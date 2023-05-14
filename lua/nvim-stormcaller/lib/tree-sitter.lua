@@ -15,7 +15,11 @@ end
 
 M.put_cursor_at_start_of_node = function(o)
     local start_row, start_col = o.node:range()
-    vim.api.nvim_win_set_cursor(o.win, { start_row + 1, start_col + 1 })
+    vim.api.nvim_win_set_cursor(o.win, { start_row + 1, start_col })
+end
+M.put_cursor_at_end_of_node = function(o)
+    local _, _, end_row, end_col = o.node:range()
+    vim.api.nvim_win_set_cursor(o.win, { end_row + 1, end_col + 1 })
 end
 
 M.get_root = function(o)

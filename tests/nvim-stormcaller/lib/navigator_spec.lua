@@ -32,7 +32,7 @@ export default function Home() {
         navigator.initiate({ win = 0 }) -- should put cursor at line 6: [<]li>
 
         local cursor_positon = vim.api.nvim_win_get_cursor(0)
-        assert.are.same({ 6, 9 }, cursor_positon)
+        assert.are.same({ 6, 8 }, cursor_positon)
     end)
 
     it(
@@ -54,10 +54,96 @@ export default function Home() {
 
             vim.cmd("norm! gg0") -- put cursor at line 1: {e}xport default ...
 
-            navigator.initiate({ win = 0 }) -- should put cursor at line 4: [<]div className="h-screen...
+            navigator.initiate({ win = 0 }) -- should put cursor at line 3: [<]>
 
             local cursor_positon = vim.api.nvim_win_get_cursor(0)
-            assert.are.same({ 3, 5 }, cursor_positon)
+            assert.are.same({ 3, 4 }, cursor_positon)
+        end
+    )
+
+    it(
+        "puts cursor at end of closest tag, with initial cursor outside and below jsx_element",
+        function()
+            helpers.set_buf_content([[
+export default function Home() {
+  return (
+    <>
+      <div className="h-screen w-screen bg-zinc-900">
+        <li>Home</li>
+        <li>About</li>
+        <li>Contacts</li>
+        <li>FAQ</li>
+      </div>
+    </>
+  )
+}]])
+
+            vim.cmd("norm! G0") -- put cursor at start of last line: [}]
+
+            navigator.initiate({ win = 0 }) -- should put cursor at line 10: </[>]
+
+            local cursor_positon = vim.api.nvim_win_get_cursor(0)
+            assert.are.same({ 10, 6 }, cursor_positon)
+        end
+    )
+
+    local set_buffer_content_as_multiple_react_components = function()
+        helpers.set_buf_content([[
+function OtherComponent() {
+  return (
+    <p>
+      Astronauts in space can grow up to 2 inches taller due to the lack of
+      gravity.
+    </p>
+  )
+}
+
+let x = 10;
+let y = 100;
+
+export default function Home() {
+  return (
+    <>
+      <div className="h-screen w-screen bg-zinc-900">
+        <li>Home</li>
+        <li>
+          A new study found that coffee drinkers have a lower risk of liver
+          cancer. So, drink up!
+        </li>
+        <li>Contacts</li>
+        <li>FAQ</li>
+        <OtherComponent />
+      </div>
+    </>
+  )
+}]])
+    end
+
+    it(
+        [[puts cursor at end of closest jsx_element,
+initial cursor below closest element and sandwiched between jsx_elements ]],
+        function()
+            set_buffer_content_as_multiple_react_components()
+            vim.cmd("norm! 8gg0")
+
+            navigator.initiate({ win = 0 })
+
+            local cursor_positon = vim.api.nvim_win_get_cursor(0)
+            assert.are.same({ 6, 7 }, cursor_positon)
+        end
+    )
+
+    it(
+        [[puts cursor at start of closest jsx_element,
+initial cursor above closest element and sandwiched between jsx_elements ]],
+        function()
+            set_buffer_content_as_multiple_react_components()
+            vim.cmd("norm! 12gg0")
+
+            navigator.initiate({ win = 0 })
+
+            local cursor_positon = vim.api.nvim_win_get_cursor(0)
+            assert.are.same({ 15, 4 }, cursor_positon)
         end
     )
 end)
