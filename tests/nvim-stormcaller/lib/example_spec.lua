@@ -32,9 +32,12 @@ export default function Home() {
         vim.cmd("norm! 5gg^")
 
         local ts_utils = require("nvim-treesitter.ts_utils")
-        local node = ts_utils.get_node_at_cursor()
-        local jsx_node_text = vim.treesitter.get_node_text(node:parent(), 0)
 
+        local node = ts_utils.get_node_at_cursor()
+        local node_text = vim.treesitter.get_node_text(node, 0)
+        assert.equals("<li>", node_text)
+
+        local jsx_node_text = vim.treesitter.get_node_text(node:parent(), 0)
         assert.equals("<li>Home</li>", jsx_node_text)
     end)
 end)
