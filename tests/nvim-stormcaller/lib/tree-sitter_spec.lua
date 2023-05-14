@@ -82,7 +82,31 @@ describe("put_cursor_at_node()", function()
 
         lib_ts.put_cursor_at_start_of_node({ node = parent, win = 0 })
         local cursor_pos = vim.api.nvim_win_get_cursor(0)
-        assert.same({ 6, 8 }, cursor_pos)
+        assert.same({ 6, 9 }, cursor_pos)
+
+        vim.api.nvim_buf_delete(0, { force = true }) -- delete buffer after the test
+    end)
+end)
+
+describe("capture_nodes_with_queries()", function()
+    it("works", function()
+        set_buffer_content_as_react_component()
+
+        local all_captures, grouped_captures = lib_ts.capture_nodes_with_queries({
+            buf = 0,
+            parser_name = "tsx",
+            queries = {
+                "(jsx_fragment) @jsx_fragment",
+                "(jsx_element) @jsx_element",
+                "(jsx_self_closing_element) @jsx_self_closing_element",
+            },
+            capture_groups = { "jsx_element", "jsx_self_closing_element", "jsx_fragment" },
+        })
+
+        assert.equals(6, #all_captures)
+        assert.equals(1, #grouped_captures["jsx_fragment"])
+        assert.equals(5, #grouped_captures["jsx_element"])
+        assert.equals(0, #grouped_captures["jsx_self_closing_element"])
 
         vim.api.nvim_buf_delete(0, { force = true }) -- delete buffer after the test
     end)

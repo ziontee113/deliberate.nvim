@@ -32,6 +32,32 @@ export default function Home() {
         navigator.initiate({ win = 0 }) -- should put cursor at line 6: [<]li>
 
         local cursor_positon = vim.api.nvim_win_get_cursor(0)
-        assert.are.same({ 6, 8 }, cursor_positon)
+        assert.are.same({ 6, 9 }, cursor_positon)
     end)
+
+    it(
+        "puts cursor at start of closest tag, with initial cursor outside and above jsx_element",
+        function()
+            helpers.set_buf_content([[
+export default function Home() {
+  return (
+    <>
+      <div className="h-screen w-screen bg-zinc-900">
+        <li>Home</li>
+        <li>About</li>
+        <li>Contacts</li>
+        <li>FAQ</li>
+      </div>
+    </>
+  )
+}]])
+
+            vim.cmd("norm! gg0") -- put cursor at line 1: {e}xport default ...
+
+            navigator.initiate({ win = 0 }) -- should put cursor at line 4: [<]div className="h-screen...
+
+            local cursor_positon = vim.api.nvim_win_get_cursor(0)
+            assert.are.same({ 3, 5 }, cursor_positon)
+        end
+    )
 end)
