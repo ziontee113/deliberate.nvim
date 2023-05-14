@@ -3,7 +3,7 @@ local lib_ts = require("nvim-stormcaller.lib.tree-sitter")
 
 local M = {}
 
-M.initiate = function()
+M.initiate = function(o)
     vim.cmd("norm! ^")
 
     local current_node = ts_utils.get_node_at_cursor(0)
@@ -11,6 +11,8 @@ M.initiate = function()
         node = current_node,
         desired_parent_types = { "jsx_element", "jsx_self_closing_element" },
     })
+
+    lib_ts.put_cursor_at_start_of_node({ node = parent, win = o.win })
 end
 
 return M
