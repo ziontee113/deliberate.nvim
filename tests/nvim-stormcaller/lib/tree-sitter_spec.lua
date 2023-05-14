@@ -108,7 +108,7 @@ describe("put_cursor_at_end_of_node()", function()
 end)
 
 describe("capture_nodes_with_queries()", function()
-    it("works", function()
+    it("returns a tuple of { all_captures, grouped_captures }", function()
         set_buffer_content_as_react_component()
 
         local all_captures, grouped_captures = lib_ts.capture_nodes_with_queries({

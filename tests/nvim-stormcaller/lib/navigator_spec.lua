@@ -120,8 +120,8 @@ export default function Home() {
     end
 
     it(
-        [[puts cursor at end of closest jsx_element,
-initial cursor below closest element and sandwiched between jsx_elements ]],
+        [[puts cursor at end of closest jsx_element
+because initial cursor was sandwiched between jsx_elements and was below closest jsx_element ]],
         function()
             set_buffer_content_as_multiple_react_components()
             vim.cmd("norm! 8gg0")
@@ -134,8 +134,8 @@ initial cursor below closest element and sandwiched between jsx_elements ]],
     )
 
     it(
-        [[puts cursor at start of closest jsx_element,
-initial cursor above closest element and sandwiched between jsx_elements ]],
+        [[puts cursor at start of closest jsx_element
+because initial cursor was sandwiched between jsx_elements and was above closest jsx_element ]],
         function()
             set_buffer_content_as_multiple_react_components()
             vim.cmd("norm! 12gg0")
