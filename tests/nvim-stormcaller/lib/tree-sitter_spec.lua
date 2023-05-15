@@ -129,7 +129,7 @@ describe("capture_nodes_with_queries()", function()
     end)
 end)
 
-describe("find_named_siblings_with_types", function()
+describe("find_named_siblings_in_direction_with_types", function()
     after_each(function()
         vim.api.nvim_buf_delete(0, { force = true }) -- delete buffer after the test
     end)
@@ -142,7 +142,7 @@ describe("find_named_siblings_with_types", function()
         local current_jsx_node_text = vim.treesitter.get_node_text(current_jsx_node, 0)
         assert.equals("<li>Home</li>", current_jsx_node_text)
 
-        local next_siblings = lib_ts.find_named_siblings_with_types({
+        local next_siblings = lib_ts.find_named_siblings_in_direction_with_types({
             node = current_jsx_node,
             direction = "next",
             desired_types = { "jsx_element", "jsx_self_closing_element" },
@@ -167,7 +167,7 @@ describe("find_named_siblings_with_types", function()
         local current_jsx_node_text = vim.treesitter.get_node_text(current_jsx_node, 0)
         assert.equals("<li>Contacts</li>", current_jsx_node_text)
 
-        local previous_siblings = lib_ts.find_named_siblings_with_types({
+        local previous_siblings = lib_ts.find_named_siblings_in_direction_with_types({
             node = current_jsx_node,
             direction = "previous",
             desired_types = { "jsx_element", "jsx_self_closing_element" },

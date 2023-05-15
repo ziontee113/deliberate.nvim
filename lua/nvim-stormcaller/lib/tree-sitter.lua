@@ -125,7 +125,7 @@ end
 
 ---@param o find_sublings_with_types_Opts
 ---@return TSNode[], TSNode[]
-M.find_named_siblings_with_types = function(o)
+M.find_named_siblings_in_direction_with_types = function(o)
     local directed_siblings, matched_siblings = {}, {}
 
     if o.direction == "next" then
