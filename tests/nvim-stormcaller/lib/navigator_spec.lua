@@ -2,6 +2,7 @@ local navigator = require("nvim-stormcaller.lib.navigator")
 local helpers = require("nvim-stormcaller.helpers")
 
 local set_buffer_content_as_multiple_react_components = function()
+    vim.bo.ft = "typescriptreact"
     helpers.set_buf_content([[
 function OtherComponent() {
   return (
@@ -150,20 +151,24 @@ end)
 
 describe("navigator.move()", function()
     before_each(function()
-        vim.bo.ft = "typescriptreact"
+        set_buffer_content_as_multiple_react_components()
     end)
     after_each(function()
         vim.api.nvim_buf_delete(0, { force = true })
     end)
 
-    it("direction = next-node-on-screen", function()
-        set_buffer_content_as_multiple_react_components()
-        vim.cmd("norm! 16gg^")
+    it("direction = next-sibling-node", function()
+        vim.cmd("norm! 17gg^") -- cursor to start of 1st <li> tag
 
         navigator.initiate({ win = 0, buf = 0 })
-        navigator.move({ win = 0, buf = 0, destination = "next-node-on-screen" })
-
         helpers.assert_cursor_node_has_text("<li>Home</li>")
+
+        navigator.move({ win = 0, buf = 0, destination = "next-sibling-node" })
+        helpers.assert_cursor_node_has_text([[ <li>
+          A new study found that coffee drinkers have a lower risk of liver
+          cancer. So, drink up!
+        </li>
+        ]])
 
         local cursor_positon = vim.api.nvim_win_get_cursor(0)
         assert.are.same({ 17, 8 }, cursor_positon)
