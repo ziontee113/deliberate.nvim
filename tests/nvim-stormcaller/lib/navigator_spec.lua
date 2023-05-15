@@ -362,4 +362,34 @@ describe("navigator.move()", function()
         cursor_positon = vim.api.nvim_win_get_cursor(0)
         assert.are.same({ 6, 7 }, cursor_positon)
     end)
+
+    it("direction = parent", function()
+        vim.cmd("norm! 22gg^") -- cursor to start 3rd <li> tag
+
+        navigator.initiate({ win = 0, buf = 0 })
+        helpers.assert_cursor_node_has_text("<li>Contacts</li>")
+
+        -- 1st move
+        navigator.move({ win = 0, buf = 0, destination = "parent" })
+        helpers.assert_first_line_of_node_has_text(
+            [[<div className="h-screen w-screen bg-zinc-900">]]
+        )
+
+        local cursor_positon = vim.api.nvim_win_get_cursor(0)
+        assert.are.same({ 16, 6 }, cursor_positon)
+
+        -- 2nd move
+        navigator.move({ win = 0, buf = 0, destination = "parent" })
+        helpers.assert_first_line_of_node_has_text("<>")
+
+        cursor_positon = vim.api.nvim_win_get_cursor(0)
+        assert.are.same({ 15, 4 }, cursor_positon)
+
+        -- 3rd move, should stand still since no more jsx parent from here
+        navigator.move({ win = 0, buf = 0, destination = "parent" })
+        helpers.assert_first_line_of_node_has_text("<>")
+
+        cursor_positon = vim.api.nvim_win_get_cursor(0)
+        assert.are.same({ 15, 4 }, cursor_positon)
+    end)
 end)

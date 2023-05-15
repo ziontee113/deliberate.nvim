@@ -96,7 +96,7 @@ end
 ---@class navigator_move_Opts
 ---@field win number
 ---@field buf number
----@field destination "next-sibling" | "previous-sibling" | "next" | "previous"
+---@field destination "next-sibling" | "previous-sibling" | "next" | "previous" | "parent"
 
 ---@class find_closest_previous_or_next_node_to_cursor_Opts
 ---@field row number
@@ -246,6 +246,9 @@ M.move = function(o)
 
     if o.destination == "next-sibling" or o.destination == "previous-sibling" then
         iterate_cursor_node_to_its_sibling(o)
+    elseif o.destination == "parent" then
+        iter_cursor_node_to_its_parent(o)
+        _destination_on_node = "start"
     end
 
     if _destination_on_node then
