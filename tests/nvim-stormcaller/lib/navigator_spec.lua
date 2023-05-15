@@ -315,4 +315,51 @@ describe("navigator.move()", function()
         cursor_positon = vim.api.nvim_win_get_cursor(0)
         assert.are.same({ 35, 6 }, cursor_positon)
     end)
+
+    it("direction = previous", function()
+        vim.cmd("norm! 22gg^") -- cursor to start 3rd <li> tag
+
+        navigator.initiate({ win = 0, buf = 0 })
+        helpers.assert_cursor_node_has_text("<li>Contacts</li>")
+
+        -- 1st move
+        navigator.move({ win = 0, buf = 0, destination = "previous" })
+        helpers.assert_cursor_node_has_text([[<li>
+          A new study found that coffee drinkers have a lower risk of liver
+          cancer. So, drink up!
+        </li>]])
+
+        local cursor_positon = vim.api.nvim_win_get_cursor(0)
+        assert.are.same({ 21, 12 }, cursor_positon)
+
+        -- 2nd move
+        navigator.move({ win = 0, buf = 0, destination = "previous" })
+        helpers.assert_cursor_node_has_text("<li>Home</li>")
+
+        cursor_positon = vim.api.nvim_win_get_cursor(0)
+        assert.are.same({ 17, 8 }, cursor_positon)
+
+        -- 3rd move
+        navigator.move({ win = 0, buf = 0, destination = "previous" })
+        helpers.assert_first_line_of_node_has_text(
+            [[<div className="h-screen w-screen bg-zinc-900">]]
+        )
+
+        cursor_positon = vim.api.nvim_win_get_cursor(0)
+        assert.are.same({ 16, 6 }, cursor_positon)
+
+        -- 4th move
+        navigator.move({ win = 0, buf = 0, destination = "previous" })
+        helpers.assert_first_line_of_node_has_text("<>")
+
+        cursor_positon = vim.api.nvim_win_get_cursor(0)
+        assert.are.same({ 15, 4 }, cursor_positon)
+
+        -- 5th move
+        navigator.move({ win = 0, buf = 0, destination = "previous" })
+        helpers.assert_last_line_of_node_has_text("    </p>")
+
+        cursor_positon = vim.api.nvim_win_get_cursor(0)
+        assert.are.same({ 6, 7 }, cursor_positon)
+    end)
 end)

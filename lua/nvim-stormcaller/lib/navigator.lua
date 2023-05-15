@@ -98,15 +98,60 @@ end
 ---@field buf number
 ---@field destination "next-sibling" | "previous-sibling" | "next" | "previous"
 
+---@class find_closest_previous_or_next_node_to_cursor_Opts
+---@field row number
+---@field nodes TSNode[]
+
+---@param o find_closest_previous_or_next_node_to_cursor_Opts
+---@return TSNode
+local function find_closest_next_node_to_row(o)
+    local closest_distance, closest_node = math.huge, nil
+    for _, node in ipairs(o.nodes) do
+        local start_row = node:range()
+        if start_row > o.row and math.abs(start_row - o.row) < closest_distance then
+            closest_node = node
+            closest_distance = math.abs(start_row - o.row)
+        end
+    end
+    return closest_node
+end
+
+---@param o find_closest_previous_or_next_node_to_cursor_Opts
+---@return TSNode
+local function find_closest_previous_node_to_row(o)
+    local closest_distance, closest_node = math.huge, nil
+    for _, node in ipairs(o.nodes) do
+        local _, _, end_row, _ = node:range()
+        if end_row < o.row and math.abs(end_row - o.row) < closest_distance then
+            closest_node = node
+            closest_distance = math.abs(end_row - o.row)
+        end
+    end
+    return closest_node
+end
+
 ---@param o navigator_move_Opts
 ---@return "start" | "end"
-local function find_destination_on_node(o)
+local function find_destination_on_node_for_sibling(o)
     local destination_on_node = "start"
     if
         string.find(o.destination, "previous")
         and not lib_ts.node_start_and_end_on_same_line(_cursor_node)
     then
         destination_on_node = "end"
+    end
+    return destination_on_node
+end
+
+---@param o navigator_move_Opts
+---@return "start" | "end"
+local function find_destination_on_node_for_parent(o)
+    local destination_on_node = "end"
+    if
+        string.find(o.destination, "previous")
+        and not lib_ts.node_start_and_end_on_same_line(_cursor_node)
+    then
+        destination_on_node = "start"
     end
     return destination_on_node
 end
@@ -124,33 +169,13 @@ local function iterate_cursor_node_to_its_sibling(o)
 
     if next_siblings[1] then
         _cursor_node = next_siblings[1]
+        _destination_on_node = find_destination_on_node_for_sibling(o)
         return next_siblings[1]
     end
-
-    _destination_on_node = find_destination_on_node(o)
 end
 
----@class find_closest_next_node_to_cursor_Opts
----@field row number
----@field nodes TSNode[]
-
----@param o find_closest_next_node_to_cursor_Opts
----@return TSNode
-local function find_closest_next_node_to_row(o)
-    local closest_distance, closest_node = math.huge, nil
-
-    for _, node in ipairs(o.nodes) do
-        local start_row = node:range()
-        if start_row > o.row and math.abs(start_row - o.row) < closest_distance then
-            closest_node = node
-            closest_distance = math.abs(start_row - o.row)
-        end
-    end
-
-    return closest_node
-end
-
-local iter_cursor_node_to_its_parent = function()
+---@param o navigator_move_Opts
+local iter_cursor_node_to_its_parent = function(o)
     local parent_node = lib_ts.find_closest_parent_with_types({
         node = _cursor_node:parent(),
         desired_parent_types = { "jsx_element", "jsx_fragment" },
@@ -158,7 +183,7 @@ local iter_cursor_node_to_its_parent = function()
 
     if parent_node then
         _cursor_node = parent_node
-        _destination_on_node = "end"
+        _destination_on_node = find_destination_on_node_for_parent(o)
     end
 
     return parent_node
@@ -180,6 +205,21 @@ local function iter_curor_node_to_next_closest_jsx_element(o)
 end
 
 ---@param o navigator_move_Opts
+local function iter_curor_node_to_previous_closest_jsx_element(o)
+    local jsx_nodes = get_all_jsx_nodes_in_buffer({ buf = o.buf, win = o.win })
+    local start_row = _cursor_node:range()
+    local closest_previous_node = find_closest_previous_node_to_row({
+        row = start_row,
+        nodes = jsx_nodes,
+    })
+
+    if closest_previous_node then
+        _cursor_node = closest_previous_node
+        _destination_on_node = "end"
+    end
+end
+
+---@param o navigator_move_Opts
 M.move = function(o)
     if o.destination == "next" then
         local jsx_children = lib_ts.get_children_with_types({
@@ -190,19 +230,22 @@ M.move = function(o)
         if #jsx_children > 0 then
             if lib_ts.cursor_at_start_of_node({ node = _cursor_node, win = o.win }) then
                 _cursor_node = jsx_children[1]
-            else
-                if not iter_cursor_node_to_its_parent() then
-                    iter_curor_node_to_next_closest_jsx_element(o)
-                end
+            elseif not iter_cursor_node_to_its_parent(o) then
+                iter_curor_node_to_next_closest_jsx_element(o)
             end
         else
-            if not iterate_cursor_node_to_its_sibling(o) then iter_cursor_node_to_its_parent() end
+            if not iterate_cursor_node_to_its_sibling(o) then iter_cursor_node_to_its_parent(o) end
+        end
+    elseif o.destination == "previous" then
+        if not iterate_cursor_node_to_its_sibling(o) then
+            if not iter_cursor_node_to_its_parent(o) then
+                iter_curor_node_to_previous_closest_jsx_element(o)
+            end
         end
     end
 
     if o.destination == "next-sibling" or o.destination == "previous-sibling" then
         iterate_cursor_node_to_its_sibling(o)
-        _destination_on_node = find_destination_on_node(o)
     end
 
     if _destination_on_node then
