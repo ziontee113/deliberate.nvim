@@ -151,4 +151,9 @@ M.find_named_siblings_in_direction_with_types = function(o)
     return matched_siblings, directed_siblings
 end
 
+M.node_start_and_end_on_same_line = function(node)
+    local start_row, _, end_row, _ = node:range()
+    return start_row == end_row
+end
+
 return M

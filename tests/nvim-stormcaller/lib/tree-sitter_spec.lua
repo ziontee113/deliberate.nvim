@@ -183,3 +183,37 @@ describe("find_named_siblings_in_direction_with_types", function()
         assert.equals("<li>Home</li>", vim.treesitter.get_node_text(previous_siblings[2], 0))
     end)
 end)
+
+describe("node_start_and_end_on_same_line", function()
+    after_each(function()
+        vim.api.nvim_buf_delete(0, { force = true })
+    end)
+
+    it("works for same line case", function()
+        set_buffer_content_as_react_component()
+        vim.cmd("norm! 10gg^") -- cursor to start of 3rd <li> tag
+
+        local current_jsx_node = ts_utils.get_node_at_cursor(0):parent()
+        local current_jsx_node_text = vim.treesitter.get_node_text(current_jsx_node, 0)
+        assert.equals("<li>Contacts</li>", current_jsx_node_text)
+
+        assert.is_true(lib_ts.node_start_and_end_on_same_line(current_jsx_node))
+    end)
+
+    it("works for same line case", function()
+        set_buffer_content_as_react_component()
+        vim.cmd("norm! 6gg^") -- cursor to start of 2nd <li> tag
+
+        local current_jsx_node = ts_utils.get_node_at_cursor(0):parent()
+        local current_jsx_node_text = vim.treesitter.get_node_text(current_jsx_node, 0)
+        assert.equals(
+            [[<li>
+          A new study found that coffee drinkers have a lower risk of liver
+          cancer. So, drink up!
+        </li>]],
+            current_jsx_node_text
+        )
+
+        assert.is_false(lib_ts.node_start_and_end_on_same_line(current_jsx_node))
+    end)
+end)
