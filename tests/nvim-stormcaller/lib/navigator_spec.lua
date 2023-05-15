@@ -163,6 +163,7 @@ describe("navigator.move()", function()
         navigator.initiate({ win = 0, buf = 0 })
         helpers.assert_cursor_node_has_text("<li>Home</li>")
 
+        -- 1st move
         navigator.move({ win = 0, buf = 0, destination = "next-sibling-node" })
         helpers.assert_cursor_node_has_text([[<li>
           A new study found that coffee drinkers have a lower risk of liver
@@ -171,5 +172,33 @@ describe("navigator.move()", function()
 
         local cursor_positon = vim.api.nvim_win_get_cursor(0)
         assert.are.same({ 18, 8 }, cursor_positon)
+
+        -- 2nd move
+        navigator.move({ win = 0, buf = 0, destination = "next-sibling-node" })
+        helpers.assert_cursor_node_has_text("<li>Contacts</li>")
+
+        cursor_positon = vim.api.nvim_win_get_cursor(0)
+        assert.are.same({ 22, 8 }, cursor_positon)
+
+        -- 3rd move
+        navigator.move({ win = 0, buf = 0, destination = "next-sibling-node" })
+        helpers.assert_cursor_node_has_text("<li>FAQ</li>")
+
+        cursor_positon = vim.api.nvim_win_get_cursor(0)
+        assert.are.same({ 23, 8 }, cursor_positon)
+
+        -- 4th move
+        navigator.move({ win = 0, buf = 0, destination = "next-sibling-node" })
+        helpers.assert_cursor_node_has_text("<OtherComponent />")
+
+        cursor_positon = vim.api.nvim_win_get_cursor(0)
+        assert.are.same({ 24, 8 }, cursor_positon)
+
+        -- 5th move, should stay in place since no next siblings
+        navigator.move({ win = 0, buf = 0, destination = "next-sibling-node" })
+        helpers.assert_cursor_node_has_text("<OtherComponent />")
+
+        cursor_positon = vim.api.nvim_win_get_cursor(0)
+        assert.are.same({ 24, 8 }, cursor_positon)
     end)
 end)
