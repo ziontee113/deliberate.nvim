@@ -48,12 +48,8 @@ function OtherOtherComponent() {
 end
 
 describe("navigator.initiate()", function()
-    before_each(function()
-        vim.bo.ft = "typescriptreact"
-    end)
-    after_each(function()
-        vim.api.nvim_buf_delete(0, { force = true }) -- delete buffer after the test
-    end)
+    before_each(function() vim.bo.ft = "typescriptreact" end)
+    after_each(function() vim.api.nvim_buf_delete(0, { force = true }) end)
 
     it("puts cursor at start of closest tag, with initial cursor inside jsx_element", function()
         helpers.set_buf_content([[
@@ -163,12 +159,8 @@ because initial cursor was sandwiched between jsx_elements and was above closest
 end)
 
 describe("navigator.move()", function()
-    before_each(function()
-        set_buffer_content_as_multiple_react_components()
-    end)
-    after_each(function()
-        vim.api.nvim_buf_delete(0, { force = true })
-    end)
+    before_each(function() set_buffer_content_as_multiple_react_components() end)
+    after_each(function() vim.api.nvim_buf_delete(0, { force = true }) end)
 
     it("direction = next-sibling", function()
         vim.cmd("norm! 17gg^") -- cursor to start of 1st <li> tag

@@ -185,9 +185,7 @@ describe("find_named_siblings_in_direction_with_types", function()
 end)
 
 describe("node_start_and_end_on_same_line", function()
-    after_each(function()
-        vim.api.nvim_buf_delete(0, { force = true })
-    end)
+    after_each(function() vim.api.nvim_buf_delete(0, { force = true }) end)
 
     it("checks for single line case correctly", function()
         set_buffer_content_as_react_component()

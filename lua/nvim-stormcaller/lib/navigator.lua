@@ -5,9 +5,7 @@ local M = {}
 
 local _cursor_node
 
-M.get_cursor_node = function()
-    return _cursor_node
-end
+M.get_cursor_node = function() return _cursor_node end
 
 ---@class find_closest_node_to_cursor_Opts
 ---@field win number
@@ -82,8 +80,10 @@ M.initiate = function(o)
         lib_ts.put_cursor_at_node({ node = parent, win = o.win, destination = "start" })
         _cursor_node = parent
     else
-        local closest_node, destination =
-            find_closest_jsx_node_to_cursor({ win = o.win, buf = o.buf })
+        local closest_node, destination = find_closest_jsx_node_to_cursor({
+            win = o.win,
+            buf = o.buf,
+        })
         lib_ts.put_cursor_at_node({
             destination = destination,
             win = o.win,
@@ -191,16 +191,12 @@ M.move = function(o)
             if lib_ts.cursor_at_start_of_node({ node = _cursor_node, win = o.win }) then
                 _cursor_node = jsx_children[1]
             else
-                local parent_node = iter_cursor_node_to_its_parent()
-                if not parent_node then
+                if not iter_cursor_node_to_its_parent() then
                     iter_curor_node_to_next_closest_jsx_element(o)
                 end
             end
         else
-            local sibling = iterate_cursor_node_to_its_sibling(o)
-            if not sibling then
-                iter_cursor_node_to_its_parent()
-            end
+            if not iterate_cursor_node_to_its_sibling(o) then iter_cursor_node_to_its_parent() end
         end
     end
 

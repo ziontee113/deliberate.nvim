@@ -17,9 +17,7 @@ local M = {}
 M.find_closest_parent_with_types = function(o)
     local node = o.node
     while node do
-        if vim.tbl_contains(o.desired_parent_types, node:type()) then
-            break
-        end
+        if vim.tbl_contains(o.desired_parent_types, node:type()) then break end
         node = node:parent()
     end
     return node
@@ -53,9 +51,7 @@ end
 
 ---@param o put_cursor_at_node_Opts
 M.put_cursor_at_node = function(o)
-    if not o.node then
-        return
-    end
+    if not o.node then return end
 
     local start_row, start_col, end_row, end_col = o.node:range()
     if o.destination == "start" then
