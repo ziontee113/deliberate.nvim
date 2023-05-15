@@ -6,6 +6,7 @@ local M = {}
 ---@field range function
 ---@field next_named_sibling function
 ---@field prev_named_sibling function
+---@field iter_children function
 
 ---@class find_closest_parent_with_types_Opts
 ---@field node TSNode
@@ -151,15 +152,39 @@ M.find_named_siblings_in_direction_with_types = function(o)
     return matched_siblings, directed_siblings
 end
 
+---@param node TSNode
+---@return boolean
 M.node_start_and_end_on_same_line = function(node)
     local start_row, _, end_row, _ = node:range()
     return start_row == end_row
 end
 
+---@class cursor_start_of_node_Opts
+---@field node TSNode
+---@field win number
+
 M.cursor_at_start_of_node = function(o)
     local start_row = o.node:range()
     local cursor_line = unpack(vim.api.nvim_win_get_cursor(o.win))
     return start_row + 1 == cursor_line
+end
+
+---@class get_children_with_types_Opts
+---@field node TSNode
+---@field buf number
+---@field win number
+---@field desired_types string[]
+
+---@param o get_children_with_types_Opts
+---@return TSNode[]
+M.get_children_with_types = function(o)
+    local matched_children = {}
+    for child in o.node:iter_children() do
+        if vim.tbl_contains(o.desired_types, child:type()) then
+            table.insert(matched_children, child)
+        end
+    end
+    return matched_children
 end
 
 return M

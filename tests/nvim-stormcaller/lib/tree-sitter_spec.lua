@@ -232,3 +232,28 @@ describe("cursor_at_start_of_node", function()
         vim.api.nvim_buf_delete(0, { force = true })
     end)
 end)
+
+describe("get_children_with_types", function()
+    it("works", function()
+        set_buffer_content_as_react_component()
+        vim.cmd("norm! 4gg^") -- cursor to start of <div> tag
+
+        local div_jsx_node = ts_utils.get_node_at_cursor(0):parent()
+        local jsx_children = lib_ts.get_children_with_types({
+            node = div_jsx_node,
+            buf = 0,
+            win = 0,
+            desired_types = { "jsx_element", "jsx_self_closing_element" },
+        })
+
+        assert.equals(4, #jsx_children)
+
+        local first_child_text = vim.treesitter.get_node_text(jsx_children[1], 0)
+        assert.equals("<li>Home</li>", first_child_text)
+
+        local last_child_text = vim.treesitter.get_node_text(jsx_children[4], 0)
+        assert.equals("<li>FAQ</li>", last_child_text)
+
+        vim.api.nvim_buf_delete(0, { force = true })
+    end)
+end)
