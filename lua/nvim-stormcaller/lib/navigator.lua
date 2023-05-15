@@ -62,16 +62,24 @@ M.initiate = function(o)
     })
 
     if parent then
-        lib_ts.put_cursor_at_start_of_node({ node = parent, win = o.win })
+        lib_ts.put_cursor_at_node({ node = parent, win = o.win, destination = "start" })
         _cursor_node = parent
     else
         local closest_node, jump_destination =
             find_closest_jsx_node_to_cursor({ win = o.win, buf = o.buf })
         if closest_node then
             if jump_destination == "start-of-node" then
-                lib_ts.put_cursor_at_start_of_node({ win = o.win, node = closest_node })
+                lib_ts.put_cursor_at_node({
+                    destination = "start",
+                    win = o.win,
+                    node = closest_node,
+                })
             elseif jump_destination == "end-of-node" then
-                lib_ts.put_cursor_at_end_of_node({ win = o.win, node = closest_node })
+                lib_ts.put_cursor_at_node({
+                    destination = "end",
+                    win = o.win,
+                    node = closest_node,
+                })
             end
             _cursor_node = closest_node
         end
