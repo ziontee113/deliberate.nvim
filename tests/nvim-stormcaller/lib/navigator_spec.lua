@@ -164,13 +164,12 @@ describe("navigator.move()", function()
         helpers.assert_cursor_node_has_text("<li>Home</li>")
 
         navigator.move({ win = 0, buf = 0, destination = "next-sibling-node" })
-        helpers.assert_cursor_node_has_text([[ <li>
+        helpers.assert_cursor_node_has_text([[<li>
           A new study found that coffee drinkers have a lower risk of liver
           cancer. So, drink up!
-        </li>
-        ]])
+        </li>]])
 
         local cursor_positon = vim.api.nvim_win_get_cursor(0)
-        assert.are.same({ 17, 8 }, cursor_positon)
+        assert.are.same({ 18, 8 }, cursor_positon)
     end)
 end)

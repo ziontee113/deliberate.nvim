@@ -110,7 +110,19 @@ M.move = function(o)
     -- 3. if no parent node --> then the next jsx_element using all the nodes
 
     if o.destination == "next-sibling-node" then
-        -- TODO:
+        local next_siblings = lib_ts.find_named_siblings_in_direction_with_types({
+            node = _cursor_node,
+            direction = "next",
+            desired_types = { "jsx_element", "jsx_self_closing_element" },
+        })
+        if #next_siblings > 0 then
+            _cursor_node = next_siblings[1]
+            lib_ts.put_cursor_at_node({
+                node = _cursor_node,
+                destination = "start",
+                win = o.win,
+            })
+        end
     end
 end
 
