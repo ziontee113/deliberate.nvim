@@ -241,8 +241,6 @@ describe("get_children_with_types", function()
         local div_jsx_node = ts_utils.get_node_at_cursor(0):parent()
         local jsx_children = lib_ts.get_children_with_types({
             node = div_jsx_node,
-            buf = 0,
-            win = 0,
             desired_types = { "jsx_element", "jsx_self_closing_element" },
         })
 

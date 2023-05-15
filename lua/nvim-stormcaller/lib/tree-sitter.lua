@@ -171,8 +171,6 @@ end
 
 ---@class get_children_with_types_Opts
 ---@field node TSNode
----@field buf number
----@field win number
 ---@field desired_types string[]
 
 ---@param o get_children_with_types_Opts
