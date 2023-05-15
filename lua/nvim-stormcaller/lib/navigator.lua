@@ -159,7 +159,7 @@ end
 local _destination_on_node
 
 ---@param o navigator_move_Opts
-local function iterate_cursor_node_to_its_sibling(o)
+local function change_cursor_node_to_its_sibling(o)
     local sibling_destination = string.find(o.destination, "next") and "next" or "previous"
     local next_siblings = lib_ts.find_named_siblings_in_direction_with_types({
         node = _cursor_node,
@@ -175,7 +175,7 @@ local function iterate_cursor_node_to_its_sibling(o)
 end
 
 ---@param o navigator_move_Opts
-local iter_cursor_node_to_its_parent = function(o)
+local change_cursor_node_to_its_parent = function(o)
     local parent_node = lib_ts.find_closest_parent_with_types({
         node = _cursor_node:parent(),
         desired_parent_types = { "jsx_element", "jsx_fragment" },
@@ -190,7 +190,7 @@ local iter_cursor_node_to_its_parent = function(o)
 end
 
 ---@param o navigator_move_Opts
-local function iter_curor_node_to_next_closest_jsx_element(o)
+local function change_cursor_node_to_next_closest_jsx_element(o)
     local jsx_nodes = get_all_jsx_nodes_in_buffer({ buf = o.buf, win = o.win })
     local _, _, end_row, _ = _cursor_node:range()
     local closest_next_node = find_closest_next_node_to_row({
@@ -205,7 +205,7 @@ local function iter_curor_node_to_next_closest_jsx_element(o)
 end
 
 ---@param o navigator_move_Opts
-local function iter_curor_node_to_previous_closest_jsx_element(o)
+local function change_cursor_node_to_previous_closest_jsx_element(o)
     local jsx_nodes = get_all_jsx_nodes_in_buffer({ buf = o.buf, win = o.win })
     local start_row = _cursor_node:range()
     local closest_previous_node = find_closest_previous_node_to_row({
@@ -230,24 +230,24 @@ M.move = function(o)
         if #jsx_children > 0 then
             if lib_ts.cursor_at_start_of_node({ node = _cursor_node, win = o.win }) then
                 _cursor_node = jsx_children[1]
-            elseif not iter_cursor_node_to_its_parent(o) then
-                iter_curor_node_to_next_closest_jsx_element(o)
+            elseif not change_cursor_node_to_its_parent(o) then
+                change_cursor_node_to_next_closest_jsx_element(o)
             end
         else
-            if not iterate_cursor_node_to_its_sibling(o) then iter_cursor_node_to_its_parent(o) end
+            if not change_cursor_node_to_its_sibling(o) then change_cursor_node_to_its_parent(o) end
         end
     elseif o.destination == "previous" then
-        if not iterate_cursor_node_to_its_sibling(o) then
-            if not iter_cursor_node_to_its_parent(o) then
-                iter_curor_node_to_previous_closest_jsx_element(o)
+        if not change_cursor_node_to_its_sibling(o) then
+            if not change_cursor_node_to_its_parent(o) then
+                change_cursor_node_to_previous_closest_jsx_element(o)
             end
         end
     end
 
     if o.destination == "next-sibling" or o.destination == "previous-sibling" then
-        iterate_cursor_node_to_its_sibling(o)
+        change_cursor_node_to_its_sibling(o)
     elseif o.destination == "parent" then
-        iter_cursor_node_to_its_parent(o)
+        change_cursor_node_to_its_parent(o)
         _destination_on_node = "start"
     end
 
