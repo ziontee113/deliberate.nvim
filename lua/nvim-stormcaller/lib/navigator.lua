@@ -100,7 +100,7 @@ end
 ---@class navigator_move_Opts
 ---@field win number
 ---@field buf number
----@field destination "next-sibling-node"
+---@field destination "next-sibling-node" | "previous-sibling-node"
 
 ---@param o navigator_move_Opts
 M.move = function(o)
@@ -109,21 +109,29 @@ M.move = function(o)
     -- 2. if no sibling --> return the parent node
     -- 3. if no parent node --> then the next jsx_element using all the nodes
 
-    if o.destination == "next-sibling-node" then
+    if o.destination == "next-sibling-node" or o.destination == "previous-sibling-node" then
+        local sibling_destination = o.destination == "next-sibling-node" and "next" or "previous"
         local next_siblings = lib_ts.find_named_siblings_in_direction_with_types({
             node = _cursor_node,
-            direction = "next",
+            direction = sibling_destination,
             desired_types = { "jsx_element", "jsx_self_closing_element" },
         })
-        if #next_siblings > 0 then
-            _cursor_node = next_siblings[1]
-            lib_ts.put_cursor_at_node({
-                node = _cursor_node,
-                destination = "start",
-                win = o.win,
-            })
-        end
+        _cursor_node = next_siblings[1] or _cursor_node
     end
+
+    local destination_on_node = "start"
+    if
+        string.find(o.destination, "previous")
+        and not lib_ts.node_start_and_end_on_same_line(_cursor_node)
+    then
+        destination_on_node = "end"
+    end
+
+    lib_ts.put_cursor_at_node({
+        node = _cursor_node,
+        destination = destination_on_node,
+        win = o.win,
+    })
 end
 
 return M

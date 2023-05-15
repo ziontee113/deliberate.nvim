@@ -201,4 +201,42 @@ describe("navigator.move()", function()
         cursor_positon = vim.api.nvim_win_get_cursor(0)
         assert.are.same({ 24, 8 }, cursor_positon)
     end)
+
+    it("direction = previous-sibling-node", function()
+        vim.cmd("norm! 23gg^")
+
+        navigator.initiate({ win = 0, buf = 0 })
+        helpers.assert_cursor_node_has_text("<li>FAQ</li>")
+
+        -- 1st move up
+        navigator.move({ win = 0, buf = 0, destination = "previous-sibling-node" })
+        helpers.assert_cursor_node_has_text("<li>Contacts</li>")
+
+        local cursor_positon = vim.api.nvim_win_get_cursor(0)
+        assert.are.same({ 22, 8 }, cursor_positon)
+
+        -- 2nd move up
+        navigator.move({ win = 0, buf = 0, destination = "previous-sibling-node" })
+        helpers.assert_cursor_node_has_text([[<li>
+          A new study found that coffee drinkers have a lower risk of liver
+          cancer. So, drink up!
+        </li>]])
+
+        cursor_positon = vim.api.nvim_win_get_cursor(0)
+        assert.are.same({ 21, 12 }, cursor_positon)
+
+        -- 3rd move up
+        navigator.move({ win = 0, buf = 0, destination = "previous-sibling-node" })
+        helpers.assert_cursor_node_has_text("<li>Home</li>")
+
+        cursor_positon = vim.api.nvim_win_get_cursor(0)
+        assert.are.same({ 17, 8 }, cursor_positon)
+
+        -- 4th move up, should stay in place since no more prevous sibling
+        navigator.move({ win = 0, buf = 0, destination = "previous-sibling-node" })
+        helpers.assert_cursor_node_has_text("<li>Home</li>")
+
+        cursor_positon = vim.api.nvim_win_get_cursor(0)
+        assert.are.same({ 17, 8 }, cursor_positon)
+    end)
 end)

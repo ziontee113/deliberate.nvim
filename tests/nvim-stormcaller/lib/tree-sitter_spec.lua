@@ -189,7 +189,7 @@ describe("node_start_and_end_on_same_line", function()
         vim.api.nvim_buf_delete(0, { force = true })
     end)
 
-    it("works for same line case", function()
+    it("checks for single line case correctly", function()
         set_buffer_content_as_react_component()
         vim.cmd("norm! 10gg^") -- cursor to start of 3rd <li> tag
 
@@ -200,7 +200,7 @@ describe("node_start_and_end_on_same_line", function()
         assert.is_true(lib_ts.node_start_and_end_on_same_line(current_jsx_node))
     end)
 
-    it("works for same line case", function()
+    it("checks for multiple lines case correctly", function()
         set_buffer_content_as_react_component()
         vim.cmd("norm! 6gg^") -- cursor to start of 2nd <li> tag
 
