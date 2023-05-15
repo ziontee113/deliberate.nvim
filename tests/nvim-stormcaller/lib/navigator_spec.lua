@@ -148,24 +148,24 @@ because initial cursor was sandwiched between jsx_elements and was above closest
     )
 end)
 
--- describe("navigator.move()", function()
---     before_each(function()
---         vim.bo.ft = "typescriptreact"
---     end)
---     after_each(function()
---         vim.api.nvim_buf_delete(0, { force = true })
---     end)
---
---     it("direction = next-node-on-screen", function()
---         set_buffer_content_as_multiple_react_components()
---         vim.cmd("norm! 16gg^")
---
---         navigator.initiate({ win = 0, buf = 0 })
---         navigator.move({ win = 0, buf = 0, destination = "next-node-on-screen" })
---
---         helpers.assert_cursor_node_has_text("<li>Home</li>")
---
---         local cursor_positon = vim.api.nvim_win_get_cursor(0)
---         assert.are.same({ 17, 8 }, cursor_positon)
---     end)
--- end)
+describe("navigator.move()", function()
+    before_each(function()
+        vim.bo.ft = "typescriptreact"
+    end)
+    after_each(function()
+        vim.api.nvim_buf_delete(0, { force = true })
+    end)
+
+    it("direction = next-node-on-screen", function()
+        set_buffer_content_as_multiple_react_components()
+        vim.cmd("norm! 16gg^")
+
+        navigator.initiate({ win = 0, buf = 0 })
+        navigator.move({ win = 0, buf = 0, destination = "next-node-on-screen" })
+
+        helpers.assert_cursor_node_has_text("<li>Home</li>")
+
+        local cursor_positon = vim.api.nvim_win_get_cursor(0)
+        assert.are.same({ 17, 8 }, cursor_positon)
+    end)
+end)

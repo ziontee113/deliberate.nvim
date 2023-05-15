@@ -9,6 +9,34 @@ M.get_cursor_node = function()
     return _cursor_node
 end
 
+---@class find_closest_node_to_cursor_Opts
+---@field win number
+---@field row_offset number
+---@field nodes TSNode[]
+
+local function find_closest_node_to_cursor(o)
+    local row_offset = o.row_offset or 0
+
+    local cur_line = unpack(vim.api.nvim_win_get_cursor(o.win)) + row_offset
+    local closest_distance, closest_node, jump_destination = math.huge, nil, nil
+
+    for _, node in ipairs(o.nodes) do
+        local start_row, _, end_row, _ = node:range()
+        if math.abs(start_row - cur_line) < closest_distance then
+            closest_node = node
+            jump_destination = "start-of-node"
+            closest_distance = math.abs(start_row - cur_line)
+        end
+        if math.abs(end_row - cur_line) < closest_distance then
+            closest_node = node
+            jump_destination = "end-of-node"
+            closest_distance = math.abs(end_row - cur_line)
+        end
+    end
+
+    return closest_node, jump_destination
+end
+
 ---@class find_closest_jsx_node_to_cursor_Opts
 ---@field buf number
 ---@field win number
@@ -27,24 +55,7 @@ local find_closest_jsx_node_to_cursor = function(o)
         capture_groups = { "jsx_element", "jsx_self_closing_element", "jsx_fragment" },
     })
 
-    local cur_line = unpack(vim.api.nvim_win_get_cursor(o.win))
-    local closest_distance, closest_node, jump_destination = math.huge, nil, nil
-
-    for _, node in ipairs(all_jsx_nodes) do
-        local start_row, _, end_row, _ = node:range()
-        if math.abs(start_row - cur_line) < closest_distance then
-            closest_node = node
-            jump_destination = "start-of-node"
-            closest_distance = math.abs(start_row - cur_line)
-        end
-        if math.abs(end_row - cur_line) < closest_distance then
-            closest_node = node
-            jump_destination = "end-of-node"
-            closest_distance = math.abs(end_row - cur_line)
-        end
-    end
-
-    return closest_node, jump_destination
+    return find_closest_node_to_cursor({ nodes = all_jsx_nodes, win = o.win })
 end
 
 ---@class navigator_initiate_Opts
@@ -86,14 +97,51 @@ M.initiate = function(o)
     end
 end
 
--- local find_target_node = function(o)
---     if o.destination == "next-node-on-screen" then
---         -- TODO:
---     end
--- end
---
--- M.move = function(o)
---     local target_node = find_target_node(o)
--- end
+---@class navigator_move_Opts
+---@field win number
+---@field buf number
+---@field destination "next-node-on-screen"
+
+---@param o navigator_move_Opts
+local find_row_offset_from_destination = function(o)
+    if o.destination == "next-node-on-screen" then
+        return 0
+    end
+end
+
+---@param o navigator_move_Opts
+local find_target_node_to_move_to = function(o)
+    local all_opening_and_closing_nodes = lib_ts.capture_nodes_with_queries({
+        buf = o.buf,
+        parser_name = "tsx",
+        queries = {
+            "(jsx_opening_element) @jsx_opening_element",
+            "(jsx_closing_element) @jsx_closing_element",
+            "(jsx_self_closing_element) @jsx_self_closing_element",
+        },
+        capture_groups = {
+            "jsx_opening_element",
+            "jsx_closing_element",
+            "jsx_self_closing_element",
+        },
+    })
+
+    return find_closest_node_to_cursor({
+        nodes = all_opening_and_closing_nodes,
+        win = o.win,
+        row_offset = find_row_offset_from_destination(o),
+    })
+end
+
+---@param o navigator_move_Opts
+M.move = function(o)
+    local target_node = find_target_node_to_move_to(o)
+    local jsx_element = lib_ts.find_closest_parent_with_types({
+        node = target_node,
+        desired_parent_types = { "jsx_element", "jsx_self_closing_element", "jsx_fragment" },
+    })
+    lib_ts.put_cursor_at_node({ node = jsx_element, destination = "start", win = o.win })
+    _cursor_node = jsx_element
+end
 
 return M

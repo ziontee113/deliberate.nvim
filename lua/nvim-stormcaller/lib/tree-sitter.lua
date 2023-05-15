@@ -65,13 +65,13 @@ M.put_cursor_at_node = function(o)
 end
 
 ---@class get_root_Opts
----@field node TSNode
+---@field buf number
 ---@field parser_name string
 
 ---@param o get_root_Opts
 ---@return TSNode | nil
 M.get_root = function(o)
-    local parser_ok, parser = pcall(vim.treesitter.get_parser, 0, o.parser_name)
+    local parser_ok, parser = pcall(vim.treesitter.get_parser, o.buf, o.parser_name)
     if parser_ok then
         local trees = parser:parse()
         local root = trees[1]:root()
@@ -81,7 +81,7 @@ end
 
 ---@class capture_nodes_with_queries_Opts
 ---@field buf number
----@field root TSNode
+---@field root TSNode | nil
 ---@field parser_name string
 ---@field capture_groups string[]
 ---@field queries string[]
