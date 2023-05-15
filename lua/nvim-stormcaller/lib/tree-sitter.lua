@@ -22,9 +22,7 @@ M.find_closest_parent_with_types = function(o)
         end
         node = node:parent()
     end
-    if node ~= o.node then
-        return node
-    end
+    return node
 end
 
 ---@class get_node_anchors_Opts
