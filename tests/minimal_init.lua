@@ -7,3 +7,7 @@ require("nvim-treesitter")
 
 -- Setup Editor Options
 vim.opt.rtp:append(".")
+
+-- Disable Swapfile
+vim.o.swapfile = false
+vim.bo.swapfile = false
