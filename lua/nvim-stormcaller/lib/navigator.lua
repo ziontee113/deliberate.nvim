@@ -100,7 +100,7 @@ end
 ---@class navigator_move_Opts
 ---@field win number
 ---@field buf number
----@field destination "next-sibling-node" | "previous-sibling-node"
+---@field destination "next-sibling" | "previous-sibling"
 
 ---@param o navigator_move_Opts
 M.move = function(o)
@@ -109,8 +109,8 @@ M.move = function(o)
     -- 2. if no sibling --> return the parent node
     -- 3. if no parent node --> then the next jsx_element using all the nodes
 
-    if o.destination == "next-sibling-node" or o.destination == "previous-sibling-node" then
-        local sibling_destination = o.destination == "next-sibling-node" and "next" or "previous"
+    if o.destination == "next-sibling" or o.destination == "previous-sibling" then
+        local sibling_destination = o.destination == "next-sibling" and "next" or "previous"
         local next_siblings = lib_ts.find_named_siblings_in_direction_with_types({
             node = _cursor_node,
             direction = sibling_destination,

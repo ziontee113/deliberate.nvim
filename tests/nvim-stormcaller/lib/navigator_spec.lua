@@ -157,14 +157,14 @@ describe("navigator.move()", function()
         vim.api.nvim_buf_delete(0, { force = true })
     end)
 
-    it("direction = next-sibling-node", function()
+    it("direction = next-sibling", function()
         vim.cmd("norm! 17gg^") -- cursor to start of 1st <li> tag
 
         navigator.initiate({ win = 0, buf = 0 })
         helpers.assert_cursor_node_has_text("<li>Home</li>")
 
         -- 1st move
-        navigator.move({ win = 0, buf = 0, destination = "next-sibling-node" })
+        navigator.move({ win = 0, buf = 0, destination = "next-sibling" })
         helpers.assert_cursor_node_has_text([[<li>
           A new study found that coffee drinkers have a lower risk of liver
           cancer. So, drink up!
@@ -174,49 +174,49 @@ describe("navigator.move()", function()
         assert.are.same({ 18, 8 }, cursor_positon)
 
         -- 2nd move
-        navigator.move({ win = 0, buf = 0, destination = "next-sibling-node" })
+        navigator.move({ win = 0, buf = 0, destination = "next-sibling" })
         helpers.assert_cursor_node_has_text("<li>Contacts</li>")
 
         cursor_positon = vim.api.nvim_win_get_cursor(0)
         assert.are.same({ 22, 8 }, cursor_positon)
 
         -- 3rd move
-        navigator.move({ win = 0, buf = 0, destination = "next-sibling-node" })
+        navigator.move({ win = 0, buf = 0, destination = "next-sibling" })
         helpers.assert_cursor_node_has_text("<li>FAQ</li>")
 
         cursor_positon = vim.api.nvim_win_get_cursor(0)
         assert.are.same({ 23, 8 }, cursor_positon)
 
         -- 4th move
-        navigator.move({ win = 0, buf = 0, destination = "next-sibling-node" })
+        navigator.move({ win = 0, buf = 0, destination = "next-sibling" })
         helpers.assert_cursor_node_has_text("<OtherComponent />")
 
         cursor_positon = vim.api.nvim_win_get_cursor(0)
         assert.are.same({ 24, 8 }, cursor_positon)
 
         -- 5th move, should stay in place since no next siblings
-        navigator.move({ win = 0, buf = 0, destination = "next-sibling-node" })
+        navigator.move({ win = 0, buf = 0, destination = "next-sibling" })
         helpers.assert_cursor_node_has_text("<OtherComponent />")
 
         cursor_positon = vim.api.nvim_win_get_cursor(0)
         assert.are.same({ 24, 8 }, cursor_positon)
     end)
 
-    it("direction = previous-sibling-node", function()
+    it("direction = previous-sibling", function()
         vim.cmd("norm! 23gg^")
 
         navigator.initiate({ win = 0, buf = 0 })
         helpers.assert_cursor_node_has_text("<li>FAQ</li>")
 
         -- 1st move up
-        navigator.move({ win = 0, buf = 0, destination = "previous-sibling-node" })
+        navigator.move({ win = 0, buf = 0, destination = "previous-sibling" })
         helpers.assert_cursor_node_has_text("<li>Contacts</li>")
 
         local cursor_positon = vim.api.nvim_win_get_cursor(0)
         assert.are.same({ 22, 8 }, cursor_positon)
 
         -- 2nd move up
-        navigator.move({ win = 0, buf = 0, destination = "previous-sibling-node" })
+        navigator.move({ win = 0, buf = 0, destination = "previous-sibling" })
         helpers.assert_cursor_node_has_text([[<li>
           A new study found that coffee drinkers have a lower risk of liver
           cancer. So, drink up!
@@ -226,14 +226,14 @@ describe("navigator.move()", function()
         assert.are.same({ 21, 12 }, cursor_positon)
 
         -- 3rd move up
-        navigator.move({ win = 0, buf = 0, destination = "previous-sibling-node" })
+        navigator.move({ win = 0, buf = 0, destination = "previous-sibling" })
         helpers.assert_cursor_node_has_text("<li>Home</li>")
 
         cursor_positon = vim.api.nvim_win_get_cursor(0)
         assert.are.same({ 17, 8 }, cursor_positon)
 
         -- 4th move up, should stay in place since no more prevous sibling
-        navigator.move({ win = 0, buf = 0, destination = "previous-sibling-node" })
+        navigator.move({ win = 0, buf = 0, destination = "previous-sibling" })
         helpers.assert_cursor_node_has_text("<li>Home</li>")
 
         cursor_positon = vim.api.nvim_win_get_cursor(0)
