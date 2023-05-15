@@ -3,9 +3,21 @@ local lib_ts = require("nvim-stormcaller.lib.tree-sitter")
 
 local M = {}
 
+local _cursor_node
+
+M.get_cursor_node = function()
+    return _cursor_node
+end
+
+---@class find_closest_jsx_node_to_cursor_Opts
+---@field buf number
+---@field win number
+
+---@param o find_closest_jsx_node_to_cursor_Opts
+---@return table, string
 local find_closest_jsx_node_to_cursor = function(o)
     local all_jsx_nodes = lib_ts.capture_nodes_with_queries({
-        buf = 0,
+        buf = o.buf,
         parser_name = "tsx",
         queries = {
             "(jsx_fragment) @jsx_fragment",
@@ -35,6 +47,11 @@ local find_closest_jsx_node_to_cursor = function(o)
     return closest_node, jump_destination
 end
 
+---@class navigator_initiate_Opts
+---@field win number
+---@field buf number
+
+---@param o navigator_initiate_Opts
 M.initiate = function(o)
     vim.cmd("norm! ^")
 
@@ -46,16 +63,29 @@ M.initiate = function(o)
 
     if parent then
         lib_ts.put_cursor_at_start_of_node({ node = parent, win = o.win })
+        _cursor_node = parent
     else
-        local closest_node, jump_destination = find_closest_jsx_node_to_cursor({ win = o.win })
+        local closest_node, jump_destination =
+            find_closest_jsx_node_to_cursor({ win = o.win, buf = o.buf })
         if closest_node then
             if jump_destination == "start-of-node" then
                 lib_ts.put_cursor_at_start_of_node({ win = o.win, node = closest_node })
             elseif jump_destination == "end-of-node" then
                 lib_ts.put_cursor_at_end_of_node({ win = o.win, node = closest_node })
             end
+            _cursor_node = closest_node
         end
     end
 end
+
+-- local find_target_node = function(o)
+--     if o.destination == "next-node-on-screen" then
+--         -- TODO:
+--     end
+-- end
+--
+-- M.move = function(o)
+--     local target_node = find_target_node(o)
+-- end
 
 return M

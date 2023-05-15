@@ -7,4 +7,10 @@ M.set_buf_content = function(content)
     vim.api.nvim_buf_set_lines(0, 0, -1, false, content)
 end
 
+M.assert_cursor_node_has_text = function(want)
+    local cursor_node = require("nvim-stormcaller.lib.navigator").get_cursor_node()
+    local cursor_node_text = vim.treesitter.get_node_text(cursor_node, 0)
+    assert.equals(want, cursor_node_text)
+end
+
 return M
