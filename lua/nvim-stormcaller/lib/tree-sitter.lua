@@ -156,4 +156,10 @@ M.node_start_and_end_on_same_line = function(node)
     return start_row == end_row
 end
 
+M.cursor_at_start_of_node = function(o)
+    local start_row = o.node:range()
+    local cursor_line = unpack(vim.api.nvim_win_get_cursor(o.win))
+    return start_row + 1 == cursor_line
+end
+
 return M
