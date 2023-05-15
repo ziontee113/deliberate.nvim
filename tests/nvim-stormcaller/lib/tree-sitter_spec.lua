@@ -128,3 +128,58 @@ describe("capture_nodes_with_queries()", function()
         vim.api.nvim_buf_delete(0, { force = true }) -- delete buffer after the test
     end)
 end)
+
+describe("find_named_siblings_with_types", function()
+    after_each(function()
+        vim.api.nvim_buf_delete(0, { force = true }) -- delete buffer after the test
+    end)
+
+    it("returns next siblings of given node if they match given type(s)", function()
+        set_buffer_content_as_react_component()
+        vim.cmd("norm! 5gg^") -- cursor to start of first <li> tag
+
+        local current_jsx_node = ts_utils.get_node_at_cursor(0):parent()
+        local current_jsx_node_text = vim.treesitter.get_node_text(current_jsx_node, 0)
+        assert.equals("<li>Home</li>", current_jsx_node_text)
+
+        local next_siblings = lib_ts.find_named_siblings_with_types({
+            node = current_jsx_node,
+            direction = "next",
+            desired_types = { "jsx_element", "jsx_self_closing_element" },
+        })
+
+        assert.equals(
+            [[<li>
+          A new study found that coffee drinkers have a lower risk of liver
+          cancer. So, drink up!
+        </li>]],
+            vim.treesitter.get_node_text(next_siblings[1], 0)
+        )
+        assert.equals("<li>Contacts</li>", vim.treesitter.get_node_text(next_siblings[2], 0))
+        assert.equals("<li>FAQ</li>", vim.treesitter.get_node_text(next_siblings[3], 0))
+    end)
+
+    it("returns previous siblings of given node if they match given type(s)", function()
+        set_buffer_content_as_react_component()
+        vim.cmd("norm! 10gg^") -- cursor to start of 3rd <li> tag
+
+        local current_jsx_node = ts_utils.get_node_at_cursor(0):parent()
+        local current_jsx_node_text = vim.treesitter.get_node_text(current_jsx_node, 0)
+        assert.equals("<li>Contacts</li>", current_jsx_node_text)
+
+        local previous_siblings = lib_ts.find_named_siblings_with_types({
+            node = current_jsx_node,
+            direction = "previous",
+            desired_types = { "jsx_element", "jsx_self_closing_element" },
+        })
+
+        assert.equals(
+            [[<li>
+          A new study found that coffee drinkers have a lower risk of liver
+          cancer. So, drink up!
+        </li>]],
+            vim.treesitter.get_node_text(previous_siblings[1], 0)
+        )
+        assert.equals("<li>Home</li>", vim.treesitter.get_node_text(previous_siblings[2], 0))
+    end)
+end)

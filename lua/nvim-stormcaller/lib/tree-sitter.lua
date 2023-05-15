@@ -4,6 +4,8 @@ local M = {}
 ---@field type function
 ---@field parent function
 ---@field range function
+---@field next_named_sibling function
+---@field prev_named_sibling function
 
 ---@class find_closest_parent_with_types_Opts
 ---@field node TSNode
@@ -114,6 +116,39 @@ M.capture_nodes_with_queries = function(o)
     end
 
     return all_captures, grouped_captures
+end
+
+---@class find_sublings_with_types_Opts
+---@field node TSNode
+---@field direction "next" | "previous"
+---@field desired_types string[]
+
+---@param o find_sublings_with_types_Opts
+---@return TSNode[], TSNode[]
+M.find_named_siblings_with_types = function(o)
+    local directed_siblings, matched_siblings = {}, {}
+
+    if o.direction == "next" then
+        local sibling = o.node:next_named_sibling()
+        while sibling do
+            table.insert(directed_siblings, sibling)
+            if vim.tbl_contains(o.desired_types, sibling:type()) then
+                table.insert(matched_siblings, sibling)
+            end
+            sibling = sibling:next_named_sibling()
+        end
+    elseif o.direction == "previous" then
+        local sibling = o.node:prev_named_sibling()
+        while sibling do
+            table.insert(directed_siblings, sibling)
+            if vim.tbl_contains(o.desired_types, sibling:type()) then
+                table.insert(matched_siblings, sibling)
+            end
+            sibling = sibling:prev_named_sibling()
+        end
+    end
+
+    return matched_siblings, directed_siblings
 end
 
 return M
