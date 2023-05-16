@@ -15,6 +15,7 @@ M.get_catalyst = function() return _catalyst end
 
 ---@param o _catalyst
 M.set_catalyst = function(o) _catalyst = o end
+M.set_catalyst_node = function(node) _catalyst.node = node end
 
 M.move_cursor_to_catalyst = function()
     lib_ts.put_cursor_at_node({

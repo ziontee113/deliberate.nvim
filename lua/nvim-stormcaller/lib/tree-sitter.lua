@@ -79,6 +79,15 @@ M.get_root = function(o)
     end
 end
 
+M.update_tree = function(o)
+    if o.root:has_changes() then
+        local start_row, start_col, end_row, end_col = o.root:range()
+        local updated_root = M.get_root({ parser_name = o.parser_name, buf = o.buf, reset = true })
+        o.root = updated_root:named_descendant_for_range(start_row, start_col, end_row, end_col)
+    end
+    return o.root
+end
+
 ---@class capture_nodes_with_queries_Opts
 ---@field buf number
 ---@field root TSNode | nil
@@ -95,13 +104,7 @@ M.capture_nodes_with_queries = function(o)
         grouped_captures[key] = {}
     end
 
-    local root = o.root or M.get_root({ parser_name = o.parser_name, buf = o.buf })
-
-    if root:has_changes() then
-        local start_row, start_col, end_row, end_col = root:range()
-        local updated_root = M.get_root({ parser_name = o.parser_name, buf = o.buf, reset = true })
-        root = updated_root:named_descendant_for_range(start_row, start_col, end_row, end_col)
-    end
+    local root = M.update_tree(o) or M.get_root({ parser_name = o.parser_name, buf = o.buf })
 
     for _, query in ipairs(o.queries) do
         local parsed_query = vim.treesitter.query.parse(o.parser_name, query)
@@ -186,6 +189,17 @@ M.get_children_with_types = function(o)
         end
     end
     return matched_children
+end
+
+---@class replace_node_text_Opts
+---@field node TSNode
+---@field replacement string | table
+---@field buf number
+
+M.replace_node_text = function(o)
+    if type(o.replacement) == "string" then o.replacement = { o.replacement } end
+    local start_row, start_col, end_row, end_col = o.node:range()
+    vim.api.nvim_buf_set_text(o.buf, start_row, start_col, end_row, end_col, o.replacement)
 end
 
 return M
