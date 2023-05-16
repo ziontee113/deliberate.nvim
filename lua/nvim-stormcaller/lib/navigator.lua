@@ -14,7 +14,7 @@ local _catalyst
 M.get_catalyst = function() return _catalyst end
 
 ---@param o _catalyst
-M.update_catalyst = function(o) _catalyst = o end
+M.set_catalyst = function(o) _catalyst = o end
 
 M.move_cursor_to_catalyst = function()
     lib_ts.put_cursor_at_node({
@@ -94,12 +94,12 @@ M.initiate = function(o)
     })
 
     if parent then
-        M.update_catalyst({ node = parent, win = o.win, buf = o.buf, node_point = "start" })
+        M.set_catalyst({ node = parent, win = o.win, buf = o.buf, node_point = "start" })
         M.move_cursor_to_catalyst()
     else
         local closest_node, destination =
             find_closest_jsx_node_to_cursor({ win = o.win, buf = o.buf })
-        M.update_catalyst({
+        M.set_catalyst({
             node = closest_node,
             win = o.win,
             buf = o.buf,
