@@ -1,52 +1,6 @@
 local navigator = require("nvim-stormcaller.lib.navigator")
 local helpers = require("nvim-stormcaller.helpers")
 
-local set_buffer_content_as_multiple_react_components = function()
-    vim.bo.ft = "typescriptreact"
-    helpers.set_buf_content([[
-function OtherComponent() {
-  return (
-    <p>
-      Astronauts in space can grow up to 2 inches taller due to the lack of
-      gravity.
-    </p>
-  )
-}
-
-let x = 10;
-let y = 100;
-
-export default function Home() {
-  return (
-    <>
-      <div className="h-screen w-screen bg-zinc-900">
-        <li>Home</li>
-        <li>
-          A new study found that coffee drinkers have a lower risk of liver
-          cancer. So, drink up!
-        </li>
-        <li>Contacts</li>
-        <li>FAQ</li>
-        <OtherComponent />
-      </div>
-    </>
-  )
-}
-
-let str = "just a random string";
-
-function OtherOtherComponent() {
-  return (
-    <div>
-      <ul>
-        <li>Log In</li>
-        <li>Sign Up</li>
-      </ul>
-    </div>
-  )
-}]])
-end
-
 describe("navigator.initiate()", function()
     before_each(function() vim.bo.ft = "typescriptreact" end)
     after_each(function() vim.api.nvim_buf_delete(0, { force = true }) end)
@@ -133,7 +87,7 @@ export default function Home() {
         [[puts cursor at end of closest jsx_element
 because initial cursor was sandwiched between jsx_elements and was below closest jsx_element ]],
         function()
-            set_buffer_content_as_multiple_react_components()
+            helpers.set_buffer_content_as_multiple_react_components()
             vim.cmd("norm! 8gg0")
 
             navigator.initiate({ win = 0, buf = 0 })
@@ -147,7 +101,7 @@ because initial cursor was sandwiched between jsx_elements and was below closest
         [[puts cursor at start of closest jsx_element
 because initial cursor was sandwiched between jsx_elements and was above closest jsx_element ]],
         function()
-            set_buffer_content_as_multiple_react_components()
+            helpers.set_buffer_content_as_multiple_react_components()
             vim.cmd("norm! 12gg0")
 
             navigator.initiate({ win = 0, buf = 0 })
@@ -159,7 +113,7 @@ because initial cursor was sandwiched between jsx_elements and was above closest
 end)
 
 describe("navigator.move()", function()
-    before_each(function() set_buffer_content_as_multiple_react_components() end)
+    before_each(function() helpers.set_buffer_content_as_multiple_react_components() end)
     after_each(function() vim.api.nvim_buf_delete(0, { force = true }) end)
 
     it("direction = next-sibling", function()

@@ -23,4 +23,50 @@ M.assert_last_line_of_node_has_text = function(want)
     assert.equals(want, split[#split])
 end
 
+M.set_buffer_content_as_multiple_react_components = function()
+    vim.bo.ft = "typescriptreact"
+    M.set_buf_content([[
+function OtherComponent() {
+  return (
+    <p>
+      Astronauts in space can grow up to 2 inches taller due to the lack of
+      gravity.
+    </p>
+  )
+}
+
+let x = 10;
+let y = 100;
+
+export default function Home() {
+  return (
+    <>
+      <div className="h-screen w-screen bg-zinc-900">
+        <li>Home</li>
+        <li>
+          A new study found that coffee drinkers have a lower risk of liver
+          cancer. So, drink up!
+        </li>
+        <li>Contacts</li>
+        <li>FAQ</li>
+        <OtherComponent />
+      </div>
+    </>
+  )
+}
+
+let str = "just a random string";
+
+function OtherOtherComponent() {
+  return (
+    <div>
+      <ul>
+        <li>Log In</li>
+        <li>Sign Up</li>
+      </ul>
+    </div>
+  )
+}]])
+end
+
 return M
