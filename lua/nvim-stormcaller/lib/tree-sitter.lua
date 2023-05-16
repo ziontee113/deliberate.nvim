@@ -64,12 +64,15 @@ end
 ---@class get_root_Opts
 ---@field buf number
 ---@field parser_name string
+---@field reset boolean
 
 ---@param o get_root_Opts
 ---@return TSNode | nil
 M.get_root = function(o)
     local parser_ok, parser = pcall(vim.treesitter.get_parser, o.buf, o.parser_name)
     if parser_ok then
+        if o.reset then parser:invalidate(true) end
+
         local trees = parser:parse()
         local root = trees[1]:root()
         return root
@@ -94,9 +97,15 @@ M.capture_nodes_with_queries = function(o)
 
     local root = o.root or M.get_root({ parser_name = o.parser_name, buf = o.buf })
 
+    if root:has_changes() then
+        local start_row, start_col, end_row, end_col = root:range()
+        local updated_root = M.get_root({ parser_name = o.parser_name, buf = o.buf, reset = true })
+        root = updated_root:named_descendant_for_range(start_row, start_col, end_row, end_col)
+    end
+
     for _, query in ipairs(o.queries) do
         local parsed_query = vim.treesitter.query.parse(o.parser_name, query)
-        for _, matches, _ in parsed_query:iter_matches(root, 0) do
+        for _, matches, _ in parsed_query:iter_matches(root, o.buf) do
             for i, node in ipairs(matches) do
                 table.insert(all_captures, node)
 
