@@ -157,7 +157,7 @@ end
 ---@field node TSNode
 ---@field win number
 
-M.cursor_at_start_of_node = function(o)
+M.cursor_is_at_start_of_node = function(o)
     local start_row = o.node:range()
     local cursor_line = unpack(vim.api.nvim_win_get_cursor(o.win))
     return start_row + 1 == cursor_line

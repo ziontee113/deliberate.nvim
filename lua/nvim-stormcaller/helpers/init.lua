@@ -6,19 +6,19 @@ M.set_buf_content = function(content)
 end
 
 M.assert_cursor_node_has_text = function(want)
-    local cursor_node = require("nvim-stormcaller.lib.navigator").get_cursor_node()
-    local cursor_node_text = vim.treesitter.get_node_text(cursor_node, 0)
+    local cursor_node = require("nvim-stormcaller.lib.navigator").get_catalyst()
+    local cursor_node_text = vim.treesitter.get_node_text(cursor_node.node, cursor_node.buf)
     assert.equals(want, cursor_node_text)
 end
 
 M.assert_first_line_of_node_has_text = function(want)
-    local cursor_node = require("nvim-stormcaller.lib.navigator").get_cursor_node()
-    local cursor_node_text = vim.treesitter.get_node_text(cursor_node, 0)
+    local cursor_node = require("nvim-stormcaller.lib.navigator").get_catalyst()
+    local cursor_node_text = vim.treesitter.get_node_text(cursor_node.node, cursor_node.buf)
     assert.equals(want, vim.split(cursor_node_text, "\n")[1])
 end
 M.assert_last_line_of_node_has_text = function(want)
-    local cursor_node = require("nvim-stormcaller.lib.navigator").get_cursor_node()
-    local cursor_node_text = vim.treesitter.get_node_text(cursor_node, 0)
+    local cursor_node = require("nvim-stormcaller.lib.navigator").get_catalyst()
+    local cursor_node_text = vim.treesitter.get_node_text(cursor_node.node, cursor_node.buf)
     local split = vim.split(cursor_node_text, "\n")
     assert.equals(want, split[#split])
 end
