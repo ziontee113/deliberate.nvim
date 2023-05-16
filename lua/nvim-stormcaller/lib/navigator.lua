@@ -16,6 +16,14 @@ M.get_catalyst = function() return _catalyst end
 ---@param o _catalyst
 M.update_catalyst = function(o) _catalyst = o end
 
+M.move_cursor_to_catalyst = function()
+    lib_ts.put_cursor_at_node({
+        node = _catalyst.node,
+        destination = _catalyst.node_point,
+        win = _catalyst.win,
+    })
+end
+
 ---@class find_closest_node_to_cursor_Opts
 ---@field win number
 ---@field row_offset number
@@ -86,24 +94,18 @@ M.initiate = function(o)
     })
 
     if parent then
-        lib_ts.put_cursor_at_node({ node = parent, win = o.win, destination = "start" })
         M.update_catalyst({ node = parent, win = o.win, buf = o.buf, node_point = "start" })
+        M.move_cursor_to_catalyst()
     else
-        local closest_node, destination = find_closest_jsx_node_to_cursor({
-            win = o.win,
-            buf = o.buf,
-        })
-        lib_ts.put_cursor_at_node({
-            destination = destination,
-            win = o.win,
-            node = closest_node,
-        })
+        local closest_node, destination =
+            find_closest_jsx_node_to_cursor({ win = o.win, buf = o.buf })
         M.update_catalyst({
             node = closest_node,
             win = o.win,
             buf = o.buf,
             node_point = destination,
         })
+        M.move_cursor_to_catalyst()
     end
 end
 
@@ -262,11 +264,7 @@ M.move = function(o)
         _catalyst.node_point = "start"
     end
 
-    lib_ts.put_cursor_at_node({
-        node = _catalyst.node,
-        destination = _catalyst.node_point,
-        win = _catalyst.win,
-    })
+    M.move_cursor_to_catalyst()
 end
 
 return M
