@@ -104,7 +104,12 @@ M.capture_nodes_with_queries = function(o)
         grouped_captures[key] = {}
     end
 
-    local root = M.update_tree(o) or M.get_root({ parser_name = o.parser_name, buf = o.buf })
+    local root
+    if o.root then
+        root = M.update_tree(o)
+    else
+        root = M.get_root({ parser_name = o.parser_name, buf = o.buf })
+    end
 
     for _, query in ipairs(o.queries) do
         local parsed_query = vim.treesitter.query.parse(o.parser_name, query)
