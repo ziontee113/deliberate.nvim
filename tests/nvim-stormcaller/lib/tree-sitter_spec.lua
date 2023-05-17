@@ -253,3 +253,25 @@ describe("get_children_with_types", function()
         vim.api.nvim_buf_delete(0, { force = true })
     end)
 end)
+
+describe("replace_node_text()", function()
+    it("works", function()
+        set_buffer_content_as_react_component()
+        vim.cmd("norm! 10gg^")
+
+        local current_jsx_node = ts_utils.get_node_at_cursor(0):parent()
+        local current_jsx_node_text = vim.treesitter.get_node_text(current_jsx_node, 0)
+        assert.equals("<li>Contacts</li>", current_jsx_node_text)
+
+        lib_ts.replace_node_text({
+            buf = 0,
+            node = current_jsx_node,
+            replacement = "<h1>Omega</h1>",
+        })
+
+        current_jsx_node_text = vim.treesitter.get_node_text(current_jsx_node, 0)
+        assert.equals("<h1>Omega</h1>", current_jsx_node_text)
+
+        vim.api.nvim_buf_delete(0, { force = true })
+    end)
+end)
