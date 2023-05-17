@@ -106,6 +106,8 @@ describe("put_cursor_at_node()", function()
 end)
 
 describe("capture_nodes_with_queries()", function()
+    after_each(function() vim.api.nvim_buf_delete(0, { force = true }) end)
+
     it("returns a tuple of { all_captures, grouped_captures }", function()
         set_buffer_content_as_react_component()
 
@@ -124,8 +126,50 @@ describe("capture_nodes_with_queries()", function()
         assert.equals(1, #grouped_captures["jsx_fragment"])
         assert.equals(5, #grouped_captures["jsx_element"])
         assert.equals(0, #grouped_captures["jsx_self_closing_element"])
+    end)
 
-        vim.api.nvim_buf_delete(0, { force = true }) -- delete buffer after the test
+    it("returns the captures correctly after vim.api.nvim_buf_set_text()", function()
+        set_buffer_content_as_react_component()
+
+        local all_captures, grouped_captures = lib_ts.capture_nodes_with_queries({
+            buf = 0,
+            parser_name = "tsx",
+            queries = {
+                "(jsx_fragment) @jsx_fragment",
+                "(jsx_element) @jsx_element",
+                "(jsx_self_closing_element) @jsx_self_closing_element",
+            },
+            capture_groups = { "jsx_element", "jsx_self_closing_element", "jsx_fragment" },
+        })
+
+        assert.equals(6, #all_captures)
+        assert.equals(1, #grouped_captures["jsx_fragment"])
+        assert.equals(5, #grouped_captures["jsx_element"])
+        assert.equals(0, #grouped_captures["jsx_self_closing_element"])
+
+        -- Make changes to buffer
+
+        lib_ts.replace_node_text({
+            node = grouped_captures["jsx_element"][2], -- first <li> tag
+            buf = 0,
+            replacement = { "<h1>Hello</h1>", "        <p>Venus</p>" },
+        })
+
+        all_captures, grouped_captures = lib_ts.capture_nodes_with_queries({
+            buf = 0,
+            parser_name = "tsx",
+            queries = {
+                "(jsx_fragment) @jsx_fragment",
+                "(jsx_element) @jsx_element",
+                "(jsx_self_closing_element) @jsx_self_closing_element",
+            },
+            capture_groups = { "jsx_element", "jsx_self_closing_element", "jsx_fragment" },
+        })
+
+        assert.equals(7, #all_captures)
+        assert.equals(1, #grouped_captures["jsx_fragment"])
+        assert.equals(6, #grouped_captures["jsx_element"])
+        assert.equals(0, #grouped_captures["jsx_self_closing_element"])
     end)
 end)
 
