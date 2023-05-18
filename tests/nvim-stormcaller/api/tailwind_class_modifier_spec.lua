@@ -1,4 +1,4 @@
-local tcm = require("nvim-stormcaller.lib.tailwind_class_modifier")
+local tcm = require("nvim-stormcaller.api.tailwind_class_modifier")
 local navigator = require("nvim-stormcaller.lib.navigator")
 local helpers = require("nvim-stormcaller.helpers")
 
