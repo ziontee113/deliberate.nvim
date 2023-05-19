@@ -12,7 +12,7 @@ describe("modify_padding()", function()
         navigator.initiate({ win = 0, buf = 0 })
         helpers.assert_cursor_node_has_text("<li>Contacts</li>")
 
-        tcm.modify_padding({ axis = "omni", modify_to = "p-4" })
+        tcm.change_padding({ axis = "omni", modify_to = "p-4" })
         helpers.assert_cursor_node_has_text('<li className="p-4">Contacts</li>')
     end)
 
@@ -24,7 +24,7 @@ describe("modify_padding()", function()
             '<h3 className="mt-4 text-sm text-gray-700">{image.name}</h3>'
         )
 
-        tcm.modify_padding({ axis = "omni", modify_to = "p-4" })
+        tcm.change_padding({ axis = "omni", modify_to = "p-4" })
         helpers.assert_cursor_node_has_text(
             '<h3 className="mt-4 text-sm text-gray-700 p-4">{image.name}</h3>'
         )

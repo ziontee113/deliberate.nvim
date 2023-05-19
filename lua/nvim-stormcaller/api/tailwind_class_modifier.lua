@@ -82,7 +82,7 @@ end
 ---@field axis "omni" | "x" | "y" | "l" | "r" | "t" | "b"
 ---@field modify_to string
 
-M.modify_padding = function(o)
+M.change_padding = function(o)
     local _catalyst = navigator.get_catalyst()
     if not _catalyst then return end
 
