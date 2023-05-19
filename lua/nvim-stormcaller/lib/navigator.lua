@@ -3,6 +3,8 @@ local lib_ts = require("nvim-stormcaller.lib.tree-sitter")
 
 local M = {}
 
+-------------------------------------------- Catalyst
+
 ---@class _catalyst
 ---@field node TSNode
 ---@field win number
@@ -24,6 +26,16 @@ M.move_cursor_to_catalyst = function()
         win = _catalyst.win,
     })
 end
+
+M.update_catalyst = function()
+    _catalyst.node = lib_ts.update_tree({
+        root = _catalyst.node,
+        buf = _catalyst.buf,
+        parser_name = "tsx",
+    })
+end
+
+-------------------------------------------- Move
 
 ---@class find_closest_node_to_cursor_Opts
 ---@field win number

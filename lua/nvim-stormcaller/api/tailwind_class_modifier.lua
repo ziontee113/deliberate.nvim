@@ -3,7 +3,7 @@ local M = {}
 local navigator = require("nvim-stormcaller.lib.navigator")
 local lib_ts = require("nvim-stormcaller.lib.tree-sitter")
 
-local function get_tag_node(_catalyst)
+local function get_tag_identifier_node(_catalyst)
     local attribute_master_node
     if _catalyst.node:type() == "jsx_element" then
         attribute_master_node = lib_ts.get_children_with_types({
@@ -22,7 +22,7 @@ local function get_tag_node(_catalyst)
 end
 
 local function set_empty_className_property(_catalyst)
-    local tag_node = get_tag_node(_catalyst)
+    local tag_node = get_tag_identifier_node(_catalyst)
     local start_row, _, _, end_col = tag_node:range()
     vim.api.nvim_buf_set_text(
         _catalyst.buf,
@@ -100,11 +100,7 @@ M.modify_padding = function(o)
         replacement = string.format('"%s"', modified_class_names),
     })
 
-    navigator.set_catalyst_node(lib_ts.update_tree({
-        root = _catalyst.node,
-        buf = _catalyst.buf,
-        parser_name = "tsx",
-    }))
+    navigator.update_catalyst()
 end
 
 return M
