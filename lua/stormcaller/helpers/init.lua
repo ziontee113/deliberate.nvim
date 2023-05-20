@@ -22,6 +22,26 @@ M.assert_last_line_of_catalyst_node_has_text = function(want)
     assert.equals(want, split[#split])
 end
 
+M.set_buffer_content_as_react_component = function()
+    vim.bo.ft = "typescriptreact"
+    M.set_buf_content([[
+export default function Home() {
+  return (
+    <>
+      <div className="h-screen w-screen bg-zinc-900">
+        <li>Home</li>
+        <li>
+          A new study found that coffee drinkers have a lower risk of liver
+          cancer. So, drink up!
+        </li>
+        <li>Contacts</li>
+        <li>FAQ</li>
+      </div>
+    </>
+  )
+}]])
+end
+
 M.set_buffer_content_as_multiple_react_components = function()
     vim.bo.ft = "typescriptreact"
     M.set_buf_content([[

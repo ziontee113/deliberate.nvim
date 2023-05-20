@@ -2,29 +2,9 @@ local ts_utils = require("nvim-treesitter.ts_utils")
 local lib_ts = require("stormcaller.lib.tree-sitter")
 local helpers = require("stormcaller.helpers")
 
-local set_buffer_content_as_react_component = function()
-    vim.bo.ft = "typescriptreact"
-    helpers.set_buf_content([[
-export default function Home() {
-  return (
-    <>
-      <div className="h-screen w-screen bg-zinc-900">
-        <li>Home</li>
-        <li>
-          A new study found that coffee drinkers have a lower risk of liver
-          cancer. So, drink up!
-        </li>
-        <li>Contacts</li>
-        <li>FAQ</li>
-      </div>
-    </>
-  )
-}]])
-end
-
 describe("find_nearest_parent_of_types()", function()
     it("returns given node if it's type is one of the `desired_parent_types`", function()
-        set_buffer_content_as_react_component()
+        helpers.set_buffer_content_as_react_component()
         vim.cmd("norm! 6gg^") -- put cursor at line 7: A new study [f]ound that
 
         local current_node = ts_utils.get_node_at_cursor(0)
@@ -46,7 +26,7 @@ describe("find_nearest_parent_of_types()", function()
         vim.api.nvim_buf_delete(0, { force = true }) -- delete buffer after the test
     end)
     it("returns closest parent node that has one of the `desired_parent_types`", function()
-        set_buffer_content_as_react_component()
+        helpers.set_buffer_content_as_react_component()
         vim.cmd("norm! 7gg0ff") -- put cursor at line 7: A new study [f]ound that
 
         local current_node = ts_utils.get_node_at_cursor(0)
@@ -75,7 +55,7 @@ describe("put_cursor_at_node()", function()
     end)
 
     it("destination == start", function()
-        set_buffer_content_as_react_component()
+        helpers.set_buffer_content_as_react_component()
         vim.cmd("norm! 7gg0ff") -- put cursor at line 7: A new study [f]ound that
 
         local current_node = ts_utils.get_node_at_cursor(0)
@@ -90,7 +70,7 @@ describe("put_cursor_at_node()", function()
     end)
 
     it("destination == end", function()
-        set_buffer_content_as_react_component()
+        helpers.set_buffer_content_as_react_component()
         vim.cmd("norm! 7gg0ff") -- put cursor at line 7: A new study [f]ound that
 
         local current_node = ts_utils.get_node_at_cursor(0)
@@ -109,7 +89,7 @@ describe("capture_nodes_with_queries()", function()
     after_each(function() vim.api.nvim_buf_delete(0, { force = true }) end)
 
     it("returns a tuple of { all_captures, grouped_captures }", function()
-        set_buffer_content_as_react_component()
+        helpers.set_buffer_content_as_react_component()
 
         local all_captures, grouped_captures = lib_ts.capture_nodes_with_queries({
             buf = 0,
@@ -129,7 +109,7 @@ describe("capture_nodes_with_queries()", function()
     end)
 
     it("returns the captures correctly after vim.api.nvim_buf_set_text()", function()
-        set_buffer_content_as_react_component()
+        helpers.set_buffer_content_as_react_component()
 
         local all_captures, grouped_captures = lib_ts.capture_nodes_with_queries({
             buf = 0,
@@ -179,7 +159,7 @@ describe("find_named_siblings_in_direction_with_types", function()
     end)
 
     it("returns next siblings of given node if they match given type(s)", function()
-        set_buffer_content_as_react_component()
+        helpers.set_buffer_content_as_react_component()
         vim.cmd("norm! 5gg^") -- cursor to start of first <li> tag
 
         local current_jsx_node = ts_utils.get_node_at_cursor(0):parent()
@@ -204,7 +184,7 @@ describe("find_named_siblings_in_direction_with_types", function()
     end)
 
     it("returns previous siblings of given node if they match given type(s)", function()
-        set_buffer_content_as_react_component()
+        helpers.set_buffer_content_as_react_component()
         vim.cmd("norm! 10gg^") -- cursor to start of 3rd <li> tag
 
         local current_jsx_node = ts_utils.get_node_at_cursor(0):parent()
@@ -232,7 +212,7 @@ describe("node_start_and_end_on_same_line", function()
     after_each(function() vim.api.nvim_buf_delete(0, { force = true }) end)
 
     it("checks for single line case correctly", function()
-        set_buffer_content_as_react_component()
+        helpers.set_buffer_content_as_react_component()
         vim.cmd("norm! 10gg^") -- cursor to start of 3rd <li> tag
 
         local current_jsx_node = ts_utils.get_node_at_cursor(0):parent()
@@ -243,7 +223,7 @@ describe("node_start_and_end_on_same_line", function()
     end)
 
     it("checks for multiple lines case correctly", function()
-        set_buffer_content_as_react_component()
+        helpers.set_buffer_content_as_react_component()
         vim.cmd("norm! 6gg^") -- cursor to start of 2nd <li> tag
 
         local current_jsx_node = ts_utils.get_node_at_cursor(0):parent()
@@ -262,7 +242,7 @@ end)
 
 describe("cursor_is_at_start_of_node", function()
     it("works", function()
-        set_buffer_content_as_react_component()
+        helpers.set_buffer_content_as_react_component()
         vim.cmd("norm! 4gg^") -- cursor to start of <div> tag
 
         local current_jsx_node = ts_utils.get_node_at_cursor(0):parent()
@@ -277,7 +257,7 @@ end)
 
 describe("get_children_with_types", function()
     it("works", function()
-        set_buffer_content_as_react_component()
+        helpers.set_buffer_content_as_react_component()
         vim.cmd("norm! 4gg^") -- cursor to start of <div> tag
 
         local div_jsx_node = ts_utils.get_node_at_cursor(0):parent()
@@ -300,7 +280,7 @@ end)
 
 describe("replace_node_text()", function()
     it("works", function()
-        set_buffer_content_as_react_component()
+        helpers.set_buffer_content_as_react_component()
         vim.cmd("norm! 10gg^")
 
         local current_jsx_node = ts_utils.get_node_at_cursor(0):parent()
