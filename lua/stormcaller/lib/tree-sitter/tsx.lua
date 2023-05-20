@@ -18,4 +18,26 @@ M.get_all_jsx_nodes_in_buffer = function(buf)
     return all_jsx_nodes, grouped_captures
 end
 
+---@param node TSNode
+---@return TSNode | nil
+M.get_tag_identifier_node = function(node)
+    local attribute_master_node
+    if node:type() == "jsx_element" then
+        attribute_master_node = lib_ts.get_children_with_types({
+            node = node,
+            desired_types = { "jsx_opening_element" },
+        })[1]
+    elseif node:type() == "jsx_self_closing_element" then
+        attribute_master_node = node
+    end
+
+    if not attribute_master_node then return end
+
+    local tag_node = lib_ts.get_children_with_types({
+        node = attribute_master_node,
+        desired_types = { "identifier" },
+    })[1]
+    return tag_node
+end
+
 return M

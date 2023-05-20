@@ -2,27 +2,10 @@ local M = {}
 
 local catalyst = require("stormcaller.lib.catalyst")
 local lib_ts = require("stormcaller.lib.tree-sitter")
-
-local function get_tag_identifier_node(node)
-    local attribute_master_node
-    if node:type() == "jsx_element" then
-        attribute_master_node = lib_ts.get_children_with_types({
-            node = node,
-            desired_types = { "jsx_opening_element" },
-        })[1]
-    elseif node:type() == "jsx_self_closing_element" then
-        -- TODO:
-    end
-
-    local tag_node = lib_ts.get_children_with_types({
-        node = attribute_master_node,
-        desired_types = { "identifier" },
-    })[1]
-    return tag_node
-end
+local lib_ts_tsx = require("stormcaller.lib.tree-sitter.tsx")
 
 local function set_empty_className_property(buf, node)
-    local tag_node = get_tag_identifier_node(node)
+    local tag_node = lib_ts_tsx.get_tag_identifier_node(node)
     local start_row, _, _, end_col = tag_node:range()
     vim.api.nvim_buf_set_text(buf, start_row, end_col, start_row, end_col, { ' className=""' })
 end
