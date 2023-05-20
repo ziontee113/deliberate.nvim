@@ -83,7 +83,7 @@ end
 
 ---@param win number
 ---@param buf number
----@return table, string
+---@return TSNode[], string
 local find_closest_jsx_node_to_cursor = function(win, buf)
     local jsx_nodes = lib_ts_tsx.get_all_jsx_nodes_in_buffer(buf)
     return find_closest_node_to_cursor(win, jsx_nodes)
