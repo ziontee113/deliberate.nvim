@@ -1,4 +1,4 @@
-local lib_ts = require("nvim-stormcaller.lib.tree-sitter")
+local lib_ts = require("stormcaller.lib.tree-sitter")
 
 local M = {}
 

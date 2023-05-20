@@ -1,6 +1,6 @@
 local M = {}
 
-local catalyst = require("nvim-stormcaller.lib.catalyst")
+local catalyst = require("stormcaller.lib.catalyst")
 
 M.set_buf_content = function(content)
     if type(content) == "string" then content = vim.split(content, "\n") end

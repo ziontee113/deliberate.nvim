@@ -1,6 +1,6 @@
-local lib_ts = require("nvim-stormcaller.lib.tree-sitter")
-local lib_ts_tsx = require("nvim-stormcaller.lib.tree-sitter.tsx")
-local catalyst = require("nvim-stormcaller.lib.catalyst")
+local lib_ts = require("stormcaller.lib.tree-sitter")
+local lib_ts_tsx = require("stormcaller.lib.tree-sitter.tsx")
+local catalyst = require("stormcaller.lib.catalyst")
 
 local M = {}
 

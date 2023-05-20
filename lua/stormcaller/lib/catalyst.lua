@@ -1,8 +1,8 @@
 local M = {}
 
 local ts_utils = require("nvim-treesitter.ts_utils")
-local lib_ts = require("nvim-stormcaller.lib.tree-sitter")
-local lib_ts_tsx = require("nvim-stormcaller.lib.tree-sitter.tsx")
+local lib_ts = require("stormcaller.lib.tree-sitter")
+local lib_ts_tsx = require("stormcaller.lib.tree-sitter.tsx")
 
 ---@class _catalyst
 ---@field node TSNode

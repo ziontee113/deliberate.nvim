@@ -1,5 +1,5 @@
-local catalyst = require("nvim-stormcaller.lib.catalyst")
-local helpers = require("nvim-stormcaller.helpers")
+local catalyst = require("stormcaller.lib.catalyst")
+local helpers = require("stormcaller.helpers")
 
 describe("catalyst.initiate()", function()
     before_each(function() vim.bo.ft = "typescriptreact" end)

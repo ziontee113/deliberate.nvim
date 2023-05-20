@@ -1,6 +1,6 @@
-local catalyst = require("nvim-stormcaller.lib.catalyst")
-local navigator = require("nvim-stormcaller.lib.navigator")
-local helpers = require("nvim-stormcaller.helpers")
+local catalyst = require("stormcaller.lib.catalyst")
+local navigator = require("stormcaller.lib.navigator")
+local helpers = require("stormcaller.helpers")
 
 describe("navigator.move()", function()
     before_each(function() helpers.set_buffer_content_as_multiple_react_components() end)

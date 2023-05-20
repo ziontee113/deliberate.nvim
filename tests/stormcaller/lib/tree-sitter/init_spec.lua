@@ -1,6 +1,6 @@
 local ts_utils = require("nvim-treesitter.ts_utils")
-local lib_ts = require("nvim-stormcaller.lib.tree-sitter")
-local helpers = require("nvim-stormcaller.helpers")
+local lib_ts = require("stormcaller.lib.tree-sitter")
+local helpers = require("stormcaller.helpers")
 
 local set_buffer_content_as_react_component = function()
     vim.bo.ft = "typescriptreact"

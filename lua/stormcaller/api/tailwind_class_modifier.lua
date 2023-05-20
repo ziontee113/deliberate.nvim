@@ -1,7 +1,7 @@
 local M = {}
 
-local catalyst = require("nvim-stormcaller.lib.catalyst")
-local lib_ts = require("nvim-stormcaller.lib.tree-sitter")
+local catalyst = require("stormcaller.lib.catalyst")
+local lib_ts = require("stormcaller.lib.tree-sitter")
 
 local function get_tag_identifier_node(node)
     local attribute_master_node
@@ -30,7 +30,7 @@ end
 ---@param buf number
 ---@param node TSNode
 ---@return TSNode | nil
-local get_className_attribute_string_node = function(buf, node)
+local get_className_property_string_node = function(buf, node)
     local _, grouped_captures = lib_ts.capture_nodes_with_queries({
         buf = buf,
         root = node,
@@ -53,7 +53,7 @@ end
 ---@param node TSNode
 ---@return string[], TSNode|nil
 local extract_class_names = function(buf, node)
-    local className_string_node = get_className_attribute_string_node(buf, node)
+    local className_string_node = get_className_property_string_node(buf, node)
     local attribute_string_text = vim.treesitter.get_node_text(className_string_node, 0)
     local string_content = attribute_string_text:match('"([^"]+)"') or ""
 
@@ -81,7 +81,7 @@ end
 M.change_padding = function(o)
     if not catalyst.is_active() then return end
 
-    if not get_className_attribute_string_node(catalyst.buf(), catalyst.node()) then
+    if not get_className_property_string_node(catalyst.buf(), catalyst.node()) then
         set_empty_className_property(catalyst.buf(), catalyst.node())
     end
 

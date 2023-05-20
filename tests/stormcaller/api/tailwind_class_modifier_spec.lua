@@ -1,6 +1,6 @@
-local tcm = require("nvim-stormcaller.api.tailwind_class_modifier")
-local catalyst = require("nvim-stormcaller.lib.catalyst")
-local helpers = require("nvim-stormcaller.helpers")
+local tcm = require("stormcaller.api.tailwind_class_modifier")
+local catalyst = require("stormcaller.lib.catalyst")
+local helpers = require("stormcaller.helpers")
 
 describe("modify_padding()", function()
     after_each(function() vim.api.nvim_buf_delete(0, { force = true }) end)
@@ -30,14 +30,14 @@ describe("modify_padding()", function()
         )
     end)
 
-    -- it("replaces equivalent padding axis", function()
-    --     vim.cmd("norm! 22gg^") -- cursor to <li>Contacts</li>
-    --     catalyst.initiate({ win = 0, buf = 0 })
-    --
-    --     tcm.modify_padding({ axis = "omni", modify_to = "p-4" })
-    --     helpers.assert_catalyst_node_has_text('<li className="p-4">Contacts</li>')
-    --
-    --     tcm.modify_padding({ axis = "omni", modify_to = "p-8" })
-    --     helpers.assert_catalyst_node_has_text('<li className="p-8">Contacts</li>')
-    -- end)
+    it("replaces equivalent padding axis", function()
+        vim.cmd("norm! 22gg^") -- cursor to <li>Contacts</li>
+        catalyst.initiate({ win = 0, buf = 0 })
+
+        tcm.change_padding({ axis = "omni", modify_to = "p-4" })
+        helpers.assert_catalyst_node_has_text('<li className="p-4">Contacts</li>')
+
+        tcm.change_padding({ axis = "omni", modify_to = "p-8" })
+        helpers.assert_catalyst_node_has_text('<li className="p-8">Contacts</li>')
+    end)
 end)
