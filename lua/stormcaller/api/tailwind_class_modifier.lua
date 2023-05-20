@@ -14,19 +14,6 @@ local function set_empty_className_property(buf, node)
     vim.api.nvim_buf_set_text(buf, start_row, end_col, start_row, end_col, { ' className=""' })
 end
 
----@param buf number
----@param node TSNode
----@return string[], TSNode|nil
-local extract_class_names = function(buf, node)
-    local className_string_node = lib_ts_tsx.get_className_property_string_node(buf, node)
-    local attribute_string_text = vim.treesitter.get_node_text(className_string_node, 0)
-    local string_content = attribute_string_text:match('"([^"]+)"') or ""
-
-    local class_names = vim.split(string_content, " ")
-
-    return class_names, className_string_node
-end
-
 ---@param class_names string[]
 ---@param modify_to string
 ---@return string
@@ -50,7 +37,8 @@ M.change_padding = function(o)
         set_empty_className_property(catalyst.buf(), catalyst.node())
     end
 
-    local class_names, className_string_node = extract_class_names(catalyst.buf(), catalyst.node())
+    local class_names, className_string_node =
+        lib_ts_tsx.extract_class_names(catalyst.buf(), catalyst.node())
     local modified_class_names = modify_class_names(class_names, o.modify_to)
 
     lib_ts.replace_node_text({

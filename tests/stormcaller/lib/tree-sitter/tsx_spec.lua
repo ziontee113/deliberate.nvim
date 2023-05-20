@@ -48,3 +48,15 @@ describe("get_className_property_string_node()", function()
         helpers.assert_node_has_text(className_string_node, [["h-screen w-screen bg-zinc-900"]])
     end)
 end)
+
+describe("extract_class_names()", function()
+    before_each(function() helpers.set_buffer_content_as_multiple_react_components() end)
+    after_each(function() vim.api.nvim_buf_delete(0, { force = true }) end)
+
+    it("works", function()
+        local _, grouped_captures = lib_ts_tsx.get_all_jsx_nodes_in_buffer(0)
+        local class_names = lib_ts_tsx.extract_class_names(0, grouped_captures["jsx_element"][2])
+
+        assert.same({ "h-screen", "w-screen", "bg-zinc-900" }, class_names)
+    end)
+end)
