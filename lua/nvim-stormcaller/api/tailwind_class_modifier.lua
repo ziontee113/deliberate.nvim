@@ -1,16 +1,16 @@
 local M = {}
 
-local navigator = require("nvim-stormcaller.lib.navigator")
+local catalyst = require("nvim-stormcaller.lib.catalyst")
 local lib_ts = require("nvim-stormcaller.lib.tree-sitter")
 
-local function get_tag_identifier_node(_catalyst)
+local function get_tag_identifier_node(node)
     local attribute_master_node
-    if _catalyst.node:type() == "jsx_element" then
+    if node:type() == "jsx_element" then
         attribute_master_node = lib_ts.get_children_with_types({
-            node = _catalyst.node,
+            node = node,
             desired_types = { "jsx_opening_element" },
         })[1]
-    elseif _catalyst:type() == "jsx_self_closing_element" then
+    elseif node:type() == "jsx_self_closing_element" then
         -- TODO:
     end
 
@@ -21,24 +21,19 @@ local function get_tag_identifier_node(_catalyst)
     return tag_node
 end
 
-local function set_empty_className_property(_catalyst)
-    local tag_node = get_tag_identifier_node(_catalyst)
+local function set_empty_className_property(buf, node)
+    local tag_node = get_tag_identifier_node(node)
     local start_row, _, _, end_col = tag_node:range()
-    vim.api.nvim_buf_set_text(
-        _catalyst.buf,
-        start_row,
-        end_col,
-        start_row,
-        end_col,
-        { ' className=""' }
-    )
-    navigator.initiate({ buf = _catalyst.buf, win = _catalyst.win })
+    vim.api.nvim_buf_set_text(buf, start_row, end_col, start_row, end_col, { ' className=""' })
 end
 
-local get_className_attribute_string_node = function(_catalyst)
+---@param buf number
+---@param node TSNode
+---@return TSNode | nil
+local get_className_attribute_string_node = function(buf, node)
     local _, grouped_captures = lib_ts.capture_nodes_with_queries({
-        buf = _catalyst.buf,
-        root = _catalyst.node,
+        buf = buf,
+        root = node,
         parser_name = "tsx",
         queries = {
             [[ ;query
@@ -54,10 +49,11 @@ local get_className_attribute_string_node = function(_catalyst)
     return grouped_captures["string"][1]
 end
 
----@param _catalyst _catalyst
----@return string[], TSNode
-local extract_class_names = function(_catalyst)
-    local className_string_node = get_className_attribute_string_node(_catalyst)
+---@param buf number
+---@param node TSNode
+---@return string[], TSNode|nil
+local extract_class_names = function(buf, node)
+    local className_string_node = get_className_attribute_string_node(buf, node)
     local attribute_string_text = vim.treesitter.get_node_text(className_string_node, 0)
     local string_content = attribute_string_text:match('"([^"]+)"') or ""
 
@@ -83,24 +79,22 @@ end
 ---@field modify_to string
 
 M.change_padding = function(o)
-    local _catalyst = navigator.get_catalyst()
-    if not _catalyst then return end
+    if not catalyst.is_active() then return end
 
-    if not get_className_attribute_string_node(_catalyst) then
-        set_empty_className_property(_catalyst)
-        _catalyst = navigator.get_catalyst()
+    if not get_className_attribute_string_node(catalyst.buf(), catalyst.node()) then
+        set_empty_className_property(catalyst.buf(), catalyst.node())
     end
 
-    local class_names, className_string_node = extract_class_names(_catalyst)
+    local class_names, className_string_node = extract_class_names(catalyst.buf(), catalyst.node())
     local modified_class_names = modify_class_names(class_names, o.modify_to)
 
     lib_ts.replace_node_text({
         node = className_string_node,
-        buf = _catalyst.buf,
+        buf = catalyst.buf(),
         replacement = string.format('"%s"', modified_class_names),
     })
 
-    navigator.update_catalyst()
+    catalyst.refresh_node()
 end
 
 return M
