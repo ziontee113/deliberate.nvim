@@ -15,15 +15,29 @@ local function set_empty_className_property(buf, node)
 end
 
 ---@param class_names string[]
----@param modify_to string
----@return string
-local function modify_class_names(class_names, modify_to)
+---@return string[]
+local function remove_empty_strings(class_names)
     for i = #class_names, 1, -1 do
         if class_names[i] == "" then table.remove(class_names, i) end
     end
+    return class_names
+end
 
+---@param class_names string[]
+---@return string
+local function format_class_names(class_names)
+    class_names = remove_empty_strings(class_names)
+    local str = table.concat(class_names, " ")
+    return string.format('"%s"', str)
+end
+
+---@param class_names string[]
+---@param modify_to string
+---@return string
+local function append_new_class_name(class_names, modify_to)
     table.insert(class_names, modify_to)
-    return table.concat(class_names, " ")
+
+    return format_class_names(class_names)
 end
 
 ---@class modify_padding_Opts
@@ -39,12 +53,13 @@ M.change_padding = function(o)
 
     local class_names, className_string_node =
         lib_ts_tsx.extract_class_names(catalyst.buf(), catalyst.node())
-    local modified_class_names = modify_class_names(class_names, o.modify_to)
+
+    local class_names_replacement = append_new_class_name(class_names, o.modify_to)
 
     lib_ts.replace_node_text({
         node = className_string_node,
         buf = catalyst.buf(),
-        replacement = string.format('"%s"', modified_class_names),
+        replacement = class_names_replacement,
     })
 
     catalyst.refresh_node()
