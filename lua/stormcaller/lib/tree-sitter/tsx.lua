@@ -3,9 +3,9 @@ local lib_ts = require("stormcaller.lib.tree-sitter")
 local M = {}
 
 ---@param buf number
----@return TSNode[]
+---@return TSNode[], table
 M.get_all_jsx_nodes_in_buffer = function(buf)
-    local all_jsx_nodes = lib_ts.capture_nodes_with_queries({
+    local all_jsx_nodes, grouped_captures = lib_ts.capture_nodes_with_queries({
         buf = buf,
         parser_name = "tsx",
         queries = {
@@ -15,7 +15,7 @@ M.get_all_jsx_nodes_in_buffer = function(buf)
         },
         capture_groups = { "jsx_element", "jsx_self_closing_element", "jsx_fragment" },
     })
-    return all_jsx_nodes
+    return all_jsx_nodes, grouped_captures
 end
 
 return M
