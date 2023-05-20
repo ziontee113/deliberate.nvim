@@ -40,4 +40,26 @@ M.get_tag_identifier_node = function(node)
     return tag_node
 end
 
+---@param buf number
+---@param node TSNode
+---@return TSNode | nil
+M.get_className_property_string_node = function(buf, node)
+    local _, grouped_captures = lib_ts.capture_nodes_with_queries({
+        buf = buf,
+        root = node,
+        parser_name = "tsx",
+        queries = {
+            [[ ;query
+(jsx_attribute
+  (property_identifier) @prop_ident (#eq? @prop_ident "className")
+  (string) @string
+)
+]],
+        },
+        capture_groups = { "string" },
+    })
+
+    return grouped_captures["string"][1]
+end
+
 return M

@@ -22,7 +22,7 @@ M.assert_last_line_of_catalyst_node_has_text = function(want)
     assert.equals(want, split[#split])
 end
 
-M.asset_node_has_text = function(node, want)
+M.assert_node_has_text = function(node, want)
     local cursor_node_text = vim.treesitter.get_node_text(node, 0)
     assert.equals(want, cursor_node_text)
 end
