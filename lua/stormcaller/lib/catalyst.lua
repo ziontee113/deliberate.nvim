@@ -48,10 +48,15 @@ end
 -------------------------------------------- Internals
 
 M.refresh_node = function()
-    _catalyst.node = lib_ts.update_tree({
+    local updated_node = lib_ts.update_tree({
         root = _catalyst.node,
         buf = _catalyst.buf,
         parser_name = "tsx",
+    })
+
+    _catalyst.node = lib_ts.find_closest_parent_with_types({
+        node = updated_node,
+        desired_parent_types = { "jsx_element", "jsx_self_closing_element", "jsx_fragment" },
     })
 end
 
