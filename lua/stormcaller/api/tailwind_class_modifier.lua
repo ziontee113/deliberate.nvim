@@ -7,7 +7,9 @@ local lua_patterns = require("stormcaller.lib.lua_patterns")
 
 ---@param buf number
 ---@param node TSNode
-local function set_empty_className_property(buf, node)
+local function set_empty_className_property_if_needed(buf, node)
+    if lib_ts_tsx.get_className_property_string_node(buf, node) then return end
+
     local tag_node = lib_ts_tsx.get_tag_identifier_node(node)
     if not tag_node then error("Given node argument shouldn't have been nil") end
 
@@ -44,14 +46,14 @@ local replace_class_names = function(class_names, property, axis, replacement)
 end
 
 ---@param class_names string[]
----@param change_to string
+---@param value string
 ---@return string
-local function process_new_class_names(class_names, property, axis, change_to)
-    local replaced, new_class_names = replace_class_names(class_names, property, axis, change_to)
+local function process_new_class_names(class_names, property, axis, value)
+    local replaced, new_class_names = replace_class_names(class_names, property, axis, value)
     if replaced then
         class_names = new_class_names
     else
-        table.insert(class_names, change_to)
+        table.insert(class_names, value)
     end
 
     return format_class_names(class_names)
@@ -60,20 +62,18 @@ end
 ---@class change_pms_Args
 ---@field property "padding" | "margin" | "spacing"
 ---@field axis "omni" | "x" | "y" | "l" | "r" | "t" | "b"
----@field change_to string
+---@field value string
 
 ---@param o change_pms_Args
 local change_pms_classes = function(o)
     if not catalyst.is_active() then return end
 
-    if not lib_ts_tsx.get_className_property_string_node(catalyst.buf(), catalyst.node()) then
-        set_empty_className_property(catalyst.buf(), catalyst.node())
-    end
+    set_empty_className_property_if_needed(catalyst.buf(), catalyst.node())
 
     local class_names, className_string_node =
         lib_ts_tsx.extract_class_names(catalyst.buf(), catalyst.node())
 
-    local replacement = process_new_class_names(class_names, o.property, o.axis, o.change_to)
+    local replacement = process_new_class_names(class_names, o.property, o.axis, o.value)
 
     lib_ts.replace_node_text({
         node = className_string_node,
@@ -85,13 +85,13 @@ local change_pms_classes = function(o)
 end
 
 M.change_padding = function(o)
-    change_pms_classes({ property = "padding", axis = o.axis, change_to = o.change_to })
+    change_pms_classes({ property = "padding", axis = o.axis, value = o.value })
 end
 M.change_margin = function(o)
-    change_pms_classes({ property = "margin", axis = o.axis, change_to = o.change_to })
+    change_pms_classes({ property = "margin", axis = o.axis, value = o.value })
 end
 M.change_spacing = function(o)
-    change_pms_classes({ property = "spacing", axis = o.axis, change_to = o.change_to })
+    change_pms_classes({ property = "spacing", axis = o.axis, value = o.value })
 end
 
 return M

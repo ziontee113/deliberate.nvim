@@ -12,7 +12,7 @@ describe("change_padding()", function()
         catalyst.initiate({ win = 0, buf = 0 })
         helpers.assert_catalyst_node_has_text("<li>Contacts</li>")
 
-        tcm.change_padding({ axis = "omni", change_to = "p-4" })
+        tcm.change_padding({ axis = "omni", value = "p-4" })
         helpers.assert_catalyst_node_has_text('<li className="p-4">Contacts</li>')
     end)
 
@@ -24,7 +24,7 @@ describe("change_padding()", function()
             '<h3 className="mt-4 text-sm text-gray-700">{image.name}</h3>'
         )
 
-        tcm.change_padding({ axis = "omni", change_to = "p-4" })
+        tcm.change_padding({ axis = "omni", value = "p-4" })
         helpers.assert_catalyst_node_has_text(
             '<h3 className="mt-4 text-sm text-gray-700 p-4">{image.name}</h3>'
         )
@@ -34,10 +34,10 @@ describe("change_padding()", function()
         vim.cmd("norm! 22gg^") -- cursor to <li>Contacts</li>
         catalyst.initiate({ win = 0, buf = 0 })
 
-        tcm.change_padding({ axis = "omni", change_to = "p-[20px]" })
+        tcm.change_padding({ axis = "omni", value = "p-[20px]" })
         helpers.assert_catalyst_node_has_text('<li className="p-[20px]">Contacts</li>')
 
-        tcm.change_padding({ axis = "omni", change_to = "p-8" })
+        tcm.change_padding({ axis = "omni", value = "p-8" })
         helpers.assert_catalyst_node_has_text('<li className="p-8">Contacts</li>')
     end)
 
@@ -45,12 +45,12 @@ describe("change_padding()", function()
         vim.cmd("norm! 60gg^") -- cursor to <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
         catalyst.initiate({ win = 0, buf = 0 })
 
-        tcm.change_padding({ axis = "x", change_to = "px-7" })
+        tcm.change_padding({ axis = "x", value = "px-7" })
         helpers.assert_first_line_of_catalyst_node_has_text(
             '<div className="mx-auto max-w-2xl px-7 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">'
         )
 
-        tcm.change_padding({ axis = "y", change_to = "py-7" })
+        tcm.change_padding({ axis = "y", value = "py-7" })
         helpers.assert_first_line_of_catalyst_node_has_text(
             '<div className="mx-auto max-w-2xl px-7 py-7 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">'
         )
@@ -67,10 +67,10 @@ describe("change_margin() & change_spacing()", function()
         catalyst.initiate({ win = 0, buf = 0 })
         helpers.assert_catalyst_node_has_text("<li>Contacts</li>")
 
-        tcm.change_margin({ axis = "omni", change_to = "m-4" })
+        tcm.change_margin({ axis = "omni", value = "m-4" })
         helpers.assert_catalyst_node_has_text('<li className="m-4">Contacts</li>')
 
-        tcm.change_spacing({ axis = "x", change_to = "space-x-4" })
+        tcm.change_spacing({ axis = "x", value = "space-x-4" })
         helpers.assert_catalyst_node_has_text('<li className="m-4 space-x-4">Contacts</li>')
     end)
 end)
