@@ -3,6 +3,7 @@ local M = {}
 local catalyst = require("stormcaller.lib.catalyst")
 local lib_ts = require("stormcaller.lib.tree-sitter")
 local lib_ts_tsx = require("stormcaller.lib.tree-sitter.tsx")
+local lua_patterns = require("stormcaller.lib.lua_patterns")
 
 ---@param buf number
 ---@param node TSNode
@@ -31,11 +32,27 @@ local function format_class_names(class_names)
     return string.format('"%s"', str)
 end
 
+local replace_class_names = function(class_names, axis, replacement)
+    for i = #class_names, 1, -1 do
+        for _, pattern in ipairs(lua_patterns.pms.p[axis]) do
+            if class_names[i] and string.match(class_names[i], pattern) then
+                class_names[i] = replacement
+                return true, class_names
+            end
+        end
+    end
+end
+
 ---@param class_names string[]
 ---@param modify_to string
 ---@return string
-local function append_new_class_name(class_names, modify_to)
-    table.insert(class_names, modify_to)
+local function process_new_class_names(class_names, axis, modify_to)
+    local replaced, new_class_names = replace_class_names(class_names, axis, modify_to)
+    if replaced then
+        class_names = new_class_names
+    else
+        table.insert(class_names, modify_to)
+    end
 
     return format_class_names(class_names)
 end
@@ -54,12 +71,12 @@ M.change_padding = function(o)
     local class_names, className_string_node =
         lib_ts_tsx.extract_class_names(catalyst.buf(), catalyst.node())
 
-    local class_names_replacement = append_new_class_name(class_names, o.modify_to)
+    local replacement = process_new_class_names(class_names, o.axis, o.modify_to)
 
     lib_ts.replace_node_text({
         node = className_string_node,
         buf = catalyst.buf(),
-        replacement = class_names_replacement,
+        replacement = replacement,
     })
 
     catalyst.refresh_node()
