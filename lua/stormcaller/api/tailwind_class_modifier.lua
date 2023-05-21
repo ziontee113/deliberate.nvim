@@ -44,23 +44,24 @@ local replace_class_names = function(class_names, axis, replacement)
 end
 
 ---@param class_names string[]
----@param modify_to string
+---@param change_to string
 ---@return string
-local function process_new_class_names(class_names, axis, modify_to)
-    local replaced, new_class_names = replace_class_names(class_names, axis, modify_to)
+local function process_new_class_names(class_names, axis, change_to)
+    local replaced, new_class_names = replace_class_names(class_names, axis, change_to)
     if replaced then
         class_names = new_class_names
     else
-        table.insert(class_names, modify_to)
+        table.insert(class_names, change_to)
     end
 
     return format_class_names(class_names)
 end
 
----@class modify_padding_Opts
+---@class change_padding_Args
 ---@field axis "omni" | "x" | "y" | "l" | "r" | "t" | "b"
----@field modify_to string
+---@field change_to string
 
+---@param o change_padding_Args
 M.change_padding = function(o)
     if not catalyst.is_active() then return end
 
@@ -71,7 +72,7 @@ M.change_padding = function(o)
     local class_names, className_string_node =
         lib_ts_tsx.extract_class_names(catalyst.buf(), catalyst.node())
 
-    local replacement = process_new_class_names(class_names, o.axis, o.modify_to)
+    local replacement = process_new_class_names(class_names, o.axis, o.change_to)
 
     lib_ts.replace_node_text({
         node = className_string_node,
