@@ -56,3 +56,21 @@ describe("change_padding()", function()
         )
     end)
 end)
+
+describe("change_margin() & change_spacing()", function()
+    after_each(function() vim.api.nvim_buf_delete(0, { force = true }) end)
+    before_each(function() helpers.set_buffer_content_as_multiple_react_components() end)
+
+    it("adds className property and specified class for tag with no classNames", function()
+        vim.cmd("norm! 22gg^") -- cursor to <li>Contacts</li>
+
+        catalyst.initiate({ win = 0, buf = 0 })
+        helpers.assert_catalyst_node_has_text("<li>Contacts</li>")
+
+        tcm.change_margin({ axis = "omni", change_to = "m-4" })
+        helpers.assert_catalyst_node_has_text('<li className="m-4">Contacts</li>')
+
+        tcm.change_spacing({ axis = "x", change_to = "space-x-4" })
+        helpers.assert_catalyst_node_has_text('<li className="m-4 space-x-4">Contacts</li>')
+    end)
+end)

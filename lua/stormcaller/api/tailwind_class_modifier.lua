@@ -32,9 +32,9 @@ local function format_class_names(class_names)
     return string.format('"%s"', str)
 end
 
-local replace_class_names = function(class_names, axis, replacement)
+local replace_class_names = function(class_names, property, axis, replacement)
     for i = #class_names, 1, -1 do
-        for _, pattern in ipairs(lua_patterns.pms.p[axis]) do
+        for _, pattern in ipairs(lua_patterns.pms[property][axis]) do
             if class_names[i] and string.match(class_names[i], pattern) then
                 class_names[i] = replacement
                 return true, class_names
@@ -46,8 +46,8 @@ end
 ---@param class_names string[]
 ---@param change_to string
 ---@return string
-local function process_new_class_names(class_names, axis, change_to)
-    local replaced, new_class_names = replace_class_names(class_names, axis, change_to)
+local function process_new_class_names(class_names, property, axis, change_to)
+    local replaced, new_class_names = replace_class_names(class_names, property, axis, change_to)
     if replaced then
         class_names = new_class_names
     else
@@ -57,12 +57,13 @@ local function process_new_class_names(class_names, axis, change_to)
     return format_class_names(class_names)
 end
 
----@class change_padding_Args
+---@class change_pms_Args
+---@field property "padding" | "margin" | "spacing"
 ---@field axis "omni" | "x" | "y" | "l" | "r" | "t" | "b"
 ---@field change_to string
 
----@param o change_padding_Args
-M.change_padding = function(o)
+---@param o change_pms_Args
+local change_pms_classes = function(o)
     if not catalyst.is_active() then return end
 
     if not lib_ts_tsx.get_className_property_string_node(catalyst.buf(), catalyst.node()) then
@@ -72,7 +73,7 @@ M.change_padding = function(o)
     local class_names, className_string_node =
         lib_ts_tsx.extract_class_names(catalyst.buf(), catalyst.node())
 
-    local replacement = process_new_class_names(class_names, o.axis, o.change_to)
+    local replacement = process_new_class_names(class_names, o.property, o.axis, o.change_to)
 
     lib_ts.replace_node_text({
         node = className_string_node,
@@ -81,6 +82,16 @@ M.change_padding = function(o)
     })
 
     catalyst.refresh_node()
+end
+
+M.change_padding = function(o)
+    change_pms_classes({ property = "padding", axis = o.axis, change_to = o.change_to })
+end
+M.change_margin = function(o)
+    change_pms_classes({ property = "margin", axis = o.axis, change_to = o.change_to })
+end
+M.change_spacing = function(o)
+    change_pms_classes({ property = "spacing", axis = o.axis, change_to = o.change_to })
 end
 
 return M
