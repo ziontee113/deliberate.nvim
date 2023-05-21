@@ -34,22 +34,29 @@ local function format_class_names(class_names)
     return string.format('"%s"', str)
 end
 
-local replace_class_names = function(class_names, property, axis, replacement)
+---@param class_names string[]
+---@param patterns string[] | string
+---@param replacement string
+---@return boolean, string[]
+local replace_class_names = function(class_names, patterns, replacement)
+    if type(patterns) == "string" then patterns = { patterns } end
     for i = #class_names, 1, -1 do
-        for _, pattern in ipairs(lua_patterns.pms[property][axis]) do
+        for _, pattern in ipairs(patterns) do
             if class_names[i] and string.match(class_names[i], pattern) then
                 class_names[i] = replacement
                 return true, class_names
             end
         end
     end
+    return false, class_names
 end
 
 ---@param class_names string[]
+---@param patterns string[] | string
 ---@param value string
 ---@return string
-local function process_new_class_names(class_names, property, axis, value)
-    local replaced, new_class_names = replace_class_names(class_names, property, axis, value)
+local function process_new_class_names(class_names, patterns, value)
+    local replaced, new_class_names = replace_class_names(class_names, patterns, value)
     if replaced then
         class_names = new_class_names
     else
@@ -59,13 +66,23 @@ local function process_new_class_names(class_names, property, axis, value)
     return format_class_names(class_names)
 end
 
----@class change_pms_Args
----@field property "padding" | "margin" | "spacing"
+---@class change_tailwind_classes_Args
+---@field property  "padding" | "margin" | "spacing" | "text_color" | "background_color"
 ---@field axis "omni" | "x" | "y" | "l" | "r" | "t" | "b"
 ---@field value string
 
----@param o change_pms_Args
-local change_pms_classes = function(o)
+---@param o change_tailwind_classes_Args
+---@return string[] | string
+local find_patterns = function(o)
+    if o.property == "padding" or o.property == "margin" or o.property == "spacing" then
+        return lua_patterns.pms[o.property][o.axis]
+    else
+        return lua_patterns[o.property]
+    end
+end
+
+---@param o change_tailwind_classes_Args
+local change_tailwind_classes = function(o)
     if not catalyst.is_active() then return end
 
     set_empty_className_property_if_needed(catalyst.buf(), catalyst.node())
@@ -73,7 +90,7 @@ local change_pms_classes = function(o)
     local class_names, className_string_node =
         lib_ts_tsx.extract_class_names(catalyst.buf(), catalyst.node())
 
-    local replacement = process_new_class_names(class_names, o.property, o.axis, o.value)
+    local replacement = process_new_class_names(class_names, find_patterns(o), o.value)
 
     lib_ts.replace_node_text({
         node = className_string_node,
@@ -85,13 +102,20 @@ local change_pms_classes = function(o)
 end
 
 M.change_padding = function(o)
-    change_pms_classes({ property = "padding", axis = o.axis, value = o.value })
+    change_tailwind_classes({ property = "padding", axis = o.axis, value = o.value })
 end
 M.change_margin = function(o)
-    change_pms_classes({ property = "margin", axis = o.axis, value = o.value })
+    change_tailwind_classes({ property = "margin", axis = o.axis, value = o.value })
 end
 M.change_spacing = function(o)
-    change_pms_classes({ property = "spacing", axis = o.axis, value = o.value })
+    change_tailwind_classes({ property = "spacing", axis = o.axis, value = o.value })
+end
+
+M.change_text_color = function(o)
+    change_tailwind_classes({ property = "text_color", value = o.value })
+end
+M.change_background_color = function(o)
+    change_tailwind_classes({ property = "background_color", value = o.value })
 end
 
 return M

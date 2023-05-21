@@ -55,22 +55,66 @@ describe("change_padding()", function()
             '<div className="mx-auto max-w-2xl px-7 py-7 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">'
         )
     end)
+
+    it("removes equivalent padding axis if value passed in is empty string", function()
+        vim.cmd("norm! 60gg^") -- cursor to <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+        catalyst.initiate({ win = 0, buf = 0 })
+
+        tcm.change_padding({ axis = "y", value = "" })
+        helpers.assert_first_line_of_catalyst_node_has_text(
+            '<div className="mx-auto max-w-2xl px-4 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">'
+        )
+        tcm.change_padding({ axis = "x", value = "" })
+        helpers.assert_first_line_of_catalyst_node_has_text(
+            '<div className="mx-auto max-w-2xl sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">'
+        )
+    end)
 end)
 
 describe("change_margin() & change_spacing()", function()
     after_each(function() vim.api.nvim_buf_delete(0, { force = true }) end)
     before_each(function() helpers.set_buffer_content_as_multiple_react_components() end)
 
-    it("adds className property and specified class for tag with no classNames", function()
+    it("adds margin and spacing classes correctly", function()
         vim.cmd("norm! 22gg^") -- cursor to <li>Contacts</li>
-
         catalyst.initiate({ win = 0, buf = 0 })
-        helpers.assert_catalyst_node_has_text("<li>Contacts</li>")
 
         tcm.change_margin({ axis = "omni", value = "m-4" })
         helpers.assert_catalyst_node_has_text('<li className="m-4">Contacts</li>')
 
         tcm.change_spacing({ axis = "x", value = "space-x-4" })
         helpers.assert_catalyst_node_has_text('<li className="m-4 space-x-4">Contacts</li>')
+    end)
+end)
+
+describe("change_text_color() & change_background_color()", function()
+    after_each(function() vim.api.nvim_buf_delete(0, { force = true }) end)
+    before_each(function() helpers.set_buffer_content_as_multiple_react_components() end)
+
+    it("adds text-color and background-color classes correctly", function()
+        vim.cmd("norm! 22gg^") -- cursor to <li>Contacts</li>
+        catalyst.initiate({ win = 0, buf = 0 })
+
+        tcm.change_text_color({ value = "text-zinc-400" })
+        helpers.assert_catalyst_node_has_text('<li className="text-zinc-400">Contacts</li>')
+
+        tcm.change_background_color({ value = "bg-black" })
+        helpers.assert_catalyst_node_has_text(
+            '<li className="text-zinc-400 bg-black">Contacts</li>'
+        )
+
+        tcm.change_text_color({ value = "text-[#000]" })
+        helpers.assert_catalyst_node_has_text('<li className="text-[#000] bg-black">Contacts</li>')
+
+        tcm.change_background_color({ value = "bg-[rgb(0,12,24)]" })
+        helpers.assert_catalyst_node_has_text(
+            '<li className="text-[#000] bg-[rgb(0,12,24)]">Contacts</li>'
+        )
+
+        tcm.change_text_color({ value = "" })
+        helpers.assert_catalyst_node_has_text('<li className="bg-[rgb(0,12,24)]">Contacts</li>')
+
+        tcm.change_background_color({ value = "" })
+        helpers.assert_catalyst_node_has_text('<li className="">Contacts</li>')
     end)
 end)
