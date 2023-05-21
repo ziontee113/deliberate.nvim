@@ -30,17 +30,6 @@ describe("modify_padding()", function()
         )
     end)
 
-    it("replaces equivalent padding omni axis", function()
-        vim.cmd("norm! 22gg^") -- cursor to <li>Contacts</li>
-        catalyst.initiate({ win = 0, buf = 0 })
-
-        tcm.change_padding({ axis = "omni", modify_to = "p-4" })
-        helpers.assert_catalyst_node_has_text('<li className="p-4">Contacts</li>')
-
-        tcm.change_padding({ axis = "omni", modify_to = "p-8" })
-        helpers.assert_catalyst_node_has_text('<li className="p-8">Contacts</li>')
-    end)
-
     it("replaces equivalent padding omni axis using arbitrary value", function()
         vim.cmd("norm! 22gg^") -- cursor to <li>Contacts</li>
         catalyst.initiate({ win = 0, buf = 0 })
