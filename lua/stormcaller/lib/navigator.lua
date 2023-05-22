@@ -6,6 +6,7 @@ local M = {}
 
 ---@class navigator_move_Args
 ---@field destination "next-sibling" | "previous-sibling" | "next" | "previous" | "parent"
+---@field track_selection boolean
 
 ---@class find_closest_previous_or_next_node_to_cursor_Opts
 ---@field row number
@@ -163,7 +164,7 @@ M.move = function(o)
         catalyst.set_node_point("start")
     end
 
-    catalyst.move_to()
+    catalyst.move_to(o.track_selection)
 end
 
 return M

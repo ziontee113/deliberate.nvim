@@ -237,3 +237,112 @@ describe("navigator.move()", function()
         assert.are.same({ 15, 4 }, cursor_positon)
     end)
 end)
+
+describe("navigator.move() with `track_selection` option", function()
+    before_each(function() helpers.set_buffer_content_as_multiple_react_components() end)
+    after_each(function() vim.api.nvim_buf_delete(0, { force = true }) end)
+
+    it("update `selected_nodes` correctly without using `track_selection` option", function()
+        vim.cmd("norm! 17gg^") -- cursor to start of 1st <li> tag
+
+        -- inititation
+        catalyst.initiate({ win = 0, buf = 0 })
+
+        local selected_nodes = catalyst.selected_nodes()
+        assert.equals(#selected_nodes, 1)
+        helpers.assert_node_has_text(selected_nodes[1], "<li>Home</li>")
+
+        -- 1st move
+        navigator.move({ destination = "next" })
+
+        selected_nodes = catalyst.selected_nodes()
+        assert.equals(#selected_nodes, 1)
+
+        helpers.assert_node_has_text(
+            selected_nodes[1],
+            [[<li>
+          A new study found that coffee drinkers have a lower risk of liver
+          cancer. So, drink up!
+        </li>]]
+        )
+
+        -- 2nd move
+        navigator.move({ destination = "next" })
+
+        selected_nodes = catalyst.selected_nodes()
+        assert.equals(#selected_nodes, 1)
+
+        helpers.assert_node_has_text(selected_nodes[1], "<li>Contacts</li>")
+
+        -- 3rd move
+        navigator.move({ destination = "next" })
+
+        selected_nodes = catalyst.selected_nodes()
+        assert.equals(#selected_nodes, 1)
+
+        helpers.assert_node_has_text(selected_nodes[1], "<li>FAQ</li>")
+    end)
+
+    it("update `selected_nodes` correctly with `track_selection` option used", function()
+        vim.cmd("norm! 17gg^") -- cursor to start of 1st <li> tag
+
+        -- inititation
+        catalyst.initiate({ win = 0, buf = 0 })
+
+        local selected_nodes = catalyst.selected_nodes()
+
+        assert.equals(#selected_nodes, 1)
+        helpers.assert_node_has_text(selected_nodes[1], "<li>Home</li>")
+
+        -- 1st move: with tracking, should add new node to selected_nodes
+        navigator.move({ destination = "next", track_selection = true })
+
+        selected_nodes = catalyst.selected_nodes()
+        assert.equals(#selected_nodes, 2)
+
+        helpers.assert_node_has_text(selected_nodes[1], "<li>Home</li>")
+        helpers.assert_node_has_text(
+            selected_nodes[2],
+            [[<li>
+          A new study found that coffee drinkers have a lower risk of liver
+          cancer. So, drink up!
+        </li>]]
+        )
+
+        -- 2nd move: WITHOUT TRACKING -> selected_nodes should stay the same.
+        -- cursor moves to the node, but does not add it to the `selected_nodes` table.
+        navigator.move({ destination = "next" })
+
+        helpers.assert_catalyst_node_has_text("<li>Contacts</li>")
+        local cursor_positon = vim.api.nvim_win_get_cursor(0)
+        assert.are.same({ 22, 8 }, cursor_positon)
+
+        selected_nodes = catalyst.selected_nodes()
+        assert.equals(#selected_nodes, 2)
+
+        helpers.assert_node_has_text(selected_nodes[1], "<li>Home</li>")
+        helpers.assert_node_has_text(
+            selected_nodes[2],
+            [[<li>
+          A new study found that coffee drinkers have a lower risk of liver
+          cancer. So, drink up!
+        </li>]]
+        )
+
+        -- 3rd move: with tracking
+        navigator.move({ destination = "next", track_selection = true })
+
+        selected_nodes = catalyst.selected_nodes()
+        assert.equals(#selected_nodes, 3)
+
+        helpers.assert_node_has_text(selected_nodes[1], "<li>Home</li>")
+        helpers.assert_node_has_text(
+            selected_nodes[2],
+            [[<li>
+          A new study found that coffee drinkers have a lower risk of liver
+          cancer. So, drink up!
+        </li>]]
+        )
+        helpers.assert_node_has_text(selected_nodes[3], "<li>FAQ</li>")
+    end)
+end)

@@ -12,6 +12,7 @@ local lib_ts_tsx = require("stormcaller.lib.tree-sitter.tsx")
 ---@field is_active boolean
 
 local _catalyst
+local _selected_nodes = {}
 
 -------------------------------------------- Getters
 
@@ -27,6 +28,9 @@ M.node = function() return _catalyst.node end
 ---@return boolean
 M.is_active = function() return _catalyst.is_active end
 
+---@return TSNode[]
+M.selected_nodes = function() return _selected_nodes end
+
 -------------------------------------------- Setters
 
 M.set_node = function(node) _catalyst.node = node end
@@ -34,10 +38,25 @@ M.set_node_point = function(node_point) _catalyst.node_point = node_point end
 M.set_buf = function(buf) _catalyst.buf = buf end
 M.set_win = function(win) _catalyst.win = win end
 
+---@param track_selection boolean
+local function update_selected_nodes(track_selection)
+    if #_selected_nodes == 0 then
+        table.insert(_selected_nodes, _catalyst.node)
+    elseif #_selected_nodes == 1 and not track_selection then
+        _selected_nodes = { _catalyst.node }
+    elseif track_selection then
+        table.insert(_selected_nodes, _catalyst.node)
+    end
+end
+
 -------------------------------------------- Actions
 
-M.move_to = function()
+---@param track_selection boolean
+M.move_to = function(track_selection)
     if not _catalyst then return end
+
+    update_selected_nodes(track_selection)
+
     lib_ts.put_cursor_at_node({
         node = _catalyst.node,
         destination = _catalyst.node_point,
