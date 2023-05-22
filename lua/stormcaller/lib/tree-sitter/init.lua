@@ -7,6 +7,7 @@ local M = {}
 ---@field next_named_sibling function
 ---@field prev_named_sibling function
 ---@field iter_children function
+---@field named_descendant_for_range function
 
 ---@class find_closest_parent_with_types_Opts
 ---@field node TSNode
@@ -79,12 +80,19 @@ M.get_root = function(o)
     end
 end
 
--- HACK: please document and rename / refactor this
-M.update_tree = function(o)
-    local start_row, start_col = o.root:range()
-    local updated_root = M.get_root({ parser_name = o.parser_name, buf = o.buf, reset = true })
-    o.root = updated_root:named_descendant_for_range(start_row, start_col, start_row, start_col)
-    return o.root
+---@param buf number
+---@param node TSNode
+---@param parser_name string
+---@param updated_root TSNode | nil
+---@return TSNode, TSNode | nil
+M.reset_node_tree = function(buf, node, parser_name, updated_root)
+    local start_row, start_col, end_row, end_col = node:range()
+
+    updated_root = updated_root
+        or M.get_root({ parser_name = parser_name, buf = buf, reset = true })
+
+    node = updated_root:named_descendant_for_range(start_row, start_col, end_row, end_col)
+    return node, updated_root
 end
 
 ---@class capture_nodes_with_queries_Opts
@@ -105,7 +113,11 @@ M.capture_nodes_with_queries = function(o)
 
     local root
     if o.root then
-        root = M.update_tree(o)
+        if o.root:has_changes() then
+            root = M.reset_node_tree(o.buf, o.root, o.parser_name)
+        else
+            root = o.root
+        end
     else
         root = M.get_root({ parser_name = o.parser_name, buf = o.buf })
     end

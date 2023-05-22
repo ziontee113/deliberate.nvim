@@ -81,7 +81,7 @@ describe("change_padding() for all `selected_nodes`", function()
     before_each(function() helpers.set_buffer_content_as_multiple_react_components() end)
     after_each(function() clean_up() end)
 
-    it("adds className property and specified class for tag with no classNames", function()
+    it("works", function()
         vim.cmd("norm! 22gg^") -- cursor to <li>Contacts</li>
 
         catalyst.initiate({ win = 0, buf = 0 })
