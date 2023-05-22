@@ -15,6 +15,8 @@ local function set_empty_className_property_if_needed(buf, node)
 
     local start_row, _, _, end_col = tag_node:range()
     vim.api.nvim_buf_set_text(buf, start_row, end_col, start_row, end_col, { ' className=""' })
+
+    catalyst.refresh_tree()
 end
 
 ---@param class_names string[]
@@ -85,20 +87,26 @@ end
 local change_tailwind_classes = function(o)
     if not catalyst.is_active() then return end
 
-    set_empty_className_property_if_needed(catalyst.buf(), catalyst.node())
+    for i = 1, #catalyst.selected_nodes() do
+        local node = catalyst.selected_nodes()[i]
 
-    local class_names, className_string_node =
-        lib_ts_tsx.extract_class_names(catalyst.buf(), catalyst.node())
+        set_empty_className_property_if_needed(catalyst.buf(), node)
 
-    local replacement = process_new_class_names(class_names, find_patterns(o), o.value)
+        node = catalyst.selected_nodes()[i]
 
-    lib_ts.replace_node_text({
-        node = className_string_node,
-        buf = catalyst.buf(),
-        replacement = replacement,
-    })
+        local class_names, className_string_node =
+            lib_ts_tsx.extract_class_names(catalyst.buf(), node)
 
-    catalyst.refresh_node()
+        local replacement = process_new_class_names(class_names, find_patterns(o), o.value)
+
+        lib_ts.replace_node_text({
+            node = className_string_node,
+            buf = catalyst.buf(),
+            replacement = replacement,
+        })
+
+        catalyst.refresh_tree()
+    end
 end
 
 M.change_padding = function(o)

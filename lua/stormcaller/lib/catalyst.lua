@@ -38,6 +38,8 @@ M.set_node_point = function(node_point) _catalyst.node_point = node_point end
 M.set_buf = function(buf) _catalyst.buf = buf end
 M.set_win = function(win) _catalyst.win = win end
 
+M.clear_selection = function() _selected_nodes = {} end
+
 ---@param track_selection boolean
 local function update_selected_nodes(track_selection)
     if #_selected_nodes == 0 then
@@ -66,17 +68,22 @@ end
 
 -------------------------------------------- Internals
 
-M.refresh_node = function()
-    local updated_node = lib_ts.update_tree({
-        root = _catalyst.node,
-        buf = _catalyst.buf,
-        parser_name = "tsx",
-    })
+-- HACK: please document and rename / refactor this
+M.refresh_tree = function()
+    for i, node in ipairs(_selected_nodes) do
+        local updated_node = lib_ts.update_tree({
+            root = node,
+            buf = _catalyst.buf,
+            parser_name = "tsx",
+        })
 
-    _catalyst.node = lib_ts.find_closest_parent_with_types({
-        node = updated_node,
-        desired_parent_types = { "jsx_element", "jsx_self_closing_element", "jsx_fragment" },
-    })
+        _selected_nodes[i] = lib_ts.find_closest_parent_with_types({
+            node = updated_node,
+            desired_parent_types = { "jsx_element", "jsx_self_closing_element", "jsx_fragment" },
+        })
+    end
+
+    _catalyst.node = _selected_nodes[#_selected_nodes]
 end
 
 -------------------------------------------- Initiate

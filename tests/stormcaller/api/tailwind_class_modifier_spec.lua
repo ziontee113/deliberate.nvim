@@ -1,10 +1,16 @@
 local tcm = require("stormcaller.api.tailwind_class_modifier")
 local catalyst = require("stormcaller.lib.catalyst")
+local navigator = require("stormcaller.lib.navigator")
 local helpers = require("stormcaller.helpers")
 
+local clean_up = function()
+    vim.api.nvim_buf_delete(0, { force = true })
+    catalyst.clear_selection()
+end
+
 describe("change_padding()", function()
-    after_each(function() vim.api.nvim_buf_delete(0, { force = true }) end)
     before_each(function() helpers.set_buffer_content_as_multiple_react_components() end)
+    after_each(function() clean_up() end)
 
     it("adds className property and specified class for tag with no classNames", function()
         vim.cmd("norm! 22gg^") -- cursor to <li>Contacts</li>
@@ -71,9 +77,41 @@ describe("change_padding()", function()
     end)
 end)
 
-describe("change_margin() & change_spacing()", function()
-    after_each(function() vim.api.nvim_buf_delete(0, { force = true }) end)
+describe("change_padding() for all `selected_nodes`", function()
     before_each(function() helpers.set_buffer_content_as_multiple_react_components() end)
+    after_each(function() clean_up() end)
+
+    it("adds className property and specified class for tag with no classNames", function()
+        vim.cmd("norm! 22gg^") -- cursor to <li>Contacts</li>
+
+        catalyst.initiate({ win = 0, buf = 0 })
+        helpers.assert_catalyst_node_has_text("<li>Contacts</li>")
+
+        navigator.move({ destination = "next", track_selection = true })
+
+        tcm.change_padding({ axis = "omni", value = "p-4" })
+
+        -- 1st round
+        local selected_nodes = catalyst.selected_nodes()
+        assert.equals(#selected_nodes, 2)
+
+        tcm.change_padding({ axis = "omni", value = "p-4" })
+        helpers.assert_node_has_text(selected_nodes[1], '<li className="p-4">Contacts</li>')
+        helpers.assert_node_has_text(selected_nodes[2], '<li className="p-4">FAQ</li>')
+
+        -- 2nd round
+        selected_nodes = catalyst.selected_nodes()
+        assert.equals(#selected_nodes, 2)
+
+        tcm.change_padding({ axis = "omni", value = "p-20" })
+        helpers.assert_node_has_text(selected_nodes[1], '<li className="p-20">Contacts</li>')
+        helpers.assert_node_has_text(selected_nodes[2], '<li className="p-20">FAQ</li>')
+    end)
+end)
+
+describe("change_margin() & change_spacing()", function()
+    before_each(function() helpers.set_buffer_content_as_multiple_react_components() end)
+    after_each(function() vim.api.nvim_buf_delete(0, { force = true }) end)
 
     it("adds margin and spacing classes correctly", function()
         vim.cmd("norm! 22gg^") -- cursor to <li>Contacts</li>
@@ -88,8 +126,8 @@ describe("change_margin() & change_spacing()", function()
 end)
 
 describe("change_text_color() & change_background_color()", function()
-    after_each(function() vim.api.nvim_buf_delete(0, { force = true }) end)
     before_each(function() helpers.set_buffer_content_as_multiple_react_components() end)
+    after_each(function() clean_up() end)
 
     it("adds text-color and background-color classes correctly", function()
         vim.cmd("norm! 22gg^") -- cursor to <li>Contacts</li>

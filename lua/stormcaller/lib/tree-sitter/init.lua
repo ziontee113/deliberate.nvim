@@ -79,12 +79,11 @@ M.get_root = function(o)
     end
 end
 
+-- HACK: please document and rename / refactor this
 M.update_tree = function(o)
-    if o.root:has_changes() then
-        local start_row, start_col, end_row, end_col = o.root:range()
-        local updated_root = M.get_root({ parser_name = o.parser_name, buf = o.buf, reset = true })
-        o.root = updated_root:named_descendant_for_range(start_row, start_col, end_row, end_col)
-    end
+    local start_row, start_col = o.root:range()
+    local updated_root = M.get_root({ parser_name = o.parser_name, buf = o.buf, reset = true })
+    o.root = updated_root:named_descendant_for_range(start_row, start_col, start_row, start_col)
     return o.root
 end
 
