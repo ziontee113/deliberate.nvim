@@ -77,7 +77,7 @@ end
 ---@return string[] | string
 local find_patterns = function(o)
     if o.property == "padding" or o.property == "margin" or o.property == "spacing" then
-        return lua_patterns.pms[o.property][o.axis]
+        return lua_patterns[o.property][o.axis]
     else
         return lua_patterns[o.property]
     end
