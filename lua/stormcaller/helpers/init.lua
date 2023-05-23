@@ -17,6 +17,12 @@ M.assert_catalyst_node_has_text = function(want)
     assert.equals(want, cursor_node_text)
 end
 
+M.assert_entire_first_line_of_catalyst_node_has_text = function(want)
+    local start_row = catalyst.node():range()
+    local lines = vim.api.nvim_buf_get_lines(catalyst.buf(), start_row, start_row + 1, false)
+    assert.equals(want, lines[1])
+end
+
 M.assert_first_line_of_catalyst_node_has_text = function(want)
     local cursor_node_text = vim.treesitter.get_node_text(catalyst.node(), catalyst.buf())
     assert.equals(want, vim.split(cursor_node_text, "\n")[1])
