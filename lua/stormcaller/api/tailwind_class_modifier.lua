@@ -88,10 +88,16 @@ local change_tailwind_classes = function(o)
     if not catalyst.is_active() then return end
 
     for i = 1, #catalyst.selected_nodes() do
+        -- we need to get `node` this way because if not, we'll get its "old content" (pre-modified)
+        -- in this case, the `replace_node_text()` of the previous iteration might've modified the node's content,
+        -- so we need to use `catalyst.selected_nodes()` to get the updated nodes, otherwise everything breaks.
         local node = catalyst.selected_nodes()[i]
 
         set_empty_className_property_if_needed(catalyst.buf(), node)
 
+        -- we need to get `node` this way because if not, we'll get its "old content" (pre-modified)
+        -- in this case, `set_empty_className_property_if_needed()` might've modified the node's content,
+        -- so we need to use `catalyst.selected_nodes()` to get the updated nodes, otherwise everything breaks.
         node = catalyst.selected_nodes()[i]
 
         local class_names, className_string_node =
