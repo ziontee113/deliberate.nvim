@@ -2,6 +2,11 @@ local M = {}
 
 local catalyst = require("stormcaller.lib.catalyst")
 
+M.clean_up = function()
+    vim.api.nvim_buf_delete(0, { force = true })
+    catalyst.clear_selection()
+end
+
 M.set_buf_content = function(content)
     if type(content) == "string" then content = vim.split(content, "\n") end
     vim.api.nvim_buf_set_lines(0, 0, -1, false, content)

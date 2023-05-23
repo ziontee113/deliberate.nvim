@@ -12,7 +12,10 @@ local lib_ts_tsx = require("stormcaller.lib.tree-sitter.tsx")
 ---@field is_active boolean
 
 local _catalyst
+
 local _selected_nodes = {}
+local _selection_tracking_state = false
+local _latest_catalyst_node
 
 -------------------------------------------- Getters
 
@@ -38,22 +41,34 @@ M.set_node_point = function(node_point) _catalyst.node_point = node_point end
 M.set_buf = function(buf) _catalyst.buf = buf end
 M.set_win = function(win) _catalyst.win = win end
 
-M.clear_selection = function() _selected_nodes = {} end
+M.clear_selection = function()
+    _selected_nodes = {}
+    _selection_tracking_state = false
+    _latest_catalyst_node = nil
+end
 
----@param track_selection boolean
+---@param track_selection boolean | nil
 local function update_selected_nodes(track_selection)
     if #_selected_nodes == 0 then
         table.insert(_selected_nodes, _catalyst.node)
-    elseif #_selected_nodes == 1 and not track_selection then
-        _selected_nodes = { _catalyst.node }
-    elseif track_selection then
-        table.insert(_selected_nodes, _catalyst.node)
+    else
+        if track_selection then
+            if not _selection_tracking_state then
+                _selection_tracking_state = true
+            else
+                table.insert(_selected_nodes, _latest_catalyst_node)
+            end
+        elseif not _selection_tracking_state then
+            _selected_nodes = { _catalyst.node }
+        end
     end
+
+    _latest_catalyst_node = _catalyst.node
 end
 
 -------------------------------------------- Actions
 
----@param track_selection boolean
+---@param track_selection boolean | nil
 M.move_to = function(track_selection)
     if not _catalyst then return end
 

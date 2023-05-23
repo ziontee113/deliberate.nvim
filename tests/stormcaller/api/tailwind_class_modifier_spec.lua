@@ -3,14 +3,9 @@ local catalyst = require("stormcaller.lib.catalyst")
 local navigator = require("stormcaller.lib.navigator")
 local helpers = require("stormcaller.helpers")
 
-local clean_up = function()
-    vim.api.nvim_buf_delete(0, { force = true })
-    catalyst.clear_selection()
-end
-
 describe("change_padding()", function()
     before_each(function() helpers.set_buffer_content_as_multiple_react_components() end)
-    after_each(function() clean_up() end)
+    after_each(function() helpers.clean_up() end)
 
     it("adds className property and specified class for tag with no classNames", function()
         vim.cmd("norm! 22gg^") -- cursor to <li>Contacts</li>
@@ -21,6 +16,36 @@ describe("change_padding()", function()
         tcm.change_padding({ axis = "omni", value = "p-4" })
         helpers.assert_catalyst_node_has_text('<li className="p-4">Contacts</li>')
     end)
+
+    it(
+        "adds className property and specified class for tag with no classNames, then move to different tags and do the same",
+        function()
+            vim.cmd("norm! 22gg^") -- cursor to <li>Contacts</li>
+
+            catalyst.initiate({ win = 0, buf = 0 })
+            helpers.assert_catalyst_node_has_text("<li>Contacts</li>")
+
+            -- 1st padding change
+            tcm.change_padding({ axis = "omni", value = "p-4" })
+            helpers.assert_catalyst_node_has_text('<li className="p-4">Contacts</li>')
+
+            -- 2nd padding change
+            navigator.move({ destination = "next" })
+            helpers.assert_catalyst_node_has_text("<li>FAQ</li>")
+
+            tcm.change_padding({ axis = "omni", value = "p-4" })
+            helpers.assert_catalyst_node_has_text('<li className="p-4">FAQ</li>')
+
+            -- 3rd padding change
+            navigator.move({ destination = "previous" })
+            navigator.move({ destination = "previous" })
+            navigator.move({ destination = "previous" })
+            helpers.assert_catalyst_node_has_text("<li>Home</li>")
+
+            tcm.change_padding({ axis = "omni", value = "p-4" })
+            helpers.assert_catalyst_node_has_text('<li className="p-4">Home</li>')
+        end
+    )
 
     it("appends specified class for tag that already has classNames", function()
         vim.cmd("norm! 90gg^")
@@ -79,39 +104,54 @@ end)
 
 describe("change_padding() for all `selected_nodes`", function()
     before_each(function() helpers.set_buffer_content_as_multiple_react_components() end)
-    after_each(function() clean_up() end)
+    after_each(function() helpers.clean_up() end)
 
     it("works", function()
         vim.cmd("norm! 22gg^") -- cursor to <li>Contacts</li>
 
+        -- initiate and move twice with `track_selection`
         catalyst.initiate({ win = 0, buf = 0 })
         helpers.assert_catalyst_node_has_text("<li>Contacts</li>")
 
         navigator.move({ destination = "next", track_selection = true })
+        navigator.move({ destination = "next", track_selection = true })
 
+        local selected_nodes = catalyst.selected_nodes()
+        assert.equals(#selected_nodes, 2)
+        helpers.assert_node_has_text(selected_nodes[1], "<li>Contacts</li>")
+        helpers.assert_node_has_text(selected_nodes[2], "<li>FAQ</li>")
+
+        -- 1st round, add classes for tags with no classes
         tcm.change_padding({ axis = "omni", value = "p-4" })
 
-        -- 1st round
-        local selected_nodes = catalyst.selected_nodes()
+        selected_nodes = catalyst.selected_nodes()
         assert.equals(#selected_nodes, 2)
 
         tcm.change_padding({ axis = "omni", value = "p-4" })
         helpers.assert_node_has_text(selected_nodes[1], '<li className="p-4">Contacts</li>')
         helpers.assert_node_has_text(selected_nodes[2], '<li className="p-4">FAQ</li>')
 
-        -- 2nd round
+        -- 2nd round, modifying already exist omni axis
         selected_nodes = catalyst.selected_nodes()
         assert.equals(#selected_nodes, 2)
 
         tcm.change_padding({ axis = "omni", value = "p-20" })
         helpers.assert_node_has_text(selected_nodes[1], '<li className="p-20">Contacts</li>')
         helpers.assert_node_has_text(selected_nodes[2], '<li className="p-20">FAQ</li>')
+
+        -- 3rd round, adding extra y axis
+        selected_nodes = catalyst.selected_nodes()
+        assert.equals(#selected_nodes, 2)
+
+        tcm.change_padding({ axis = "y", value = "py-4" })
+        helpers.assert_node_has_text(selected_nodes[1], '<li className="p-20 py-4">Contacts</li>')
+        helpers.assert_node_has_text(selected_nodes[2], '<li className="p-20 py-4">FAQ</li>')
     end)
 end)
 
 describe("change_margin() & change_spacing()", function()
     before_each(function() helpers.set_buffer_content_as_multiple_react_components() end)
-    after_each(function() vim.api.nvim_buf_delete(0, { force = true }) end)
+    after_each(function() helpers.clean_up() end)
 
     it("adds margin and spacing classes correctly", function()
         vim.cmd("norm! 22gg^") -- cursor to <li>Contacts</li>
@@ -127,7 +167,7 @@ end)
 
 describe("change_text_color() & change_background_color()", function()
     before_each(function() helpers.set_buffer_content_as_multiple_react_components() end)
-    after_each(function() clean_up() end)
+    after_each(function() helpers.clean_up() end)
 
     it("adds text-color and background-color classes correctly", function()
         vim.cmd("norm! 22gg^") -- cursor to <li>Contacts</li>
@@ -154,5 +194,38 @@ describe("change_text_color() & change_background_color()", function()
 
         tcm.change_background_color({ value = "" })
         helpers.assert_catalyst_node_has_text('<li className="">Contacts</li>')
+    end)
+
+    it("adds text-color to all selected elements correctly", function()
+        vim.cmd("norm! 22gg^") -- cursor to <li>Contacts</li>
+        catalyst.initiate({ win = 0, buf = 0 })
+
+        -- 1st text color change
+        tcm.change_text_color({ value = "text-zinc-400" })
+        helpers.assert_catalyst_node_has_text('<li className="text-zinc-400">Contacts</li>')
+
+        -- 2nd text color change
+        navigator.move({ destination = "next" })
+        helpers.assert_catalyst_node_has_text("<li>FAQ</li>")
+
+        tcm.change_text_color({ value = "text-zinc-400" })
+        helpers.assert_catalyst_node_has_text('<li className="text-zinc-400">FAQ</li>')
+
+        -- move then select multiple tags for the 3rd text color change
+        navigator.move({ destination = "previous" })
+        navigator.move({ destination = "previous", track_selection = true })
+        navigator.move({ destination = "previous" })
+        navigator.move({ destination = "previous", track_selection = true })
+
+        tcm.change_text_color({ value = "text-red-200" })
+
+        local selected_nodes = catalyst.selected_nodes()
+        assert.equals(#selected_nodes, 2)
+
+        helpers.assert_node_has_text(
+            selected_nodes[1],
+            '<li className="text-red-200">Contacts</li>'
+        )
+        helpers.assert_node_has_text(selected_nodes[2], '<li className="text-red-200">Home</li>')
     end)
 end)
