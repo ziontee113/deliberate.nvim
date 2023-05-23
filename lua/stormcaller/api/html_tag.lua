@@ -11,15 +11,19 @@ local find_indents = function(buf, node)
 end
 
 M.add = function(tag)
-    local _, _, end_row = catalyst.node():range()
+    for i = 1, #catalyst.selected_nodes() do
+        local node = catalyst.selected_nodes()[i]
 
-    local placeholder = "###"
-    local indents = find_indents(catalyst.buf(), catalyst.node())
-    local content = string.format("%s<%s>%s</%s>", indents, tag, placeholder, tag)
+        local _, _, end_row = node:range()
 
-    vim.api.nvim_buf_set_lines(catalyst.buf(), end_row + 1, end_row + 1, false, { content })
+        local placeholder = "###"
+        local indents = find_indents(catalyst.buf(), catalyst.node())
+        local content = string.format("%s<%s>%s</%s>", indents, tag, placeholder, tag)
 
-    catalyst.refresh_tree()
+        vim.api.nvim_buf_set_lines(catalyst.buf(), end_row + 1, end_row + 1, false, { content })
+
+        catalyst.refresh_tree()
+    end
 end
 
 return M

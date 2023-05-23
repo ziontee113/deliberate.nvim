@@ -19,4 +19,29 @@ describe("add()", function()
         helpers.assert_catalyst_node_has_text("<li>###</li>")
         helpers.assert_entire_first_line_of_catalyst_node_has_text("        <li>###</li>")
     end)
+
+    -- it("works for multi selection", function()
+    --     vim.cmd("norm! 22gg^") -- cursor to <li>Contacts</li>
+    --
+    --     catalyst.initiate({ win = 0, buf = 0 })
+    --     helpers.assert_catalyst_node_has_text("<li>Contacts</li>")
+    --
+    --     navigator.move({ destination = "next", track_selection = true })
+    --     navigator.move({ destination = "next", track_selection = true })
+    --
+    --     local selected_nodes = catalyst.selected_nodes()
+    --     assert.equals(2, #selected_nodes)
+    --     helpers.assert_node_has_text(selected_nodes[1], "<li>Contacts</li>")
+    --     helpers.assert_node_has_text(selected_nodes[2], "<li>FAQ</li>")
+    --
+    --     tag.add("li")
+    --
+    --     local text = vim.treesitter.get_node_text(catalyst.node():parent(), 0)
+    --     print(text)
+    --
+    --     selected_nodes = catalyst.selected_nodes()
+    --     assert.equals(2, #selected_nodes)
+    --     helpers.assert_node_has_text(selected_nodes[1], "<li>###</li>")
+    --     helpers.assert_node_has_text(selected_nodes[2], "<li>###</li>")
+    -- end)
 end)
