@@ -1,3 +1,5 @@
+require("tests.editor_config")
+
 local tcm = require("stormcaller.api.tailwind_class_modifier")
 local catalyst = require("stormcaller.lib.catalyst")
 local navigator = require("stormcaller.lib.navigator")

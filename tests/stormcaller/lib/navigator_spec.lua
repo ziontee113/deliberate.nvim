@@ -1,3 +1,5 @@
+require("tests.editor_config")
+
 local catalyst = require("stormcaller.lib.catalyst")
 local navigator = require("stormcaller.lib.navigator")
 local helpers = require("stormcaller.helpers")

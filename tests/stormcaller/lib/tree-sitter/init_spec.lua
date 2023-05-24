@@ -1,3 +1,5 @@
+require("tests.editor_config")
+
 local ts_utils = require("nvim-treesitter.ts_utils")
 local lib_ts = require("stormcaller.lib.tree-sitter")
 local helpers = require("stormcaller.helpers")

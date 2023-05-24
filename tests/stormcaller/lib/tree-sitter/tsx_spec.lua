@@ -1,3 +1,5 @@
+require("tests.editor_config")
+
 local helpers = require("stormcaller.helpers")
 local lib_ts_tsx = require("stormcaller.lib.tree-sitter.tsx")
 
