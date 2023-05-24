@@ -35,8 +35,12 @@ describe("add()", function()
         helpers.assert_catalyst_node_has_text("<li>###</li>")
         helpers.assert_entire_first_line_of_catalyst_node_has_text("        <li>###</li>")
     end)
+end)
 
-    it("works for multi selection", function()
+describe("tag.add() chain testing", function()
+    helpers.set_buffer_content_as_multiple_react_components()
+
+    it("Adds new tag after each selected node", function()
         vim.cmd("norm! 22gg^") -- cursor to <li>Contacts</li>
 
         catalyst.initiate({ win = 0, buf = 0 })
@@ -78,8 +82,9 @@ describe("add()", function()
         local node_at_cursor = ts_utils.get_node_at_cursor()
         local jsx_node_at_cursor = lib_ts_tsx.get_jsx_node(node_at_cursor)
         helpers.assert_node_has_text(jsx_node_at_cursor, "<OtherComponent />")
+    end)
 
-        -- clear multi selection, intent to select a few different tags, then use `tag.add()`
+    it("clears current selection, select 2 tags, add new tag after each selection", function()
         catalyst.clear_multi_selection()
 
         navigator.move({ destination = "previous", track_selection = true }) -- select `OtherComponent` tag
@@ -92,7 +97,7 @@ describe("add()", function()
         navigator.move({ destination = "previous", track_selection = true }) -- and select it
 
         -- make sure we selected the right stuffs
-        selected_nodes = catalyst.selected_nodes()
+        local selected_nodes = catalyst.selected_nodes()
         assert.equals(2, #selected_nodes)
         helpers.assert_node_has_text(selected_nodes[1], "<OtherComponent />")
         helpers.assert_node_has_text(selected_nodes[2], "<li>Home</li>")
@@ -121,11 +126,12 @@ describe("add()", function()
 
         helpers.assert_node_has_text(selected_nodes[1], "<h1>###</h1>")
         helpers.assert_node_has_text(selected_nodes[2], "<h1>###</h1>")
+    end)
 
-        -- execute `tag.add()` with destination = "previous"
+    it("keeping current selection, add new tag before each selection", function()
         tag.add("h3", "previous")
 
-        selected_nodes = catalyst.selected_nodes()
+        local selected_nodes = catalyst.selected_nodes()
         helpers.assert_node_has_text(
             selected_nodes[1]:parent(),
             [[<div className="h-screen w-screen bg-zinc-900">
@@ -149,4 +155,6 @@ describe("add()", function()
         helpers.assert_node_has_text(selected_nodes[1], "<h3>###</h3>")
         helpers.assert_node_has_text(selected_nodes[2], "<h3>###</h3>")
     end)
+
+    helpers.clean_up()
 end)
