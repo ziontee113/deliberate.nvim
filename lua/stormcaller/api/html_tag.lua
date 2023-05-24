@@ -54,7 +54,7 @@ M.add = function(o)
                 target_col,
                 target_row,
                 target_col,
-                { "", string.rep(" ", 2) .. content, indents }
+                { "", string.rep(" ", vim.bo.tabstop) .. content, indents }
             )
 
             -- we do this because `nvim_buf_set_text()` moves the cursor down
@@ -62,7 +62,7 @@ M.add = function(o)
             if catalyst.selection_index_matches_catalyst(i) then catalyst.move_to() end
 
             update_row = target_row
-            update_col = target_col + 2
+            update_col = target_col + vim.bo.tabstop
         else
             local offset = o.destination == "previous" and 0 or 1
             local target_row = end_row + offset

@@ -6,9 +6,6 @@ local catalyst = require("stormcaller.lib.catalyst")
 local navigator = require("stormcaller.lib.navigator")
 local tag = require("stormcaller.api.html_tag")
 
-vim.bo.tabstop = 2
-vim.bo.shiftwidth = 2
-
 describe("add()", function()
     before_each(function() helpers.set_buffer_content_as_multiple_react_components() end)
     after_each(function() helpers.clean_up() end)
