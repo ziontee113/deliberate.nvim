@@ -1,3 +1,6 @@
+local ts_utils = require("nvim-treesitter.ts_utils")
+local lib_ts_tsx = require("stormcaller.lib.tree-sitter.tsx")
+
 local helpers = require("stormcaller.helpers")
 local catalyst = require("stormcaller.lib.catalyst")
 local navigator = require("stormcaller.lib.navigator")
@@ -36,8 +39,21 @@ describe("add()", function()
 
         tag.add("li")
 
-        local text = vim.treesitter.get_node_text(catalyst.node():parent(), 0)
-        print(text)
+        helpers.assert_node_has_text(
+            selected_nodes[1]:parent(),
+            [[<div className="h-screen w-screen bg-zinc-900">
+        <li>Home</li>
+        <li>
+          A new study found that coffee drinkers have a lower risk of liver
+          cancer. So, drink up!
+        </li>
+        <li>Contacts</li>
+        <li>###</li>
+        <li>FAQ</li>
+        <li>###</li>
+        <OtherComponent />
+      </div>]]
+        )
 
         -- check that selection becomes newly added tags
         selected_nodes = catalyst.selected_nodes()
@@ -45,7 +61,53 @@ describe("add()", function()
         helpers.assert_node_has_text(selected_nodes[1], "<li>###</li>")
         helpers.assert_node_has_text(selected_nodes[2], "<li>###</li>")
 
-        -- TODO: there is more to do here in this test
-        -- such as turning off multi selection, then select something else, then add more tags
+        -- assure that the catalyst node's cursor auto moves after the buffer change caused by `tag.add()`
+        local node_at_cursor = ts_utils.get_node_at_cursor()
+        local jsx_node_at_cursor = lib_ts_tsx.get_jsx_node(node_at_cursor)
+        helpers.assert_node_has_text(jsx_node_at_cursor, "<OtherComponent />")
+
+        -- clear multi selection, intent to select a few different tags, then use `tag.add()`
+        catalyst.clear_multi_selection()
+
+        navigator.move({ destination = "previous", track_selection = true }) -- select `OtherComponent` tag
+
+        navigator.move({ destination = "previous" }) -- moves upwards
+        navigator.move({ destination = "previous" })
+        navigator.move({ destination = "previous" })
+        navigator.move({ destination = "previous" })
+        navigator.move({ destination = "previous" }) -- up to <li>Home</li>
+        navigator.move({ destination = "previous", track_selection = true }) -- and select it
+
+        -- make sure we selected the right stuffs
+        selected_nodes = catalyst.selected_nodes()
+        assert.equals(2, #selected_nodes)
+        helpers.assert_node_has_text(selected_nodes[1], "<OtherComponent />")
+        helpers.assert_node_has_text(selected_nodes[2], "<li>Home</li>")
+
+        -- execute `tag.add()`
+        tag.add("h1")
+
+        selected_nodes = catalyst.selected_nodes()
+
+        helpers.assert_node_has_text(
+            selected_nodes[1]:parent(),
+            [[<div className="h-screen w-screen bg-zinc-900">
+        <li>Home</li>
+        <h1>###</h1>
+        <li>
+          A new study found that coffee drinkers have a lower risk of liver
+          cancer. So, drink up!
+        </li>
+        <li>Contacts</li>
+        <li>###</li>
+        <li>FAQ</li>
+        <li>###</li>
+        <OtherComponent />
+        <h1>###</h1>
+      </div>]]
+        )
+
+        helpers.assert_node_has_text(selected_nodes[1], "<h1>###</h1>")
+        helpers.assert_node_has_text(selected_nodes[2], "<h1>###</h1>")
     end)
 end)

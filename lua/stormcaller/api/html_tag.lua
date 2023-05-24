@@ -11,7 +11,7 @@ local find_indents = function(buf, node)
     return string.match(first_line, "^%s+")
 end
 
-local function ligma(index, end_row, start_col)
+local function update_selected_node(index, end_row, start_col)
     local root = lib_ts.get_root({ parser_name = "tsx", buf = catalyst.buf(), reset = true })
     local updated_node =
         root:named_descendant_for_range(end_row + 1, start_col, end_row + 1, start_col)
@@ -26,14 +26,14 @@ M.add = function(tag)
         local _, start_col, end_row = node:range()
 
         local placeholder = "###"
-        local indents = find_indents(catalyst.buf(), catalyst.node())
+        local indents = find_indents(catalyst.buf(), node)
         local content = string.format("%s<%s>%s</%s>", indents, tag, placeholder, tag)
 
         vim.api.nvim_buf_set_lines(catalyst.buf(), end_row + 1, end_row + 1, false, { content })
 
         catalyst.refresh_tree()
 
-        ligma(i, end_row, start_col)
+        update_selected_node(i, end_row, start_col)
     end
 
     if #catalyst.selected_nodes() == 1 then navigator.move({ destination = "next" }) end

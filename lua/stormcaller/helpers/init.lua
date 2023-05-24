@@ -4,7 +4,7 @@ local catalyst = require("stormcaller.lib.catalyst")
 
 M.clean_up = function()
     vim.api.nvim_buf_delete(0, { force = true })
-    catalyst.clear_selection()
+    catalyst.clear_everything_for_the_next_test()
 end
 
 M.set_buf_content = function(content)

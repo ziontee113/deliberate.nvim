@@ -57,7 +57,7 @@ M.set_node_point = function(node_point) _catalyst.node_point = node_point end
 M.set_buf = function(buf) _catalyst.buf = buf end
 M.set_win = function(win) _catalyst.win = win end
 
-M.clear_selection = function()
+M.clear_everything_for_the_next_test = function()
     _selected_nodes, _selected_nodes_extmark_ids = {}, {}
     _latest_catalyst_node, _latest_catalyst_node_extmark_id = nil, nil
     _selection_tracking_state = false
@@ -69,6 +69,12 @@ M.update_node_in_selection = function(index, node)
 
     vim.api.nvim_buf_del_extmark(_catalyst.buf, ns_hidden, _selected_nodes_extmark_ids[index])
     _selected_nodes_extmark_ids[index] = set_extmark_for_node(node, _catalyst.buf)
+end
+
+M.clear_multi_selection = function()
+    _selected_nodes = { _catalyst.node }
+    _selected_nodes_extmark_ids = { _catalyst.extmark_id }
+    _selection_tracking_state = false
 end
 
 ---@param track_selection boolean | nil
