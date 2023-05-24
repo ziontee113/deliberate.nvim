@@ -10,13 +10,26 @@ describe("add()", function()
     before_each(function() helpers.set_buffer_content_as_multiple_react_components() end)
     after_each(function() helpers.clean_up() end)
 
-    it("works for single target (at cursor node only, no multi selection)", function()
+    it("works for single target (cursor node only), destination = next", function()
         vim.cmd("norm! 22gg^") -- cursor to <li>Contacts</li>
 
         catalyst.initiate({ win = 0, buf = 0 })
         helpers.assert_catalyst_node_has_text("<li>Contacts</li>")
 
-        tag.add("li")
+        tag.add("li", "next")
+
+        -- catalyst node should be updated to newly created node without manual `navigator.move()`
+        helpers.assert_catalyst_node_has_text("<li>###</li>")
+        helpers.assert_entire_first_line_of_catalyst_node_has_text("        <li>###</li>")
+    end)
+
+    it("works for single target (cursor node only), destination = previous", function()
+        vim.cmd("norm! 22gg^") -- cursor to <li>Contacts</li>
+
+        catalyst.initiate({ win = 0, buf = 0 })
+        helpers.assert_catalyst_node_has_text("<li>Contacts</li>")
+
+        tag.add("li", "previous")
 
         -- catalyst node should be updated to newly created node without manual `navigator.move()`
         helpers.assert_catalyst_node_has_text("<li>###</li>")
@@ -37,7 +50,7 @@ describe("add()", function()
         helpers.assert_node_has_text(selected_nodes[1], "<li>Contacts</li>")
         helpers.assert_node_has_text(selected_nodes[2], "<li>FAQ</li>")
 
-        tag.add("li")
+        tag.add("li", "next")
 
         helpers.assert_node_has_text(
             selected_nodes[1]:parent(),
@@ -85,10 +98,9 @@ describe("add()", function()
         helpers.assert_node_has_text(selected_nodes[2], "<li>Home</li>")
 
         -- execute `tag.add()`
-        tag.add("h1")
+        tag.add("h1", "next")
 
         selected_nodes = catalyst.selected_nodes()
-
         helpers.assert_node_has_text(
             selected_nodes[1]:parent(),
             [[<div className="h-screen w-screen bg-zinc-900">
@@ -109,5 +121,32 @@ describe("add()", function()
 
         helpers.assert_node_has_text(selected_nodes[1], "<h1>###</h1>")
         helpers.assert_node_has_text(selected_nodes[2], "<h1>###</h1>")
+
+        -- execute `tag.add()` with destination = "previous"
+        tag.add("h3", "previous")
+
+        selected_nodes = catalyst.selected_nodes()
+        helpers.assert_node_has_text(
+            selected_nodes[1]:parent(),
+            [[<div className="h-screen w-screen bg-zinc-900">
+        <li>Home</li>
+        <h3>###</h3>
+        <h1>###</h1>
+        <li>
+          A new study found that coffee drinkers have a lower risk of liver
+          cancer. So, drink up!
+        </li>
+        <li>Contacts</li>
+        <li>###</li>
+        <li>FAQ</li>
+        <li>###</li>
+        <OtherComponent />
+        <h3>###</h3>
+        <h1>###</h1>
+      </div>]]
+        )
+
+        helpers.assert_node_has_text(selected_nodes[1], "<h3>###</h3>")
+        helpers.assert_node_has_text(selected_nodes[2], "<h3>###</h3>")
     end)
 end)

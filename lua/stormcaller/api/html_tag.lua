@@ -19,7 +19,19 @@ local function update_selected_node(index, end_row, start_col)
     catalyst.update_node_in_selection(index, updated_node)
 end
 
-M.add = function(tag)
+local find_offset = function(destination)
+    if destination == "next" or destination == "inside" then
+        return 1
+    elseif destination == "previous" then
+        return 0
+    end
+end
+
+---@param tag string
+---@param destination "next" | "previous" | "inside"
+M.add = function(tag, destination)
+    local offset = find_offset(destination)
+
     for i = 1, #catalyst.selected_nodes() do
         local node = catalyst.selected_nodes()[i]
 
@@ -29,14 +41,17 @@ M.add = function(tag)
         local indents = find_indents(catalyst.buf(), node)
         local content = string.format("%s<%s>%s</%s>", indents, tag, placeholder, tag)
 
-        vim.api.nvim_buf_set_lines(catalyst.buf(), end_row + 1, end_row + 1, false, { content })
+        local target_row = end_row + offset
+        vim.api.nvim_buf_set_lines(catalyst.buf(), target_row, target_row, false, { content })
 
         catalyst.refresh_tree()
 
-        update_selected_node(i, end_row, start_col)
+        update_selected_node(i, target_row - 1, start_col)
     end
 
-    if #catalyst.selected_nodes() == 1 then navigator.move({ destination = "next" }) end
+    if #catalyst.selected_nodes() == 1 then
+        navigator.move({ destination = destination == "previous" and "previous" or "next" })
+    end
 end
 
 return M
