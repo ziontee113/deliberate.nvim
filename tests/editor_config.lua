@@ -1,3 +1,5 @@
+-- This config file is for both local testing and CI workflow.
+
 vim.o.swapfile = false
 vim.bo.swapfile = false
 

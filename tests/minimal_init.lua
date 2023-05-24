@@ -1,3 +1,5 @@
+-- This config file is for local testing using NeoTest.
+
 -- Dependencies for local testing (using Lazy.nvim)
 vim.opt.rtp:append("~/.local/share/nvim/lazy/plenary.nvim")
 require("plenary.busted")
