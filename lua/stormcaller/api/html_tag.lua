@@ -1,4 +1,5 @@
 local M = {}
+local api = vim.api
 
 local catalyst = require("stormcaller.lib.catalyst")
 local navigator = require("stormcaller.lib.navigator")
@@ -10,7 +11,7 @@ local lib_ts_tsx = require("stormcaller.lib.tree-sitter.tsx")
 ---@return string
 local find_indents = function(buf, node)
     local start_row = node:range()
-    local first_line = vim.api.nvim_buf_get_lines(buf, start_row, start_row + 1, false)[1]
+    local first_line = api.nvim_buf_get_lines(buf, start_row, start_row + 1, false)[1]
     return string.match(first_line, "^%s+")
 end
 
@@ -31,10 +32,10 @@ end
 ---@field content string
 
 ---@param index number
----@param content string
+---@param replacement string
 ---@param indents string
 ---@return number, number
-local function handle_inside_destination(index, content, indents)
+local function handle_inside(index, replacement, indents)
     local first_closing_bracket = lib_ts.capture_nodes_with_queries({
         root = catalyst.selected_nodes()[index],
         buf = catalyst.buf(),
@@ -44,9 +45,9 @@ local function handle_inside_destination(index, content, indents)
     })[1]
 
     local _, _, b_row, b_col = first_closing_bracket:range()
-    content = string.rep(" ", vim.bo.tabstop) .. content
+    replacement = string.rep(" ", vim.bo.tabstop) .. replacement
 
-    vim.api.nvim_buf_set_text(catalyst.buf(), b_row, b_col, b_row, b_col, { "", content, indents })
+    api.nvim_buf_set_text(catalyst.buf(), b_row, b_col, b_row, b_col, { "", replacement, indents })
 
     -- we do this because `nvim_buf_set_text()` moves the cursor down
     -- if cursor row is equal or below where we start changing buffer text.
@@ -58,15 +59,15 @@ local function handle_inside_destination(index, content, indents)
 end
 
 ---@param destination string
----@param content string
+---@param replacement string
 ---@param og_end_row number
 ---@param og_start_col number
 ---@return number, number
-local function handle_next_or_previous_destination(destination, content, og_end_row, og_start_col)
+local function handle_next_or_previous(destination, replacement, og_end_row, og_start_col)
     local offset = destination == "previous" and 0 or 1
     local target_row = og_end_row + offset
 
-    vim.api.nvim_buf_set_lines(catalyst.buf(), target_row, target_row, false, { content })
+    api.nvim_buf_set_lines(catalyst.buf(), target_row, target_row, false, { replacement })
 
     local update_row = target_row - 1
     local update_col = og_start_col
@@ -81,19 +82,15 @@ M.add = function(o)
         local og_node = catalyst.selected_nodes()[i]
         local _, og_start_col, og_end_row = og_node:range()
 
-        local placeholder = o.content or "###"
+        local content = o.content or "###"
         local indents = find_indents(catalyst.buf(), og_node)
-        local content = string.format("%s<%s>%s</%s>", indents, o.tag, placeholder, o.tag)
+        local replacement = string.format("%s<%s>%s</%s>", indents, o.tag, content, o.tag)
 
         if o.destination == "inside" then
-            update_row, update_col = handle_inside_destination(i, content, indents)
+            update_row, update_col = handle_inside(i, replacement, indents)
         else
-            update_row, update_col = handle_next_or_previous_destination(
-                o.destination,
-                content,
-                og_end_row,
-                og_start_col
-            )
+            update_row, update_col =
+                handle_next_or_previous(o.destination, replacement, og_end_row, og_start_col)
         end
 
         catalyst.refresh_tree()
