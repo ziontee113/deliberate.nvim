@@ -64,6 +64,13 @@ M.clear_selection = function()
     vim.api.nvim_buf_clear_namespace(0, ns_hidden, 0, -1)
 end
 
+M.update_node_in_selection = function(index, node)
+    _selected_nodes[index] = node
+
+    vim.api.nvim_buf_del_extmark(_catalyst.buf, ns_hidden, _selected_nodes_extmark_ids[index])
+    _selected_nodes_extmark_ids[index] = set_extmark_for_node(node, _catalyst.buf)
+end
+
 ---@param track_selection boolean | nil
 local function update_selected_nodes(track_selection)
     if #_selected_nodes == 0 then
@@ -104,13 +111,6 @@ end
 
 -------------------------------------------- Internals
 
-local get_jsx_node = function(node)
-    return lib_ts.find_closest_parent_with_types({
-        node = node,
-        desired_parent_types = { "jsx_element", "jsx_self_closing_element", "jsx_fragment" },
-    })
-end
-
 ---This function should be called whenever we programatically change buffer content (e.g by using `nvim_buf_set_text()`).
 M.refresh_tree = function()
     if #_selected_nodes == 0 then return end
@@ -122,14 +122,14 @@ M.refresh_tree = function()
             unpack(vim.api.nvim_buf_get_extmark_by_id(_catalyst.buf, ns_hidden, id, {}))
 
         local updated_node = updated_root:named_descendant_for_range(row, col, row, col)
-        _selected_nodes[i] = get_jsx_node(updated_node)
+        _selected_nodes[i] = lib_ts_tsx.get_jsx_node(updated_node)
     end
 
     local row, col = unpack(
         vim.api.nvim_buf_get_extmark_by_id(_catalyst.buf, ns_hidden, _catalyst.extmark_id, {})
     )
     local updated_node = updated_root:named_descendant_for_range(row, col, row, col)
-    _catalyst.node = get_jsx_node(updated_node)
+    _catalyst.node = lib_ts_tsx.get_jsx_node(updated_node)
 end
 
 -------------------------------------------- Initiate

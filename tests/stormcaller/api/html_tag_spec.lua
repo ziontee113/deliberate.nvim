@@ -39,10 +39,13 @@ describe("add()", function()
         local text = vim.treesitter.get_node_text(catalyst.node():parent(), 0)
         print(text)
 
-        -- -- check that selection becomes newly added tags
-        -- selected_nodes = catalyst.selected_nodes()
-        -- assert.equals(2, #selected_nodes)
-        -- helpers.assert_node_has_text(selected_nodes[1], "<li>###</li>")
-        -- helpers.assert_node_has_text(selected_nodes[2], "<li>###</li>")
+        -- check that selection becomes newly added tags
+        selected_nodes = catalyst.selected_nodes()
+        assert.equals(2, #selected_nodes)
+        helpers.assert_node_has_text(selected_nodes[1], "<li>###</li>")
+        helpers.assert_node_has_text(selected_nodes[2], "<li>###</li>")
+
+        -- TODO: there is more to do here in this test
+        -- such as turning off multi selection, then select something else, then add more tags
     end)
 end)

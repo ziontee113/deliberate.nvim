@@ -74,4 +74,13 @@ M.extract_class_names = function(buf, node)
     return class_names, className_string_node
 end
 
+---@param node TSNode
+---@return TSNode|nil
+M.get_jsx_node = function(node)
+    return lib_ts.find_closest_parent_with_types({
+        node = node,
+        desired_parent_types = { "jsx_element", "jsx_self_closing_element", "jsx_fragment" },
+    })
+end
+
 return M
