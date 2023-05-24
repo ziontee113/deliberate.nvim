@@ -15,7 +15,7 @@ describe("add()", function()
 
         tag.add("li")
 
-        navigator.move({ destination = "next" })
+        -- catalyst node should be updated to newly created node without manual `navigator.move()`
         helpers.assert_catalyst_node_has_text("<li>###</li>")
         helpers.assert_entire_first_line_of_catalyst_node_has_text("        <li>###</li>")
     end)
@@ -25,8 +25,6 @@ describe("add()", function()
 
         catalyst.initiate({ win = 0, buf = 0 })
         helpers.assert_catalyst_node_has_text("<li>Contacts</li>")
-
-        catalyst.print_all_selected_extmarks()
 
         navigator.move({ destination = "next", track_selection = true })
         navigator.move({ destination = "next", track_selection = true })
@@ -38,10 +36,10 @@ describe("add()", function()
 
         tag.add("li")
 
-        print("------------------")
         local text = vim.treesitter.get_node_text(catalyst.node():parent(), 0)
         print(text)
 
+        -- -- check that selection becomes newly added tags
         -- selected_nodes = catalyst.selected_nodes()
         -- assert.equals(2, #selected_nodes)
         -- helpers.assert_node_has_text(selected_nodes[1], "<li>###</li>")

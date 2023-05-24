@@ -42,33 +42,10 @@ M.is_active = function() return _catalyst.is_active end
 ---@return TSNode[]
 M.selected_nodes = function() return _selected_nodes end
 
-M.print_all_selected_extmarks = function()
-    print("-")
-    M.print_all_extmarks()
-    print("-")
-
-    for _, id in ipairs(_selected_nodes_extmark_ids) do
-        local row, col =
-            unpack(vim.api.nvim_buf_get_extmark_by_id(_catalyst.buf, ns_hidden, id, {}))
-
-        print(vim.inspect({ id, row, col }))
-    end
-end
-M.print_all_extmarks = function()
-    local all = vim.api.nvim_buf_get_extmarks(_catalyst.buf, ns_hidden, 0, -1, {})
-    for _, tbl in ipairs(all) do
-        print(vim.inspect(tbl))
-    end
-end
-
 -------------------------------------------- Setters
 
 local function set_extmark_for_node(node, buf)
     local start_row, start_col = node:range()
-
-    local text = vim.treesitter.get_node_text(node, 0)
-    print("set_extmark_for_node() " .. text)
-
     return vim.api.nvim_buf_set_extmark(buf, ns_hidden, start_row, start_col, {})
 end
 

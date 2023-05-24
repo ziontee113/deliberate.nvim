@@ -1,6 +1,7 @@
 local M = {}
 
 local catalyst = require("stormcaller.lib.catalyst")
+local navigator = require("stormcaller.lib.navigator")
 local lib_ts = require("stormcaller.lib.tree-sitter")
 local lib_ts_tsx = require("stormcaller.lib.tree-sitter.tsx")
 
@@ -11,17 +12,8 @@ local find_indents = function(buf, node)
 end
 
 M.add = function(tag)
-    print("add was called")
-
-    catalyst.print_all_selected_extmarks()
-    print("--------------------------")
-
     for i = 1, #catalyst.selected_nodes() do
         local node = catalyst.selected_nodes()[i]
-
-        print("iteration " .. i)
-        catalyst.print_all_selected_extmarks()
-        print("--------------------------")
 
         local _, _, end_row = node:range()
 
@@ -31,10 +23,10 @@ M.add = function(tag)
 
         vim.api.nvim_buf_set_lines(catalyst.buf(), end_row + 1, end_row + 1, false, { content })
 
-        catalyst.print_all_selected_extmarks()
-
         catalyst.refresh_tree()
     end
+
+    if #catalyst.selected_nodes() == 1 then navigator.move({ destination = "next" }) end
 end
 
 return M
