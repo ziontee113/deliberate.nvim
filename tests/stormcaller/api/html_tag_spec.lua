@@ -16,7 +16,7 @@ describe("add()", function()
         catalyst.initiate({ win = 0, buf = 0 })
         helpers.assert_catalyst_node_has_text("<li>Contacts</li>")
 
-        tag.add("li", "next")
+        tag.add({ tag = "li", destination = "next" })
 
         -- catalyst node should be updated to newly created node without manual `navigator.move()`
         helpers.assert_catalyst_node_has_text("<li>###</li>")
@@ -29,12 +29,23 @@ describe("add()", function()
         catalyst.initiate({ win = 0, buf = 0 })
         helpers.assert_catalyst_node_has_text("<li>Contacts</li>")
 
-        tag.add("li", "previous")
+        tag.add({ tag = "li", destination = "previous" })
 
         -- catalyst node should be updated to newly created node without manual `navigator.move()`
         helpers.assert_catalyst_node_has_text("<li>###</li>")
         helpers.assert_entire_first_line_of_catalyst_node_has_text("        <li>###</li>")
     end)
+
+    -- it("works for single target (cursor node only), destination = inside", function()
+    --     vim.cmd("norm! 22gg^") -- cursor to <li>Contacts</li>
+    --
+    --     catalyst.initiate({ win = 0, buf = 0 })
+    --     helpers.assert_catalyst_node_has_text("<li>Contacts</li>")
+    --
+    --     tag.add({ tag = "div", destination = "next", content = "" })
+    --
+    --     helpers.assert_catalyst_node_has_text("<div></div>")
+    -- end)
 end)
 
 describe("tag.add() chain testing", function()
@@ -54,7 +65,7 @@ describe("tag.add() chain testing", function()
         helpers.assert_node_has_text(selected_nodes[1], "<li>Contacts</li>")
         helpers.assert_node_has_text(selected_nodes[2], "<li>FAQ</li>")
 
-        tag.add("li", "next")
+        tag.add({ tag = "li", destination = "next", content = "first_add" })
 
         helpers.assert_node_has_text(
             selected_nodes[1]:parent(),
@@ -65,9 +76,9 @@ describe("tag.add() chain testing", function()
           cancer. So, drink up!
         </li>
         <li>Contacts</li>
-        <li>###</li>
+        <li>first_add</li>
         <li>FAQ</li>
-        <li>###</li>
+        <li>first_add</li>
         <OtherComponent />
       </div>]]
         )
@@ -75,8 +86,8 @@ describe("tag.add() chain testing", function()
         -- check that selection becomes newly added tags
         selected_nodes = catalyst.selected_nodes()
         assert.equals(2, #selected_nodes)
-        helpers.assert_node_has_text(selected_nodes[1], "<li>###</li>")
-        helpers.assert_node_has_text(selected_nodes[2], "<li>###</li>")
+        helpers.assert_node_has_text(selected_nodes[1], "<li>first_add</li>")
+        helpers.assert_node_has_text(selected_nodes[2], "<li>first_add</li>")
 
         -- assure that the catalyst node's cursor auto moves after the buffer change caused by `tag.add()`
         local node_at_cursor = ts_utils.get_node_at_cursor()
@@ -103,57 +114,57 @@ describe("tag.add() chain testing", function()
         helpers.assert_node_has_text(selected_nodes[2], "<li>Home</li>")
 
         -- execute `tag.add()`
-        tag.add("h1", "next")
+        tag.add({ tag = "h1", destination = "next", content = "2nd" })
 
         selected_nodes = catalyst.selected_nodes()
         helpers.assert_node_has_text(
             selected_nodes[1]:parent(),
             [[<div className="h-screen w-screen bg-zinc-900">
         <li>Home</li>
-        <h1>###</h1>
+        <h1>2nd</h1>
         <li>
           A new study found that coffee drinkers have a lower risk of liver
           cancer. So, drink up!
         </li>
         <li>Contacts</li>
-        <li>###</li>
+        <li>first_add</li>
         <li>FAQ</li>
-        <li>###</li>
+        <li>first_add</li>
         <OtherComponent />
-        <h1>###</h1>
+        <h1>2nd</h1>
       </div>]]
         )
 
-        helpers.assert_node_has_text(selected_nodes[1], "<h1>###</h1>")
-        helpers.assert_node_has_text(selected_nodes[2], "<h1>###</h1>")
+        helpers.assert_node_has_text(selected_nodes[1], "<h1>2nd</h1>")
+        helpers.assert_node_has_text(selected_nodes[2], "<h1>2nd</h1>")
     end)
 
     it("keeping current selection, add new tag before each selection", function()
-        tag.add("h3", "previous")
+        tag.add({ tag = "h3", destination = "previous", content = "third-add-call" })
 
         local selected_nodes = catalyst.selected_nodes()
         helpers.assert_node_has_text(
             selected_nodes[1]:parent(),
             [[<div className="h-screen w-screen bg-zinc-900">
         <li>Home</li>
-        <h3>###</h3>
-        <h1>###</h1>
+        <h3>third-add-call</h3>
+        <h1>2nd</h1>
         <li>
           A new study found that coffee drinkers have a lower risk of liver
           cancer. So, drink up!
         </li>
         <li>Contacts</li>
-        <li>###</li>
+        <li>first_add</li>
         <li>FAQ</li>
-        <li>###</li>
+        <li>first_add</li>
         <OtherComponent />
-        <h3>###</h3>
-        <h1>###</h1>
+        <h3>third-add-call</h3>
+        <h1>2nd</h1>
       </div>]]
         )
 
-        helpers.assert_node_has_text(selected_nodes[1], "<h3>###</h3>")
-        helpers.assert_node_has_text(selected_nodes[2], "<h3>###</h3>")
+        helpers.assert_node_has_text(selected_nodes[1], "<h3>third-add-call</h3>")
+        helpers.assert_node_has_text(selected_nodes[2], "<h3>third-add-call</h3>")
     end)
 
     helpers.clean_up()

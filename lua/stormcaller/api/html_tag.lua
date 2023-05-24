@@ -27,19 +27,23 @@ local find_offset = function(destination)
     end
 end
 
----@param tag string
----@param destination "next" | "previous" | "inside"
-M.add = function(tag, destination)
-    local offset = find_offset(destination)
+---@class tag_add_Opts
+---@field tag string
+---@field destination "next" | "previous" | "inside"
+---@field content string
+
+---@param o tag_add_Opts
+M.add = function(o)
+    local offset = find_offset(o.destination)
 
     for i = 1, #catalyst.selected_nodes() do
         local node = catalyst.selected_nodes()[i]
 
         local _, start_col, end_row = node:range()
 
-        local placeholder = "###"
+        local placeholder = o.content or "###"
         local indents = find_indents(catalyst.buf(), node)
-        local content = string.format("%s<%s>%s</%s>", indents, tag, placeholder, tag)
+        local content = string.format("%s<%s>%s</%s>", indents, o.tag, placeholder, o.tag)
 
         local target_row = end_row + offset
         vim.api.nvim_buf_set_lines(catalyst.buf(), target_row, target_row, false, { content })
@@ -50,7 +54,7 @@ M.add = function(tag, destination)
     end
 
     if #catalyst.selected_nodes() == 1 then
-        navigator.move({ destination = destination == "previous" and "previous" or "next" })
+        navigator.move({ destination = o.destination == "previous" and "previous" or "next" })
     end
 end
 
