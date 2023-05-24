@@ -15,9 +15,11 @@ describe("selection.nodes()", function()
 
     it("returns correct nodes after moving catalyst", function()
         navigator.move({ destination = "next" })
+        assert.equals(1, #selection.nodes())
         helpers.assert_node_has_text(selection.nodes()[1], "<li>FAQ</li>")
 
         navigator.move({ destination = "next" })
+        assert.equals(1, #selection.nodes())
         helpers.assert_node_has_text(selection.nodes()[1], "<OtherComponent />")
     end)
 

@@ -51,6 +51,31 @@ M.current_selection_matches_catalyst = function(index)
     return items_are_identical(selection[index], current_catalyst_info)
 end
 
+local remove_unused_extmarks = function()
+    if #selection ~= 1 then return end
+
+    local items_to_check = {}
+    for _, item in ipairs(selection) do
+        table.insert(items_to_check, item)
+    end
+    table.insert(items_to_check, current_catalyst_info)
+    table.insert(items_to_check, previous_catalyst_info)
+
+    local all_extmarks = vim.api.nvim_buf_get_extmarks(current_catalyst_info.buf, ns, 0, -1, {})
+
+    for _, extmark in ipairs(all_extmarks) do
+        local match = false
+        local id = extmark[1]
+        for _, item in ipairs(items_to_check) do
+            if item.extmark_id == id then
+                match = true
+                break
+            end
+        end
+        if not match then vim.api.nvim_buf_del_extmark(current_catalyst_info.buf, ns, id) end
+    end
+end
+
 M.update = function(track_selection)
     if track_selection and actively_tracking then
         local match = false
@@ -73,6 +98,8 @@ M.update = function(track_selection)
     if not track_selection and not actively_tracking then selection = { current_catalyst_info } end
 
     previous_catalyst_info = current_catalyst_info
+
+    remove_unused_extmarks()
 end
 
 --------------------------------------------
@@ -87,11 +114,8 @@ end
 
 M.update_specific_selection_index = function(index, node)
     selection[index].node = node
-
     vim.api.nvim_buf_del_extmark(selection[index].buf, ns, selection[index].extmark_id)
-
     local new_extmark_id = set_extmark_for_node(selection[index].buf, node)
-
     selection[index].extmark_id = new_extmark_id
 end
 
