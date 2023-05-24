@@ -2,6 +2,7 @@ require("tests.editor_config")
 
 local tcm = require("stormcaller.api.tailwind_class_modifier")
 local catalyst = require("stormcaller.lib.catalyst")
+local selection = require("stormcaller.lib.selection")
 local navigator = require("stormcaller.lib.navigator")
 local helpers = require("stormcaller.helpers")
 
@@ -118,36 +119,35 @@ describe("change_padding() for all `selected_nodes`", function()
         navigator.move({ destination = "next", track_selection = true })
         navigator.move({ destination = "next", track_selection = true })
 
-        local selected_nodes = catalyst.selected_nodes()
-        assert.equals(#selected_nodes, 2)
-        helpers.assert_node_has_text(selected_nodes[1], "<li>Contacts</li>")
-        helpers.assert_node_has_text(selected_nodes[2], "<li>FAQ</li>")
+        assert.equals(#selection.nodes(), 2)
+        helpers.assert_node_has_text(selection.nodes()[1], "<li>Contacts</li>")
+        helpers.assert_node_has_text(selection.nodes()[2], "<li>FAQ</li>")
 
         -- 1st round, add classes for tags with no classes
         tcm.change_padding({ axis = "omni", value = "p-4" })
 
-        selected_nodes = catalyst.selected_nodes()
-        assert.equals(#selected_nodes, 2)
+        assert.equals(#selection.nodes(), 2)
 
         tcm.change_padding({ axis = "omni", value = "p-4" })
-        helpers.assert_node_has_text(selected_nodes[1], '<li className="p-4">Contacts</li>')
-        helpers.assert_node_has_text(selected_nodes[2], '<li className="p-4">FAQ</li>')
+        helpers.assert_node_has_text(selection.nodes()[1], '<li className="p-4">Contacts</li>')
+        helpers.assert_node_has_text(selection.nodes()[2], '<li className="p-4">FAQ</li>')
 
         -- 2nd round, modifying already exist omni axis
-        selected_nodes = catalyst.selected_nodes()
-        assert.equals(#selected_nodes, 2)
+        assert.equals(#selection.nodes(), 2)
 
         tcm.change_padding({ axis = "omni", value = "p-20" })
-        helpers.assert_node_has_text(selected_nodes[1], '<li className="p-20">Contacts</li>')
-        helpers.assert_node_has_text(selected_nodes[2], '<li className="p-20">FAQ</li>')
+        helpers.assert_node_has_text(selection.nodes()[1], '<li className="p-20">Contacts</li>')
+        helpers.assert_node_has_text(selection.nodes()[2], '<li className="p-20">FAQ</li>')
 
         -- 3rd round, adding extra y axis
-        selected_nodes = catalyst.selected_nodes()
-        assert.equals(#selected_nodes, 2)
+        assert.equals(#selection.nodes(), 2)
 
         tcm.change_padding({ axis = "y", value = "py-4" })
-        helpers.assert_node_has_text(selected_nodes[1], '<li className="p-20 py-4">Contacts</li>')
-        helpers.assert_node_has_text(selected_nodes[2], '<li className="p-20 py-4">FAQ</li>')
+        helpers.assert_node_has_text(
+            selection.nodes()[1],
+            '<li className="p-20 py-4">Contacts</li>'
+        )
+        helpers.assert_node_has_text(selection.nodes()[2], '<li className="p-20 py-4">FAQ</li>')
     end)
 end)
 
@@ -221,13 +221,12 @@ describe("change_text_color() & change_background_color()", function()
 
         tcm.change_text_color({ value = "text-red-200" })
 
-        local selected_nodes = catalyst.selected_nodes()
-        assert.equals(#selected_nodes, 2)
+        assert.equals(#selection.nodes(), 2)
 
         helpers.assert_node_has_text(
-            selected_nodes[1],
+            selection.nodes()[1],
             '<li className="text-red-200">Contacts</li>'
         )
-        helpers.assert_node_has_text(selected_nodes[2], '<li className="text-red-200">Home</li>')
+        helpers.assert_node_has_text(selection.nodes()[2], '<li className="text-red-200">Home</li>')
     end)
 end)

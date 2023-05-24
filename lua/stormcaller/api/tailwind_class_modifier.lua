@@ -1,6 +1,7 @@
 local M = {}
 
 local catalyst = require("stormcaller.lib.catalyst")
+local selection = require("stormcaller.lib.selection")
 local lib_ts = require("stormcaller.lib.tree-sitter")
 local lib_ts_tsx = require("stormcaller.lib.tree-sitter.tsx")
 local lua_patterns = require("stormcaller.lib.lua_patterns")
@@ -16,7 +17,7 @@ local function set_empty_className_property_if_needed(buf, node)
     local start_row, _, _, end_col = tag_node:range()
     vim.api.nvim_buf_set_text(buf, start_row, end_col, start_row, end_col, { ' className=""' })
 
-    catalyst.refresh_tree()
+    selection.refresh_tree()
 end
 
 ---@param class_names string[]
@@ -87,18 +88,18 @@ end
 local change_tailwind_classes = function(o)
     if not catalyst.is_active() then return end
 
-    for i = 1, #catalyst.selected_nodes() do
+    for i = 1, #selection.nodes() do
         -- we need to get `node` this way because if not, we'll get its "old content" (pre-modified)
         -- in this case, the `replace_node_text()` of the previous iteration might've modified the node's content,
-        -- so we need to use `catalyst.selected_nodes()` to get the updated nodes, otherwise everything breaks.
-        local node = catalyst.selected_nodes()[i]
+        -- so we need to use `selection.nodes()` to get the updated nodes, otherwise everything breaks.
+        local node = selection.nodes()[i]
 
         set_empty_className_property_if_needed(catalyst.buf(), node)
 
         -- we need to get `node` this way because if not, we'll get its "old content" (pre-modified)
         -- in this case, `set_empty_className_property_if_needed()` might've modified the node's content,
-        -- so we need to use `catalyst.selected_nodes()` to get the updated nodes, otherwise everything breaks.
-        node = catalyst.selected_nodes()[i]
+        -- so we need to use `selection.nodes()` to get the updated nodes, otherwise everything breaks.
+        node = selection.nodes()[i]
 
         local class_names, className_string_node =
             lib_ts_tsx.extract_class_names(catalyst.buf(), node)
@@ -111,7 +112,7 @@ local change_tailwind_classes = function(o)
             replacement = replacement,
         })
 
-        catalyst.refresh_tree()
+        selection.refresh_tree()
     end
 end
 

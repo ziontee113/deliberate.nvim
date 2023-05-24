@@ -1,6 +1,7 @@
 require("tests.editor_config")
 
 local catalyst = require("stormcaller.lib.catalyst")
+local selection = require("stormcaller.lib.selection")
 local navigator = require("stormcaller.lib.navigator")
 local helpers = require("stormcaller.helpers")
 
@@ -250,18 +251,16 @@ describe("navigator.move() with `track_selection` option", function()
         -- inititation
         catalyst.initiate({ win = 0, buf = 0 })
 
-        local selected_nodes = catalyst.selected_nodes()
-        assert.equals(#selected_nodes, 1)
-        helpers.assert_node_has_text(selected_nodes[1], "<li>Home</li>")
+        assert.equals(#selection.nodes(), 1)
+        helpers.assert_node_has_text(selection.nodes()[1], "<li>Home</li>")
 
         -- 1st move
         navigator.move({ destination = "next" })
 
-        selected_nodes = catalyst.selected_nodes()
-        assert.equals(#selected_nodes, 1)
+        assert.equals(#selection.nodes(), 1)
 
         helpers.assert_node_has_text(
-            selected_nodes[1],
+            selection.nodes()[1],
             [[<li>
           A new study found that coffee drinkers have a lower risk of liver
           cancer. So, drink up!
@@ -271,31 +270,28 @@ describe("navigator.move() with `track_selection` option", function()
         -- 2nd move
         navigator.move({ destination = "next" })
 
-        selected_nodes = catalyst.selected_nodes()
-        assert.equals(#selected_nodes, 1)
+        assert.equals(#selection.nodes(), 1)
 
-        helpers.assert_node_has_text(selected_nodes[1], "<li>Contacts</li>")
+        helpers.assert_node_has_text(selection.nodes()[1], "<li>Contacts</li>")
 
         -- 3rd move
         navigator.move({ destination = "next" })
 
-        selected_nodes = catalyst.selected_nodes()
-        assert.equals(#selected_nodes, 1)
+        assert.equals(#selection.nodes(), 1)
 
-        helpers.assert_node_has_text(selected_nodes[1], "<li>FAQ</li>")
+        helpers.assert_node_has_text(selection.nodes()[1], "<li>FAQ</li>")
     end)
 
-    it("update `selected_nodes` correctly with `track_selection` option used", function()
+    it("update `selection.nodes()` correctly with `track_selection` option used", function()
         vim.cmd("norm! 17gg^") -- cursor to start of 1st <li> tag
 
         -- inititation
         catalyst.initiate({ win = 0, buf = 0 })
 
-        local selected_nodes = catalyst.selected_nodes()
-        assert.equals(#selected_nodes, 1)
-        helpers.assert_node_has_text(selected_nodes[1], "<li>Home</li>")
+        assert.equals(#selection.nodes(), 1)
+        helpers.assert_node_has_text(selection.nodes()[1], "<li>Home</li>")
 
-        -- 1st move: "next" destination, with NO track_selection, cursor moves to the next node, but `selected_nodes` stays the same
+        -- 1st move: "next" destination, with NO track_selection, cursor moves to the next node, but `selection.nodes()` stays the same
         navigator.move({ destination = "next", track_selection = true })
 
         helpers.assert_catalyst_node_has_text([[<li>
@@ -303,38 +299,34 @@ describe("navigator.move() with `track_selection` option", function()
           cancer. So, drink up!
         </li>]])
 
-        selected_nodes = catalyst.selected_nodes()
-        assert.equals(#selected_nodes, 1)
-        helpers.assert_node_has_text(selected_nodes[1], "<li>Home</li>")
+        assert.equals(#selection.nodes(), 1)
+        helpers.assert_node_has_text(selection.nodes()[1], "<li>Home</li>")
 
-        -- 2nd move: "next" destination, with NO track_selection, cursor moves to the next node, but `selected_nodes` stays the same
-        -- cursor moves to the node, but does not add it to the `selected_nodes` table.
+        -- 2nd move: "next" destination, with NO track_selection, cursor moves to the next node, but `selection.nodes()` stays the same
+        -- cursor moves to the node, but does not add it to the `selection.nodes()` table.
         navigator.move({ destination = "next" })
 
         helpers.assert_catalyst_node_has_text("<li>Contacts</li>")
 
-        selected_nodes = catalyst.selected_nodes()
-        assert.equals(#selected_nodes, 1)
-        helpers.assert_node_has_text(selected_nodes[1], "<li>Home</li>")
+        assert.equals(#selection.nodes(), 1)
+        helpers.assert_node_has_text(selection.nodes()[1], "<li>Home</li>")
 
-        -- 3rd move: "next" destination, with TRACK_SELECTION, node on cursor gets added to `selected_nodes`,
+        -- 3rd move: "next" destination, with TRACK_SELECTION, node on cursor gets added to `selection.nodes()`,
         -- then cursor moves to next node.
         navigator.move({ destination = "next", track_selection = true })
 
-        selected_nodes = catalyst.selected_nodes()
-        assert.equals(#selected_nodes, 2)
+        assert.equals(#selection.nodes(), 2)
 
-        helpers.assert_node_has_text(selected_nodes[1], "<li>Home</li>")
-        helpers.assert_node_has_text(selected_nodes[2], "<li>Contacts</li>")
+        helpers.assert_node_has_text(selection.nodes()[1], "<li>Home</li>")
+        helpers.assert_node_has_text(selection.nodes()[2], "<li>Contacts</li>")
 
         -- 4th move: with tracking
         navigator.move({ destination = "next", track_selection = true })
 
-        selected_nodes = catalyst.selected_nodes()
-        assert.equals(#selected_nodes, 3)
+        assert.equals(#selection.nodes(), 3)
 
-        helpers.assert_node_has_text(selected_nodes[1], "<li>Home</li>")
-        helpers.assert_node_has_text(selected_nodes[2], "<li>Contacts</li>")
-        helpers.assert_node_has_text(selected_nodes[3], "<li>FAQ</li>")
+        helpers.assert_node_has_text(selection.nodes()[1], "<li>Home</li>")
+        helpers.assert_node_has_text(selection.nodes()[2], "<li>Contacts</li>")
+        helpers.assert_node_has_text(selection.nodes()[3], "<li>FAQ</li>")
     end)
 end)

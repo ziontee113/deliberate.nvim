@@ -2,6 +2,7 @@ local M = {}
 local api = vim.api
 
 local catalyst = require("stormcaller.lib.catalyst")
+local selection = require("stormcaller.lib.selection")
 local navigator = require("stormcaller.lib.navigator")
 local lib_ts = require("stormcaller.lib.tree-sitter")
 local lib_ts_tsx = require("stormcaller.lib.tree-sitter.tsx")
@@ -23,7 +24,7 @@ local function update_selected_node(index, end_row, start_col)
     local updated_node =
         root:named_descendant_for_range(end_row + 1, start_col, end_row + 1, start_col)
     updated_node = lib_ts_tsx.get_jsx_node(updated_node)
-    catalyst.update_node_in_selection(index, updated_node)
+    selection.update_specific_selection_index(index, updated_node)
 end
 
 ---@class tag_add_Opts
@@ -37,7 +38,7 @@ end
 ---@return number, number
 local function handle_inside(index, replacement, indents)
     local first_closing_bracket = lib_ts.capture_nodes_with_queries({
-        root = catalyst.selected_nodes()[index],
+        root = selection.nodes()[index],
         buf = catalyst.buf(),
         parser_name = "tsx",
         queries = { [[ (">" @closing_bracket) ]] },
@@ -51,7 +52,7 @@ local function handle_inside(index, replacement, indents)
 
     -- we do this because `nvim_buf_set_text()` moves the cursor down
     -- if cursor row is equal or below where we start changing buffer text.
-    if catalyst.selection_index_matches_catalyst(index) then catalyst.move_to() end
+    if selection.current_selection_matches_catalyst(index) then catalyst.move_to() end
 
     local update_row = b_row
     local update_col = b_col + vim.bo.tabstop
@@ -76,10 +77,10 @@ end
 
 ---@param o tag_add_Opts
 M.add = function(o)
-    for i = 1, #catalyst.selected_nodes() do
+    for i = 1, #selection.nodes() do
         local update_row, update_col
 
-        local og_node = catalyst.selected_nodes()[i]
+        local og_node = selection.nodes()[i]
         local _, og_start_col, og_end_row = og_node:range()
 
         local content = o.content or "###"
@@ -93,11 +94,11 @@ M.add = function(o)
                 handle_next_or_previous(o.destination, replacement, og_end_row, og_start_col)
         end
 
-        catalyst.refresh_tree()
+        selection.refresh_tree()
         update_selected_node(i, update_row, update_col)
     end
 
-    if #catalyst.selected_nodes() == 1 then
+    if #selection.nodes() == 1 then
         navigator.move({ destination = o.destination == "previous" and "previous" or "next" })
     end
 end

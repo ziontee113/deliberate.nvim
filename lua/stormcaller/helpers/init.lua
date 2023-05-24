@@ -1,10 +1,11 @@
 local M = {}
 
 local catalyst = require("stormcaller.lib.catalyst")
+local selection = require("stormcaller.lib.selection")
 
 M.clean_up = function()
     vim.api.nvim_buf_delete(0, { force = true })
-    catalyst.clear_everything_for_the_next_test()
+    selection.clear()
 end
 
 M.set_buf_content = function(content)
@@ -36,6 +37,12 @@ end
 M.assert_node_has_text = function(node, want)
     local cursor_node_text = vim.treesitter.get_node_text(node, 0)
     assert.equals(want, cursor_node_text)
+end
+
+M.loop = function(times, callback, arguments)
+    for _ = 1, times do
+        callback(unpack(arguments))
+    end
 end
 
 M.set_buffer_content_as_react_component = function()
