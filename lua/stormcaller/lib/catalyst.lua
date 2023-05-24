@@ -4,18 +4,26 @@ local ts_utils = require("nvim-treesitter.ts_utils")
 local lib_ts = require("stormcaller.lib.tree-sitter")
 local lib_ts_tsx = require("stormcaller.lib.tree-sitter.tsx")
 
+local ns_hidden = vim.api.nvim_create_namespace("Stormcaller's invisible extmarks")
+
 ---@class _catalyst
 ---@field node TSNode
 ---@field win number
 ---@field buf number
 ---@field node_point "start" | "end"
 ---@field is_active boolean
+---@field extmark_id number
 
 local _catalyst
 
+-- Multi Selection Management --> Need to refactor this after implementing extmark tracking
 local _selected_nodes = {}
+local _selected_nodes_extmark_ids = {}
+
 local _selection_tracking_state = false
+
 local _latest_catalyst_node
+local _latest_catalyst_node_extmark_id
 
 -------------------------------------------- Getters
 
@@ -34,36 +42,72 @@ M.is_active = function() return _catalyst.is_active end
 ---@return TSNode[]
 M.selected_nodes = function() return _selected_nodes end
 
+M.print_all_selected_extmarks = function()
+    print("-")
+    M.print_all_extmarks()
+    print("-")
+
+    for _, id in ipairs(_selected_nodes_extmark_ids) do
+        local row, col =
+            unpack(vim.api.nvim_buf_get_extmark_by_id(_catalyst.buf, ns_hidden, id, {}))
+
+        print(vim.inspect({ id, row, col }))
+    end
+end
+M.print_all_extmarks = function()
+    local all = vim.api.nvim_buf_get_extmarks(_catalyst.buf, ns_hidden, 0, -1, {})
+    for _, tbl in ipairs(all) do
+        print(vim.inspect(tbl))
+    end
+end
+
 -------------------------------------------- Setters
 
-M.set_node = function(node) _catalyst.node = node end
+local function set_extmark_for_node(node, buf)
+    local start_row, start_col = node:range()
+
+    local text = vim.treesitter.get_node_text(node, 0)
+    print("set_extmark_for_node() " .. text)
+
+    return vim.api.nvim_buf_set_extmark(buf, ns_hidden, start_row, start_col, {})
+end
+
+M.set_node = function(node)
+    _catalyst.node = node
+    _catalyst.extmark_id = set_extmark_for_node(node, _catalyst.buf)
+end
 M.set_node_point = function(node_point) _catalyst.node_point = node_point end
 M.set_buf = function(buf) _catalyst.buf = buf end
 M.set_win = function(win) _catalyst.win = win end
 
 M.clear_selection = function()
-    _selected_nodes = {}
+    _selected_nodes, _selected_nodes_extmark_ids = {}, {}
+    _latest_catalyst_node, _latest_catalyst_node_extmark_id = nil, nil
     _selection_tracking_state = false
-    _latest_catalyst_node = nil
+    vim.api.nvim_buf_clear_namespace(0, ns_hidden, 0, -1)
 end
 
 ---@param track_selection boolean | nil
 local function update_selected_nodes(track_selection)
     if #_selected_nodes == 0 then
         table.insert(_selected_nodes, _catalyst.node)
+        table.insert(_selected_nodes_extmark_ids, _catalyst.extmark_id)
     else
         if track_selection then
             if not _selection_tracking_state then
                 _selection_tracking_state = true
             else
                 table.insert(_selected_nodes, _latest_catalyst_node)
+                table.insert(_selected_nodes_extmark_ids, _latest_catalyst_node_extmark_id)
             end
         elseif not _selection_tracking_state then
             _selected_nodes = { _catalyst.node }
+            _selected_nodes_extmark_ids = { _catalyst.extmark_id }
         end
     end
 
     _latest_catalyst_node = _catalyst.node
+    _latest_catalyst_node_extmark_id = _catalyst.extmark_id
 end
 
 -------------------------------------------- Actions
@@ -95,12 +139,18 @@ M.refresh_tree = function()
     if #_selected_nodes == 0 then return end
 
     local updated_root = lib_ts.get_root({ parser_name = "tsx", buf = _catalyst.buf, reset = true })
-    for i, node in ipairs(_selected_nodes) do
-        local updated_node = lib_ts.reset_node_tree(_catalyst.buf, node, "tsx", updated_root)
+
+    for i, id in ipairs(_selected_nodes_extmark_ids) do
+        local row, col =
+            unpack(vim.api.nvim_buf_get_extmark_by_id(_catalyst.buf, ns_hidden, id, {}))
+
+        local updated_node = updated_root:named_descendant_for_range(row, col, row, col)
         _selected_nodes[i] = get_jsx_node(updated_node)
     end
 
-    local row, col = _catalyst.node:range()
+    local row, col = unpack(
+        vim.api.nvim_buf_get_extmark_by_id(_catalyst.buf, ns_hidden, _catalyst.extmark_id, {})
+    )
     local updated_node = updated_root:named_descendant_for_range(row, col, row, col)
     _catalyst.node = get_jsx_node(updated_node)
 end
@@ -160,12 +210,15 @@ M.initiate = function(o)
         node, node_point = find_closest_jsx_node_to_cursor(o.win, o.buf)
     end
 
+    local extmark_id = set_extmark_for_node(node, o.buf)
+
     _catalyst = {
         win = o.win,
         buf = o.buf,
         node = node,
         node_point = node_point,
         is_active = true,
+        extmark_id = extmark_id,
     }
     M.move_to() -- move cursor to _catalyst's node
 end

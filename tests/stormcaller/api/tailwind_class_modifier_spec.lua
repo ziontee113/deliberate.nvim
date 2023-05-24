@@ -33,8 +33,8 @@ describe("change_padding()", function()
             navigator.move({ destination = "next" })
             helpers.assert_catalyst_node_has_text("<li>FAQ</li>")
 
-            tcm.change_padding({ axis = "omni", value = "p-4" })
-            helpers.assert_catalyst_node_has_text('<li className="p-4">FAQ</li>')
+            tcm.change_padding({ axis = "omni", value = "p-8" })
+            helpers.assert_catalyst_node_has_text('<li className="p-8">FAQ</li>')
 
             -- 3rd padding change
             navigator.move({ destination = "previous" })
@@ -42,8 +42,8 @@ describe("change_padding()", function()
             navigator.move({ destination = "previous" })
             helpers.assert_catalyst_node_has_text("<li>Home</li>")
 
-            tcm.change_padding({ axis = "omni", value = "p-4" })
-            helpers.assert_catalyst_node_has_text('<li className="p-4">Home</li>')
+            tcm.change_padding({ axis = "omni", value = "p-6" })
+            helpers.assert_catalyst_node_has_text('<li className="p-6">Home</li>')
         end
     )
 

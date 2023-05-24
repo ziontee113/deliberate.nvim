@@ -11,8 +11,17 @@ local find_indents = function(buf, node)
 end
 
 M.add = function(tag)
+    print("add was called")
+
+    catalyst.print_all_selected_extmarks()
+    print("--------------------------")
+
     for i = 1, #catalyst.selected_nodes() do
         local node = catalyst.selected_nodes()[i]
+
+        print("iteration " .. i)
+        catalyst.print_all_selected_extmarks()
+        print("--------------------------")
 
         local _, _, end_row = node:range()
 
@@ -21,6 +30,8 @@ M.add = function(tag)
         local content = string.format("%s<%s>%s</%s>", indents, tag, placeholder, tag)
 
         vim.api.nvim_buf_set_lines(catalyst.buf(), end_row + 1, end_row + 1, false, { content })
+
+        catalyst.print_all_selected_extmarks()
 
         catalyst.refresh_tree()
     end
