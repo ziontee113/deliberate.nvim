@@ -19,14 +19,6 @@ local function update_selected_node(index, end_row, start_col)
     catalyst.update_node_in_selection(index, updated_node)
 end
 
-local find_offset = function(destination)
-    if destination == "next" or destination == "inside" then
-        return 1
-    elseif destination == "previous" then
-        return 0
-    end
-end
-
 ---@class tag_add_Opts
 ---@field tag string
 ---@field destination "next" | "previous" | "inside"
@@ -34,9 +26,9 @@ end
 
 ---@param o tag_add_Opts
 M.add = function(o)
-    local offset = find_offset(o.destination)
-
     for i = 1, #catalyst.selected_nodes() do
+        local update_row, update_col
+
         local node = catalyst.selected_nodes()[i]
 
         local _, start_col, end_row = node:range()
@@ -45,12 +37,43 @@ M.add = function(o)
         local indents = find_indents(catalyst.buf(), node)
         local content = string.format("%s<%s>%s</%s>", indents, o.tag, placeholder, o.tag)
 
-        local target_row = end_row + offset
-        vim.api.nvim_buf_set_lines(catalyst.buf(), target_row, target_row, false, { content })
+        if o.destination == "inside" then
+            local first_closing_bracket = lib_ts.capture_nodes_with_queries({
+                root = node,
+                buf = catalyst.buf(),
+                parser_name = "tsx",
+                queries = { [[ (">" @closing_bracket) ]] },
+                capture_groups = { "closing_bracket" },
+            })[1]
+
+            local _, _, target_row, target_col = first_closing_bracket:range()
+
+            vim.api.nvim_buf_set_text(
+                catalyst.buf(),
+                target_row,
+                target_col,
+                target_row,
+                target_col,
+                { "", string.rep(" ", 2) .. content, indents }
+            )
+
+            -- we do this because `nvim_buf_set_text()` moves the cursor down
+            -- if cursor row is equal or below where we start changing buffer text.
+            if catalyst.selection_index_matches_catalyst(i) then catalyst.move_to() end
+
+            update_row = target_row
+            update_col = target_col + 2
+        else
+            local offset = o.destination == "previous" and 0 or 1
+            local target_row = end_row + offset
+            vim.api.nvim_buf_set_lines(catalyst.buf(), target_row, target_row, false, { content })
+
+            update_row = target_row - 1
+            update_col = start_col
+        end
 
         catalyst.refresh_tree()
-
-        update_selected_node(i, target_row - 1, start_col)
+        update_selected_node(i, update_row, update_col)
     end
 
     if #catalyst.selected_nodes() == 1 then

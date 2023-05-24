@@ -15,7 +15,7 @@ vim.keymap.set("n", "<leader>l", function()
     N(all_extmarks)
 
     local row = unpack(vim.api.nvim_win_get_cursor(0))
-    vim.api.nvim_buf_set_lines(0, row, row, false, { "-- this is a comment" })
+    vim.api.nvim_buf_set_text(0, row, 0, row, 0, { "-- this is a comment", "" })
 
     all_extmarks = vim.api.nvim_buf_get_extmarks(0, ns, 0, -1, {})
     N(all_extmarks)

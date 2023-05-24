@@ -42,6 +42,10 @@ M.is_active = function() return _catalyst.is_active end
 ---@return TSNode[]
 M.selected_nodes = function() return _selected_nodes end
 
+M.selection_index_matches_catalyst = function(index)
+    return _selected_nodes_extmark_ids[index] == _catalyst.extmark_id
+end
+
 -------------------------------------------- Setters
 
 local function set_extmark_for_node(node, buf)
