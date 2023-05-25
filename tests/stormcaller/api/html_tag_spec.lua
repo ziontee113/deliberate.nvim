@@ -189,11 +189,12 @@ describe("tag.add() chain testing with destinations `next` & `previous`", functi
 end)
 
 describe("tag.add() with inside destination", function()
-    helpers.set_buffer_content_as_multiple_react_components()
-
-    vim.cmd("norm! 16gg^") -- cursor to <div className="h-screen w-screen bg-zinc-900">
+    before_each(function() helpers.set_buffer_content_as_multiple_react_components() end)
+    after_each(function() helpers.clean_up() end)
 
     it("works when tag already has children", function()
+        vim.cmd("norm! 16gg^") -- cursor to <div className="h-screen w-screen bg-zinc-900">
+
         catalyst.initiate({ win = 0, buf = 0 })
         helpers.assert_first_line_of_catalyst_node_has_text(
             '<div className="h-screen w-screen bg-zinc-900">'
@@ -218,7 +219,72 @@ describe("tag.add() with inside destination", function()
         )
     end)
 
-    helpers.clean_up()
+    it("chains with destination = next afterwards", function()
+        vim.cmd("norm! 34gg^") -- cursor to <div>
+
+        catalyst.initiate({ win = 0, buf = 0 })
+
+        navigator.move({ destination = "next", select_move = true })
+        navigator.move({ destination = "next", select_move = true })
+
+        assert.equals(2, #selection.nodes())
+        helpers.assert_node_has_text(
+            selection.nodes()[1],
+            [[<div>
+      <ul>
+        <li>Log In</li>
+        <li>Sign Up</li>
+      </ul>
+    </div>]]
+        )
+        helpers.assert_node_has_text(
+            selection.nodes()[2],
+            [[<ul>
+        <li>Log In</li>
+        <li>Sign Up</li>
+      </ul>]]
+        )
+
+        -- add with destination = "inside"
+        tag.add({ tag = "p", content = "Beyonce", destination = "inside" })
+
+        assert.equals(2, #selection.nodes())
+        helpers.assert_node_has_text(selection.nodes()[1], "<p>Beyonce</p>")
+        helpers.assert_node_has_text(selection.nodes()[2], "<p>Beyonce</p>")
+
+        helpers.assert_node_has_text(
+            selection.nodes()[1]:parent(),
+            [[<div>
+      <ul>
+        <li>Log In</li>
+        <li>Sign Up</li>
+        <p>Beyonce</p>
+      </ul>
+      <p>Beyonce</p>
+    </div>]]
+        )
+
+        -- add with destination = "next"
+        tag.add({ tag = "h3", content = "Partition", destination = "next" })
+
+        assert.equals(2, #selection.nodes())
+        helpers.assert_node_has_text(selection.nodes()[1], "<h3>Partition</h3>")
+        helpers.assert_node_has_text(selection.nodes()[2], "<h3>Partition</h3>")
+
+        helpers.assert_node_has_text(
+            selection.nodes()[1]:parent(),
+            [[<div>
+      <ul>
+        <li>Log In</li>
+        <li>Sign Up</li>
+        <p>Beyonce</p>
+        <h3>Partition</h3>
+      </ul>
+      <p>Beyonce</p>
+      <h3>Partition</h3>
+    </div>]]
+        )
+    end)
 end)
 
 describe("tag.add() chain testing with destinations `next` & `previous` & `inside`", function()
