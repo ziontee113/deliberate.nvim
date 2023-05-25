@@ -27,7 +27,12 @@ local function update_selected_node(index, end_row, start_col)
     selection.update_specific_selection_index(index, updated_node)
 end
 
-local candice = function(destination, replacement, end_row, start_col)
+---@param destination "next" | "previous"
+---@param replacement string
+---@param end_row number
+---@param start_col number
+---@return number, number
+local add_new_line_tag = function(destination, replacement, end_row, start_col)
     local offset = destination == "previous" and 0 or 1
     local target_row = end_row + offset
 
@@ -43,13 +48,53 @@ end
 ---@field destination "next" | "previous" | "inside"
 ---@field content string | nil
 
+---@param indents string
+---@param index number
+---@param replacement string
+---@return number, number
+local function handle_inside_has_no_children(indents, index, replacement)
+    local first_closing_bracket = lib_ts.capture_nodes_with_queries({
+        root = selection.nodes()[index],
+        buf = catalyst.buf(),
+        parser_name = "tsx",
+        queries = { [[ (">" @closing_bracket) ]] },
+        capture_groups = { "closing_bracket" },
+    })[1]
+
+    local _, _, b_row, b_col = first_closing_bracket:range()
+
+    api.nvim_buf_set_text(catalyst.buf(), b_row, b_col, b_row, b_col, { "", replacement, indents })
+
+    -- we do this because `nvim_buf_set_text()` moves the cursor down
+    -- if cursor row is equal or below where we start changing buffer text.
+    if selection.current_selection_matches_catalyst(index) then catalyst.move_to() end
+
+    local update_row = b_row
+    local update_col = b_col + vim.bo.tabstop
+
+    return update_row, update_col
+end
+
+---@param jsx_children TSNode[]
+---@param replacement string
+---@return number, number
+local function handle_inside_has_children(jsx_children, replacement)
+    local last_child = jsx_children[#jsx_children]
+    local _, start_col, end_row = last_child:range()
+
+    -- setting the child to `last_child`, so we land correctly at the target node
+    -- when `navigator.move()` is called at the end of `tag.add()`
+    catalyst.set_node(last_child)
+
+    return add_new_line_tag("next", replacement, end_row, start_col)
+end
+
 ---@param index number
 ---@param replacement string
 ---@param indents string
 ---@return number, number
 local function handle_inside(index, replacement, indents)
     local update_row, update_col
-
     replacement = string.rep(" ", vim.bo.tabstop) .. replacement
 
     local jsx_children = lib_ts.get_children_with_types({
@@ -58,42 +103,10 @@ local function handle_inside(index, replacement, indents)
     })
 
     if #jsx_children == 0 then
-        local first_closing_bracket = lib_ts.capture_nodes_with_queries({
-            root = selection.nodes()[index],
-            buf = catalyst.buf(),
-            parser_name = "tsx",
-            queries = { [[ (">" @closing_bracket) ]] },
-            capture_groups = { "closing_bracket" },
-        })[1]
-
-        local _, _, b_row, b_col = first_closing_bracket:range()
-
-        api.nvim_buf_set_text(
-            catalyst.buf(),
-            b_row,
-            b_col,
-            b_row,
-            b_col,
-            { "", replacement, indents }
-        )
-
-        -- we do this because `nvim_buf_set_text()` moves the cursor down
-        -- if cursor row is equal or below where we start changing buffer text.
-        if selection.current_selection_matches_catalyst(index) then catalyst.move_to() end
-
-        update_row = b_row
-        update_col = b_col + vim.bo.tabstop
+        update_row, update_col = handle_inside_has_no_children(indents, index, replacement)
     else
-        local last_child = jsx_children[#jsx_children]
-        local _, start_col, end_row = last_child:range()
-
-        -- setting the child to `last_child`, so we land correctly at the target node
-        -- when `navigator.move()` is called at the end of `tag.add()`
-        catalyst.set_node(last_child)
-
-        update_row, update_col = candice("inside", replacement, end_row, start_col)
+        update_row, update_col = handle_inside_has_children(jsx_children, replacement)
     end
-
     return update_row, update_col
 end
 
@@ -103,7 +116,7 @@ end
 ---@param og_start_col number
 ---@return number, number
 local function handle_next_or_previous(destination, replacement, og_end_row, og_start_col)
-    return candice(destination, replacement, og_end_row, og_start_col)
+    return add_new_line_tag(destination, replacement, og_end_row, og_start_col)
 end
 
 ---@param o tag_add_Opts
