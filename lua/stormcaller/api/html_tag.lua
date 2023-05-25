@@ -3,7 +3,7 @@ local api = vim.api
 
 local catalyst = require("stormcaller.lib.catalyst")
 local selection = require("stormcaller.lib.selection")
-local navigator = require("stormcaller.lib.navigator")
+local navigator = require("stormcaller.api.navigator")
 local lib_ts = require("stormcaller.lib.tree-sitter")
 local lib_ts_tsx = require("stormcaller.lib.tree-sitter.tsx")
 

@@ -3,7 +3,7 @@ require("tests.editor_config")
 local tcm = require("stormcaller.api.tailwind_class_modifier")
 local catalyst = require("stormcaller.lib.catalyst")
 local selection = require("stormcaller.lib.selection")
-local navigator = require("stormcaller.lib.navigator")
+local navigator = require("stormcaller.api.navigator")
 local helpers = require("stormcaller.helpers")
 
 describe("change_padding()", function()

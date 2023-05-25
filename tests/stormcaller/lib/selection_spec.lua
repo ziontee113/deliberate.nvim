@@ -1,5 +1,5 @@
 local catalyst = require("stormcaller.lib.catalyst")
-local navigator = require("stormcaller.lib.navigator")
+local navigator = require("stormcaller.api.navigator")
 local selection = require("stormcaller.lib.selection")
 local helpers = require("stormcaller.helpers")
 

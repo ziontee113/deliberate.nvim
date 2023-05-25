@@ -2,7 +2,7 @@ require("tests.editor_config")
 
 local catalyst = require("stormcaller.lib.catalyst")
 local selection = require("stormcaller.lib.selection")
-local navigator = require("stormcaller.lib.navigator")
+local navigator = require("stormcaller.api.navigator")
 local helpers = require("stormcaller.helpers")
 
 describe("navigator.move()", function()

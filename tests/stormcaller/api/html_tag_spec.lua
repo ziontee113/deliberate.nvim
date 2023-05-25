@@ -6,7 +6,7 @@ local lib_ts_tsx = require("stormcaller.lib.tree-sitter.tsx")
 local helpers = require("stormcaller.helpers")
 local catalyst = require("stormcaller.lib.catalyst")
 local selection = require("stormcaller.lib.selection")
-local navigator = require("stormcaller.lib.navigator")
+local navigator = require("stormcaller.api.navigator")
 local tag = require("stormcaller.api.html_tag")
 
 describe("add()", function()
