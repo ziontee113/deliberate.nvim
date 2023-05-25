@@ -23,6 +23,9 @@ local previous_catalyst_info
 ---@type CatalystInfo
 local current_catalyst_info
 
+---@param buf number
+---@param node TSNode
+---@return number
 local function set_extmark_for_node(buf, node)
     local start_row, start_col = node:range()
     return vim.api.nvim_buf_set_extmark(buf, ns, start_row, start_col, {})
@@ -42,12 +45,16 @@ M.update_current_catalyst_info = function(win, buf, node)
     }
 end
 
+---@param a CatalystInfo
+---@param b CatalystInfo
+---@return boolean
 local items_are_identical = function(a, b)
     local row_a, col_a = unpack(vim.api.nvim_buf_get_extmark_by_id(a.buf, ns, a.extmark_id, {}))
     local row_b, col_b = unpack(vim.api.nvim_buf_get_extmark_by_id(b.buf, ns, b.extmark_id, {}))
     return row_a == row_b and col_a == col_b
 end
 
+---@param index number
 M.current_selection_matches_catalyst = function(index)
     return items_are_identical(selection[index], current_catalyst_info)
 end
@@ -77,6 +84,7 @@ local remove_unused_extmarks = function()
     end
 end
 
+---@param item CatalystInfo
 local insert_item_if_selection_does_not_have_it = function(item)
     local match = false
     for _, selection_item in ipairs(selection) do
@@ -88,6 +96,7 @@ local insert_item_if_selection_does_not_have_it = function(item)
     if not match then table.insert(selection, item) end
 end
 
+---@param select_move boolean | nil
 M.update = function(select_move)
     if visual_mode.is_active() then
         insert_item_if_selection_does_not_have_it(current_catalyst_info)
@@ -111,6 +120,7 @@ end
 
 --------------------------------------------
 
+---@return TSNode[]
 M.nodes = function()
     local nodes = {}
     for _, item in ipairs(selection) do
@@ -119,6 +129,8 @@ M.nodes = function()
     return nodes
 end
 
+---@param index number
+---@param node TSNode
 M.update_specific_selection_index = function(index, node)
     selection[index].node = node
     vim.api.nvim_buf_del_extmark(selection[index].buf, ns, selection[index].extmark_id)
@@ -126,7 +138,7 @@ M.update_specific_selection_index = function(index, node)
     selection[index].extmark_id = new_extmark_id
 end
 
----This function should be called whenever we programatically change buffer content (e.g by using `nvim_buf_set_text()`).
+---This function must be called whenever we programatically change buffer content (e.g by using `nvim_buf_set_text()`).
 M.refresh_tree = function()
     if #selection == 0 then return end
 
