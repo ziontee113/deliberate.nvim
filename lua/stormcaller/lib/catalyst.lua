@@ -5,8 +5,6 @@ local ts_utils = require("nvim-treesitter.ts_utils")
 local lib_ts = require("stormcaller.lib.tree-sitter")
 local lib_ts_tsx = require("stormcaller.lib.tree-sitter.tsx")
 
-local ns_hidden = vim.api.nvim_create_namespace("Stormcaller's invisible extmarks")
-
 ---@class _catalyst
 ---@field node TSNode
 ---@field win number
@@ -31,11 +29,6 @@ M.node = function() return _catalyst.node end
 M.is_active = function() return _catalyst.is_active end
 
 -------------------------------------------- Setters
-
-local function set_extmark_for_node(node, buf)
-    local start_row, start_col = node:range()
-    return vim.api.nvim_buf_set_extmark(buf, ns_hidden, start_row, start_col, {})
-end
 
 M.set_node = function(node)
     _catalyst.node = node
@@ -115,15 +108,12 @@ M.initiate = function(o)
         node, node_point = find_closest_jsx_node_to_cursor(o.win, o.buf)
     end
 
-    local extmark_id = set_extmark_for_node(node, o.buf)
-
     _catalyst = {
         win = o.win,
         buf = o.buf,
         node = node,
         node_point = node_point,
         is_active = true,
-        extmark_id = extmark_id,
     }
     M.move_to() -- move cursor to _catalyst's node
 
