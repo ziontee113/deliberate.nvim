@@ -80,8 +80,8 @@ describe("tag.add() chain testing with destinations `next` & `previous`", functi
         catalyst.initiate({ win = 0, buf = 0 })
         helpers.assert_catalyst_node_has_text("<li>Contacts</li>")
 
-        navigator.move({ destination = "next", track_selection = true })
-        navigator.move({ destination = "next", track_selection = true })
+        navigator.move({ destination = "next", select_move = true })
+        navigator.move({ destination = "next", select_move = true })
 
         assert.equals(2, #selection.nodes())
         helpers.assert_node_has_text(selection.nodes()[1], "<li>Contacts</li>")
@@ -119,14 +119,14 @@ describe("tag.add() chain testing with destinations `next` & `previous`", functi
     it("clears current selection, select 2 tags, add new tag after each selection", function()
         selection.clear()
 
-        navigator.move({ destination = "previous", track_selection = true }) -- select `OtherComponent` tag
+        navigator.move({ destination = "previous", select_move = true }) -- select `OtherComponent` tag
 
         navigator.move({ destination = "previous" }) -- moves upwards
         navigator.move({ destination = "previous" })
         navigator.move({ destination = "previous" })
         navigator.move({ destination = "previous" })
         navigator.move({ destination = "previous" }) -- up to <li>Home</li>
-        navigator.move({ destination = "previous", track_selection = true }) -- and select it
+        navigator.move({ destination = "previous", select_move = true }) -- and select it
 
         -- make sure we selected the right stuffs
         assert.equals(2, #selection.nodes())
@@ -197,8 +197,8 @@ describe("tag.add() chain testing with destinations `next` & `previous`", functi
         catalyst.initiate({ win = 0, buf = 0 })
         helpers.assert_catalyst_node_has_text("<li>Contacts</li>")
 
-        navigator.move({ destination = "next", track_selection = true })
-        navigator.move({ destination = "next", track_selection = true })
+        navigator.move({ destination = "next", select_move = true })
+        navigator.move({ destination = "next", select_move = true })
 
         assert.equals(2, #selection.nodes())
         helpers.assert_node_has_text(selection.nodes()[1], "<li>Contacts</li>")

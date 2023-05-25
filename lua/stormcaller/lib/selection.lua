@@ -1,11 +1,12 @@
 local lib_ts = require("stormcaller.lib.tree-sitter")
 local lib_ts_tsx = require("stormcaller.lib.tree-sitter.tsx")
+local visual_mode = require("stormcaller.api.visual_mode")
 
 local M = {}
 
 local ns = vim.api.nvim_create_namespace("Stormcaller Selection Namespace")
 
-local actively_tracking = false
+local select_move_active = false
 
 ---@class CatalystInfo
 ---@field node TSNode
@@ -76,26 +77,35 @@ local remove_unused_extmarks = function()
     end
 end
 
-M.update = function(track_selection)
-    if track_selection and actively_tracking then
+M.update = function(select_move)
+    if visual_mode.is_active() then
         local match = false
-
         for _, item in ipairs(selection) do
-            if items_are_identical(item, previous_catalyst_info) then
+            if items_are_identical(item, current_catalyst_info) then
                 match = true
                 break
             end
         end
+        if not match then table.insert(selection, current_catalyst_info) end
+    else
+        if select_move and select_move_active then
+            local match = false
+            for _, item in ipairs(selection) do
+                if items_are_identical(item, previous_catalyst_info) then
+                    match = true
+                    break
+                end
+            end
+            if not match then table.insert(selection, previous_catalyst_info) end
+        end
 
-        if not match then table.insert(selection, previous_catalyst_info) end
+        if select_move and not select_move_active then
+            select_move_active = true
+            selection = { previous_catalyst_info }
+        end
+
+        if not select_move and not select_move_active then selection = { current_catalyst_info } end
     end
-
-    if track_selection and not actively_tracking then
-        actively_tracking = true
-        selection = { previous_catalyst_info }
-    end
-
-    if not track_selection and not actively_tracking then selection = { current_catalyst_info } end
 
     previous_catalyst_info = current_catalyst_info
 
@@ -155,7 +165,7 @@ M.refresh_tree = function()
 end
 
 M.clear = function()
-    actively_tracking = false
+    select_move_active = false
     M.update()
 end
 

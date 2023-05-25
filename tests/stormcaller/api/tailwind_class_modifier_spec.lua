@@ -112,12 +112,12 @@ describe("change_padding() for all `selected_nodes`", function()
     it("works", function()
         vim.cmd("norm! 22gg^") -- cursor to <li>Contacts</li>
 
-        -- initiate and move twice with `track_selection`
+        -- initiate and move twice with `select_move`
         catalyst.initiate({ win = 0, buf = 0 })
         helpers.assert_catalyst_node_has_text("<li>Contacts</li>")
 
-        navigator.move({ destination = "next", track_selection = true })
-        navigator.move({ destination = "next", track_selection = true })
+        navigator.move({ destination = "next", select_move = true })
+        navigator.move({ destination = "next", select_move = true })
 
         assert.equals(#selection.nodes(), 2)
         helpers.assert_node_has_text(selection.nodes()[1], "<li>Contacts</li>")
@@ -215,9 +215,9 @@ describe("change_text_color() & change_background_color()", function()
 
         -- move then select multiple tags for the 3rd text color change
         navigator.move({ destination = "previous" })
-        navigator.move({ destination = "previous", track_selection = true })
+        navigator.move({ destination = "previous", select_move = true })
         navigator.move({ destination = "previous" })
-        navigator.move({ destination = "previous", track_selection = true })
+        navigator.move({ destination = "previous", select_move = true })
 
         tcm.change_text_color({ value = "text-red-200" })
 

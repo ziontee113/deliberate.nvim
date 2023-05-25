@@ -241,11 +241,11 @@ describe("navigator.move()", function()
     end)
 end)
 
-describe("navigator.move() with `track_selection` option", function()
+describe("navigator.move() with `select_move` option", function()
     before_each(function() helpers.set_buffer_content_as_multiple_react_components() end)
     after_each(function() helpers.clean_up() end)
 
-    it("update `selected_nodes` correctly without using `track_selection` option", function()
+    it("update `selected_nodes` correctly without using `select_move` option", function()
         vim.cmd("norm! 17gg^") -- cursor to start of 1st <li> tag
 
         -- inititation
@@ -282,7 +282,7 @@ describe("navigator.move() with `track_selection` option", function()
         helpers.assert_node_has_text(selection.nodes()[1], "<li>FAQ</li>")
     end)
 
-    it("update `selection.nodes()` correctly with `track_selection` option used", function()
+    it("update `selection.nodes()` correctly with `select_move` option used", function()
         vim.cmd("norm! 17gg^") -- cursor to start of 1st <li> tag
 
         -- inititation
@@ -291,8 +291,8 @@ describe("navigator.move() with `track_selection` option", function()
         assert.equals(#selection.nodes(), 1)
         helpers.assert_node_has_text(selection.nodes()[1], "<li>Home</li>")
 
-        -- 1st move: "next" destination, with NO track_selection, cursor moves to the next node, but `selection.nodes()` stays the same
-        navigator.move({ destination = "next", track_selection = true })
+        -- 1st move: "next" destination, with NO select_move, cursor moves to the next node, but `selection.nodes()` stays the same
+        navigator.move({ destination = "next", select_move = true })
 
         helpers.assert_catalyst_node_has_text([[<li>
           A new study found that coffee drinkers have a lower risk of liver
@@ -302,7 +302,7 @@ describe("navigator.move() with `track_selection` option", function()
         assert.equals(#selection.nodes(), 1)
         helpers.assert_node_has_text(selection.nodes()[1], "<li>Home</li>")
 
-        -- 2nd move: "next" destination, with NO track_selection, cursor moves to the next node, but `selection.nodes()` stays the same
+        -- 2nd move: "next" destination, with NO select_move, cursor moves to the next node, but `selection.nodes()` stays the same
         -- cursor moves to the node, but does not add it to the `selection.nodes()` table.
         navigator.move({ destination = "next" })
 
@@ -311,9 +311,9 @@ describe("navigator.move() with `track_selection` option", function()
         assert.equals(#selection.nodes(), 1)
         helpers.assert_node_has_text(selection.nodes()[1], "<li>Home</li>")
 
-        -- 3rd move: "next" destination, with TRACK_SELECTION, node on cursor gets added to `selection.nodes()`,
+        -- 3rd move: "next" destination, with select_move, node on cursor gets added to `selection.nodes()`,
         -- then cursor moves to next node.
-        navigator.move({ destination = "next", track_selection = true })
+        navigator.move({ destination = "next", select_move = true })
 
         assert.equals(#selection.nodes(), 2)
 
@@ -321,7 +321,7 @@ describe("navigator.move() with `track_selection` option", function()
         helpers.assert_node_has_text(selection.nodes()[2], "<li>Contacts</li>")
 
         -- 4th move: with tracking
-        navigator.move({ destination = "next", track_selection = true })
+        navigator.move({ destination = "next", select_move = true })
 
         assert.equals(#selection.nodes(), 3)
 
