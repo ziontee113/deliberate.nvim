@@ -188,7 +188,40 @@ describe("tag.add() chain testing with destinations `next` & `previous`", functi
     helpers.clean_up()
 end)
 
-describe("tag.add() chain testing with destinations `next` & `previous`", function()
+describe("tag.add() with inside destination", function()
+    helpers.set_buffer_content_as_multiple_react_components()
+
+    vim.cmd("norm! 16gg^") -- cursor to <div className="h-screen w-screen bg-zinc-900">
+
+    it("works when tag already has children", function()
+        catalyst.initiate({ win = 0, buf = 0 })
+        helpers.assert_first_line_of_catalyst_node_has_text(
+            '<div className="h-screen w-screen bg-zinc-900">'
+        )
+
+        tag.add({ tag = "h1", content = "2NE1", destination = "inside" })
+
+        helpers.assert_node_has_text(selection.nodes()[1], "<h1>2NE1</h1>")
+        helpers.assert_node_has_text(
+            selection.nodes()[1]:parent(),
+            [[<div className="h-screen w-screen bg-zinc-900">
+        <li>Home</li>
+        <li>
+          A new study found that coffee drinkers have a lower risk of liver
+          cancer. So, drink up!
+        </li>
+        <li>Contacts</li>
+        <li>FAQ</li>
+        <OtherComponent />
+        <h1>2NE1</h1>
+      </div>]]
+        )
+    end)
+
+    helpers.clean_up()
+end)
+
+describe("tag.add() chain testing with destinations `next` & `previous` & `inside`", function()
     helpers.set_buffer_content_as_multiple_react_components()
 
     it("first select 2 li elements, then add empty <div> tag after each selection", function()
