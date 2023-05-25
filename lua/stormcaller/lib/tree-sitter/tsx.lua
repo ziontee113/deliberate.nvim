@@ -83,4 +83,28 @@ M.get_jsx_node = function(node)
     })
 end
 
+---@param buf number
+---@return TSNode
+M.get_updated_root = function(buf)
+    local updated_root = lib_ts.get_root({ parser_name = "tsx", buf = buf, reset = true })
+    if not updated_root then error("can't get updated root, something went wrong.") end
+    return updated_root
+end
+
+---@param buf number
+---@param node TSNode
+---@return TSNode
+M.get_first_closing_bracket = function(buf, node)
+    local first_bracket = lib_ts.capture_nodes_with_queries({
+        root = node,
+        buf = buf,
+        parser_name = "tsx",
+        queries = { [[ (">" @closing_bracket) ]] },
+        capture_groups = { "closing_bracket" },
+    })[1]
+
+    if not first_bracket then error("given node argument is not a jsx_element") end
+    return first_bracket
+end
+
 return M

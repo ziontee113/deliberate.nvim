@@ -1,4 +1,3 @@
-local lib_ts = require("stormcaller.lib.tree-sitter")
 local lib_ts_tsx = require("stormcaller.lib.tree-sitter.tsx")
 local visual_mode = require("stormcaller.api.visual_mode")
 
@@ -142,10 +141,7 @@ end
 M.refresh_tree = function()
     if #selection == 0 then return end
 
-    local updated_root =
-        lib_ts.get_root({ parser_name = "tsx", buf = current_catalyst_info.buf, reset = true })
-
-    if not updated_root then error("we're screwed for not getting updated_root") end
+    local updated_root = lib_ts_tsx.get_updated_root(current_catalyst_info.buf)
 
     for i, item in ipairs(selection) do
         local row, col =

@@ -20,8 +20,7 @@ end
 ---@param end_row number
 ---@param start_col number
 local function update_selected_node(index, end_row, start_col)
-    local root = lib_ts.get_root({ parser_name = "tsx", buf = catalyst.buf(), reset = true })
-    if not root then error("can't find root using catalyst.buf()") end
+    local root = lib_ts_tsx.get_updated_root(catalyst.buf())
 
     local updated_node =
         root:named_descendant_for_range(end_row + 1, start_col, end_row + 1, start_col)
@@ -57,14 +56,8 @@ end
 ---@param replacement string
 ---@return number, number
 local function handle_inside_has_no_children(indents, index, replacement)
-    local first_closing_bracket = lib_ts.capture_nodes_with_queries({
-        root = selection.nodes()[index],
-        buf = catalyst.buf(),
-        parser_name = "tsx",
-        queries = { [[ (">" @closing_bracket) ]] },
-        capture_groups = { "closing_bracket" },
-    })[1]
-
+    local first_closing_bracket =
+        lib_ts_tsx.get_first_closing_bracket(catalyst.buf(), selection.nodes()[index])
     local _, _, b_row, b_col = first_closing_bracket:range()
 
     api.nvim_buf_set_text(catalyst.buf(), b_row, b_col, b_row, b_col, { "", replacement, indents })
