@@ -38,5 +38,18 @@ describe("visual_mode", function()
         helpers.assert_node_has_text(selection.nodes()[1], "<li>FAQ</li>")
     end)
 
+    it("navigator.move({select_move = true}) works as normal", function()
+        navigator.move({ destination = "previous", select_move = true })
+
+        assert.equals(1, #selection.nodes())
+        helpers.assert_node_has_text(selection.nodes()[1], "<li>FAQ</li>")
+
+        navigator.move({ destination = "previous", select_move = true })
+
+        assert.equals(2, #selection.nodes())
+        helpers.assert_node_has_text(selection.nodes()[1], "<li>FAQ</li>")
+        helpers.assert_node_has_text(selection.nodes()[2], "<li>Contacts</li>")
+    end)
+
     helpers.clean_up()
 end)
