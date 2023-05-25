@@ -21,18 +21,22 @@ end
 ---@param start_col number
 local function update_selected_node(index, end_row, start_col)
     local root = lib_ts.get_root({ parser_name = "tsx", buf = catalyst.buf(), reset = true })
+    if not root then error("can't find root using catalyst.buf()") end
+
     local updated_node =
         root:named_descendant_for_range(end_row + 1, start_col, end_row + 1, start_col)
     updated_node = lib_ts_tsx.get_jsx_node(updated_node)
+    if not updated_node then error("can't return correct updated_node") end
+
     selection.update_specific_selection_index(index, updated_node)
 end
 
----@param destination "next" | "previous"
+---@param destination "next" | "previous" | "inside"
 ---@param replacement string
----@param end_row number
----@param start_col number
+---@param node TSNode
 ---@return number, number
-local add_new_line_tag = function(destination, replacement, end_row, start_col)
+local add_tag_after_node = function(destination, replacement, node)
+    local _, start_col, end_row = node:range()
     local offset = destination == "previous" and 0 or 1
     local target_row = end_row + offset
 
@@ -71,7 +75,6 @@ local function handle_inside_has_no_children(indents, index, replacement)
 
     local update_row = b_row
     local update_col = b_col + vim.bo.tabstop
-
     return update_row, update_col
 end
 
@@ -80,20 +83,17 @@ end
 ---@return number, number
 local function handle_inside_has_children(jsx_children, replacement)
     local last_child = jsx_children[#jsx_children]
-    local _, start_col, end_row = last_child:range()
-
     -- setting the child to `last_child`, so we land correctly at the target node
     -- when `navigator.move()` is called at the end of `tag.add()`
     catalyst.set_node(last_child)
-
-    return add_new_line_tag("next", replacement, end_row, start_col)
+    return add_tag_after_node("next", replacement, last_child)
 end
 
 ---@param index number
 ---@param replacement string
 ---@param indents string
 ---@return number, number
-local function handle_inside(index, replacement, indents)
+local function handle_destination_inside(index, replacement, indents)
     local update_row, update_col
     replacement = string.rep(" ", vim.bo.tabstop) .. replacement
 
@@ -101,7 +101,6 @@ local function handle_inside(index, replacement, indents)
         node = selection.nodes()[index],
         desired_types = { "jsx_element", "jsx_self_closing_element" },
     })
-
     if #jsx_children == 0 then
         update_row, update_col = handle_inside_has_no_children(indents, index, replacement)
     else
@@ -110,32 +109,19 @@ local function handle_inside(index, replacement, indents)
     return update_row, update_col
 end
 
----@param destination string
----@param replacement string
----@param og_end_row number
----@param og_start_col number
----@return number, number
-local function handle_next_or_previous(destination, replacement, og_end_row, og_start_col)
-    return add_new_line_tag(destination, replacement, og_end_row, og_start_col)
-end
-
 ---@param o tag_add_Opts
 M.add = function(o)
     for i = 1, #selection.nodes() do
         local update_row, update_col
-
         local og_node = selection.nodes()[i]
-        local _, og_start_col, og_end_row = og_node:range()
-
         local content = o.content or "###"
         local indents = find_indents(catalyst.buf(), og_node)
         local replacement = string.format("%s<%s>%s</%s>", indents, o.tag, content, o.tag)
 
         if o.destination == "inside" then
-            update_row, update_col = handle_inside(i, replacement, indents)
+            update_row, update_col = handle_destination_inside(i, replacement, indents)
         else
-            update_row, update_col =
-                handle_next_or_previous(o.destination, replacement, og_end_row, og_start_col)
+            update_row, update_col = add_tag_after_node(o.destination, replacement, og_node)
         end
 
         selection.refresh_tree()
