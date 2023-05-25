@@ -77,26 +77,23 @@ local remove_unused_extmarks = function()
     end
 end
 
+local insert_item_if_selection_does_not_have_it = function(item)
+    local match = false
+    for _, selection_item in ipairs(selection) do
+        if items_are_identical(selection_item, item) then
+            match = true
+            break
+        end
+    end
+    if not match then table.insert(selection, item) end
+end
+
 M.update = function(select_move)
     if visual_mode.is_active() then
-        local match = false
-        for _, item in ipairs(selection) do
-            if items_are_identical(item, current_catalyst_info) then
-                match = true
-                break
-            end
-        end
-        if not match then table.insert(selection, current_catalyst_info) end
+        insert_item_if_selection_does_not_have_it(current_catalyst_info)
     else
         if select_move and select_move_active then
-            local match = false
-            for _, item in ipairs(selection) do
-                if items_are_identical(item, previous_catalyst_info) then
-                    match = true
-                    break
-                end
-            end
-            if not match then table.insert(selection, previous_catalyst_info) end
+            insert_item_if_selection_does_not_have_it(previous_catalyst_info)
         end
 
         if select_move and not select_move_active then
