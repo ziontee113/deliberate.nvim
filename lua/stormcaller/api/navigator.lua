@@ -8,33 +8,31 @@ local M = {}
 ---@field destination "next-sibling" | "previous-sibling" | "next" | "previous" | "parent"
 ---@field select_move boolean
 
----@class find_closest_previous_or_next_node_to_cursor_Opts
----@field row number
----@field nodes TSNode[]
-
----@param o find_closest_previous_or_next_node_to_cursor_Opts
+---@param nodes TSNode[]
+---@param row number
 ---@return TSNode
-local function find_closest_next_node_to_row(o)
+local function find_closest_next_node_to_row(nodes, row)
     local closest_distance, closest_node = math.huge, nil
-    for _, node in ipairs(o.nodes) do
+    for _, node in ipairs(nodes) do
         local start_row = node:range()
-        if start_row > o.row and math.abs(start_row - o.row) < closest_distance then
+        if start_row > row and math.abs(start_row - row) < closest_distance then
             closest_node = node
-            closest_distance = math.abs(start_row - o.row)
+            closest_distance = math.abs(start_row - row)
         end
     end
     return closest_node
 end
 
----@param o find_closest_previous_or_next_node_to_cursor_Opts
+---@param nodes TSNode[]
+---@param row number
 ---@return TSNode
-local function find_closest_previous_node_to_row(o)
+local function find_closest_previous_node_to_row(nodes, row)
     local closest_distance, closest_node = math.huge, nil
-    for _, node in ipairs(o.nodes) do
+    for _, node in ipairs(nodes) do
         local _, _, end_row, _ = node:range()
-        if end_row < o.row and math.abs(end_row - o.row) < closest_distance then
+        if end_row < row and math.abs(end_row - row) < closest_distance then
             closest_node = node
-            closest_distance = math.abs(end_row - o.row)
+            closest_distance = math.abs(end_row - row)
         end
     end
     return closest_node
@@ -100,7 +98,7 @@ end
 local function change_catalyst_node_to_next_closest_jsx_element()
     local jsx_nodes = lib_ts_tsx.get_all_jsx_nodes_in_buffer(catalyst.buf())
     local _, _, end_row, _ = catalyst.node():range()
-    local closest_next_node = find_closest_next_node_to_row({ row = end_row, nodes = jsx_nodes })
+    local closest_next_node = find_closest_next_node_to_row(jsx_nodes, end_row)
 
     if closest_next_node then
         catalyst.set_node(closest_next_node)
@@ -111,10 +109,7 @@ end
 local function change_catalyst_node_to_previous_closest_jsx_element()
     local jsx_nodes = lib_ts_tsx.get_all_jsx_nodes_in_buffer(catalyst.buf())
     local start_row = catalyst.node():range()
-    local closest_previous_node = find_closest_previous_node_to_row({
-        row = start_row,
-        nodes = jsx_nodes,
-    })
+    local closest_previous_node = find_closest_previous_node_to_row(jsx_nodes, start_row)
 
     if closest_previous_node then
         catalyst.set_node(closest_previous_node)
