@@ -2,6 +2,7 @@ require("tests.editor_config")
 
 local helpers = require("stormcaller.helpers")
 local lib_ts_tsx = require("stormcaller.lib.tree-sitter.tsx")
+local ts_utils = require("nvim-treesitter.ts_utils")
 
 describe("get_all_jsx_nodes_in_buffer()", function()
     before_each(function() helpers.set_buffer_content_as_multiple_react_components() end)
@@ -60,5 +61,39 @@ describe("extract_class_names()", function()
         local class_names = lib_ts_tsx.extract_class_names(0, grouped_captures["jsx_element"][2])
 
         assert.same({ "h-screen", "w-screen", "bg-zinc-900" }, class_names)
+    end)
+end)
+
+describe("get_jsx_node()", function()
+    before_each(function() helpers.set_buffer_content_as_multiple_react_components() end)
+    after_each(function() vim.api.nvim_buf_delete(0, { force = true }) end)
+
+    it("works", function()
+        vim.cmd("norm! 22ggfn")
+
+        local node_at_cursor = ts_utils.get_node_at_cursor()
+        helpers.assert_node_has_text(node_at_cursor, "Contacts")
+
+        local jsx_node = lib_ts_tsx.get_jsx_node(node_at_cursor)
+        helpers.assert_node_has_text(jsx_node, "<li>Contacts</li>")
+    end)
+end)
+
+describe("get_updated_root()", function() end) -- difficult to test
+
+describe("get_first_closing_bracket()", function()
+    before_each(function() helpers.set_buffer_content_as_multiple_react_components() end)
+    after_each(function() vim.api.nvim_buf_delete(0, { force = true }) end)
+
+    it("works", function()
+        vim.cmd("norm! 22ggfn")
+
+        local jsx_node = lib_ts_tsx.get_jsx_node(ts_utils.get_node_at_cursor())
+        helpers.assert_node_has_text(jsx_node, "<li>Contacts</li>")
+
+        local first_bracket_node = lib_ts_tsx.get_first_closing_bracket(0, jsx_node)
+        helpers.assert_node_has_text(first_bracket_node, ">")
+        helpers.assert_node_has_text(first_bracket_node:parent(), "<li>")
+        helpers.assert_node_has_text(first_bracket_node:parent():parent(), "<li>Contacts</li>")
     end)
 end)
