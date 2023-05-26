@@ -4,7 +4,6 @@ local api = vim.api
 local catalyst = require("stormcaller.lib.catalyst")
 local selection = require("stormcaller.lib.selection")
 local navigator = require("stormcaller.api.navigator")
-local lib_ts = require("stormcaller.lib.tree-sitter")
 local lib_ts_tsx = require("stormcaller.lib.tree-sitter.tsx")
 
 ---@param buf number
@@ -90,10 +89,7 @@ local function handle_destination_inside(index, replacement, indents)
     local update_row, update_col
     replacement = string.rep(" ", vim.bo.tabstop) .. replacement
 
-    local html_children = lib_ts.get_children_with_types({
-        node = selection.nodes()[index],
-        desired_types = { "jsx_element", "jsx_self_closing_element" },
-    })
+    local html_children = lib_ts_tsx.get_html_children(selection.nodes()[index])
     if #html_children == 0 then
         update_row, update_col = handle_inside_has_no_children(indents, index, replacement)
     else
