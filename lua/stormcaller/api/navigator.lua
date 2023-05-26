@@ -1,5 +1,5 @@
 local lib_ts = require("stormcaller.lib.tree-sitter")
-local lib_ts_tsx = require("stormcaller.lib.tree-sitter.tsx")
+local aggregator = require("stormcaller.lib.tree-sitter.language_aggregator")
 local catalyst = require("stormcaller.lib.catalyst")
 
 local M = {}
@@ -67,7 +67,7 @@ end
 ---@param o navigator_move_Args
 local function change_catalyst_node_to_its_sibling(o)
     local sibling_direction = string.find(o.destination, "next") and "next" or "previous"
-    local next_siblings = lib_ts_tsx.get_html_siblings(catalyst.node(), sibling_direction)
+    local next_siblings = aggregator.get_html_siblings(catalyst.node(), sibling_direction)
 
     if next_siblings[1] then
         catalyst.set_node(next_siblings[1])
@@ -78,7 +78,7 @@ end
 
 ---@param o navigator_move_Args
 local function change_catalyst_node_to_its_parent(o)
-    local parent_node = lib_ts_tsx.get_html_node(catalyst.node():parent())
+    local parent_node = aggregator.get_html_node(catalyst.node():parent())
     if parent_node then
         catalyst.set_node(parent_node)
         catalyst.set_node_point(find_node_point_for_parent(o))
@@ -88,7 +88,7 @@ local function change_catalyst_node_to_its_parent(o)
 end
 
 local function change_catalyst_node_to_next_closest_html_element()
-    local html_nodes = lib_ts_tsx.get_all_html_nodes_in_buffer(catalyst.buf())
+    local html_nodes = aggregator.get_all_html_nodes_in_buffer(catalyst.buf())
     local _, _, end_row, _ = catalyst.node():range()
     local closest_next_node = find_closest_next_node_to_row(html_nodes, end_row)
 
@@ -99,7 +99,7 @@ local function change_catalyst_node_to_next_closest_html_element()
 end
 
 local function change_catalyst_node_to_previous_closest_html_element()
-    local html_nodes = lib_ts_tsx.get_all_html_nodes_in_buffer(catalyst.buf())
+    local html_nodes = aggregator.get_all_html_nodes_in_buffer(catalyst.buf())
     local start_row = catalyst.node():range()
     local closest_previous_node = find_closest_previous_node_to_row(html_nodes, start_row)
 
@@ -114,7 +114,7 @@ M.move = function(o)
     if not catalyst.is_active() then return end
 
     if o.destination == "next" then
-        local html_children = lib_ts_tsx.get_html_children(catalyst.node())
+        local html_children = aggregator.get_html_children(catalyst.node())
         if #html_children > 0 then
             if
                 lib_ts.cursor_is_at_start_of_node({

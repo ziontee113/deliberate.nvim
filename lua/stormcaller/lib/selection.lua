@@ -1,4 +1,4 @@
-local lib_ts_tsx = require("stormcaller.lib.tree-sitter.tsx")
+local aggregator = require("stormcaller.lib.tree-sitter.language_aggregator")
 local visual_mode = require("stormcaller.api.visual_mode")
 
 local M = {}
@@ -141,14 +141,14 @@ end
 M.refresh_tree = function()
     if #selection == 0 then return end
 
-    local updated_root = lib_ts_tsx.get_updated_root(current_catalyst_info.buf)
+    local updated_root = aggregator.get_updated_root(current_catalyst_info.buf)
 
     for i, item in ipairs(selection) do
         local row, col =
             unpack(vim.api.nvim_buf_get_extmark_by_id(item.buf, ns, item.extmark_id, {}))
 
         local updated_node = updated_root:named_descendant_for_range(row, col, row, col)
-        updated_node = lib_ts_tsx.get_html_node(updated_node)
+        updated_node = aggregator.get_html_node(updated_node)
 
         if not updated_node then error("we're screwed for not able to find updated_node") end
 
@@ -165,7 +165,7 @@ M.refresh_tree = function()
     )
     local updated_node = updated_root:named_descendant_for_range(row, col, row, col)
     if not updated_node then error("can't find updated_node for catalyst") end
-    updated_node = lib_ts_tsx.get_html_node(updated_node)
+    updated_node = aggregator.get_html_node(updated_node)
     require("stormcaller.lib.catalyst").set_node(updated_node)
 end
 
