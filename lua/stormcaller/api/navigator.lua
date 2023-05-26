@@ -95,10 +95,10 @@ local function change_catalyst_node_to_its_parent(o)
     return parent_node
 end
 
-local function change_catalyst_node_to_next_closest_jsx_element()
-    local jsx_nodes = lib_ts_tsx.get_all_jsx_nodes_in_buffer(catalyst.buf())
+local function change_catalyst_node_to_next_closest_html_element()
+    local html_nodes = lib_ts_tsx.get_all_html_nodes_in_buffer(catalyst.buf())
     local _, _, end_row, _ = catalyst.node():range()
-    local closest_next_node = find_closest_next_node_to_row(jsx_nodes, end_row)
+    local closest_next_node = find_closest_next_node_to_row(html_nodes, end_row)
 
     if closest_next_node then
         catalyst.set_node(closest_next_node)
@@ -106,10 +106,10 @@ local function change_catalyst_node_to_next_closest_jsx_element()
     end
 end
 
-local function change_catalyst_node_to_previous_closest_jsx_element()
-    local jsx_nodes = lib_ts_tsx.get_all_jsx_nodes_in_buffer(catalyst.buf())
+local function change_catalyst_node_to_previous_closest_html_element()
+    local html_nodes = lib_ts_tsx.get_all_html_nodes_in_buffer(catalyst.buf())
     local start_row = catalyst.node():range()
-    local closest_previous_node = find_closest_previous_node_to_row(jsx_nodes, start_row)
+    local closest_previous_node = find_closest_previous_node_to_row(html_nodes, start_row)
 
     if closest_previous_node then
         catalyst.set_node(closest_previous_node)
@@ -122,22 +122,22 @@ M.move = function(o)
     if not catalyst.is_active() then return end
 
     if o.destination == "next" then
-        local jsx_children = lib_ts.get_children_with_types({
+        local html_children = lib_ts.get_children_with_types({
             node = catalyst.node(),
             desired_types = { "jsx_element", "jsx_self_closing_element" },
         })
 
-        if #jsx_children > 0 then
+        if #html_children > 0 then
             if
                 lib_ts.cursor_is_at_start_of_node({
                     node = catalyst.node(),
                     win = catalyst.win(),
                 })
             then
-                catalyst.set_node(jsx_children[1])
+                catalyst.set_node(html_children[1])
                 catalyst.set_node_point("start")
             elseif not change_catalyst_node_to_its_parent(o) then
-                change_catalyst_node_to_next_closest_jsx_element()
+                change_catalyst_node_to_next_closest_html_element()
             end
         else
             if not change_catalyst_node_to_its_sibling(o) then
@@ -147,7 +147,7 @@ M.move = function(o)
     elseif o.destination == "previous" then
         if not change_catalyst_node_to_its_sibling(o) then
             if not change_catalyst_node_to_its_parent(o) then
-                change_catalyst_node_to_previous_closest_jsx_element()
+                change_catalyst_node_to_previous_closest_html_element()
             end
         end
     end

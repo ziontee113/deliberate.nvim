@@ -82,9 +82,9 @@ end
 ---@param win number
 ---@param buf number
 ---@return TSNode[], string
-local find_closest_jsx_node_to_cursor = function(win, buf)
-    local jsx_nodes = lib_ts_tsx.get_all_jsx_nodes_in_buffer(buf)
-    return find_closest_node_to_cursor(win, jsx_nodes)
+local find_closest_html_node_to_cursor = function(win, buf)
+    local html_nodes = lib_ts_tsx.get_all_html_nodes_in_buffer(buf)
+    return find_closest_node_to_cursor(win, html_nodes)
 end
 
 ---@class navigator_initiate_Args
@@ -105,7 +105,7 @@ M.initiate = function(o)
     if parent then
         node, node_point = parent, "start"
     else
-        node, node_point = find_closest_jsx_node_to_cursor(o.win, o.buf)
+        node, node_point = find_closest_html_node_to_cursor(o.win, o.buf)
     end
 
     _catalyst = {

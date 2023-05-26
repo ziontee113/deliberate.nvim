@@ -148,7 +148,7 @@ describe("navigator.move()", function()
         cursor_positon = vim.api.nvim_win_get_cursor(0)
         assert.are.same({ 26, 6 }, cursor_positon)
 
-        -- 8th move --> should jump to next jsx Component
+        -- 8th move --> should jump to next html Component
         navigator.move({ destination = "next" })
         helpers.assert_first_line_of_catalyst_node_has_text("<div>")
 
@@ -232,7 +232,7 @@ describe("navigator.move()", function()
         cursor_positon = vim.api.nvim_win_get_cursor(0)
         assert.are.same({ 15, 4 }, cursor_positon)
 
-        -- 3rd move, should stand still since no more jsx parent from here
+        -- 3rd move, should stand still since no more html parent from here
         navigator.move({ destination = "parent" })
         helpers.assert_first_line_of_catalyst_node_has_text("<>")
 

@@ -148,7 +148,7 @@ M.refresh_tree = function()
             unpack(vim.api.nvim_buf_get_extmark_by_id(item.buf, ns, item.extmark_id, {}))
 
         local updated_node = updated_root:named_descendant_for_range(row, col, row, col)
-        updated_node = lib_ts_tsx.get_jsx_node(updated_node)
+        updated_node = lib_ts_tsx.get_html_node(updated_node)
 
         if not updated_node then error("we're screwed for not able to find updated_node") end
 
@@ -165,7 +165,7 @@ M.refresh_tree = function()
     )
     local updated_node = updated_root:named_descendant_for_range(row, col, row, col)
     if not updated_node then error("can't find updated_node for catalyst") end
-    updated_node = lib_ts_tsx.get_jsx_node(updated_node)
+    updated_node = lib_ts_tsx.get_html_node(updated_node)
     require("stormcaller.lib.catalyst").set_node(updated_node)
 end
 

@@ -4,8 +4,8 @@ local M = {}
 
 ---@param buf number
 ---@return TSNode[], table
-M.get_all_jsx_nodes_in_buffer = function(buf)
-    local all_jsx_nodes, grouped_captures = lib_ts.capture_nodes_with_queries({
+M.get_all_html_nodes_in_buffer = function(buf)
+    local all_html_nodes, grouped_captures = lib_ts.capture_nodes_with_queries({
         buf = buf,
         parser_name = "tsx",
         queries = {
@@ -15,7 +15,7 @@ M.get_all_jsx_nodes_in_buffer = function(buf)
         },
         capture_groups = { "jsx_element", "jsx_self_closing_element", "jsx_fragment" },
     })
-    return all_jsx_nodes, grouped_captures
+    return all_html_nodes, grouped_captures
 end
 
 ---@param node TSNode
@@ -76,7 +76,7 @@ end
 
 ---@param node TSNode
 ---@return TSNode|nil
-M.get_jsx_node = function(node)
+M.get_html_node = function(node)
     return lib_ts.find_closest_parent_with_types({
         node = node,
         desired_parent_types = { "jsx_element", "jsx_self_closing_element", "jsx_fragment" },
@@ -103,7 +103,7 @@ M.get_first_closing_bracket = function(buf, node)
         capture_groups = { "closing_bracket" },
     })[1]
 
-    if not first_bracket then error("given node argument is not a jsx_element") end
+    if not first_bracket then error("given node argument is not an html_element") end
     return first_bracket
 end
 

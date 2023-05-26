@@ -7,7 +7,7 @@ describe("catalyst.initiate()", function()
     before_each(function() vim.bo.ft = "typescriptreact" end)
     after_each(function() vim.api.nvim_buf_delete(0, { force = true }) end)
 
-    it("puts cursor at start of closest tag, with initial cursor inside jsx_element", function()
+    it("puts cursor at start of closest tag, with initial cursor inside html_element", function()
         helpers.set_buf_content([[
 export default function Home() {
   return (
@@ -34,7 +34,7 @@ export default function Home() {
     end)
 
     it(
-        "puts cursor at start of closest tag, with initial cursor outside and above jsx_element",
+        "puts cursor at start of closest tag, with initial cursor outside and above html_element",
         function()
             helpers.set_buf_content([[
 export default function Home() {
@@ -60,7 +60,7 @@ export default function Home() {
     )
 
     it(
-        "puts cursor at end of closest tag, with initial cursor outside and below jsx_element",
+        "puts cursor at end of closest tag, with initial cursor outside and below html_element",
         function()
             helpers.set_buf_content([[
 export default function Home() {
@@ -86,8 +86,8 @@ export default function Home() {
     )
 
     it(
-        [[puts cursor at end of closest jsx_element
-because initial cursor was sandwiched between jsx_elements and was below closest jsx_element ]],
+        [[puts cursor at end of closest html_element
+because initial cursor was sandwiched between html_elements and was below closest html_element ]],
         function()
             helpers.set_buffer_content_as_multiple_react_components()
             vim.cmd("norm! 8gg0")
@@ -100,8 +100,8 @@ because initial cursor was sandwiched between jsx_elements and was below closest
     )
 
     it(
-        [[puts cursor at start of closest jsx_element
-because initial cursor was sandwiched between jsx_elements and was above closest jsx_element ]],
+        [[puts cursor at start of closest html_element
+because initial cursor was sandwiched between html_elements and was above closest html_element ]],
         function()
             helpers.set_buffer_content_as_multiple_react_components()
             vim.cmd("norm! 12gg0")

@@ -112,8 +112,8 @@ describe("tag.add() chain testing with destinations `next` & `previous`", functi
 
         -- assure that the catalyst node's cursor auto moves after the buffer change caused by `tag.add()`
         local node_at_cursor = ts_utils.get_node_at_cursor()
-        local jsx_node_at_cursor = lib_ts_tsx.get_jsx_node(node_at_cursor)
-        helpers.assert_node_has_text(jsx_node_at_cursor, "<OtherComponent />")
+        local html_node_at_cursor = lib_ts_tsx.get_html_node(node_at_cursor)
+        helpers.assert_node_has_text(html_node_at_cursor, "<OtherComponent />")
     end)
 
     it("clears current selection, select 2 tags, add new tag after each selection", function()
@@ -328,8 +328,8 @@ describe("tag.add() chain testing with destinations `next` & `previous` & `insid
 
         -- assure that the catalyst node's cursor auto moves after the buffer change caused by `tag.add()`
         local node_at_cursor = ts_utils.get_node_at_cursor()
-        local jsx_node_at_cursor = lib_ts_tsx.get_jsx_node(node_at_cursor)
-        helpers.assert_node_has_text(jsx_node_at_cursor, "<OtherComponent />")
+        local html_node_at_cursor = lib_ts_tsx.get_html_node(node_at_cursor)
+        helpers.assert_node_has_text(html_node_at_cursor, "<OtherComponent />")
     end)
 
     it("adds new <p> tag inside each selection", function()

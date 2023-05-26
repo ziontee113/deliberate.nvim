@@ -24,7 +24,7 @@ local function update_selected_node(index, end_row, start_col)
 
     local updated_node =
         root:named_descendant_for_range(end_row + 1, start_col, end_row + 1, start_col)
-    updated_node = lib_ts_tsx.get_jsx_node(updated_node)
+    updated_node = lib_ts_tsx.get_html_node(updated_node)
     if not updated_node then error("can't return correct updated_node") end
 
     selection.update_specific_selection_index(index, updated_node)
@@ -71,11 +71,11 @@ local function handle_inside_has_no_children(indents, index, replacement)
     return update_row, update_col
 end
 
----@param jsx_children TSNode[]
+---@param html_children TSNode[]
 ---@param replacement string
 ---@return number, number
-local function handle_inside_has_children(jsx_children, replacement)
-    local last_child = jsx_children[#jsx_children]
+local function handle_inside_has_children(html_children, replacement)
+    local last_child = html_children[#html_children]
     -- setting the child to `last_child`, so we land correctly at the target node
     -- when `navigator.move()` is called at the end of `tag.add()`
     catalyst.set_node(last_child)
@@ -90,14 +90,14 @@ local function handle_destination_inside(index, replacement, indents)
     local update_row, update_col
     replacement = string.rep(" ", vim.bo.tabstop) .. replacement
 
-    local jsx_children = lib_ts.get_children_with_types({
+    local html_children = lib_ts.get_children_with_types({
         node = selection.nodes()[index],
         desired_types = { "jsx_element", "jsx_self_closing_element" },
     })
-    if #jsx_children == 0 then
+    if #html_children == 0 then
         update_row, update_col = handle_inside_has_no_children(indents, index, replacement)
     else
-        update_row, update_col = handle_inside_has_children(jsx_children, replacement)
+        update_row, update_col = handle_inside_has_children(html_children, replacement)
     end
     return update_row, update_col
 end

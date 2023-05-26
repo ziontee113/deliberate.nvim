@@ -4,12 +4,12 @@ local helpers = require("stormcaller.helpers")
 local lib_ts_tsx = require("stormcaller.lib.tree-sitter.tsx")
 local ts_utils = require("nvim-treesitter.ts_utils")
 
-describe("get_all_jsx_nodes_in_buffer()", function()
+describe("get_all_html_nodes_in_buffer()", function()
     before_each(function() helpers.set_buffer_content_as_multiple_react_components() end)
     after_each(function() vim.api.nvim_buf_delete(0, { force = true }) end)
 
     it("works", function()
-        local all_nodes, grouped_captures = lib_ts_tsx.get_all_jsx_nodes_in_buffer(0)
+        local all_nodes, grouped_captures = lib_ts_tsx.get_all_html_nodes_in_buffer(0)
 
         assert.equals(#all_nodes, 20)
         assert.equals(#grouped_captures["jsx_fragment"], 1)
@@ -23,7 +23,7 @@ describe("get_tag_identifier_node()", function()
     after_each(function() vim.api.nvim_buf_delete(0, { force = true }) end)
 
     it("works for `jsx_element` node type", function()
-        local _, grouped_captures = lib_ts_tsx.get_all_jsx_nodes_in_buffer(0)
+        local _, grouped_captures = lib_ts_tsx.get_all_html_nodes_in_buffer(0)
         local node = grouped_captures["jsx_element"][1]
 
         local tag_idenifier_node = lib_ts_tsx.get_tag_identifier_node(node)
@@ -31,7 +31,7 @@ describe("get_tag_identifier_node()", function()
     end)
 
     it("works for `jsx_self_closing_element` node type", function()
-        local _, grouped_captures = lib_ts_tsx.get_all_jsx_nodes_in_buffer(0)
+        local _, grouped_captures = lib_ts_tsx.get_all_html_nodes_in_buffer(0)
         local node = grouped_captures["jsx_self_closing_element"][1]
 
         local tag_idenifier_node = lib_ts_tsx.get_tag_identifier_node(node)
@@ -44,7 +44,7 @@ describe("get_className_property_string_node()", function()
     after_each(function() vim.api.nvim_buf_delete(0, { force = true }) end)
 
     it("works", function()
-        local _, grouped_captures = lib_ts_tsx.get_all_jsx_nodes_in_buffer(0)
+        local _, grouped_captures = lib_ts_tsx.get_all_html_nodes_in_buffer(0)
         local className_string_node =
             lib_ts_tsx.get_className_property_string_node(0, grouped_captures["jsx_element"][2])
 
@@ -57,14 +57,14 @@ describe("extract_class_names()", function()
     after_each(function() vim.api.nvim_buf_delete(0, { force = true }) end)
 
     it("works", function()
-        local _, grouped_captures = lib_ts_tsx.get_all_jsx_nodes_in_buffer(0)
+        local _, grouped_captures = lib_ts_tsx.get_all_html_nodes_in_buffer(0)
         local class_names = lib_ts_tsx.extract_class_names(0, grouped_captures["jsx_element"][2])
 
         assert.same({ "h-screen", "w-screen", "bg-zinc-900" }, class_names)
     end)
 end)
 
-describe("get_jsx_node()", function()
+describe("get_html_node()", function()
     before_each(function() helpers.set_buffer_content_as_multiple_react_components() end)
     after_each(function() vim.api.nvim_buf_delete(0, { force = true }) end)
 
@@ -74,8 +74,8 @@ describe("get_jsx_node()", function()
         local node_at_cursor = ts_utils.get_node_at_cursor()
         helpers.assert_node_has_text(node_at_cursor, "Contacts")
 
-        local jsx_node = lib_ts_tsx.get_jsx_node(node_at_cursor)
-        helpers.assert_node_has_text(jsx_node, "<li>Contacts</li>")
+        local html_node = lib_ts_tsx.get_html_node(node_at_cursor)
+        helpers.assert_node_has_text(html_node, "<li>Contacts</li>")
     end)
 end)
 
@@ -88,10 +88,10 @@ describe("get_first_closing_bracket()", function()
     it("works", function()
         vim.cmd("norm! 22ggfn")
 
-        local jsx_node = lib_ts_tsx.get_jsx_node(ts_utils.get_node_at_cursor())
-        helpers.assert_node_has_text(jsx_node, "<li>Contacts</li>")
+        local html_node = lib_ts_tsx.get_html_node(ts_utils.get_node_at_cursor())
+        helpers.assert_node_has_text(html_node, "<li>Contacts</li>")
 
-        local first_bracket_node = lib_ts_tsx.get_first_closing_bracket(0, jsx_node)
+        local first_bracket_node = lib_ts_tsx.get_first_closing_bracket(0, html_node)
         helpers.assert_node_has_text(first_bracket_node, ">")
         helpers.assert_node_has_text(first_bracket_node:parent(), "<li>")
         helpers.assert_node_has_text(first_bracket_node:parent():parent(), "<li>Contacts</li>")
