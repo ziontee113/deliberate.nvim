@@ -23,6 +23,8 @@ local long_li_tag = [[<li>
           A new study found that coffee drinkers have a lower risk of liver
           cancer. So, drink up!
         </li>]]
+local first_line = helpers.assert_first_line_of_catalyst_node_has_text
+local last_line = helpers.assert_last_line_of_catalyst_node_has_text
 
 describe("typescriptreact navigator.move()", function()
     before_each(function() helpers.set_buffer_content_as_multiple_react_components() end)
@@ -46,136 +48,85 @@ describe("typescriptreact navigator.move()", function()
     end)
 
     it("direction = next", function()
-        initiate(
-            "16gg",
-            '<div className="h-screen w-screen bg-zinc-900">',
-            helpers.assert_first_line_of_catalyst_node_has_text
-        )
-
+        initiate("16gg", '<div className="h-screen w-screen bg-zinc-900">', first_line)
         move("next", "<li>Home</li>", { 17, 8 })
         move("next", long_li_tag, { 18, 8 })
         move("next", "<li>Contacts</li>", { 22, 8 })
         move("next", "<li>FAQ</li>", { 23, 8 })
         move("next", "<OtherComponent />", { 24, 8 })
-        move("next", "      </div>", { 25, 11 }, helpers.assert_last_line_of_catalyst_node_has_text)
-        move("next", "    </>", { 26, 6 }, helpers.assert_last_line_of_catalyst_node_has_text)
-        move("next", "<div>", { 34, 4 }, helpers.assert_first_line_of_catalyst_node_has_text) --> should jump to next html Component
-        move("next", "<ul>", { 35, 6 }, helpers.assert_first_line_of_catalyst_node_has_text)
+        move("next", "      </div>", { 25, 11 }, last_line)
+        move("next", "    </>", { 26, 6 }, last_line)
+        move("next", "<div>", { 34, 4 }, first_line) --> should jump to next html Component
+        move("next", "<ul>", { 35, 6 }, first_line)
     end)
 
     it("direction = previous", function()
         initiate("22gg^", "<li>Contacts</li>")
         move("previous", long_li_tag, { 21, 12 })
         move("previous", "<li>Home</li>", { 17, 8 })
-        move(
-            "previous",
-            '<div className="h-screen w-screen bg-zinc-900">',
-            { 16, 6 },
-            helpers.assert_first_line_of_catalyst_node_has_text
-        )
-        move("previous", "<>", { 15, 4 }, helpers.assert_first_line_of_catalyst_node_has_text)
-        move("previous", "    </p>", { 6, 7 }, helpers.assert_last_line_of_catalyst_node_has_text)
+        move("previous", '<div className="h-screen w-screen bg-zinc-900">', { 16, 6 }, first_line)
+        move("previous", "<>", { 15, 4 }, first_line)
+        move("previous", "    </p>", { 6, 7 }, last_line)
     end)
 
     it("direction = parent", function()
         initiate("22gg^", "<li>Contacts</li>")
-        move(
-            "parent",
-            '<div className="h-screen w-screen bg-zinc-900">',
-            { 16, 6 },
-            helpers.assert_first_line_of_catalyst_node_has_text
-        )
-        move("parent", "<>", { 15, 4 }, helpers.assert_first_line_of_catalyst_node_has_text)
-        move("parent", "<>", { 15, 4 }, helpers.assert_first_line_of_catalyst_node_has_text) -- stands still since no more html parent from here
+        move("parent", '<div className="h-screen w-screen bg-zinc-900">', { 16, 6 }, first_line)
+        move("parent", "<>", { 15, 4 }, first_line)
+        move("parent", "<>", { 15, 4 }, first_line) -- stands still since no more html parent from here
     end)
 end)
+
+local move_then_assert_selection = function(opts, quantity, text_tbl, catalyst_text)
+    if type(opts) == "string" then
+        opts = { destination = opts }
+    elseif type(opts) == "table" then
+        opts = { destination = opts[1], select_move = opts[2] }
+    end
+    navigator.move(opts)
+
+    assert.equals(#selection.nodes(), quantity)
+
+    if type(text_tbl) == "string" then text_tbl = { text_tbl } end
+    for i, item in ipairs(text_tbl) do
+        if type(item) == "string" then
+            helpers.assert_node_has_text(selection.nodes()[i], item)
+        else
+            local text, assert_fn = unpack(item)
+            assert_fn(selection.nodes()[i], text)
+        end
+    end
+
+    helpers.assert_catalyst_node_has_text(catalyst_text)
+end
 
 describe("navigator.move() with `select_move` option", function()
     before_each(function() helpers.set_buffer_content_as_multiple_react_components() end)
     after_each(function() helpers.clean_up() end)
 
     it("update `selected_nodes` correctly without using `select_move` option", function()
-        vim.cmd("norm! 17gg^") -- cursor to start of 1st <li> tag
-
-        -- inititation
-        catalyst.initiate({ win = 0, buf = 0 })
-
-        assert.equals(#selection.nodes(), 1)
-        helpers.assert_node_has_text(selection.nodes()[1], "<li>Home</li>")
-
-        -- 1st move
-        navigator.move({ destination = "next" })
-
-        assert.equals(#selection.nodes(), 1)
-
-        helpers.assert_node_has_text(
-            selection.nodes()[1],
-            [[<li>
-          A new study found that coffee drinkers have a lower risk of liver
-          cancer. So, drink up!
-        </li>]]
-        )
-
-        -- 2nd move
-        navigator.move({ destination = "next" })
-
-        assert.equals(#selection.nodes(), 1)
-
-        helpers.assert_node_has_text(selection.nodes()[1], "<li>Contacts</li>")
-
-        -- 3rd move
-        navigator.move({ destination = "next" })
-
-        assert.equals(#selection.nodes(), 1)
-
-        helpers.assert_node_has_text(selection.nodes()[1], "<li>FAQ</li>")
+        initiate("17gg^", "<li>Home</li>")
+        move_then_assert_selection("next", 1, long_li_tag, long_li_tag)
+        move_then_assert_selection("next", 1, "<li>Contacts</li>", "<li>Contacts</li>")
+        move_then_assert_selection("next", 1, "<li>FAQ</li>", "<li>FAQ</li>")
     end)
 
     it("update `selection.nodes()` correctly with `select_move` option used", function()
-        vim.cmd("norm! 17gg^") -- cursor to start of 1st <li> tag
-
-        -- inititation
-        catalyst.initiate({ win = 0, buf = 0 })
-
-        assert.equals(#selection.nodes(), 1)
-        helpers.assert_node_has_text(selection.nodes()[1], "<li>Home</li>")
-
-        -- 1st move: "next" destination, with NO select_move, cursor moves to the next node, but `selection.nodes()` stays the same
-        navigator.move({ destination = "next", select_move = true })
-
-        helpers.assert_catalyst_node_has_text([[<li>
-          A new study found that coffee drinkers have a lower risk of liver
-          cancer. So, drink up!
-        </li>]])
-
-        assert.equals(#selection.nodes(), 1)
-        helpers.assert_node_has_text(selection.nodes()[1], "<li>Home</li>")
-
-        -- 2nd move: "next" destination, with NO select_move, cursor moves to the next node, but `selection.nodes()` stays the same
-        -- cursor moves to the node, but does not add it to the `selection.nodes()` table.
-        navigator.move({ destination = "next" })
-
-        helpers.assert_catalyst_node_has_text("<li>Contacts</li>")
-
-        assert.equals(#selection.nodes(), 1)
-        helpers.assert_node_has_text(selection.nodes()[1], "<li>Home</li>")
-
-        -- 3rd move: "next" destination, with select_move, node on cursor gets added to `selection.nodes()`,
-        -- then cursor moves to next node.
-        navigator.move({ destination = "next", select_move = true })
-
-        assert.equals(#selection.nodes(), 2)
-
-        helpers.assert_node_has_text(selection.nodes()[1], "<li>Home</li>")
-        helpers.assert_node_has_text(selection.nodes()[2], "<li>Contacts</li>")
-
-        -- 4th move: with tracking
-        navigator.move({ destination = "next", select_move = true })
-
-        assert.equals(#selection.nodes(), 3)
-
-        helpers.assert_node_has_text(selection.nodes()[1], "<li>Home</li>")
-        helpers.assert_node_has_text(selection.nodes()[2], "<li>Contacts</li>")
-        helpers.assert_node_has_text(selection.nodes()[3], "<li>FAQ</li>")
+        initiate("17gg^", "<li>Home</li>")
+        -- next with `select_move`, selection set to <li>Home</li>, then catalyst moves to long_li_tag
+        move_then_assert_selection({ "next", true }, 1, { "<li>Home</li>" }, long_li_tag)
+        -- next MOVE ONLY, catalyst moves, selection stays the same
+        move_then_assert_selection("next", 1, { "<li>Home</li>" }, "<li>Contacts</li>")
+        -- next with `select_move`, adding <li>Contacts</li> to selection, then catalyst moves to <li>FAQ</li>
+        move_then_assert_selection({ "next", true }, 2, {
+            "<li>Home</li>",
+            "<li>Contacts</li>",
+        }, "<li>FAQ</li>")
+        -- next with `select_move`, adding <li>FAQ</li> to selection, then catalyst moves to <OtherComponent />
+        move_then_assert_selection({ "next", true }, 3, {
+            "<li>Home</li>",
+            "<li>Contacts</li>",
+            "<li>FAQ</li>",
+        }, "<OtherComponent />")
     end)
 end)
