@@ -66,12 +66,8 @@ end
 
 ---@param o navigator_move_Args
 local function change_catalyst_node_to_its_sibling(o)
-    local sibling_destination = string.find(o.destination, "next") and "next" or "previous"
-    local next_siblings = lib_ts.find_named_siblings_in_direction_with_types({
-        node = catalyst.node(),
-        direction = sibling_destination,
-        desired_types = { "jsx_element", "jsx_self_closing_element" },
-    })
+    local sibling_direction = string.find(o.destination, "next") and "next" or "previous"
+    local next_siblings = lib_ts_tsx.get_html_siblings(catalyst.node(), sibling_direction)
 
     if next_siblings[1] then
         catalyst.set_node(next_siblings[1])
@@ -82,11 +78,7 @@ end
 
 ---@param o navigator_move_Args
 local function change_catalyst_node_to_its_parent(o)
-    local parent_node = lib_ts.find_closest_parent_with_types({
-        node = catalyst.node():parent(),
-        desired_parent_types = { "jsx_element", "jsx_fragment" },
-    })
-
+    local parent_node = lib_ts_tsx.get_html_node(catalyst.node():parent())
     if parent_node then
         catalyst.set_node(parent_node)
         catalyst.set_node_point(find_node_point_for_parent(o))
@@ -122,11 +114,7 @@ M.move = function(o)
     if not catalyst.is_active() then return end
 
     if o.destination == "next" then
-        local html_children = lib_ts.get_children_with_types({
-            node = catalyst.node(),
-            desired_types = { "jsx_element", "jsx_self_closing_element" },
-        })
-
+        local html_children = lib_ts_tsx.get_html_children(catalyst.node())
         if #html_children > 0 then
             if
                 lib_ts.cursor_is_at_start_of_node({

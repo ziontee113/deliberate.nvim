@@ -74,15 +74,6 @@ M.extract_class_names = function(buf, node)
     return class_names, className_string_node
 end
 
----@param node TSNode
----@return TSNode|nil
-M.get_html_node = function(node)
-    return lib_ts.find_closest_parent_with_types({
-        node = node,
-        desired_parent_types = { "jsx_element", "jsx_self_closing_element", "jsx_fragment" },
-    })
-end
-
 ---@param buf number
 ---@return TSNode
 M.get_updated_root = function(buf)
@@ -105,6 +96,35 @@ M.get_first_closing_bracket = function(buf, node)
 
     if not first_bracket then error("given node argument is not an html_element") end
     return first_bracket
+end
+
+---@param node TSNode
+---@return TSNode|nil
+M.get_html_node = function(node)
+    return lib_ts.find_closest_parent_with_types({
+        node = node,
+        desired_parent_types = { "jsx_element", "jsx_self_closing_element", "jsx_fragment" },
+    })
+end
+
+---@param node TSNode
+---@return TSNode[]
+M.get_html_children = function(node)
+    return lib_ts.get_children_with_types({
+        node = node,
+        desired_types = { "jsx_element", "jsx_self_closing_element" },
+    })
+end
+
+---@param node TSNode
+---@param direction "previous" | "next"
+---@return TSNode[], TSNode
+M.get_html_siblings = function(node, direction)
+    return lib_ts.find_named_siblings_in_direction_with_types({
+        node = node,
+        direction = direction,
+        desired_types = { "jsx_element", "jsx_self_closing_element" },
+    })
 end
 
 return M

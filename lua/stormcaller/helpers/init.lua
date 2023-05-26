@@ -24,10 +24,15 @@ M.assert_entire_first_line_of_catalyst_node_has_text = function(want)
     assert.equals(want, lines[1])
 end
 
-M.assert_first_line_of_catalyst_node_has_text = function(want)
-    local cursor_node_text = vim.treesitter.get_node_text(catalyst.node(), catalyst.buf())
+M.assert_first_line_of_node_has_text = function(node, want, buf)
+    local cursor_node_text = vim.treesitter.get_node_text(node, buf or 0)
     assert.equals(want, vim.split(cursor_node_text, "\n")[1])
 end
+
+M.assert_first_line_of_catalyst_node_has_text = function(want)
+    M.assert_first_line_of_node_has_text(catalyst.node(), want, catalyst.buf())
+end
+
 M.assert_last_line_of_catalyst_node_has_text = function(want)
     local cursor_node_text = vim.treesitter.get_node_text(catalyst.node(), catalyst.buf())
     local split = vim.split(cursor_node_text, "\n")

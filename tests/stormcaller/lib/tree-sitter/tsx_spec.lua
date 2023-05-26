@@ -97,3 +97,39 @@ describe("get_first_closing_bracket()", function()
         helpers.assert_node_has_text(first_bracket_node:parent():parent(), "<li>Contacts</li>")
     end)
 end)
+
+describe("get_html_children()", function()
+    before_each(function() helpers.set_buffer_content_as_multiple_react_components() end)
+    after_each(function() vim.api.nvim_buf_delete(0, { force = true }) end)
+
+    it("works", function()
+        vim.cmd("norm! 35gg^")
+
+        local html_node = lib_ts_tsx.get_html_node(ts_utils.get_node_at_cursor())
+        helpers.assert_first_line_of_node_has_text(html_node, "<ul>")
+
+        local html_children = lib_ts_tsx.get_html_children(html_node)
+        helpers.assert_node_has_text(html_children[1], "<li>Log In</li>")
+        helpers.assert_node_has_text(html_children[2], "<li>Sign Up</li>")
+    end)
+end)
+
+describe("get_html_siblings()", function()
+    before_each(function() helpers.set_buffer_content_as_multiple_react_components() end)
+    after_each(function() vim.api.nvim_buf_delete(0, { force = true }) end)
+
+    it("works", function()
+        vim.cmd("norm! 22gg^")
+
+        local html_node = lib_ts_tsx.get_html_node(ts_utils.get_node_at_cursor())
+        helpers.assert_node_has_text(html_node, "<li>Contacts</li>")
+
+        local next_siblings = lib_ts_tsx.get_html_siblings(html_node, "next")
+        helpers.assert_node_has_text(next_siblings[1], "<li>FAQ</li>")
+        helpers.assert_node_has_text(next_siblings[2], "<OtherComponent />")
+
+        local previous_siblings = lib_ts_tsx.get_html_siblings(html_node, "previous")
+        helpers.assert_first_line_of_node_has_text(previous_siblings[1], "<li>")
+        helpers.assert_node_has_text(previous_siblings[2], "<li>Home</li>")
+    end)
+end)
