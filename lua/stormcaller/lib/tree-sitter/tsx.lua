@@ -78,7 +78,7 @@ end
 ---@return TSNode
 M.get_updated_root = function(buf)
     local updated_root = lib_ts.get_root({ parser_name = "tsx", buf = buf, reset = true })
-    if not updated_root then error("can't get updated root, something went wrong.") end
+    if not updated_root then error("can't get updated root for tsx, something went wrong.") end
     return updated_root
 end
 

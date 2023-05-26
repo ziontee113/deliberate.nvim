@@ -1,5 +1,6 @@
 require("tests.editor_config")
 
+local ts_utils = require("nvim-treesitter.ts_utils")
 local helpers = require("stormcaller.helpers")
 local lib_ts_svelte = require("stormcaller.lib.tree-sitter.svelte")
 
@@ -67,4 +68,79 @@ describe("extract_class_names()", function()
     end)
 
     vim.api.nvim_buf_delete(0, { force = true })
+end)
+
+describe("get_html_node()", function()
+    before_each(function() helpers.set_buffer_content_as_svelte_file() end)
+    after_each(function() vim.api.nvim_buf_delete(0, { force = true }) end)
+
+    it("works", function()
+        vim.cmd("norm! 32ggfg")
+
+        local node_at_cursor = ts_utils.get_node_at_cursor()
+        local html_node = lib_ts_svelte.get_html_node(node_at_cursor)
+
+        helpers.assert_node_has_text(html_node, "<h1>Ligma</h1>")
+    end)
+end)
+
+describe("get_first_closing_bracket()", function()
+    before_each(function() helpers.set_buffer_content_as_svelte_file() end)
+    after_each(function() vim.api.nvim_buf_delete(0, { force = true }) end)
+
+    it("works", function()
+        vim.cmd("norm! 32ggfg")
+
+        local html_node = lib_ts_svelte.get_html_node(ts_utils.get_node_at_cursor())
+        helpers.assert_node_has_text(html_node, "<h1>Ligma</h1>")
+
+        local first_bracket_node = lib_ts_svelte.get_first_closing_bracket(0, html_node)
+        helpers.assert_node_has_text(first_bracket_node, ">")
+        helpers.assert_node_has_text(first_bracket_node:parent(), "<h1>")
+        helpers.assert_node_has_text(first_bracket_node:parent():parent(), "<h1>Ligma</h1>")
+    end)
+end)
+
+describe("get_html_children()", function()
+    before_each(function() helpers.set_buffer_content_as_svelte_file() end)
+    after_each(function() vim.api.nvim_buf_delete(0, { force = true }) end)
+
+    it("works", function()
+        vim.cmd("norm! 31gg^")
+
+        local html_node = lib_ts_svelte.get_html_node(ts_utils.get_node_at_cursor())
+        helpers.assert_first_line_of_node_has_text(html_node, "<section>")
+
+        local html_children = lib_ts_svelte.get_html_children(html_node)
+        assert.equals(3, #html_children)
+        helpers.assert_node_has_text(html_children[1], "<h1>Ligma</h1>")
+        helpers.assert_node_has_text(html_children[2], "<h3>is a made-up term</h3>")
+        helpers.assert_node_has_text(
+            html_children[3],
+            "<p>that gained popularity as part of an Internet prank or meme.</p>"
+        )
+    end)
+end)
+
+describe("get_html_siblings()", function()
+    before_each(function() helpers.set_buffer_content_as_svelte_file() end)
+    after_each(function() vim.api.nvim_buf_delete(0, { force = true }) end)
+
+    it("works", function()
+        vim.cmd("norm! 33gg^")
+
+        local html_node = lib_ts_svelte.get_html_node(ts_utils.get_node_at_cursor())
+        helpers.assert_node_has_text(html_node, "<h3>is a made-up term</h3>")
+
+        local next_siblings = lib_ts_svelte.get_html_siblings(html_node, "next")
+        assert.equals(1, #next_siblings)
+        helpers.assert_node_has_text(
+            next_siblings[1],
+            "<p>that gained popularity as part of an Internet prank or meme.</p>"
+        )
+
+        local previous_siblings = lib_ts_svelte.get_html_siblings(html_node, "previous")
+        assert.equals(1, #previous_siblings)
+        helpers.assert_first_line_of_node_has_text(previous_siblings[1], "<h1>Ligma</h1>")
+    end)
 end)
