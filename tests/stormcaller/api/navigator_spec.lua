@@ -5,92 +5,52 @@ local selection = require("stormcaller.lib.selection")
 local navigator = require("stormcaller.api.navigator")
 local helpers = require("stormcaller.helpers")
 
-describe("navigator.move()", function()
+local initiate = function(cmd, wanted_text)
+    vim.cmd(string.format("norm! %s", cmd))
+    catalyst.initiate({ win = 0, buf = 0 })
+    helpers.assert_catalyst_node_has_text(wanted_text)
+end
+
+local move = function(destination, wanted_text, position, assert_fn)
+    navigator.move({ destination = destination })
+    assert_fn = assert_fn or helpers.assert_catalyst_node_has_text
+    assert_fn(wanted_text)
+    assert.are.same(position, vim.api.nvim_win_get_cursor(0))
+end
+
+describe("typescriptreact navigator.move()", function()
     before_each(function() helpers.set_buffer_content_as_multiple_react_components() end)
     after_each(function() helpers.clean_up() end)
 
     it("direction = next-sibling", function()
-        vim.cmd("norm! 17gg^") -- cursor to start of 1st <li> tag
-
-        catalyst.initiate({ win = 0, buf = 0 })
-        helpers.assert_catalyst_node_has_text("<li>Home</li>")
-
-        -- 1st move
-        navigator.move({ destination = "next-sibling" })
-        helpers.assert_catalyst_node_has_text([[<li>
+        initiate("17gg^", "<li>Home</li>")
+        move(
+            "next-sibling",
+            [[<li>
           A new study found that coffee drinkers have a lower risk of liver
           cancer. So, drink up!
-        </li>]])
-
-        local cursor_positon = vim.api.nvim_win_get_cursor(0)
-        assert.are.same({ 18, 8 }, cursor_positon)
-
-        -- 2nd move
-        navigator.move({ destination = "next-sibling" })
-        helpers.assert_catalyst_node_has_text("<li>Contacts</li>")
-
-        cursor_positon = vim.api.nvim_win_get_cursor(0)
-        assert.are.same({ 22, 8 }, cursor_positon)
-
-        -- 3rd move
-        navigator.move({ destination = "next-sibling" })
-        helpers.assert_catalyst_node_has_text("<li>FAQ</li>")
-
-        cursor_positon = vim.api.nvim_win_get_cursor(0)
-        assert.are.same({ 23, 8 }, cursor_positon)
-
-        -- 4th move
-        navigator.move({ destination = "next-sibling" })
-        helpers.assert_catalyst_node_has_text("<OtherComponent />")
-
-        cursor_positon = vim.api.nvim_win_get_cursor(0)
-        assert.are.same({ 24, 8 }, cursor_positon)
-
-        -- 5th move, should stay in place since no next siblings
-        navigator.move({ destination = "next-sibling" })
-        helpers.assert_catalyst_node_has_text("<OtherComponent />")
-
-        cursor_positon = vim.api.nvim_win_get_cursor(0)
-        assert.are.same({ 24, 8 }, cursor_positon)
+        </li>]],
+            { 18, 8 }
+        )
+        move("next-sibling", "<li>Contacts</li>", { 22, 8 })
+        move("next-sibling", "<li>FAQ</li>", { 23, 8 })
+        move("next-sibling", "<OtherComponent />", { 24, 8 })
+        move("next-sibling", "<OtherComponent />", { 24, 8 }) -- stays in place since no next siblings
     end)
 
     it("direction = previous-sibling", function()
-        vim.cmd("norm! 23gg^")
-
-        catalyst.initiate({ win = 0, buf = 0 })
-        helpers.assert_catalyst_node_has_text("<li>FAQ</li>")
-
-        -- 1st move up
-        navigator.move({ destination = "previous-sibling" })
-        helpers.assert_catalyst_node_has_text("<li>Contacts</li>")
-
-        local cursor_positon = vim.api.nvim_win_get_cursor(0)
-        assert.are.same({ 22, 8 }, cursor_positon)
-
-        -- 2nd move up, should put cursor at end of tag since we're moving up
-        -- and target start and end not on same line.
-        navigator.move({ destination = "previous-sibling" })
-        helpers.assert_catalyst_node_has_text([[<li>
+        initiate("23gg^", "<li>FAQ</li>")
+        move("previous-sibling", "<li>Contacts</li>", { 22, 8 })
+        move( -- put cursor at end of tag since we're moving up and target start and end not on same line.
+            "previous-sibling",
+            [[<li>
           A new study found that coffee drinkers have a lower risk of liver
           cancer. So, drink up!
-        </li>]])
-
-        cursor_positon = vim.api.nvim_win_get_cursor(0)
-        assert.are.same({ 21, 12 }, cursor_positon)
-
-        -- 3rd move up
-        navigator.move({ destination = "previous-sibling" })
-        helpers.assert_catalyst_node_has_text("<li>Home</li>")
-
-        cursor_positon = vim.api.nvim_win_get_cursor(0)
-        assert.are.same({ 17, 8 }, cursor_positon)
-
-        -- 4th move up, should stay in place since no more prevous sibling
-        navigator.move({ destination = "previous-sibling" })
-        helpers.assert_catalyst_node_has_text("<li>Home</li>")
-
-        cursor_positon = vim.api.nvim_win_get_cursor(0)
-        assert.are.same({ 17, 8 }, cursor_positon)
+        </li>]],
+            { 21, 12 }
+        )
+        move("previous-sibling", "<li>Home</li>", { 17, 8 })
+        move("previous-sibling", "<li>Home</li>", { 17, 8 }) -- stays in place since no more prevous sibling
     end)
 
     it("direction = next", function()
@@ -98,7 +58,7 @@ describe("navigator.move()", function()
 
         catalyst.initiate({ win = 0, buf = 0 })
         helpers.assert_first_line_of_catalyst_node_has_text(
-            [[<div className="h-screen w-screen bg-zinc-900">]]
+            '<div className="h-screen w-screen bg-zinc-900">'
         )
 
         -- 1st move
