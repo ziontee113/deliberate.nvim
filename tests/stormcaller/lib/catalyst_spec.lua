@@ -3,7 +3,7 @@ require("tests.editor_config")
 local catalyst = require("stormcaller.lib.catalyst")
 local helpers = require("stormcaller.helpers")
 
-describe("catalyst.initiate()", function()
+describe("catalyst.initiate() for tsx", function()
     before_each(function() vim.bo.ft = "typescriptreact" end)
     after_each(function() vim.api.nvim_buf_delete(0, { force = true }) end)
 
@@ -30,7 +30,7 @@ export default function Home() {
         catalyst.initiate({ win = 0, buf = 0 }) -- should put cursor at line 6: [<]li>
 
         local cursor_positon = vim.api.nvim_win_get_cursor(0)
-        assert.are.same({ 6, 8 }, cursor_positon)
+        assert.same({ 6, 8 }, cursor_positon)
     end)
 
     it(
@@ -55,7 +55,7 @@ export default function Home() {
             catalyst.initiate({ win = 0, buf = 0 }) -- should put cursor at line 3: [<]>
 
             local cursor_positon = vim.api.nvim_win_get_cursor(0)
-            assert.are.same({ 3, 4 }, cursor_positon)
+            assert.same({ 3, 4 }, cursor_positon)
         end
     )
 
@@ -81,7 +81,7 @@ export default function Home() {
             catalyst.initiate({ win = 0, buf = 0 }) -- should put cursor at line 10: </[>]
 
             local cursor_positon = vim.api.nvim_win_get_cursor(0)
-            assert.are.same({ 10, 6 }, cursor_positon)
+            assert.same({ 10, 6 }, cursor_positon)
         end
     )
 
@@ -95,7 +95,7 @@ because initial cursor was sandwiched between html_elements and was below closes
             catalyst.initiate({ win = 0, buf = 0 })
 
             local cursor_positon = vim.api.nvim_win_get_cursor(0)
-            assert.are.same({ 6, 7 }, cursor_positon)
+            assert.same({ 6, 7 }, cursor_positon)
         end
     )
 
@@ -109,7 +109,20 @@ because initial cursor was sandwiched between html_elements and was above closes
             catalyst.initiate({ win = 0, buf = 0 })
 
             local cursor_positon = vim.api.nvim_win_get_cursor(0)
-            assert.are.same({ 15, 4 }, cursor_positon)
+            assert.same({ 15, 4 }, cursor_positon)
         end
     )
+end)
+
+describe("catalyst.initiate() for svelte()", function()
+    before_each(function() helpers.set_buffer_content_as_svelte_file() end)
+    after_each(function() helpers.clean_up() end)
+
+    it("puts cursor at start of closest tag, with initial cursor inside html_element", function()
+        vim.cmd("norm! 32ggfm")
+        catalyst.initiate({ win = 0, buf = 0 })
+
+        helpers.assert_catalyst_node_has_text("<h1>Ligma</h1>")
+        assert.same({ 32, 4 }, vim.api.nvim_win_get_cursor(0))
+    end)
 end)

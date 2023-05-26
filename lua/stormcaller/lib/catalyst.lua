@@ -3,7 +3,7 @@ local M = {}
 local selection = require("stormcaller.lib.selection")
 local ts_utils = require("nvim-treesitter.ts_utils")
 local lib_ts = require("stormcaller.lib.tree-sitter")
-local lib_ts_tsx = require("stormcaller.lib.tree-sitter.tsx")
+local aggregator = require("stormcaller.lib.tree-sitter.language_aggregator")
 
 ---@class _catalyst
 ---@field node TSNode
@@ -83,7 +83,7 @@ end
 ---@param buf number
 ---@return TSNode[], string
 local find_closest_html_node_to_cursor = function(win, buf)
-    local html_nodes = lib_ts_tsx.get_all_html_nodes_in_buffer(buf)
+    local html_nodes = aggregator.get_all_html_nodes_in_buffer(buf)
     return find_closest_node_to_cursor(win, html_nodes)
 end
 
@@ -93,13 +93,12 @@ end
 
 ---@param o navigator_initiate_Args
 M.initiate = function(o)
+    _catalyst = { buf = o.buf } -- temporary solution so aggregator can work correctly
+
     vim.cmd("norm! ^")
 
-    local node_at_cursor = ts_utils.get_node_at_cursor(0)
-    local parent = lib_ts.find_closest_parent_with_types({
-        node = node_at_cursor,
-        desired_parent_types = { "jsx_element", "jsx_self_closing_element" },
-    })
+    local node_at_cursor = ts_utils.get_node_at_cursor(o.win)
+    local parent = aggregator.get_html_node(node_at_cursor)
 
     local node, node_point
     if parent then
