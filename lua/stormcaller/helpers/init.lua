@@ -45,6 +45,8 @@ M.loop = function(times, callback, arguments)
     end
 end
 
+-------------------------------------------- React
+
 M.set_buffer_content_as_react_component = function()
     vim.bo.ft = "typescriptreact"
     M.set_buf_content([[
@@ -162,6 +164,78 @@ function BlurImage({ image }: { image: Image }) {
     </a>
   )
 }]])
+end
+
+-------------------------------------------- Svelte
+
+M.set_buffer_content_as_svelte_file = function()
+    vim.bo.ft = "svelte"
+    M.set_buf_content([[
+<script>
+    import Counter from "./Counter.svelte";
+    import welcome from "$lib/images/svelte-welcome.webp";
+    import welcome_fallback from "$lib/images/svelte-welcome.png";
+</script>
+
+<svelte:head>
+    <title>Home</title>
+    <meta name="description" content="Svelte demo app" />
+</svelte:head>
+
+<section>
+    <h1>
+        <span class="welcome">
+            <picture>
+                <source srcset={welcome} type="image/webp" />
+                <img src={welcome_fallback} alt="Welcome" />
+            </picture>
+        </span>
+
+        to your new<br />SvelteKit app
+    </h1>
+
+    <h2>
+        try editing <strong>src/routes/+page.svelte</strong>
+    </h2>
+
+    <Counter />
+</section>
+
+<section>
+    <h1>Ligma</h1>
+    <h3>is a made-up term</h3>
+    <p>that gained popularity as part of an Internet prank or meme.</p>
+</section>
+
+<style>
+    section {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        flex: 0.6;
+    }
+
+    h1 {
+        width: 100%;
+    }
+
+    .welcome {
+        display: block;
+        position: relative;
+        width: 100%;
+        height: 0;
+        padding: 0 0 calc(100% * 495 / 2048) 0;
+    }
+
+    .welcome img {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        display: block;
+    }
+</style>]])
 end
 
 return M
