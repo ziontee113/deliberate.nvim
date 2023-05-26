@@ -38,3 +38,33 @@ describe("get_tag_identifier_node()", function()
 
     vim.api.nvim_buf_delete(0, { force = true })
 end)
+
+describe("get_className_property_string_node()", function()
+    helpers.set_buffer_content_as_svelte_file()
+
+    it("works", function()
+        local all_nodes = lib_ts_svelte.get_all_html_nodes_in_buffer(0)
+        local node = all_nodes[6]
+        helpers.assert_first_line_of_node_has_text(node, '<span class="welcome">')
+
+        local className_string_node = lib_ts_svelte.get_className_property_string_node(0, node)
+        helpers.assert_node_has_text(className_string_node, [["welcome"]])
+    end)
+
+    vim.api.nvim_buf_delete(0, { force = true })
+end)
+
+describe("extract_class_names()", function()
+    helpers.set_buffer_content_as_svelte_file()
+
+    it("works", function()
+        local all_nodes = lib_ts_svelte.get_all_html_nodes_in_buffer(0)
+        local node = all_nodes[6]
+        helpers.assert_first_line_of_node_has_text(node, '<span class="welcome">')
+
+        local class_names = lib_ts_svelte.extract_class_names(0, node)
+        assert.same({ "welcome" }, class_names)
+    end)
+
+    vim.api.nvim_buf_delete(0, { force = true })
+end)
