@@ -63,54 +63,20 @@ M.extract_class_names = function(buf, node)
     return class_names, className_string_node
 end
 
----@param buf number
----@return TSNode
-M.get_updated_root = function(buf)
-    local updated_root = lib_ts.get_root({ parser_name = "svelte", buf = buf, reset = true })
-    if not updated_root then error("can't get updated root for svelte, something went wrong.") end
-    return updated_root
-end
+--------------------------------------------
 
----@param node TSNode
----@return TSNode|nil
-M.get_html_node = function(node)
-    return lib_ts.find_closest_parent_with_types({
-        node = node,
-        desired_parent_types = { "element" },
-    })
-end
+M.get_updated_root = function(buf) return lib_ts.get_updated_root(buf, "svelte") end
 
----@param buf number
----@param node TSNode
----@return TSNode
+M.get_html_node = function(node) return lib_ts.get_html_node(node, { "element" }) end
+
 M.get_first_closing_bracket = function(buf, node)
-    local first_bracket = lib_ts.capture_nodes_with_queries({
-        root = node,
-        buf = buf,
-        parser_name = "svelte",
-        queries = { [[ (">" @closing_bracket) ]] },
-        capture_groups = { "closing_bracket" },
-    })[1]
-
-    if not first_bracket then error("given node argument is not an html_element") end
-    return first_bracket
+    return lib_ts.get_first_closing_bracket(buf, node, "svelte")
 end
 
----@param node TSNode
----@return TSNode[]
-M.get_html_children = function(node)
-    return lib_ts.get_children_with_types({ node = node, desired_types = { "element" } })
-end
+M.get_html_children = function(node) return lib_ts.get_html_children(node, { "element" }) end
 
----@param node TSNode
----@param direction "previous" | "next"
----@return TSNode[], TSNode
 M.get_html_siblings = function(node, direction)
-    return lib_ts.find_named_siblings_in_direction_with_types({
-        node = node,
-        direction = direction,
-        desired_types = { "element" },
-    })
+    return lib_ts.get_html_siblings(node, direction, { "element" })
 end
 
 return M

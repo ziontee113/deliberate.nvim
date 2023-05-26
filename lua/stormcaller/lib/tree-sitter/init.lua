@@ -218,4 +218,56 @@ M.replace_node_text = function(o)
     vim.api.nvim_buf_set_text(o.buf, start_row, start_col, end_row, end_col, o.replacement)
 end
 
+-------------------------------------------- Shared Functions between languages
+
+---@param buf number
+---@return TSNode
+M.get_updated_root = function(buf, parser_name)
+    local updated_root = M.get_root({ parser_name = parser_name, buf = buf, reset = true })
+    if not updated_root then error("can't get updated root for tsx, something went wrong.") end
+    return updated_root
+end
+
+---@param buf number
+---@param node TSNode
+---@return TSNode
+M.get_first_closing_bracket = function(buf, node, parser_name)
+    local first_bracket = M.capture_nodes_with_queries({
+        root = node,
+        buf = buf,
+        parser_name = parser_name,
+        queries = { [[ (">" @closing_bracket) ]] },
+        capture_groups = { "closing_bracket" },
+    })[1]
+
+    if not first_bracket then error("given node argument is not an html_element") end
+    return first_bracket
+end
+
+---@param node TSNode
+---@return TSNode|nil
+M.get_html_node = function(node, desired_parent_types)
+    return M.find_closest_parent_with_types({
+        node = node,
+        desired_parent_types = desired_parent_types,
+    })
+end
+
+---@param node TSNode
+---@return TSNode[]
+M.get_html_children = function(node, desired_types)
+    return M.get_children_with_types({ node = node, desired_types = desired_types })
+end
+
+---@param node TSNode
+---@param direction "previous" | "next"
+---@return TSNode[], TSNode
+M.get_html_siblings = function(node, direction, desired_types)
+    return M.find_named_siblings_in_direction_with_types({
+        node = node,
+        direction = direction,
+        desired_types = desired_types,
+    })
+end
+
 return M

@@ -74,57 +74,24 @@ M.extract_class_names = function(buf, node)
     return class_names, className_string_node
 end
 
----@param buf number
----@return TSNode
-M.get_updated_root = function(buf)
-    local updated_root = lib_ts.get_root({ parser_name = "tsx", buf = buf, reset = true })
-    if not updated_root then error("can't get updated root for tsx, something went wrong.") end
-    return updated_root
-end
+--------------------------------------------
 
----@param buf number
----@param node TSNode
----@return TSNode
+M.get_updated_root = function(buf) return lib_ts.get_updated_root(buf, "tsx") end
+
 M.get_first_closing_bracket = function(buf, node)
-    local first_bracket = lib_ts.capture_nodes_with_queries({
-        root = node,
-        buf = buf,
-        parser_name = "tsx",
-        queries = { [[ (">" @closing_bracket) ]] },
-        capture_groups = { "closing_bracket" },
-    })[1]
-
-    if not first_bracket then error("given node argument is not an html_element") end
-    return first_bracket
+    return lib_ts.get_first_closing_bracket(buf, node, "tsx")
 end
 
----@param node TSNode
----@return TSNode|nil
 M.get_html_node = function(node)
-    return lib_ts.find_closest_parent_with_types({
-        node = node,
-        desired_parent_types = { "jsx_element", "jsx_self_closing_element", "jsx_fragment" },
-    })
+    return lib_ts.get_html_node(node, { "jsx_element", "jsx_self_closing_element", "jsx_fragment" })
 end
 
----@param node TSNode
----@return TSNode[]
 M.get_html_children = function(node)
-    return lib_ts.get_children_with_types({
-        node = node,
-        desired_types = { "jsx_element", "jsx_self_closing_element" },
-    })
+    return lib_ts.get_html_children(node, { "jsx_element", "jsx_self_closing_element" })
 end
 
----@param node TSNode
----@param direction "previous" | "next"
----@return TSNode[], TSNode
 M.get_html_siblings = function(node, direction)
-    return lib_ts.find_named_siblings_in_direction_with_types({
-        node = node,
-        direction = direction,
-        desired_types = { "jsx_element", "jsx_self_closing_element" },
-    })
+    return lib_ts.get_html_siblings(node, direction, { "jsx_element", "jsx_self_closing_element" })
 end
 
 return M
