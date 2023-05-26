@@ -118,11 +118,41 @@ describe("catalyst.initiate() for svelte()", function()
     before_each(function() helpers.set_buffer_content_as_svelte_file() end)
     after_each(function() helpers.clean_up() end)
 
-    it("puts cursor at start of closest tag, with initial cursor inside html_element", function()
+    it("puts cursor at start of closest tag, initial cursor inside html_element", function()
         vim.cmd("norm! 32ggfm")
         catalyst.initiate({ win = 0, buf = 0 })
 
         helpers.assert_catalyst_node_has_text("<h1>Ligma</h1>")
         assert.same({ 32, 4 }, vim.api.nvim_win_get_cursor(0))
     end)
+
+    it(
+        "puts cursor at start of closest tag, initial cursor outside and above html_element",
+        function()
+            vim.cmd("norm! 30gg")
+            catalyst.initiate({ win = 0, buf = 0 })
+
+            helpers.assert_catalyst_node_has_text([[<section>
+    <h1>Ligma</h1>
+    <h3>is a made-up term</h3>
+    <p>that gained popularity as part of an Internet prank or meme.</p>
+</section>]])
+            assert.same({ 31, 0 }, vim.api.nvim_win_get_cursor(0))
+        end
+    )
+
+    it(
+        "puts cursor at end of closest tag, with initial cursor outside and below html_element",
+        function()
+            vim.cmd("norm! 43gg")
+            catalyst.initiate({ win = 0, buf = 0 })
+
+            helpers.assert_catalyst_node_has_text([[<section>
+    <h1>Ligma</h1>
+    <h3>is a made-up term</h3>
+    <p>that gained popularity as part of an Internet prank or meme.</p>
+</section>]])
+            assert.same({ 35, 9 }, vim.api.nvim_win_get_cursor(0))
+        end
+    )
 end)
