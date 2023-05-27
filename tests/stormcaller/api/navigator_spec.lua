@@ -8,7 +8,7 @@ local initiate = helpers.initiate
 
 local move = function(destination, wanted_text, position, assert_fn)
     navigator.move({ destination = destination })
-    assert_fn = assert_fn or helpers.assert_catalyst_node_has_text
+    assert_fn = assert_fn or helpers.catalyst_has
     assert_fn(wanted_text)
     assert.are.same(position, vim.api.nvim_win_get_cursor(0))
 end
@@ -17,8 +17,8 @@ local long_li_tag = [[<li>
           A new study found that coffee drinkers have a lower risk of liver
           cancer. So, drink up!
         </li>]]
-local first_line = helpers.assert_first_line_of_catalyst_node_has_text
-local last_line = helpers.assert_last_line_of_catalyst_node_has_text
+local first_line = helpers.catalyst_first
+local last_line = helpers.catalyst_last
 
 describe("typescriptreact navigator.move()", function()
     before_each(function() helpers.set_buffer_content_as_multiple_react_components() end)
@@ -84,14 +84,14 @@ local move_then_assert_selection = function(opts, quantity, text_tbl, catalyst_t
     if type(text_tbl) == "string" then text_tbl = { text_tbl } end
     for i, item in ipairs(text_tbl) do
         if type(item) == "string" then
-            helpers.assert_node_has_text(selection.nodes()[i], item)
+            helpers.node_has_text(selection.nodes()[i], item)
         else
             local text, assert_fn = unpack(item)
             assert_fn(selection.nodes()[i], text)
         end
     end
 
-    helpers.assert_catalyst_node_has_text(catalyst_text)
+    helpers.catalyst_has(catalyst_text)
 end
 
 describe("navigator.move() with `select_move` option", function()

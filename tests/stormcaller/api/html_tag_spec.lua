@@ -17,41 +17,41 @@ describe("add()", function()
         vim.cmd("norm! 22gg^") -- cursor to <li>Contacts</li>
 
         catalyst.initiate({ win = 0, buf = 0 })
-        helpers.assert_catalyst_node_has_text("<li>Contacts</li>")
+        helpers.catalyst_has("<li>Contacts</li>")
 
         tag.add({ tag = "li", destination = "next" })
 
         -- catalyst node should be updated to newly created node without manual `navigator.move()`
-        helpers.assert_catalyst_node_has_text("<li>###</li>")
-        helpers.assert_entire_first_line_of_catalyst_node_has_text("        <li>###</li>")
+        helpers.catalyst_has("<li>###</li>")
+        helpers.catalyst_entire_first_line("        <li>###</li>")
     end)
 
     it("works for single target (cursor node only), destination = previous", function()
         vim.cmd("norm! 22gg^") -- cursor to <li>Contacts</li>
 
         catalyst.initiate({ win = 0, buf = 0 })
-        helpers.assert_catalyst_node_has_text("<li>Contacts</li>")
+        helpers.catalyst_has("<li>Contacts</li>")
 
         tag.add({ tag = "li", destination = "previous" })
 
         -- catalyst node should be updated to newly created node without manual `navigator.move()`
-        helpers.assert_catalyst_node_has_text("<li>###</li>")
-        helpers.assert_entire_first_line_of_catalyst_node_has_text("        <li>###</li>")
+        helpers.catalyst_has("<li>###</li>")
+        helpers.catalyst_entire_first_line("        <li>###</li>")
     end)
 
     it("works for single target (cursor node only), destination = inside", function()
         vim.cmd("norm! 22gg^") -- cursor to <li>Contacts</li>
 
         catalyst.initiate({ win = 0, buf = 0 })
-        helpers.assert_catalyst_node_has_text("<li>Contacts</li>")
+        helpers.catalyst_has("<li>Contacts</li>")
 
         tag.add({ tag = "div", destination = "next", content = "" })
-        helpers.assert_catalyst_node_has_text("<div></div>")
+        helpers.catalyst_has("<div></div>")
 
         tag.add({ tag = "h1", destination = "inside", content = "inside the div" })
-        helpers.assert_catalyst_node_has_text("<h1>inside the div</h1>")
+        helpers.catalyst_has("<h1>inside the div</h1>")
 
-        helpers.assert_node_has_text(
+        helpers.node_has_text(
             catalyst.node():parent(),
             [[<div>
           <h1>inside the div</h1>
@@ -59,9 +59,9 @@ describe("add()", function()
         )
 
         tag.add({ tag = "p", destination = "next", content = "Lorem ipsum" })
-        helpers.assert_catalyst_node_has_text("<p>Lorem ipsum</p>")
+        helpers.catalyst_has("<p>Lorem ipsum</p>")
 
-        helpers.assert_node_has_text(
+        helpers.node_has_text(
             catalyst.node():parent(),
             [[<div>
           <h1>inside the div</h1>
@@ -78,18 +78,18 @@ describe("tag.add() chain testing with destinations `next` & `previous`", functi
         vim.cmd("norm! 22gg^") -- cursor to <li>Contacts</li>
 
         catalyst.initiate({ win = 0, buf = 0 })
-        helpers.assert_catalyst_node_has_text("<li>Contacts</li>")
+        helpers.catalyst_has("<li>Contacts</li>")
 
         navigator.move({ destination = "next", select_move = true })
         navigator.move({ destination = "next", select_move = true })
 
         assert.equals(2, #selection.nodes())
-        helpers.assert_node_has_text(selection.nodes()[1], "<li>Contacts</li>")
-        helpers.assert_node_has_text(selection.nodes()[2], "<li>FAQ</li>")
+        helpers.node_has_text(selection.nodes()[1], "<li>Contacts</li>")
+        helpers.node_has_text(selection.nodes()[2], "<li>FAQ</li>")
 
         tag.add({ tag = "li", destination = "next", content = "first_add" })
 
-        helpers.assert_node_has_text(
+        helpers.node_has_text(
             selection.nodes()[1]:parent(),
             [[<div className="h-screen w-screen bg-zinc-900">
         <li>Home</li>
@@ -107,13 +107,13 @@ describe("tag.add() chain testing with destinations `next` & `previous`", functi
 
         -- check that selection becomes newly added tags
         assert.equals(2, #selection.nodes())
-        helpers.assert_node_has_text(selection.nodes()[1], "<li>first_add</li>")
-        helpers.assert_node_has_text(selection.nodes()[2], "<li>first_add</li>")
+        helpers.node_has_text(selection.nodes()[1], "<li>first_add</li>")
+        helpers.node_has_text(selection.nodes()[2], "<li>first_add</li>")
 
         -- assure that the catalyst node's cursor auto moves after the buffer change caused by `tag.add()`
         local node_at_cursor = ts_utils.get_node_at_cursor()
         local html_node_at_cursor = lib_ts_tsx.get_html_node(node_at_cursor)
-        helpers.assert_node_has_text(html_node_at_cursor, "<OtherComponent />")
+        helpers.node_has_text(html_node_at_cursor, "<OtherComponent />")
     end)
 
     it("clears current selection, select 2 tags, add new tag after each selection", function()
@@ -130,13 +130,13 @@ describe("tag.add() chain testing with destinations `next` & `previous`", functi
 
         -- make sure we selected the right stuffs
         assert.equals(2, #selection.nodes())
-        helpers.assert_node_has_text(selection.nodes()[1], "<OtherComponent />")
-        helpers.assert_node_has_text(selection.nodes()[2], "<li>Home</li>")
+        helpers.node_has_text(selection.nodes()[1], "<OtherComponent />")
+        helpers.node_has_text(selection.nodes()[2], "<li>Home</li>")
 
         -- execute `tag.add()`
         tag.add({ tag = "h1", destination = "next", content = "2nd" })
 
-        helpers.assert_node_has_text(
+        helpers.node_has_text(
             selection.nodes()[1]:parent(),
             [[<div className="h-screen w-screen bg-zinc-900">
         <li>Home</li>
@@ -154,14 +154,14 @@ describe("tag.add() chain testing with destinations `next` & `previous`", functi
       </div>]]
         )
 
-        helpers.assert_node_has_text(selection.nodes()[1], "<h1>2nd</h1>")
-        helpers.assert_node_has_text(selection.nodes()[2], "<h1>2nd</h1>")
+        helpers.node_has_text(selection.nodes()[1], "<h1>2nd</h1>")
+        helpers.node_has_text(selection.nodes()[2], "<h1>2nd</h1>")
     end)
 
     it("keeping current selection, add new tag before each selection", function()
         tag.add({ tag = "h3", destination = "previous", content = "third-add-call" })
 
-        helpers.assert_node_has_text(
+        helpers.node_has_text(
             selection.nodes()[1]:parent(),
             [[<div className="h-screen w-screen bg-zinc-900">
         <li>Home</li>
@@ -181,8 +181,8 @@ describe("tag.add() chain testing with destinations `next` & `previous`", functi
       </div>]]
         )
 
-        helpers.assert_node_has_text(selection.nodes()[1], "<h3>third-add-call</h3>")
-        helpers.assert_node_has_text(selection.nodes()[2], "<h3>third-add-call</h3>")
+        helpers.node_has_text(selection.nodes()[1], "<h3>third-add-call</h3>")
+        helpers.node_has_text(selection.nodes()[2], "<h3>third-add-call</h3>")
     end)
 
     helpers.clean_up()
@@ -196,14 +196,12 @@ describe("tag.add() with inside destination", function()
         vim.cmd("norm! 16gg^") -- cursor to <div className="h-screen w-screen bg-zinc-900">
 
         catalyst.initiate({ win = 0, buf = 0 })
-        helpers.assert_first_line_of_catalyst_node_has_text(
-            '<div className="h-screen w-screen bg-zinc-900">'
-        )
+        helpers.catalyst_first('<div className="h-screen w-screen bg-zinc-900">')
 
         tag.add({ tag = "h1", content = "2NE1", destination = "inside" })
 
-        helpers.assert_node_has_text(selection.nodes()[1], "<h1>2NE1</h1>")
-        helpers.assert_node_has_text(
+        helpers.node_has_text(selection.nodes()[1], "<h1>2NE1</h1>")
+        helpers.node_has_text(
             selection.nodes()[1]:parent(),
             [[<div className="h-screen w-screen bg-zinc-900">
         <li>Home</li>
@@ -228,7 +226,7 @@ describe("tag.add() with inside destination", function()
         navigator.move({ destination = "next", select_move = true })
 
         assert.equals(2, #selection.nodes())
-        helpers.assert_node_has_text(
+        helpers.node_has_text(
             selection.nodes()[1],
             [[<div>
       <ul>
@@ -237,7 +235,7 @@ describe("tag.add() with inside destination", function()
       </ul>
     </div>]]
         )
-        helpers.assert_node_has_text(
+        helpers.node_has_text(
             selection.nodes()[2],
             [[<ul>
         <li>Log In</li>
@@ -249,10 +247,10 @@ describe("tag.add() with inside destination", function()
         tag.add({ tag = "p", content = "Beyonce", destination = "inside" })
 
         assert.equals(2, #selection.nodes())
-        helpers.assert_node_has_text(selection.nodes()[1], "<p>Beyonce</p>")
-        helpers.assert_node_has_text(selection.nodes()[2], "<p>Beyonce</p>")
+        helpers.node_has_text(selection.nodes()[1], "<p>Beyonce</p>")
+        helpers.node_has_text(selection.nodes()[2], "<p>Beyonce</p>")
 
-        helpers.assert_node_has_text(
+        helpers.node_has_text(
             selection.nodes()[1]:parent(),
             [[<div>
       <ul>
@@ -268,10 +266,10 @@ describe("tag.add() with inside destination", function()
         tag.add({ tag = "h3", content = "Partition", destination = "next" })
 
         assert.equals(2, #selection.nodes())
-        helpers.assert_node_has_text(selection.nodes()[1], "<h3>Partition</h3>")
-        helpers.assert_node_has_text(selection.nodes()[2], "<h3>Partition</h3>")
+        helpers.node_has_text(selection.nodes()[1], "<h3>Partition</h3>")
+        helpers.node_has_text(selection.nodes()[2], "<h3>Partition</h3>")
 
-        helpers.assert_node_has_text(
+        helpers.node_has_text(
             selection.nodes()[1]:parent(),
             [[<div>
       <ul>
@@ -294,18 +292,18 @@ describe("tag.add() chain testing with destinations `next` & `previous` & `insid
         vim.cmd("norm! 22gg^") -- cursor to <li>Contacts</li>
 
         catalyst.initiate({ win = 0, buf = 0 })
-        helpers.assert_catalyst_node_has_text("<li>Contacts</li>")
+        helpers.catalyst_has("<li>Contacts</li>")
 
         navigator.move({ destination = "next", select_move = true })
         navigator.move({ destination = "next", select_move = true })
 
         assert.equals(2, #selection.nodes())
-        helpers.assert_node_has_text(selection.nodes()[1], "<li>Contacts</li>")
-        helpers.assert_node_has_text(selection.nodes()[2], "<li>FAQ</li>")
+        helpers.node_has_text(selection.nodes()[1], "<li>Contacts</li>")
+        helpers.node_has_text(selection.nodes()[2], "<li>FAQ</li>")
 
         tag.add({ tag = "div", destination = "next", content = "" })
 
-        helpers.assert_node_has_text(
+        helpers.node_has_text(
             selection.nodes()[1]:parent(),
             [[<div className="h-screen w-screen bg-zinc-900">
         <li>Home</li>
@@ -323,23 +321,23 @@ describe("tag.add() chain testing with destinations `next` & `previous` & `insid
 
         -- check that selection becomes newly added tags
         assert.equals(2, #selection.nodes())
-        helpers.assert_node_has_text(selection.nodes()[1], "<div></div>")
-        helpers.assert_node_has_text(selection.nodes()[2], "<div></div>")
+        helpers.node_has_text(selection.nodes()[1], "<div></div>")
+        helpers.node_has_text(selection.nodes()[2], "<div></div>")
 
         -- assure that the catalyst node's cursor auto moves after the buffer change caused by `tag.add()`
         local node_at_cursor = ts_utils.get_node_at_cursor()
         local html_node_at_cursor = lib_ts_tsx.get_html_node(node_at_cursor)
-        helpers.assert_node_has_text(html_node_at_cursor, "<OtherComponent />")
+        helpers.node_has_text(html_node_at_cursor, "<OtherComponent />")
     end)
 
     it("adds new <p> tag inside each selection", function()
         tag.add({ tag = "p", destination = "inside", content = "testing_1" })
 
         assert.equals(2, #selection.nodes())
-        helpers.assert_node_has_text(selection.nodes()[1], "<p>testing_1</p>")
-        helpers.assert_node_has_text(selection.nodes()[2], "<p>testing_1</p>")
+        helpers.node_has_text(selection.nodes()[1], "<p>testing_1</p>")
+        helpers.node_has_text(selection.nodes()[2], "<p>testing_1</p>")
 
-        helpers.assert_node_has_text(
+        helpers.node_has_text(
             selection.nodes()[1]:parent():parent(),
             [[<div className="h-screen w-screen bg-zinc-900">
         <li>Home</li>
@@ -364,10 +362,10 @@ describe("tag.add() chain testing with destinations `next` & `previous` & `insid
         tag.add({ tag = "h2", destination = "next", content = "2nd round of insert" })
 
         assert.equals(2, #selection.nodes())
-        helpers.assert_node_has_text(selection.nodes()[1], "<h2>2nd round of insert</h2>")
-        helpers.assert_node_has_text(selection.nodes()[2], "<h2>2nd round of insert</h2>")
+        helpers.node_has_text(selection.nodes()[1], "<h2>2nd round of insert</h2>")
+        helpers.node_has_text(selection.nodes()[2], "<h2>2nd round of insert</h2>")
 
-        helpers.assert_node_has_text(
+        helpers.node_has_text(
             selection.nodes()[1]:parent():parent(),
             [[<div className="h-screen w-screen bg-zinc-900">
         <li>Home</li>

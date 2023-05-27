@@ -8,7 +8,7 @@ local selection = require("stormcaller.lib.selection")
 M.initiate = function(cmd, wanted_text, assert_fn)
     vim.cmd(string.format("norm! %s", cmd))
     catalyst.initiate({ win = 0, buf = 0 })
-    assert_fn = assert_fn or M.assert_catalyst_node_has_text
+    assert_fn = assert_fn or M.catalyst_has
     assert_fn(wanted_text)
 end
 
@@ -38,36 +38,34 @@ end
 
 -------------------------------------------- Assertions
 
-M.assert_node_has_text = function(node, want)
+M.node_has_text = function(node, want)
     local cursor_node_text = vim.treesitter.get_node_text(node, 0)
     assert.equals(want, cursor_node_text)
 end
 
-M.assert_first_line_of_node_has_text = function(node, want, buf)
+M.node_first_line = function(node, want, buf)
     local cursor_node_text = vim.treesitter.get_node_text(node, buf or 0)
     assert.equals(want, vim.split(cursor_node_text, "\n")[1])
 end
 
 -- Catalyst
-M.assert_catalyst_node_has_text = function(want)
+M.catalyst_has = function(want)
     local cursor_node_text = vim.treesitter.get_node_text(catalyst.node(), catalyst.buf())
     assert.equals(want, cursor_node_text)
 end
 
-M.assert_first_line_of_catalyst_node_has_text = function(want)
-    M.assert_first_line_of_node_has_text(catalyst.node(), want, catalyst.buf())
-end
+M.catalyst_first = function(want) M.node_first_line(catalyst.node(), want, catalyst.buf()) end
 
-M.assert_entire_first_line_of_catalyst_node_has_text = function(want)
-    local start_row = catalyst.node():range()
-    local lines = vim.api.nvim_buf_get_lines(catalyst.buf(), start_row, start_row + 1, false)
-    assert.equals(want, lines[1])
-end
-
-M.assert_last_line_of_catalyst_node_has_text = function(want)
+M.catalyst_last = function(want)
     local cursor_node_text = vim.treesitter.get_node_text(catalyst.node(), catalyst.buf())
     local split = vim.split(cursor_node_text, "\n")
     assert.equals(want, split[#split])
+end
+
+M.catalyst_entire_first_line = function(want)
+    local start_row = catalyst.node():range()
+    local lines = vim.api.nvim_buf_get_lines(catalyst.buf(), start_row, start_row + 1, false)
+    assert.equals(want, lines[1])
 end
 
 -------------------------------------------- React
