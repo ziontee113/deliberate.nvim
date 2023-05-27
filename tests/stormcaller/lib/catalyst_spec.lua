@@ -41,32 +41,10 @@ describe("catalyst.initiate() for svelte()", function()
     )
     it(
         "puts cursor at start of closest tag, initial cursor outside and above html_element",
-        function()
-            initiate(
-                "30gg",
-                [[<section>
-    <h1>Ligma</h1>
-    <h3>is a made-up term</h3>
-    <p>that gained popularity as part of an Internet prank or meme.</p>
-</section>]],
-                h.catalyst_has,
-                { 31, 0 }
-            )
-        end
+        function() initiate("0gg", "<svelte:head>", h.catalyst_first, { 7, 0 }) end
     )
     it(
         "puts cursor at end of closest tag, with initial cursor outside and below html_element",
-        function()
-            initiate(
-                "43gg",
-                [[<section>
-    <h1>Ligma</h1>
-    <h3>is a made-up term</h3>
-    <p>that gained popularity as part of an Internet prank or meme.</p>
-</section>]],
-                h.catalyst_has,
-                { 35, 9 }
-            )
-        end
+        function() initiate("43gg", "</section>", h.catalyst_last, { 35, 9 }) end
     )
 end)
