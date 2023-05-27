@@ -18,7 +18,7 @@ end
 ---@param index number
 ---@param end_row number
 ---@param start_col number
-local function update_selected_node(index, end_row, start_col)
+local function update_currently_selected_node(index, end_row, start_col)
     local root = aggregator.get_updated_root(catalyst.buf())
 
     local updated_node =
@@ -75,9 +75,11 @@ end
 ---@return number, number
 local function handle_inside_has_children(html_children, replacement)
     local last_child = html_children[#html_children]
+
     catalyst.set_node(last_child)
     catalyst.set_node_point("start")
     catalyst.move_to()
+
     return add_tag_after_node("next", replacement, last_child)
 end
 
@@ -116,7 +118,7 @@ M.add = function(o)
         end
 
         selection.refresh_tree()
-        update_selected_node(i, update_row, update_col)
+        update_currently_selected_node(i, update_row, update_col)
     end
 
     if #selection.nodes() == 1 then
