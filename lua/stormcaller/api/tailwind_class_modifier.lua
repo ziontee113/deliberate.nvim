@@ -15,7 +15,8 @@ local function set_empty_className_property_if_needed(buf, node)
     if not tag_node then error("Given node argument shouldn't have been nil") end
 
     local start_row, _, _, end_col = tag_node:range()
-    vim.api.nvim_buf_set_text(buf, start_row, end_col, start_row, end_col, { ' className=""' })
+    local template = aggregator.get_className_property_template()
+    vim.api.nvim_buf_set_text(buf, start_row, end_col, start_row, end_col, { template })
 
     selection.refresh_tree()
 end

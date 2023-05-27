@@ -44,4 +44,12 @@ M.get_first_closing_bracket = function(...) return invoke("get_first_closing_bra
 M.get_html_children = function(...) return invoke("get_html_children", ...) end
 M.get_html_siblings = function(...) return invoke("get_html_siblings", ...) end
 
+--------------------------------------------
+
+local filetype_to_className_template = {
+    ["typescriptreact"] = ' className=""',
+    ["svelte"] = ' class=""',
+}
+M.get_className_property_template = function() return filetype_to_className_template[ft()] end
+
 return M
