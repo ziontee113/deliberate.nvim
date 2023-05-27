@@ -1,16 +1,10 @@
 require("tests.editor_config")
 
-local catalyst = require("stormcaller.lib.catalyst")
 local selection = require("stormcaller.lib.selection")
 local navigator = require("stormcaller.api.navigator")
 local helpers = require("stormcaller.helpers")
 
-local initiate = function(cmd, wanted_text, assert_fn)
-    vim.cmd(string.format("norm! %s", cmd))
-    catalyst.initiate({ win = 0, buf = 0 })
-    assert_fn = assert_fn or helpers.assert_catalyst_node_has_text
-    assert_fn(wanted_text)
-end
+local initiate = helpers.initiate
 
 local move = function(destination, wanted_text, position, assert_fn)
     navigator.move({ destination = destination })

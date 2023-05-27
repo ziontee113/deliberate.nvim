@@ -3,6 +3,23 @@ local M = {}
 local catalyst = require("stormcaller.lib.catalyst")
 local selection = require("stormcaller.lib.selection")
 
+-------------------------------------------- ...
+
+M.initiate = function(cmd, wanted_text, assert_fn)
+    vim.cmd(string.format("norm! %s", cmd))
+    catalyst.initiate({ win = 0, buf = 0 })
+    assert_fn = assert_fn or M.assert_catalyst_node_has_text
+    assert_fn(wanted_text)
+end
+
+M.initiate_and_check_cursor_positon = function(cmd, wanted_text, assert_fn, pos)
+    M.initiate(cmd, wanted_text, assert_fn)
+    if not pos then return end
+    assert.same(pos, vim.api.nvim_win_get_cursor(0))
+end
+
+-------------------------------------------- ...
+
 M.clean_up = function()
     vim.api.nvim_buf_delete(0, { force = true })
     selection.clear()
@@ -13,9 +30,32 @@ M.set_buf_content = function(content)
     vim.api.nvim_buf_set_lines(0, 0, -1, false, content)
 end
 
+M.loop = function(times, callback, arguments)
+    for _ = 1, times do
+        callback(unpack(arguments))
+    end
+end
+
+-------------------------------------------- Assertions
+
+M.assert_node_has_text = function(node, want)
+    local cursor_node_text = vim.treesitter.get_node_text(node, 0)
+    assert.equals(want, cursor_node_text)
+end
+
+M.assert_first_line_of_node_has_text = function(node, want, buf)
+    local cursor_node_text = vim.treesitter.get_node_text(node, buf or 0)
+    assert.equals(want, vim.split(cursor_node_text, "\n")[1])
+end
+
+-- Catalyst
 M.assert_catalyst_node_has_text = function(want)
     local cursor_node_text = vim.treesitter.get_node_text(catalyst.node(), catalyst.buf())
     assert.equals(want, cursor_node_text)
+end
+
+M.assert_first_line_of_catalyst_node_has_text = function(want)
+    M.assert_first_line_of_node_has_text(catalyst.node(), want, catalyst.buf())
 end
 
 M.assert_entire_first_line_of_catalyst_node_has_text = function(want)
@@ -24,30 +64,10 @@ M.assert_entire_first_line_of_catalyst_node_has_text = function(want)
     assert.equals(want, lines[1])
 end
 
-M.assert_first_line_of_node_has_text = function(node, want, buf)
-    local cursor_node_text = vim.treesitter.get_node_text(node, buf or 0)
-    assert.equals(want, vim.split(cursor_node_text, "\n")[1])
-end
-
-M.assert_first_line_of_catalyst_node_has_text = function(want)
-    M.assert_first_line_of_node_has_text(catalyst.node(), want, catalyst.buf())
-end
-
 M.assert_last_line_of_catalyst_node_has_text = function(want)
     local cursor_node_text = vim.treesitter.get_node_text(catalyst.node(), catalyst.buf())
     local split = vim.split(cursor_node_text, "\n")
     assert.equals(want, split[#split])
-end
-
-M.assert_node_has_text = function(node, want)
-    local cursor_node_text = vim.treesitter.get_node_text(node, 0)
-    assert.equals(want, cursor_node_text)
-end
-
-M.loop = function(times, callback, arguments)
-    for _ = 1, times do
-        callback(unpack(arguments))
-    end
 end
 
 -------------------------------------------- React
