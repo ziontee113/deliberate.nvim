@@ -1,8 +1,5 @@
 require("tests.editor_config")
 
-local ts_utils = require("nvim-treesitter.ts_utils")
-local lib_ts_tsx = require("stormcaller.lib.tree-sitter.tsx")
-
 local catalyst = require("stormcaller.lib.catalyst")
 local selection = require("stormcaller.lib.selection")
 local navigator = require("stormcaller.api.navigator")
@@ -155,64 +152,44 @@ describe("tag.add() with inside destination", function()
     before_each(function() h.set_buffer_content_as_multiple_react_components() end)
     after_each(function() h.clean_up() end)
 
-    it("works when tag already has children", function()
-        vim.cmd("norm! 16gg^") -- cursor to <div className="h-screen w-screen bg-zinc-900">
-
-        catalyst.initiate({ win = 0, buf = 0 })
-        h.catalyst_first('<div className="h-screen w-screen bg-zinc-900">')
-
-        html_tag.add({ tag = "h1", content = "2NE1", destination = "inside" })
-
-        h.node_has_text(selection.nodes()[1], "<h1>2NE1</h1>")
+    it("works when tag already has children, no multi-selection", function()
+        initiate("34gg^", "<div>", h.catalyst_first)
+        add({ "h1", "inside", "2NE1" }, "<h1>2NE1</h1>", { 39, 6 })
         h.node_has_text(
             selection.nodes()[1]:parent(),
-            [[<div className="h-screen w-screen bg-zinc-900">
-        <li>Home</li>
-        <li>
-          A new study found that coffee drinkers have a lower risk of liver
-          cancer. So, drink up!
-        </li>
-        <li>Contacts</li>
-        <li>FAQ</li>
-        <OtherComponent />
-        <h1>2NE1</h1>
-      </div>]]
-        )
-    end)
-
-    it("chains with destination = next afterwards", function()
-        vim.cmd("norm! 34gg^") -- cursor to <div>
-
-        catalyst.initiate({ win = 0, buf = 0 })
-
-        navigator.move({ destination = "next", select_move = true })
-        navigator.move({ destination = "next", select_move = true })
-
-        assert.equals(2, #selection.nodes())
-        h.node_has_text(
-            selection.nodes()[1],
             [[<div>
       <ul>
         <li>Log In</li>
         <li>Sign Up</li>
       </ul>
+      <h1>2NE1</h1>
     </div>]]
         )
-        h.node_has_text(
-            selection.nodes()[2],
+    end)
+
+    it("chains with destination = next afterwards", function()
+        initiate("34gg^", "<div>", h.catalyst_first)
+        navigator.move({ destination = "next", select_move = true })
+        navigator.move({ destination = "next", select_move = true })
+        h.selection_is(2, {
+            [[<div>
+      <ul>
+        <li>Log In</li>
+        <li>Sign Up</li>
+      </ul>
+    </div>]],
             [[<ul>
         <li>Log In</li>
         <li>Sign Up</li>
-      </ul>]]
-        )
+      </ul>]],
+        })
 
         -- add with destination = "inside"
         html_tag.add({ tag = "p", content = "Beyonce", destination = "inside" })
-
-        assert.equals(2, #selection.nodes())
-        h.node_has_text(selection.nodes()[1], "<p>Beyonce</p>")
-        h.node_has_text(selection.nodes()[2], "<p>Beyonce</p>")
-
+        h.selection_is(2, {
+            "<p>Beyonce</p>",
+            "<p>Beyonce</p>",
+        })
         h.node_has_text(
             selection.nodes()[1]:parent(),
             [[<div>
@@ -227,11 +204,10 @@ describe("tag.add() with inside destination", function()
 
         -- add with destination = "next"
         html_tag.add({ tag = "h3", content = "Partition", destination = "next" })
-
-        assert.equals(2, #selection.nodes())
-        h.node_has_text(selection.nodes()[1], "<h3>Partition</h3>")
-        h.node_has_text(selection.nodes()[2], "<h3>Partition</h3>")
-
+        h.selection_is(2, {
+            "<h3>Partition</h3>",
+            "<h3>Partition</h3>",
+        })
         h.node_has_text(
             selection.nodes()[1]:parent(),
             [[<div>
@@ -252,20 +228,19 @@ describe("tag.add() chain testing with destinations `next` & `previous` & `insid
     h.set_buffer_content_as_multiple_react_components()
 
     it("first select 2 li elements, then add empty <div> tag after each selection", function()
-        vim.cmd("norm! 22gg^") -- cursor to <li>Contacts</li>
-
-        catalyst.initiate({ win = 0, buf = 0 })
-        h.catalyst_has("<li>Contacts</li>")
-
+        initiate("22gg^", "<li>Contacts</li>")
         navigator.move({ destination = "next", select_move = true })
         navigator.move({ destination = "next", select_move = true })
-
-        assert.equals(2, #selection.nodes())
-        h.node_has_text(selection.nodes()[1], "<li>Contacts</li>")
-        h.node_has_text(selection.nodes()[2], "<li>FAQ</li>")
+        h.selection_is(2, {
+            "<li>Contacts</li>",
+            "<li>FAQ</li>",
+        })
 
         html_tag.add({ tag = "div", destination = "next", content = "" })
-
+        h.selection_is(2, {
+            "<div></div>",
+            "<div></div>",
+        })
         h.node_has_text(
             selection.nodes()[1]:parent(),
             [[<div className="h-screen w-screen bg-zinc-900">
@@ -281,25 +256,15 @@ describe("tag.add() chain testing with destinations `next` & `previous` & `insid
         <OtherComponent />
       </div>]]
         )
-
-        -- check that selection becomes newly added tags
-        assert.equals(2, #selection.nodes())
-        h.node_has_text(selection.nodes()[1], "<div></div>")
-        h.node_has_text(selection.nodes()[2], "<div></div>")
-
-        -- assure that the catalyst node's cursor auto moves after the buffer change caused by `tag.add()`
-        local node_at_cursor = ts_utils.get_node_at_cursor()
-        local html_node_at_cursor = lib_ts_tsx.get_html_node(node_at_cursor)
-        h.node_has_text(html_node_at_cursor, "<OtherComponent />")
+        h.catalyst_has("<OtherComponent />", { 26, 8 })
     end)
 
     it("adds new <p> tag inside each selection", function()
         html_tag.add({ tag = "p", destination = "inside", content = "testing_1" })
-
-        assert.equals(2, #selection.nodes())
-        h.node_has_text(selection.nodes()[1], "<p>testing_1</p>")
-        h.node_has_text(selection.nodes()[2], "<p>testing_1</p>")
-
+        h.selection_is(2, {
+            "<p>testing_1</p>",
+            "<p>testing_1</p>",
+        })
         h.node_has_text(
             selection.nodes()[1]:parent():parent(),
             [[<div className="h-screen w-screen bg-zinc-900">
@@ -323,11 +288,10 @@ describe("tag.add() chain testing with destinations `next` & `previous` & `insid
 
     it("add new <h2> tag after each selection", function()
         html_tag.add({ tag = "h2", destination = "next", content = "2nd round of insert" })
-
-        assert.equals(2, #selection.nodes())
-        h.node_has_text(selection.nodes()[1], "<h2>2nd round of insert</h2>")
-        h.node_has_text(selection.nodes()[2], "<h2>2nd round of insert</h2>")
-
+        h.selection_is(2, {
+            "<h2>2nd round of insert</h2>",
+            "<h2>2nd round of insert</h2>",
+        })
         h.node_has_text(
             selection.nodes()[1]:parent():parent(),
             [[<div className="h-screen w-screen bg-zinc-900">

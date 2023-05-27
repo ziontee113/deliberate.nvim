@@ -89,9 +89,10 @@ M.node_first_line = function(node, want, buf)
 end
 
 -- Catalyst
-M.catalyst_has = function(want)
+M.catalyst_has = function(want, pos)
     local cursor_node_text = vim.treesitter.get_node_text(catalyst.node(), catalyst.buf())
     assert.equals(want, cursor_node_text)
+    if pos then assert.are.same(pos, vim.api.nvim_win_get_cursor(0)) end
 end
 
 M.catalyst_first = function(want) M.node_first_line(catalyst.node(), want, catalyst.buf()) end
