@@ -1,6 +1,6 @@
 require("tests.editor_config")
 
-local lua_patterns = require("lua.stormcaller.lib.lua_patterns")
+local lua_patterns = require("stormcaller.lib.lua_patterns")
 
 local patterns_matches_inputs = function(patterns, inputs)
     local result = false
