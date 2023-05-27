@@ -1,11 +1,11 @@
 local M = {}
 
-local lib_ts_tsx = require("stormcaller.lib.tree-sitter.tsx")
-local lib_ts_svelte = require("stormcaller.lib.tree-sitter.svelte")
+local tsx = require("stormcaller.lib.tree-sitter.tsx")
+local svelte = require("stormcaller.lib.tree-sitter.svelte")
 
 local m = {
-    ["typescriptreact"] = lib_ts_tsx,
-    ["svelte"] = lib_ts_svelte,
+    ["typescriptreact"] = tsx,
+    ["svelte"] = svelte,
 }
 
 local ft = function()

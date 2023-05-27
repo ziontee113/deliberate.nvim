@@ -4,7 +4,7 @@ local api = vim.api
 local catalyst = require("stormcaller.lib.catalyst")
 local selection = require("stormcaller.lib.selection")
 local navigator = require("stormcaller.api.navigator")
-local lib_ts_tsx = require("stormcaller.lib.tree-sitter.tsx")
+local aggregator = require("stormcaller.lib.tree-sitter.language_aggregator")
 
 ---@param buf number
 ---@param node TSNode
@@ -19,11 +19,11 @@ end
 ---@param end_row number
 ---@param start_col number
 local function update_selected_node(index, end_row, start_col)
-    local root = lib_ts_tsx.get_updated_root(catalyst.buf())
+    local root = aggregator.get_updated_root(catalyst.buf())
 
     local updated_node =
         root:named_descendant_for_range(end_row + 1, start_col, end_row + 1, start_col)
-    updated_node = lib_ts_tsx.get_html_node(updated_node)
+    updated_node = aggregator.get_html_node(updated_node)
     if not updated_node then error("can't return correct updated_node") end
 
     selection.update_specific_selection_index(index, updated_node)
@@ -56,7 +56,7 @@ end
 ---@return number, number
 local function handle_inside_has_no_children(indents, index, replacement)
     local first_closing_bracket =
-        lib_ts_tsx.get_first_closing_bracket(catalyst.buf(), selection.nodes()[index])
+        aggregator.get_first_closing_bracket(catalyst.buf(), selection.nodes()[index])
     local _, _, b_row, b_col = first_closing_bracket:range()
 
     api.nvim_buf_set_text(catalyst.buf(), b_row, b_col, b_row, b_col, { "", replacement, indents })
@@ -89,7 +89,7 @@ local function handle_destination_inside(index, replacement, indents)
     local update_row, update_col
     replacement = string.rep(" ", vim.bo.tabstop) .. replacement
 
-    local html_children = lib_ts_tsx.get_html_children(selection.nodes()[index])
+    local html_children = aggregator.get_html_children(selection.nodes()[index])
     if #html_children == 0 then
         update_row, update_col = handle_inside_has_no_children(indents, index, replacement)
     else

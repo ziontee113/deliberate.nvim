@@ -3,15 +3,15 @@ local M = {}
 local catalyst = require("stormcaller.lib.catalyst")
 local selection = require("stormcaller.lib.selection")
 local lib_ts = require("stormcaller.lib.tree-sitter")
-local lib_ts_tsx = require("stormcaller.lib.tree-sitter.tsx")
+local aggregator = require("stormcaller.lib.tree-sitter.language_aggregator")
 local lua_patterns = require("stormcaller.lib.lua_patterns")
 
 ---@param buf number
 ---@param node TSNode
 local function set_empty_className_property_if_needed(buf, node)
-    if lib_ts_tsx.get_className_property_string_node(buf, node) then return end
+    if aggregator.get_className_property_string_node(buf, node) then return end
 
-    local tag_node = lib_ts_tsx.get_tag_identifier_node(node)
+    local tag_node = aggregator.get_tag_identifier_node(node)
     if not tag_node then error("Given node argument shouldn't have been nil") end
 
     local start_row, _, _, end_col = tag_node:range()
@@ -102,7 +102,7 @@ local change_tailwind_classes = function(o)
         node = selection.nodes()[i]
 
         local class_names, className_string_node =
-            lib_ts_tsx.extract_class_names(catalyst.buf(), node)
+            aggregator.extract_class_names(catalyst.buf(), node)
 
         local replacement = process_new_class_names(class_names, find_patterns(o), o.value)
 
