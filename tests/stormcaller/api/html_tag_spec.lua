@@ -17,6 +17,8 @@ local add = function(args, has_text, cursor, has_entire_line)
     if has_entire_line then h.catalyst_entire_first_line(has_entire_line) end
 end
 
+-------------------------------------------- Typescriptreact
+
 describe("tag.add() on current catalyst node", function()
     before_each(function() h.set_buffer_content_as_multiple_react_components() end)
     after_each(function() h.clean_up() end)
@@ -231,5 +233,22 @@ describe("further tag.add() tests with destination = inside", function()
       <h3>Partition</h3>
     </div>]]
         )
+    end)
+end)
+
+-------------------------------------------- Svelte
+
+describe("tag.add() on current catalyst node", function()
+    before_each(function() h.set_buffer_content_as_svelte_file() end)
+    after_each(function() h.clean_up() end)
+
+    it("destination = next", function()
+        initiate("24gg^", "<h2>", h.catalyst_first)
+        add({ "li", "next", "next" }, "<li>next</li>", { 27, 4 }, "    <li>next</li>")
+    end)
+
+    it("destination = previous", function()
+        initiate("24gg^", "<h2>", h.catalyst_first)
+        add({ "h3", "previous", "prev" }, "<h3>prev</h3>", { 24, 4 }, "    <h3>prev</h3>")
     end)
 end)

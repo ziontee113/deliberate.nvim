@@ -19,15 +19,13 @@ end
 ---@param node TSNode
 ---@return number, number
 local add_tag_after_node = function(destination, replacement, node)
-    local _, start_col, end_row = node:range()
+    local start_row, start_col, end_row = node:range()
+    local target_row = destination == "previous" and start_row or end_row
     local row_offset = destination == "previous" and 0 or 1
-    local target_row = end_row + row_offset
+    target_row = target_row + row_offset
 
     api.nvim_buf_set_lines(catalyst.buf(), target_row, target_row, false, { replacement })
-
-    local update_row = target_row
-    local update_col = start_col
-    return update_row, update_col
+    return target_row, start_col
 end
 
 ---@class tag_add_Opts
