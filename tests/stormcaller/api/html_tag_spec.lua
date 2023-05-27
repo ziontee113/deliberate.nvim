@@ -251,4 +251,35 @@ describe("tag.add() on current catalyst node", function()
         initiate("24gg^", "<h2>", h.catalyst_first)
         add({ "h3", "previous", "prev" }, "<h3>prev</h3>", { 24, 4 }, "    <h3>prev</h3>")
     end)
+
+    it("destination = inside, tag already has children", function()
+        initiate("32gg^", "<h1>Ligma</h1>")
+        add({ "ul", "next", "" }, "<ul></ul>", { 33, 4 })
+        add({ "li", "inside", "ligma what?" }, "<li>ligma what?</li>", { 34, 8 })
+        h.node_has_text(
+            catalyst.node():parent():parent(),
+            [[<section>
+    <h1>Ligma</h1>
+    <ul>
+        <li>ligma what?</li>
+    </ul>
+    <h3>is a made-up term</h3>
+    <p>that gained popularity as part of an Internet prank or meme.</p>
+</section>]]
+        )
+    end)
+
+    it("destination = inside, tag already has children", function()
+        initiate("31gg^", "<section>", h.catalyst_first)
+        add({ "button", "inside", "OK" }, "<button>OK</button>", { 35, 4 })
+        h.node_has_text(
+            catalyst.node():parent(),
+            [[<section>
+    <h1>Ligma</h1>
+    <h3>is a made-up term</h3>
+    <p>that gained popularity as part of an Internet prank or meme.</p>
+    <button>OK</button>
+</section>]]
+        )
+    end)
 end)

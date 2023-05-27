@@ -11,7 +11,7 @@ local aggregator = require("stormcaller.lib.tree-sitter.language_aggregator")
 local find_indents = function(buf, node)
     local start_row = node:range()
     local first_line = api.nvim_buf_get_lines(buf, start_row, start_row + 1, false)[1]
-    return string.match(first_line, "^%s+")
+    return string.match(first_line, "^%s+") or ""
 end
 
 ---@param destination "next" | "previous" | "inside"
@@ -92,6 +92,7 @@ M.add = function(o)
         local og_node = selection.nodes()[i]
         local content = o.content or "###"
         local indents = find_indents(catalyst.buf(), og_node)
+
         local replacement = string.format("%s<%s>%s</%s>", indents, o.tag, content, o.tag)
 
         if o.destination == "inside" then
