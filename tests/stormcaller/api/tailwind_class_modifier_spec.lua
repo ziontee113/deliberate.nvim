@@ -24,7 +24,7 @@ local cs = function(a, t, f) change_class(tcm.change_spacing, a, t, f) end
 local tc = function(a, t, f) change_class(tcm.change_text_color, a, t, f) end
 local bc = function(a, t, f) change_class(tcm.change_background_color, a, t, f) end
 
---------------------------------------------
+-------------------------------------------- Typescriptreact
 
 describe("change_padding()", function()
     before_each(function() h.set_buffer_content_as_multiple_react_components() end)
@@ -157,5 +157,54 @@ describe("change_text_color() & change_background_color()", function()
             '<li className="text-red-200">Home</li>',
             '<li className="text-red-200">Contacts</li>',
         })
+    end)
+end)
+
+-------------------------------------------- Svelte
+
+describe("change_padding()", function()
+    before_each(function() h.set_buffer_content_as_svelte_file() end)
+    after_each(function() h.clean_up() end)
+
+    it("adds class property and specified class for tag with no classNames", function()
+        initiate("32gg^", "<h1>Ligma</h1>")
+        cp({ "omni", "p-4" }, '<h1 class="p-4">Ligma</h1>')
+    end)
+
+    it("append / replace specified class for tag that already has classNames", function()
+        initiate("14gg^", '<span class="welcome">', h.catalyst_first)
+        cp({ "omni", "p-4" }, '<span class="welcome p-4">', h.catalyst_first)
+        cp({ "omni", "p-8" }, '<span class="welcome p-8">', h.catalyst_first)
+        cp({ "x", "px-16" }, '<span class="welcome p-8 px-16">', h.catalyst_first)
+        cp({ "omni", "p-4" }, '<span class="welcome p-4 px-16">', h.catalyst_first)
+    end)
+
+    it("removes equivalent padding axis if value passed in is empty string", function()
+        initiate("14gg^", '<span class="welcome">', h.catalyst_first)
+        cp({ "omni", "p-4" }, '<span class="welcome p-4">', h.catalyst_first)
+        cp({ "omni", "" }, '<span class="welcome">', h.catalyst_first)
+    end)
+end)
+
+describe("change_margin() & change_spacing()", function()
+    before_each(function() h.set_buffer_content_as_svelte_file() end)
+    after_each(function() h.clean_up() end)
+
+    it("adds / replace margin and spacing classes correctly", function()
+        initiate("14gg^", '<span class="welcome">', h.catalyst_first)
+        cm({ "omni", "m-4" }, '<span class="welcome m-4">', h.catalyst_first)
+        cm({ "y", "my-40" }, '<span class="welcome m-4 my-40">', h.catalyst_first)
+        cp({ "y", "py-20" }, '<span class="welcome m-4 my-40 py-20">', h.catalyst_first)
+    end)
+end)
+
+describe("change_text_color() & change_background_color()", function()
+    before_each(function() h.set_buffer_content_as_svelte_file() end)
+    after_each(function() h.clean_up() end)
+
+    it("adds / replace margin and spacing classes correctly", function()
+        initiate("14gg^", '<span class="welcome">', h.catalyst_first)
+        tc("text-white", '<span class="welcome text-white">', h.catalyst_first)
+        bc("bg-gray-400", '<span class="welcome text-white bg-gray-400">', h.catalyst_first)
     end)
 end)

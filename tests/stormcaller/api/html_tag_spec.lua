@@ -252,7 +252,7 @@ describe("tag.add() on current catalyst node", function()
         add({ "h3", "previous", "prev" }, "<h3>prev</h3>", { 24, 4 }, "    <h3>prev</h3>")
     end)
 
-    it("destination = inside, tag already has children", function()
+    it("destination = inside, tag empty, doesn't have children", function()
         initiate("32gg^", "<h1>Ligma</h1>")
         add({ "ul", "next", "" }, "<ul></ul>", { 33, 4 })
         add({ "li", "inside", "ligma what?" }, "<li>ligma what?</li>", { 34, 8 })
