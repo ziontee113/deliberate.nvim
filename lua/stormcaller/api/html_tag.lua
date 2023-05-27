@@ -75,16 +75,16 @@ end
 ---@return number, number
 local function handle_inside_has_children(html_children, replacement)
     local last_child = html_children[#html_children]
-    -- setting the child to `last_child`, so we land correctly at the target node
-    -- when `navigator.move()` is called at the end of `tag.add()`
     catalyst.set_node(last_child)
+    catalyst.set_node_point("start")
+    catalyst.move_to()
     return add_tag_after_node("next", replacement, last_child)
 end
 
 ---@param index number
 ---@param replacement string
 ---@param indents string
----@return number, number
+---@return number, number, number
 local function handle_destination_inside(index, replacement, indents)
     local update_row, update_col
     replacement = string.rep(" ", vim.bo.tabstop) .. replacement
@@ -95,11 +95,13 @@ local function handle_destination_inside(index, replacement, indents)
     else
         update_row, update_col = handle_inside_has_children(html_children, replacement)
     end
-    return update_row, update_col
+    return update_row, update_col, html_children
 end
 
 ---@param o tag_add_Opts
 M.add = function(o)
+    local children
+
     for i = 1, #selection.nodes() do
         local update_row, update_col
         local og_node = selection.nodes()[i]
@@ -108,7 +110,7 @@ M.add = function(o)
         local replacement = string.format("%s<%s>%s</%s>", indents, o.tag, content, o.tag)
 
         if o.destination == "inside" then
-            update_row, update_col = handle_destination_inside(i, replacement, indents)
+            update_row, update_col, children = handle_destination_inside(i, replacement, indents)
         else
             update_row, update_col = add_tag_after_node(o.destination, replacement, og_node)
         end
@@ -118,7 +120,11 @@ M.add = function(o)
     end
 
     if #selection.nodes() == 1 then
-        navigator.move({ destination = o.destination == "previous" and "previous" or "next" })
+        if children and #children > 0 then
+            navigator.move({ destination = "next-sibling" })
+        else
+            navigator.move({ destination = o.destination == "previous" and "previous" or "next" })
+        end
     end
 end
 
