@@ -3,7 +3,6 @@ local api = vim.api
 
 local catalyst = require("stormcaller.lib.catalyst")
 local selection = require("stormcaller.lib.selection")
-local navigator = require("stormcaller.api.navigator")
 local aggregator = require("stormcaller.lib.tree-sitter.language_aggregator")
 
 ---@param buf number
@@ -15,32 +14,18 @@ local find_indents = function(buf, node)
     return string.match(first_line, "^%s+")
 end
 
----@param index number
----@param end_row number
----@param start_col number
-local function update_currently_selected_node(index, end_row, start_col)
-    local root = aggregator.get_updated_root(catalyst.buf())
-
-    local updated_node =
-        root:named_descendant_for_range(end_row + 1, start_col, end_row + 1, start_col)
-    updated_node = aggregator.get_html_node(updated_node)
-    if not updated_node then error("can't return correct updated_node") end
-
-    selection.update_specific_selection_index(index, updated_node)
-end
-
 ---@param destination "next" | "previous" | "inside"
 ---@param replacement string
 ---@param node TSNode
 ---@return number, number
 local add_tag_after_node = function(destination, replacement, node)
     local _, start_col, end_row = node:range()
-    local offset = destination == "previous" and 0 or 1
-    local target_row = end_row + offset
+    local row_offset = destination == "previous" and 0 or 1
+    local target_row = end_row + row_offset
 
     api.nvim_buf_set_lines(catalyst.buf(), target_row, target_row, false, { replacement })
 
-    local update_row = target_row - 1
+    local update_row = target_row
     local update_col = start_col
     return update_row, update_col
 end
@@ -61,11 +46,8 @@ local function handle_inside_has_no_children(indents, index, replacement)
 
     api.nvim_buf_set_text(catalyst.buf(), b_row, b_col, b_row, b_col, { "", replacement, indents })
 
-    -- we do this because `nvim_buf_set_text()` moves the cursor down
-    -- if cursor row is equal or below where we start changing buffer text.
-    if selection.current_selection_matches_catalyst(index) then catalyst.move_to() end
-
-    local update_row = b_row
+    local row_offset = 1
+    local update_row = b_row + row_offset
     local update_col = b_col + vim.bo.tabstop
     return update_row, update_col
 end
@@ -86,7 +68,7 @@ end
 ---@param index number
 ---@param replacement string
 ---@param indents string
----@return number, number, number
+---@return number, number
 local function handle_destination_inside(index, replacement, indents)
     local update_row, update_col
     replacement = string.rep(" ", vim.bo.tabstop) .. replacement
@@ -97,12 +79,15 @@ local function handle_destination_inside(index, replacement, indents)
     else
         update_row, update_col = handle_inside_has_children(html_children, replacement)
     end
-    return update_row, update_col, html_children
+    return update_row, update_col
 end
 
 ---@param o tag_add_Opts
 M.add = function(o)
-    local children
+    local should_move_to_newly_created_tag
+    if #selection.nodes() == 1 and selection.item_matches_catalyst(1) then
+        should_move_to_newly_created_tag = true
+    end
 
     for i = 1, #selection.nodes() do
         local update_row, update_col
@@ -112,21 +97,19 @@ M.add = function(o)
         local replacement = string.format("%s<%s>%s</%s>", indents, o.tag, content, o.tag)
 
         if o.destination == "inside" then
-            update_row, update_col, children = handle_destination_inside(i, replacement, indents)
+            update_row, update_col = handle_destination_inside(i, replacement, indents)
         else
             update_row, update_col = add_tag_after_node(o.destination, replacement, og_node)
         end
 
         selection.refresh_tree()
-        update_currently_selected_node(i, update_row, update_col)
+        selection.update_item(i, update_row, update_col)
     end
 
-    if #selection.nodes() == 1 then
-        if children and #children > 0 then
-            navigator.move({ destination = "next-sibling" })
-        else
-            navigator.move({ destination = o.destination == "previous" and "previous" or "next" })
-        end
+    if should_move_to_newly_created_tag then
+        catalyst.set_node(selection.nodes()[1])
+        catalyst.set_node_point("start")
+        catalyst.move_to()
     end
 end
 

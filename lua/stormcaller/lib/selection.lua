@@ -54,7 +54,7 @@ local items_are_identical = function(a, b)
 end
 
 ---@param index number
-M.current_selection_matches_catalyst = function(index)
+M.item_matches_catalyst = function(index)
     return items_are_identical(selection[index], current_catalyst_info)
 end
 
@@ -128,45 +128,49 @@ M.nodes = function()
     return nodes
 end
 
+---@param root TSNode
+---@param row number
+---@param col number
+---@return TSNode
+local get_updated_node_from_position = function(root, row, col)
+    local updated_node = root:named_descendant_for_range(row, col, row, col)
+    if not updated_node then error("can't return updated_node from given row & col") end
+    return aggregator.get_html_node(updated_node)
+end
+
+---@param root TSNode
+---@param item CatalystInfo
+---@return TSNode
+local get_updated_node_from_item = function(root, item)
+    local row, col = unpack(vim.api.nvim_buf_get_extmark_by_id(item.buf, ns, item.extmark_id, {}))
+    return get_updated_node_from_position(root, row, col)
+end
+
 ---@param index number
----@param node TSNode
-M.update_specific_selection_index = function(index, node)
-    selection[index].node = node
+---@param row number
+---@param col number
+M.update_item = function(index, row, col)
+    local root = aggregator.get_updated_root(current_catalyst_info.buf)
+    local updated_node = get_updated_node_from_position(root, row, col)
+    selection[index].node = updated_node
+
     vim.api.nvim_buf_del_extmark(selection[index].buf, ns, selection[index].extmark_id)
-    local new_extmark_id = set_extmark_for_node(selection[index].buf, node)
+    local new_extmark_id = set_extmark_for_node(selection[index].buf, updated_node)
     selection[index].extmark_id = new_extmark_id
 end
 
 ---This function must be called whenever we programatically change buffer content (e.g by using `nvim_buf_set_text()`).
 M.refresh_tree = function()
     if #selection == 0 then return end
-
-    local updated_root = aggregator.get_updated_root(current_catalyst_info.buf)
+    local root = aggregator.get_updated_root(current_catalyst_info.buf)
 
     for i, item in ipairs(selection) do
-        local row, col =
-            unpack(vim.api.nvim_buf_get_extmark_by_id(item.buf, ns, item.extmark_id, {}))
-
-        local updated_node = updated_root:named_descendant_for_range(row, col, row, col)
-        updated_node = aggregator.get_html_node(updated_node)
-
-        if not updated_node then error("we're screwed for not able to find updated_node") end
-
-        selection[i].node = updated_node
+        selection[i].node = get_updated_node_from_item(root, item)
     end
 
-    local row, col = unpack(
-        vim.api.nvim_buf_get_extmark_by_id(
-            current_catalyst_info.buf,
-            ns,
-            current_catalyst_info.extmark_id,
-            {}
-        )
+    require("stormcaller.lib.catalyst").set_node(
+        get_updated_node_from_item(root, current_catalyst_info)
     )
-    local updated_node = updated_root:named_descendant_for_range(row, col, row, col)
-    if not updated_node then error("can't find updated_node for catalyst") end
-    updated_node = aggregator.get_html_node(updated_node)
-    require("stormcaller.lib.catalyst").set_node(updated_node)
 end
 
 M.clear = function()
