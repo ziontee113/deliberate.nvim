@@ -8,7 +8,7 @@ describe("catalyst.initiate() for tsx", function()
     after_each(function() h.clean_up() end)
 
     it(
-        "puts cursor at start of closest tag, with initial cursor inside html_element",
+        "puts cursor at start of current html_element, with initial cursor inside html_element",
         function() initiate("19gg0ff", "<li>", h.catalyst_first, { 18, 8 }) end
     )
     it(
@@ -36,7 +36,7 @@ describe("catalyst.initiate() for svelte()", function()
     after_each(function() h.clean_up() end)
 
     it(
-        "puts cursor at start of closest tag, initial cursor inside html_element",
+        "puts cursor at start of current html_element, initial cursor inside html_element",
         function() initiate("32ggfm", "<h1>Ligma</h1>", h.catalyst_has, { 32, 4 }) end
     )
     it(

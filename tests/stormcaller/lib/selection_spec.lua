@@ -1,129 +1,95 @@
-local catalyst = require("stormcaller.lib.catalyst")
 local navigator = require("stormcaller.api.navigator")
 local selection = require("stormcaller.lib.selection")
-local helpers = require("stormcaller.helpers")
+
+local h = require("stormcaller.helpers")
+local initiate = h.initiate
+local mova = h.move_then_assert_selection
 
 describe("typescriptreact selection.nodes()", function()
-    helpers.set_buffer_content_as_multiple_react_components()
+    h.set_buffer_content_as_multiple_react_components()
 
-    vim.cmd("norm! 22gg^") -- cursor to <li>Contacts</li>
-
-    it("returns correct nodes after initiating catalyst", function()
-        catalyst.initiate({ win = 0, buf = 0 })
-        helpers.node_has_text(selection.nodes()[1], "<li>Contacts</li>")
+    it("works on initiate", function() initiate("22gg^", "<li>Contacts</li>") end)
+    it("move next 2 times", function()
+        mova("next", 1, { "<li>FAQ</li>" }, "<li>FAQ</li>")
+        mova("next", 1, { "<OtherComponent />" }, "<OtherComponent />")
     end)
-
-    it("returns correct nodes after moving catalyst", function()
-        navigator.move({ destination = "next" })
-        assert.equals(1, #selection.nodes())
-        helpers.node_has_text(selection.nodes()[1], "<li>FAQ</li>")
-
-        navigator.move({ destination = "next" })
-        assert.equals(1, #selection.nodes())
-        helpers.node_has_text(selection.nodes()[1], "<OtherComponent />")
-    end)
-
-    it("returns correct nodes after selecting with tracking once", function()
-        navigator.move({ destination = "previous", select_move = true })
-        helpers.node_has_text(selection.nodes()[1], "<OtherComponent />")
-    end)
-
+    it(
+        "returns correct nodes after selecting with select_move once",
+        function() mova({ "previous", true }, 1, { "<OtherComponent />" }, "<li>FAQ</li>") end
+    )
     it("returns correct nodes after selecting with tracking 2nd and 3rd time", function()
-        navigator.move({ destination = "previous", select_move = true })
-        helpers.node_has_text(selection.nodes()[1], "<OtherComponent />")
-        helpers.node_has_text(selection.nodes()[2], "<li>FAQ</li>")
-
-        navigator.move({ destination = "previous", select_move = true })
-        helpers.node_has_text(selection.nodes()[1], "<OtherComponent />")
-        helpers.node_has_text(selection.nodes()[2], "<li>FAQ</li>")
-        helpers.node_has_text(selection.nodes()[3], "<li>Contacts</li>")
+        mova({ "previous", true }, 2, { "<OtherComponent />", "<li>FAQ</li>" }, "<li>Contacts</li>")
+        mova({ "previous", true }, 3, {
+            "<OtherComponent />",
+            "<li>FAQ</li>",
+            "<li>Contacts</li>",
+        }, { "<li>", h.catalyst_first })
     end)
-
     it("returned nodes stays the same due to new node already in selection table", function()
         navigator.move({ destination = "next" })
-        navigator.move({ destination = "next", select_move = true })
-
-        assert.equals(3, #selection.nodes())
-        helpers.node_has_text(selection.nodes()[1], "<OtherComponent />")
-        helpers.node_has_text(selection.nodes()[2], "<li>FAQ</li>")
-        helpers.node_has_text(selection.nodes()[3], "<li>Contacts</li>")
+        mova({ "next", true }, 3, {
+            "<OtherComponent />",
+            "<li>FAQ</li>",
+            "<li>Contacts</li>",
+        }, "<li>FAQ</li>")
     end)
-
     it("returns only current catalyst node after clear() was called", function()
         selection.clear()
         assert.equals(1, #selection.nodes())
-        helpers.node_has_text(selection.nodes()[1], "<li>FAQ</li>")
+        h.node_has_text(selection.nodes()[1], "<li>FAQ</li>")
     end)
 
-    helpers.clean_up()
+    h.clean_up()
 end)
 
 describe("svelte selection.nodes()", function()
-    helpers.set_buffer_content_as_svelte_file()
+    h.set_buffer_content_as_svelte_file()
 
-    vim.cmd("norm! 32gg^")
-
-    it("returns correct nodes after initiating catalyst", function()
-        catalyst.initiate({ win = 0, buf = 0 })
-        helpers.node_has_text(selection.nodes()[1], "<h1>Ligma</h1>")
-    end)
-
+    it("works on initiate", function() initiate("32gg^", "<h1>Ligma</h1>") end)
     it("returns correct nodes after moving catalyst", function()
-        navigator.move({ destination = "next" })
-        assert.equals(1, #selection.nodes())
-        helpers.node_has_text(selection.nodes()[1], "<h3>is a made-up term</h3>")
-
-        navigator.move({ destination = "next" })
-        assert.equals(1, #selection.nodes())
-        helpers.node_has_text(
-            selection.nodes()[1],
+        mova("next", 1, "<h3>is a made-up term</h3>", "<h3>is a made-up term</h3>")
+        mova(
+            "next",
+            1,
+            "<p>that gained popularity as part of an Internet prank or meme.</p>",
             "<p>that gained popularity as part of an Internet prank or meme.</p>"
         )
     end)
-
-    it("returns correct nodes after selecting with tracking once", function()
-        navigator.move({ destination = "previous", select_move = true })
-        helpers.node_has_text(
-            selection.nodes()[1],
-            "<p>that gained popularity as part of an Internet prank or meme.</p>"
-        )
-    end)
-
+    it(
+        "returns correct nodes after selecting with tracking once",
+        function()
+            mova(
+                { "previous", true },
+                1,
+                { "<p>that gained popularity as part of an Internet prank or meme.</p>" },
+                "<h3>is a made-up term</h3>"
+            )
+        end
+    )
     it("returns correct nodes after selecting with tracking 2nd and 3rd time", function()
-        navigator.move({ destination = "previous", select_move = true })
-        helpers.node_has_text(
-            selection.nodes()[1],
-            "<p>that gained popularity as part of an Internet prank or meme.</p>"
-        )
-        helpers.node_has_text(selection.nodes()[2], "<h3>is a made-up term</h3>")
-
-        navigator.move({ destination = "previous", select_move = true })
-        helpers.node_has_text(
-            selection.nodes()[1],
-            "<p>that gained popularity as part of an Internet prank or meme.</p>"
-        )
-        helpers.node_has_text(selection.nodes()[2], "<h3>is a made-up term</h3>")
-        helpers.node_has_text(selection.nodes()[3], "<h1>Ligma</h1>")
+        mova({ "previous", true }, 2, {
+            "<p>that gained popularity as part of an Internet prank or meme.</p>",
+            "<h3>is a made-up term</h3>",
+        }, "<h1>Ligma</h1>")
+        mova({ "previous", true }, 3, {
+            "<p>that gained popularity as part of an Internet prank or meme.</p>",
+            "<h3>is a made-up term</h3>",
+            "<h1>Ligma</h1>",
+        }, { "<section>", h.catalyst_first })
     end)
-
     it("returned nodes stays the same due to new node already in selection table", function()
         navigator.move({ destination = "next" })
-        navigator.move({ destination = "next", select_move = true })
-
-        assert.equals(3, #selection.nodes())
-        helpers.node_has_text(
-            selection.nodes()[1],
-            "<p>that gained popularity as part of an Internet prank or meme.</p>"
-        )
-        helpers.node_has_text(selection.nodes()[2], "<h3>is a made-up term</h3>")
-        helpers.node_has_text(selection.nodes()[3], "<h1>Ligma</h1>")
+        mova({ "next", true }, 3, {
+            "<p>that gained popularity as part of an Internet prank or meme.</p>",
+            "<h3>is a made-up term</h3>",
+            "<h1>Ligma</h1>",
+        }, "<h3>is a made-up term</h3>")
     end)
-
     it("returns only current catalyst node after clear() was called", function()
         selection.clear()
         assert.equals(1, #selection.nodes())
-        helpers.node_has_text(selection.nodes()[1], "<h3>is a made-up term</h3>")
+        h.node_has_text(selection.nodes()[1], "<h3>is a made-up term</h3>")
     end)
 
-    helpers.clean_up()
+    h.clean_up()
 end)

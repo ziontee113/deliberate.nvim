@@ -1,28 +1,20 @@
 require("tests.editor_config")
 
-local selection = require("stormcaller.lib.selection")
-local navigator = require("stormcaller.api.navigator")
-local helpers = require("stormcaller.helpers")
-
-local initiate = helpers.initiate
-
-local move = function(destination, wanted_text, position, assert_fn)
-    navigator.move({ destination = destination })
-    assert_fn = assert_fn or helpers.catalyst_has
-    assert_fn(wanted_text)
-    assert.are.same(position, vim.api.nvim_win_get_cursor(0))
-end
+local h = require("stormcaller.helpers")
+local initiate = h.initiate
+local move = h.move
+local move_then_assert_selection = h.move_then_assert_selection
 
 local long_li_tag = [[<li>
           A new study found that coffee drinkers have a lower risk of liver
           cancer. So, drink up!
         </li>]]
-local first_line = helpers.catalyst_first
-local last_line = helpers.catalyst_last
+local first_line = h.catalyst_first
+local last_line = h.catalyst_last
 
 describe("typescriptreact navigator.move()", function()
-    before_each(function() helpers.set_buffer_content_as_multiple_react_components() end)
-    after_each(function() helpers.clean_up() end)
+    before_each(function() h.set_buffer_content_as_multiple_react_components() end)
+    after_each(function() h.clean_up() end)
 
     it("direction = next-sibling", function()
         initiate("17gg^", "<li>Home</li>")
@@ -71,32 +63,9 @@ describe("typescriptreact navigator.move()", function()
     end)
 end)
 
-local move_then_assert_selection = function(opts, quantity, text_tbl, catalyst_text)
-    if type(opts) == "string" then
-        opts = { destination = opts }
-    elseif type(opts) == "table" then
-        opts = { destination = opts[1], select_move = opts[2] }
-    end
-    navigator.move(opts)
-
-    assert.equals(#selection.nodes(), quantity)
-
-    if type(text_tbl) == "string" then text_tbl = { text_tbl } end
-    for i, item in ipairs(text_tbl) do
-        if type(item) == "string" then
-            helpers.node_has_text(selection.nodes()[i], item)
-        else
-            local text, assert_fn = unpack(item)
-            assert_fn(selection.nodes()[i], text)
-        end
-    end
-
-    helpers.catalyst_has(catalyst_text)
-end
-
 describe("navigator.move() with `select_move` option", function()
-    before_each(function() helpers.set_buffer_content_as_multiple_react_components() end)
-    after_each(function() helpers.clean_up() end)
+    before_each(function() h.set_buffer_content_as_multiple_react_components() end)
+    after_each(function() h.clean_up() end)
 
     it("update `selected_nodes` correctly without using `select_move` option", function()
         initiate("17gg^", "<li>Home</li>")

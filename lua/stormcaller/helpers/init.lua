@@ -2,6 +2,7 @@ local M = {}
 
 local catalyst = require("stormcaller.lib.catalyst")
 local selection = require("stormcaller.lib.selection")
+local navigator = require("stormcaller.api.navigator")
 
 -------------------------------------------- ...
 
@@ -16,6 +17,40 @@ M.initiate_and_check_cursor_positon = function(cmd, wanted_text, assert_fn, pos)
     M.initiate(cmd, wanted_text, assert_fn)
     if not pos then return end
     assert.same(pos, vim.api.nvim_win_get_cursor(0))
+end
+
+M.move = function(destination, wanted_text, position, assert_fn)
+    navigator.move({ destination = destination })
+    assert_fn = assert_fn or M.catalyst_has
+    assert_fn(wanted_text)
+    assert.are.same(position, vim.api.nvim_win_get_cursor(0))
+end
+
+M.move_then_assert_selection = function(opts, quantity, text_tbl, catalyst_text)
+    if type(opts) == "string" then
+        opts = { destination = opts }
+    elseif type(opts) == "table" then
+        opts = { destination = opts[1], select_move = opts[2] }
+    end
+    navigator.move(opts)
+
+    assert.equals(#selection.nodes(), quantity)
+
+    if type(text_tbl) == "string" then text_tbl = { text_tbl } end
+    for i, item in ipairs(text_tbl) do
+        if type(item) == "string" then
+            M.node_has_text(selection.nodes()[i], item)
+        else
+            local text, assert_fn = unpack(item)
+            assert_fn(selection.nodes()[i], text)
+        end
+    end
+
+    local catalyst_assert_fn = M.catalyst_has
+    if type(catalyst_text) == "table" then
+        catalyst_text, catalyst_assert_fn = unpack(catalyst_text)
+    end
+    catalyst_assert_fn(catalyst_text)
 end
 
 -------------------------------------------- ...
