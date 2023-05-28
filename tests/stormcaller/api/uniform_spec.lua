@@ -1,6 +1,6 @@
 require("tests.editor_config")
-local selection = require("stormcaller.lib.selection")
 
+local selection = require("stormcaller.lib.selection")
 local uniform = require("stormcaller.api.uniform")
 local navigator = require("stormcaller.api.navigator")
 local tag = require("stormcaller.api.html_tag")
@@ -12,7 +12,7 @@ local move = h.move
 local movesel = h.move_then_assert_selection
 local long_li_tag = h.long_li_tag
 
-describe("...", function()
+describe("uniform.move()", function()
     before_each(function() h.set_buffer_content_as_multiple_react_components() end)
     after_each(function() h.clean_up() end)
 
@@ -54,7 +54,7 @@ describe("...", function()
         })
     end)
 
-    it("works on destination == next", function()
+    it("works on destination = next & destination == previous", function()
         initiate("35gg^", "<ul>", h.catalyst_first)
         add({ "div", "next", "" }, "<div></div>", { 39, 6 })
         add({ "ul", "inside", "" }, "<ul></ul>", { 40, 8 })
