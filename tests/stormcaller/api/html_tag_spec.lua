@@ -1,4 +1,5 @@
 require("tests.editor_config")
+local u = require("stormcaller.lib.utils")
 
 local catalyst = require("stormcaller.lib.catalyst")
 local selection = require("stormcaller.lib.selection")
@@ -226,6 +227,55 @@ describe("further tag.add() tests with destination = inside", function()
       <p>Beyonce</p>
       <h3>Partition</h3>
     </div>]]
+        )
+    end)
+end)
+
+-- Test out `tag.add()` interation with vim count
+describe("typescriptreact navigator.move() with count", function()
+    before_each(function() h.set_buffer_content_as_multiple_react_components() end)
+    after_each(function() h.clean_up() end)
+
+    it("direction = next", function()
+        initiate("37gg^", "<li>Sign Up</li>")
+
+        vim.cmd("norm! 2")
+        u.execute_with_count(
+            html_tag.add,
+            { tag = "h2", destination = "next", content = "count=2" }
+        )
+        h.catalyst_has("<h2>count=2</h2>", { 39, 8 })
+        h.node_has_text(
+            catalyst.node():parent(),
+            [[<ul>
+        <li>Log In</li>
+        <li>Sign Up</li>
+        <h2>count=2</h2>
+        <h2>count=2</h2>
+      </ul>]]
+        )
+
+        -- test multi select with count
+        h.loop(2, navigator.move, { { destination = "previous", select_move = true } })
+        h.selection_is(2, { "<h2>count=2</h2>", "<h2>count=2</h2>" })
+
+        vim.cmd("norm! 3")
+        u.execute_with_count(html_tag.add, { tag = "h3", destination = "previous", content = "C3" })
+        h.catalyst_has("<li>Sign Up</li>", { 37, 8 })
+        h.node_has_text(
+            catalyst.node():parent(),
+            [[<ul>
+        <li>Log In</li>
+        <li>Sign Up</li>
+        <h3>C3</h3>
+        <h3>C3</h3>
+        <h3>C3</h3>
+        <h2>count=2</h2>
+        <h3>C3</h3>
+        <h3>C3</h3>
+        <h3>C3</h3>
+        <h2>count=2</h2>
+      </ul>]]
         )
     end)
 end)
