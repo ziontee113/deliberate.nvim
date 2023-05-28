@@ -5,6 +5,7 @@ local selection = require("stormcaller.lib.selection")
 local lib_ts = require("stormcaller.lib.tree-sitter")
 local aggregator = require("stormcaller.lib.tree-sitter.language_aggregator")
 local lua_patterns = require("stormcaller.lib.lua_patterns")
+local utils = require("stormcaller.lib.utils")
 
 ---@param buf number
 ---@param node TSNode
@@ -22,18 +23,9 @@ local function set_empty_className_property_if_needed(buf, node)
 end
 
 ---@param class_names string[]
----@return string[]
-local function remove_empty_strings(class_names)
-    for i = #class_names, 1, -1 do
-        if class_names[i] == "" then table.remove(class_names, i) end
-    end
-    return class_names
-end
-
----@param class_names string[]
 ---@return string
 local function format_class_names(class_names)
-    class_names = remove_empty_strings(class_names)
+    class_names = utils.remove_empty_strings(class_names)
     local str = table.concat(class_names, " ")
     return string.format('"%s"', str)
 end
@@ -60,6 +52,10 @@ end
 ---@param value string
 ---@return string
 local function process_new_class_names(class_names, patterns, value)
+    ---- To support "Change Classes Groups"
+    -- TODO: remove all classes from given `patterns_to_remove`.
+    -- TODO: remove all classes from given table.
+
     local replaced, new_class_names = replace_class_names(class_names, patterns, value)
     if replaced then
         class_names = new_class_names
@@ -90,7 +86,7 @@ local change_tailwind_classes = function(o)
     if not catalyst.is_active() then return end
 
     for i = 1, #selection.nodes() do
-        -- QUESTION: why use `selection.nodes()[i]` instead of using `for _, node in ipairs(selection.nodes())`?
+        -- QUESTION: why use `selection.nodes()[i]` instead of using `for i, node in ipairs(selection.nodes())`?
         -- ANSWER: `selection.nodes()[i]` makes sure we get the "latest updated version of the node" (handled by `selection` module).
         -- If we use `ipairs`, after we change buffer content (like using `nvim_buf_set_text()`),
         -- the `node` we get from `ipairs` doesn't get updated, which leads to false computation.
