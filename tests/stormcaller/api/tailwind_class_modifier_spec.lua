@@ -160,6 +160,16 @@ describe("change_text_color() & change_background_color()", function()
     end)
 end)
 
+describe("...", function()
+    before_each(function() h.set_buffer_content_as_multiple_react_components() end)
+    after_each(function() h.clean_up() end)
+
+    it("...", function()
+        initiate("22gg^", "<li>Contacts</li>")
+        -- TODO:
+    end)
+end)
+
 -------------------------------------------- Svelte
 
 describe("change_padding()", function()

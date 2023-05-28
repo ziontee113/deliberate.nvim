@@ -90,20 +90,15 @@ local change_tailwind_classes = function(o)
     if not catalyst.is_active() then return end
 
     for i = 1, #selection.nodes() do
-        -- we need to get `node` this way because if not, we'll get its "old content" (pre-modified)
-        -- in this case, the `replace_node_text()` of the previous iteration might've modified the node's content,
-        -- so we need to use `selection.nodes()` to get the updated nodes, otherwise everything breaks.
-        local node = selection.nodes()[i]
+        -- QUESTION: why use `selection.nodes()[i]` instead of using `for _, node in ipairs(selection.nodes())`?
+        -- ANSWER: `selection.nodes()[i]` makes sure we get the "latest updated version of the node" (handled by `selection` module).
+        -- If we use `ipairs`, after we change buffer content (like using `nvim_buf_set_text()`),
+        -- the `node` we get from `ipairs` doesn't get updated, which leads to false computation.
 
-        set_empty_className_property_if_needed(catalyst.buf(), node)
-
-        -- we need to get `node` this way because if not, we'll get its "old content" (pre-modified)
-        -- in this case, `set_empty_className_property_if_needed()` might've modified the node's content,
-        -- so we need to use `selection.nodes()` to get the updated nodes, otherwise everything breaks.
-        node = selection.nodes()[i]
+        set_empty_className_property_if_needed(catalyst.buf(), selection.nodes()[i])
 
         local class_names, className_string_node =
-            aggregator.extract_class_names(catalyst.buf(), node)
+            aggregator.extract_class_names(catalyst.buf(), selection.nodes()[i])
 
         local replacement = process_new_class_names(class_names, find_patterns(o), o.value)
 
