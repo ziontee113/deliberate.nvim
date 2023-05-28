@@ -110,5 +110,20 @@ describe("...", function()
 
         uniform.move({ destination = "previous" })
         h.selection_is(4, { "<li>2nd</li>", "<li>2nd</li>", "<li>2nd</li>", "<li>2nd</li>" })
+
+        uniform.move({ destination = "previous" })
+        h.selection_is(4, { "<li>1st</li>", "<li>1st</li>", "<li>1st</li>", "<li>1st</li>" })
+
+        uniform.move({ destination = "previous" })
+        local ul_content = [[<ul>
+          <li>1st</li>
+          <li>2nd</li>
+          <li>3rd</li>
+        </ul>]]
+        h.selection_is(4, { ul_content, ul_content, ul_content, ul_content })
+
+        -- should do nothing
+        uniform.move({ destination = "previous" })
+        h.selection_is(4, { ul_content, ul_content, ul_content, ul_content })
     end)
 end)

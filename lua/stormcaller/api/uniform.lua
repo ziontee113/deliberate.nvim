@@ -3,37 +3,61 @@ local aggregator = require("stormcaller.lib.tree-sitter.language_aggregator")
 
 local M = {}
 
+---@param targets TSNode[]
+---@return boolean | nil
 local update_selection_if_possible = function(targets)
     if #targets == #selection.nodes() then
         for i, node in ipairs(targets) do
             selection.update_item(i, nil, nil, node)
         end
+        return true
     end
 end
 
-local handle_siblings = function(destination)
+local function find_parents()
+    local targets = {}
+    for _, node in ipairs(selection.nodes()) do
+        local parent = aggregator.get_html_node(node:parent())
+        if parent then table.insert(targets, parent) end
+    end
+    return targets
+end
+
+local function find_siblings(destination)
     local sibling_direction = string.find(destination, "next") and "next" or "previous"
     local targets = {}
     for _, node in ipairs(selection.nodes()) do
         local next_siblings = aggregator.get_html_siblings(node, sibling_direction)
         if next_siblings[1] then table.insert(targets, next_siblings[1]) end
     end
-
-    update_selection_if_possible(targets)
+    return targets
 end
 
 local handle_parent = function()
-    local targets = {}
-    for _, node in ipairs(selection.nodes()) do
-        local parent = aggregator.get_html_node(node:parent())
-        if parent then table.insert(targets, parent) end
-    end
-
-    update_selection_if_possible(targets)
+    local parents = find_parents()
+    return update_selection_if_possible(parents)
 end
 
-local handle_previous_or_next = function(direction)
-    -- TODO:
+local handle_siblings = function(destination)
+    local targets = find_siblings(destination)
+    return update_selection_if_possible(targets)
+end
+
+local handle_previous_or_next = function(destination)
+    if not handle_siblings(destination) then
+        local parents = find_parents()
+        local overlap = false
+        for i, node in ipairs(parents) do
+            for j, parent in ipairs(parents) do
+                if i ~= j and node == parent then
+                    overlap = true
+                    break
+                end
+                if overlap then break end
+            end
+        end
+        if not overlap then update_selection_if_possible(parents) end
+    end
 end
 
 ---@class uniform_move_Args
