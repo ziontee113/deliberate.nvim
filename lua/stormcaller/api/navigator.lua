@@ -1,6 +1,7 @@
 local lib_ts = require("stormcaller.lib.tree-sitter")
 local aggregator = require("stormcaller.lib.tree-sitter.language_aggregator")
 local catalyst = require("stormcaller.lib.catalyst")
+local utils = require("stormcaller.lib.utils")
 
 local M = {}
 
