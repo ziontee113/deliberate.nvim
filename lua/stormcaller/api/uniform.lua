@@ -23,6 +23,15 @@ local function find_parents()
     return targets
 end
 
+local find_children = function()
+    local targets = {}
+    for _, node in ipairs(selection.nodes()) do
+        local children = aggregator.get_html_children(node)
+        if children then table.insert(targets, children[1]) end
+    end
+    return targets
+end
+
 local function find_siblings(destination)
     local sibling_direction = string.find(destination, "next") and "next" or "previous"
     local targets = {}
@@ -45,18 +54,23 @@ end
 
 local handle_previous_or_next = function(destination)
     if not handle_siblings(destination) then
-        local parents = find_parents()
-        local overlap = false
-        for i, node in ipairs(parents) do
-            for j, parent in ipairs(parents) do
-                if i ~= j and node == parent then
-                    overlap = true
-                    break
+        if destination == "previous" then
+            local parents = find_parents()
+            local overlap = false
+            for i, node in ipairs(parents) do
+                for j, parent in ipairs(parents) do
+                    if i ~= j and node == parent then
+                        overlap = true
+                        break
+                    end
+                    if overlap then break end
                 end
-                if overlap then break end
             end
+            if not overlap then update_selection_if_possible(parents) end
+        elseif destination == "next" then
+            local children = find_children()
+            update_selection_if_possible(children)
         end
-        if not overlap then update_selection_if_possible(parents) end
     end
 end
 
