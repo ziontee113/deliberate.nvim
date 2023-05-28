@@ -3,12 +3,9 @@ require("tests.editor_config")
 local h = require("stormcaller.helpers")
 local initiate = h.initiate
 local move = h.move
+local long_li_tag = h.long_li_tag
 local move_then_assert_selection = h.move_then_assert_selection
 
-local long_li_tag = [[<li>
-          A new study found that coffee drinkers have a lower risk of liver
-          cancer. So, drink up!
-        </li>]]
 local first_line = h.catalyst_first
 local last_line = h.catalyst_last
 

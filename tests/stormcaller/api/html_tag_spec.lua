@@ -7,15 +7,9 @@ local html_tag = require("stormcaller.api.html_tag")
 
 local h = require("stormcaller.helpers")
 local initiate = h.initiate
+local add = h.add
 local move = h.move
 local mova = h.move_then_assert_selection
-
-local add = function(args, has_text, cursor, has_entire_line)
-    html_tag.add({ tag = args[1], destination = args[2], content = args[3] })
-    h.catalyst_has(has_text)
-    if cursor then assert.same(cursor, vim.api.nvim_win_get_cursor(0)) end
-    if has_entire_line then h.catalyst_entire_first_line(has_entire_line) end
-end
 
 -------------------------------------------- Typescriptreact
 

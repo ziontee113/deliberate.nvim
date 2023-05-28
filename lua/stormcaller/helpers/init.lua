@@ -3,6 +3,7 @@ local M = {}
 local catalyst = require("stormcaller.lib.catalyst")
 local selection = require("stormcaller.lib.selection")
 local navigator = require("stormcaller.api.navigator")
+local html_tag = require("stormcaller.api.html_tag")
 
 -------------------------------------------- ...
 
@@ -58,6 +59,13 @@ M.move_then_assert_selection = function(opts, quantity, text_tbl, catalyst_text)
     catalyst_assert_fn(catalyst_text)
 end
 
+M.add = function(args, has_text, cursor, has_entire_line)
+    html_tag.add({ tag = args[1], destination = args[2], content = args[3] })
+    M.catalyst_has(has_text)
+    if cursor then assert.same(cursor, vim.api.nvim_win_get_cursor(0)) end
+    if has_entire_line then M.catalyst_entire_first_line(has_entire_line) end
+end
+
 -------------------------------------------- ...
 
 M.clean_up = function()
@@ -95,7 +103,10 @@ M.catalyst_has = function(want, pos)
     if pos then assert.are.same(pos, vim.api.nvim_win_get_cursor(0)) end
 end
 
-M.catalyst_first = function(want) M.node_first_line(catalyst.node(), want, catalyst.buf()) end
+M.catalyst_first = function(want, pos)
+    M.node_first_line(catalyst.node(), want, catalyst.buf())
+    if pos then assert.are.same(pos, vim.api.nvim_win_get_cursor(0)) end
+end
 
 M.catalyst_last = function(want)
     local cursor_node_text = vim.treesitter.get_node_text(catalyst.node(), catalyst.buf())
@@ -110,6 +121,11 @@ M.catalyst_entire_first_line = function(want)
 end
 
 -------------------------------------------- React
+
+M.long_li_tag = [[<li>
+          A new study found that coffee drinkers have a lower risk of liver
+          cancer. So, drink up!
+        </li>]]
 
 M.set_buffer_content_as_react_component = function()
     vim.bo.ft = "typescriptreact"

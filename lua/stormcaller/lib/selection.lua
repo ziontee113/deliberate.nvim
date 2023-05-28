@@ -147,11 +147,15 @@ local get_updated_node_from_item = function(root, item)
 end
 
 ---@param index number
----@param row number
----@param col number
-M.update_item = function(index, row, col)
-    local root = aggregator.get_updated_root(current_catalyst_info.buf)
-    local updated_node = get_updated_node_from_position(root, row, col)
+---@param row number | nil
+---@param col number | nil
+---@param updated_node TSNode | nil
+M.update_item = function(index, row, col, updated_node)
+    if not updated_node then
+        local root = aggregator.get_updated_root(current_catalyst_info.buf)
+        if not row or not col then error("invalid row & col arguments") end
+        updated_node = get_updated_node_from_position(root, row, col)
+    end
     selection[index].node = updated_node
 
     vim.api.nvim_buf_del_extmark(selection[index].buf, ns, selection[index].extmark_id)
