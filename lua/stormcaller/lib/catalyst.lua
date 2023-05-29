@@ -74,6 +74,7 @@ local function find_closest_node_to_cursor(win, nodes)
             jump_destination = "end"
             closest_distance = math.abs(end_row - cur_line)
         end
+        if closest_distance == 0 then break end
     end
 
     return closest_node, jump_destination
