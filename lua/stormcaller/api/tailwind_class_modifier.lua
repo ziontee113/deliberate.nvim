@@ -36,15 +36,17 @@ end
 ---@return boolean, string[]
 local replace_class_names = function(class_names, patterns, replacement)
     if type(patterns) == "string" then patterns = { patterns } end
+    local replaced = false
     for i = #class_names, 1, -1 do
         for _, pattern in ipairs(patterns) do
             if class_names[i] and string.match(class_names[i], pattern) then
                 class_names[i] = replacement
-                return true, class_names
+                replaced = true
+                break
             end
         end
     end
-    return false, class_names
+    return replaced, class_names
 end
 
 ---@param class_names string[]
