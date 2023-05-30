@@ -29,4 +29,9 @@ M.execute_with_count = function(fn, ...)
     M.reset_count()
 end
 
+M.feed_keys = function(input)
+    local feed = vim.api.nvim_replace_termcodes(input, true, true, true)
+    vim.api.nvim_feedkeys(feed, "mtix!", false)
+end
+
 return M

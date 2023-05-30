@@ -1,13 +1,14 @@
-local PopUp = require("stormcaller.api.unforgiven")
+local PopUp = require("stormcaller.lib.ui.PopUp")
 local h = require("stormcaller.helpers")
 
-describe("...", function()
-    it("...", function()
+local u = require("stormcaller.lib.utils")
+local input = u.feed_keys
+
+describe("PopUp", function()
+    it("returns correct callback result", function()
         h.set_buffer_content_as_multiple_react_components()
 
-        -- local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
-        -- print(table.concat(lines, "\n"))
-
+        local myvar -- dummy variable to test callback result
         local popup = PopUp:new({
             title = "PopUp",
             items = {
@@ -19,10 +20,12 @@ describe("...", function()
                 hide = { "z", "q", "<Esc>" },
             },
             callback = function(result)
-                --
                 print(result)
+                myvar = result
             end,
         })
+
+        --------------------- check if PopUp has correct content
 
         popup:show()
 
@@ -33,5 +36,17 @@ describe("...", function()
             "u UNFORGIVEN",
         }
         assert.same(want, popup_lines)
+
+        --------------------- check if myvar gets assigned new result value from callback
+
+        input("u")
+        assert.equals("UNFORGIVEN", myvar)
+        ---> popup should be altomatically hidden after accepting a choice. No need to manually call `popup:hide()`
+
+        --------------------- 2nd time
+
+        popup:show()
+        input("<CR>")
+        assert.equals("LE SSERAFIM", myvar)
     end)
 end)
