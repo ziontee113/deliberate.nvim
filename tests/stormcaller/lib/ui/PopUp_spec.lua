@@ -9,14 +9,10 @@ describe("PopUp", function()
 
         local myvar -- dummy variable to test callback result
         local popup = PopUp:new({
-            title = "PopUp",
             items = {
                 { keymaps = { "l" }, text = "LE SSERAFIM" },
                 "",
                 { keymaps = { "u" }, text = "UNFORGIVEN" },
-            },
-            keymaps = {
-                hide = { "z", "q", "<Esc>" },
             },
             callback = function(result)
                 print(string.format("result from PopUp keymap == %s", result))
@@ -62,14 +58,10 @@ describe("PopUp combined with Input", function()
         })
 
         local popup = PopUp:new({
-            title = "PopUp",
             items = {
                 { keymaps = { "l" }, text = "LE SSERAFIM" },
                 "",
                 { keymaps = { "u" }, text = "UNFORGIVEN" },
-            },
-            keymaps = {
-                hide = { "z", "q", "<Esc>" },
             },
             callback = function(result)
                 input:show()
