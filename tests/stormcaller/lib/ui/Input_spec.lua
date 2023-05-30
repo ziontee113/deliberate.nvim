@@ -1,8 +1,8 @@
 local Input = require("stormcaller.lib.ui.Input")
-local u = require("stormcaller.lib.utils")
-local feed = u.feed_keys
-local h = require("stormcaller.helpers")
-local insert = h.insert_chars_for_Input
+local utils = require("stormcaller.lib.utils")
+local helpers = require("stormcaller.helpers")
+local feed = utils.feed_keys
+local insert = helpers.insert_chars_for_Input
 
 describe("Input", function()
     it("...", function()

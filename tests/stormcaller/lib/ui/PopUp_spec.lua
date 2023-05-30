@@ -1,12 +1,11 @@
 local PopUp = require("stormcaller.lib.ui.PopUp")
-local h = require("stormcaller.helpers")
-
-local u = require("stormcaller.lib.utils")
-local input = u.feed_keys
+local Input = require("stormcaller.lib.ui.Input")
+local helpers = require("stormcaller.helpers")
+local utils = require("stormcaller.lib.utils")
 
 describe("PopUp", function()
     it("returns correct callback result", function()
-        h.set_buffer_content_as_multiple_react_components()
+        helpers.set_buffer_content_as_multiple_react_components()
 
         local myvar -- dummy variable to test callback result
         local popup = PopUp:new({
@@ -20,7 +19,7 @@ describe("PopUp", function()
                 hide = { "z", "q", "<Esc>" },
             },
             callback = function(result)
-                print(result)
+                print(string.format("result from PopUp keymap == %s", result))
                 myvar = result
             end,
         })
@@ -39,16 +38,49 @@ describe("PopUp", function()
 
         --------------------- check if myvar gets assigned new result value from callback
 
-        input("u")
+        utils.feed_keys("u")
         assert.equals("UNFORGIVEN", myvar)
         ---> popup should be altomatically hidden after accepting a choice. No need to manually call `popup:hide()`
 
         --------------------- 2nd time
 
         popup:show()
-        input("<CR>")
+        utils.feed_keys("<CR>")
         assert.equals("LE SSERAFIM", myvar)
     end)
 end)
 
--- TODO: combine PopUp with Input
+describe("PopUp combined with Input", function()
+    it("returns correct callback result", function()
+        local myvar
+
+        local input = Input:new({
+            callback = function(result)
+                myvar = result
+                print(string.format("result from input == %s", result))
+            end,
+        })
+
+        local popup = PopUp:new({
+            title = "PopUp",
+            items = {
+                { keymaps = { "l" }, text = "LE SSERAFIM" },
+                "",
+                { keymaps = { "u" }, text = "UNFORGIVEN" },
+            },
+            keymaps = {
+                hide = { "z", "q", "<Esc>" },
+            },
+            callback = function(result)
+                input:show()
+                helpers.insert_chars_for_Input(input.buf, result)
+                utils.feed_keys("<CR>")
+            end,
+        })
+
+        popup:show()
+
+        utils.feed_keys("u")
+        assert.equals("UNFORGIVEN", myvar)
+    end)
+end)
