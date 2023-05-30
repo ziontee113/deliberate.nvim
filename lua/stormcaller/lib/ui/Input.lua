@@ -9,6 +9,8 @@ function Input:_execute_callback()
     local result = vim.api.nvim_buf_get_lines(0, 0, -1, false)[1]
     self.callback(result)
     self:hide()
+
+    vim.api.nvim_set_current_win(self.target_win)
 end
 
 function Input:_set_hide_keymaps()
@@ -35,10 +37,12 @@ end
 
 -- Public
 
-function Input:show()
+function Input:show(metadata)
+    metadata = metadata or {}
+
     vim.api.nvim_buf_set_lines(self.buf, 0, -1, false, {})
 
-    self.target_win = vim.api.nvim_get_current_win()
+    self.target_win = metadata.target_win or vim.api.nvim_get_current_win()
     self.target_buf = vim.api.nvim_get_current_buf()
 
     self.win = vim.api.nvim_open_win(self.buf, true, {

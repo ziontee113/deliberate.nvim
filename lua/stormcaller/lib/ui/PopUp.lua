@@ -44,7 +44,7 @@ end
 function PopUp:_execute_callback(item_index)
     local item = self.items[item_index]
     if type(item) == "string" then return end
-    self.callback(item.text)
+    self.callback(item.text, { target_win = self.target_win, target_buf = self.target_buf })
     self:hide()
 end
 
