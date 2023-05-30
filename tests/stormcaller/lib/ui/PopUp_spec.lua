@@ -50,3 +50,5 @@ describe("PopUp", function()
         assert.equals("LE SSERAFIM", myvar)
     end)
 end)
+
+-- TODO: combine PopUp with Input

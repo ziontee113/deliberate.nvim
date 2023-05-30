@@ -5,7 +5,7 @@ local selection = require("stormcaller.lib.selection")
 local navigator = require("stormcaller.api.navigator")
 local html_tag = require("stormcaller.api.html_tag")
 
--------------------------------------------- ...
+--------------------------------------------
 
 M.initiate = function(cmd, wanted_text, assert_fn)
     vim.cmd(string.format("norm! %s", cmd))
@@ -66,7 +66,7 @@ M.add = function(args, has_text, cursor, has_entire_line)
     if has_entire_line then M.catalyst_entire_first_line(has_entire_line) end
 end
 
--------------------------------------------- ...
+--------------------------------------------
 
 M.clean_up = function()
     vim.api.nvim_buf_delete(0, { force = true })
@@ -82,6 +82,13 @@ M.loop = function(times, callback, arguments)
     for _ = 1, times do
         callback(unpack(arguments))
     end
+end
+
+M.insert_chars_for_Input = function(input_buf, chars)
+    vim.api.nvim_buf_call(input_buf, function()
+        local cmd = string.format("norm! i%s", chars)
+        vim.cmd(cmd)
+    end)
 end
 
 -------------------------------------------- Assertions
