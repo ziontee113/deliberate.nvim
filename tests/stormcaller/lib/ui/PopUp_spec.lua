@@ -94,7 +94,6 @@ describe("PopUp combined with Input", function()
                 {
                     items = {
                         { keymaps = { "l" }, text = "LE SSERAFIM" },
-                        "",
                         { keymaps = { "u" }, text = "UNFORGIVEN" },
                     },
                     callback = function(results)

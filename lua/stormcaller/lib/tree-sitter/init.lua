@@ -181,14 +181,22 @@ M.node_start_and_end_on_same_line = function(node)
     return start_row == end_row
 end
 
----@class cursor_start_of_node_Opts
----@field node TSNode
----@field win number
-
-M.cursor_is_at_start_of_node = function(o)
-    local start_row = o.node:range()
-    local cursor_line = unpack(vim.api.nvim_win_get_cursor(o.win))
+---@param win number
+---@param node TSNode
+---@return boolean
+M.cursor_is_at_start_of_node = function(win, node)
+    local start_row = node:range()
+    local cursor_line = unpack(vim.api.nvim_win_get_cursor(win))
     return start_row + 1 == cursor_line
+end
+
+---@param win number
+---@param node TSNode
+---@return boolean
+M.cursor_is_at_end_of_node = function(win, node)
+    local _, _, end_row = node:range()
+    local cursor_line = unpack(vim.api.nvim_win_get_cursor(win))
+    return end_row + 1 == cursor_line
 end
 
 ---@class get_children_with_types_Opts

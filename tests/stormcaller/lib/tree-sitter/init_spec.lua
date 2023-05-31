@@ -248,10 +248,25 @@ describe("cursor_is_at_start_of_node", function()
         vim.cmd("norm! 4gg^") -- cursor to start of <div> tag
 
         local current_jsx_node = ts_utils.get_node_at_cursor(0):parent()
-        assert.is_true(lib_ts.cursor_is_at_start_of_node({ node = current_jsx_node, win = 0 }))
+        assert.is_true(lib_ts.cursor_is_at_start_of_node(0, current_jsx_node))
 
         vim.cmd("norm! 2j")
-        assert.is_false(lib_ts.cursor_is_at_start_of_node({ node = current_jsx_node, win = 0 }))
+        assert.is_false(lib_ts.cursor_is_at_start_of_node(0, current_jsx_node))
+
+        vim.api.nvim_buf_delete(0, { force = true })
+    end)
+end)
+
+describe("cursor_is_at_end_of_node", function()
+    it("works", function()
+        helpers.set_buffer_content_as_react_component()
+        vim.cmd("norm! G3k^") -- cursor to end of <div> tag
+
+        local current_jsx_node = ts_utils.get_node_at_cursor(0):parent()
+        assert.is_true(lib_ts.cursor_is_at_end_of_node(0, current_jsx_node))
+
+        vim.cmd("norm! 2k")
+        assert.is_false(lib_ts.cursor_is_at_end_of_node(0, current_jsx_node))
 
         vim.api.nvim_buf_delete(0, { force = true })
     end)

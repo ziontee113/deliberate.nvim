@@ -113,15 +113,11 @@ end
 M.move = function(o)
     if not catalyst.is_active() then return end
 
+    local html_children = aggregator.get_html_children(catalyst.node())
+
     if o.destination == "next" then
-        local html_children = aggregator.get_html_children(catalyst.node())
         if #html_children > 0 then
-            if
-                lib_ts.cursor_is_at_start_of_node({
-                    node = catalyst.node(),
-                    win = catalyst.win(),
-                })
-            then
+            if lib_ts.cursor_is_at_start_of_node(catalyst.win(), catalyst.node()) then
                 catalyst.set_node(html_children[1])
                 catalyst.set_node_point("start")
             elseif not change_catalyst_node_to_its_parent(o) then
@@ -129,13 +125,24 @@ M.move = function(o)
             end
         else
             if not change_catalyst_node_to_its_sibling(o) then
-                change_catalyst_node_to_its_parent(o)
+                if not change_catalyst_node_to_its_parent(o) then
+                    change_catalyst_node_to_next_closest_html_element()
+                end
             end
         end
     elseif o.destination == "previous" then
-        if not change_catalyst_node_to_its_sibling(o) then
-            if not change_catalyst_node_to_its_parent(o) then
+        if #html_children > 0 then
+            if lib_ts.cursor_is_at_end_of_node(catalyst.win(), catalyst.node()) then
+                catalyst.set_node(html_children[#html_children])
+                catalyst.set_node_point("end")
+            elseif not change_catalyst_node_to_its_parent(o) then
                 change_catalyst_node_to_previous_closest_html_element()
+            end
+        else
+            if not change_catalyst_node_to_its_sibling(o) then
+                if not change_catalyst_node_to_its_parent(o) then
+                    change_catalyst_node_to_previous_closest_html_element()
+                end
             end
         end
     end
