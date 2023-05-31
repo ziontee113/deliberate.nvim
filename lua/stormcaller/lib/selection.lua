@@ -1,5 +1,6 @@
 local aggregator = require("stormcaller.lib.tree-sitter.language_aggregator")
 local visual_mode = require("stormcaller.api.visual_mode")
+local indicator = require("stormcaller.lib.indicator")
 
 local M = {}
 
@@ -113,6 +114,7 @@ M.update = function(select_move)
     end
 
     previous_catalyst_info = current_catalyst_info
+    indicator.highlight_catalyst(current_catalyst_info)
 
     remove_unused_extmarks()
 end
@@ -180,6 +182,7 @@ end
 M.clear = function()
     select_move_active = false
     M.update()
+    indicator.clear(current_catalyst_info.buf)
 end
 
 return M
