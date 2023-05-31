@@ -4,20 +4,19 @@ local helpers = require("stormcaller.helpers")
 local utils = require("stormcaller.lib.utils")
 
 describe("PopUp", function()
-    it("returns correct callback result", function()
-        helpers.set_buffer_content_as_multiple_react_components()
-
+    it("returns correct results - single PopUp", function()
         local myvar -- dummy variable to test callback result
         local popup = PopUp:new({
-            items = {
-                { keymaps = { "l" }, text = "LE SSERAFIM" },
-                "",
-                { keymaps = { "u" }, text = "UNFORGIVEN" },
+            steps = {
+                {
+                    items = {
+                        { keymaps = { "l" }, text = "LE SSERAFIM" },
+                        "",
+                        { keymaps = { "u" }, text = "UNFORGIVEN" },
+                    },
+                    callback = function(results) myvar = results[1] end,
+                },
             },
-            callback = function(result)
-                print(string.format("result from PopUp keymap == %s", result))
-                myvar = result
-            end,
         })
 
         --------------------- check if PopUp has correct content
@@ -44,6 +43,39 @@ describe("PopUp", function()
         utils.feed_keys("<CR>")
         assert.equals("LE SSERAFIM", myvar)
     end)
+
+    it("returns correct results - double PopUps", function()
+        local final_result
+
+        local popup = PopUp:new({
+            steps = {
+                {
+                    items = {
+                        { keymaps = { "1" }, text = "1st - " },
+                        "",
+                        { keymaps = { "2" }, text = "2nd - " },
+                    },
+                    format = function(results, current_item)
+                        return string.format("%s - %s", results[1], current_item.text)
+                    end,
+                },
+                {
+                    items = {
+                        { keymaps = { "l" }, text = "LE SSERAFIM" },
+                        "",
+                        { keymaps = { "u" }, text = "UNFORGIVEN" },
+                    },
+                    callback = function(results) final_result = table.concat(results, "") end,
+                },
+            },
+        })
+
+        popup:show()
+        utils.feed_keys("1")
+        utils.feed_keys("l")
+
+        assert.equals("1st - LE SSERAFIM", final_result)
+    end)
 end)
 
 describe("PopUp combined with Input", function()
@@ -58,16 +90,20 @@ describe("PopUp combined with Input", function()
         })
 
         local popup = PopUp:new({
-            items = {
-                { keymaps = { "l" }, text = "LE SSERAFIM" },
-                "",
-                { keymaps = { "u" }, text = "UNFORGIVEN" },
+            steps = {
+                {
+                    items = {
+                        { keymaps = { "l" }, text = "LE SSERAFIM" },
+                        "",
+                        { keymaps = { "u" }, text = "UNFORGIVEN" },
+                    },
+                    callback = function(results)
+                        input:show()
+                        helpers.insert_chars_for_Input(input.buf, results[1])
+                        utils.feed_keys("<CR>")
+                    end,
+                },
             },
-            callback = function(result)
-                input:show()
-                helpers.insert_chars_for_Input(input.buf, result)
-                utils.feed_keys("<CR>")
-            end,
         })
 
         popup:show()
