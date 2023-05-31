@@ -1,16 +1,15 @@
-local visual_mode = require("stormcaller.api.visual_mode")
+local visual_collector = require("stormcaller.api.visual_collector")
 local navigator = require("stormcaller.api.navigator")
-local catalyst = require("stormcaller.lib.catalyst")
 local selection = require("stormcaller.lib.selection")
 local helpers = require("stormcaller.helpers")
 
-describe("visual_mode", function()
+describe("visual_collector", function()
     helpers.set_buffer_content_as_multiple_react_components()
 
     it("works when only selecting items with visual_mode.on()", function()
         helpers.initiate("22gg^", "<li>Contacts</li>")
 
-        visual_mode.on()
+        visual_collector.start()
 
         navigator.move({ destination = "next" })
 
@@ -20,17 +19,23 @@ describe("visual_mode", function()
 
         navigator.move({ destination = "next" })
 
-        assert.equals(3, #selection.nodes())
-        helpers.node_has_text(selection.nodes()[1], "<li>Contacts</li>")
-        helpers.node_has_text(selection.nodes()[2], "<li>FAQ</li>")
-        helpers.node_has_text(selection.nodes()[3], "<OtherComponent />")
+        helpers.selection_is(3, {
+            "<li>Contacts</li>",
+            "<li>FAQ</li>",
+            "<OtherComponent />",
+        })
     end)
 
-    it("returns to normal selecting behavior after visual_mode.off()", function()
-        visual_mode.off()
+    it("...", function()
+        visual_collector.stop()
 
-        assert.equals(1, #selection.nodes())
-        helpers.node_has_text(selection.nodes()[1], "<OtherComponent />")
+        helpers.selection_is(3, {
+            "<li>Contacts</li>",
+            "<li>FAQ</li>",
+            "<OtherComponent />",
+        })
+
+        selection.clear()
 
         navigator.move({ destination = "previous" })
         assert.equals(1, #selection.nodes())
@@ -73,7 +78,7 @@ describe("combine `select_move` with `visual_mode`", function()
             "<li>FAQ</li>",
             "<li>Contacts</li>",
         })
-        visual_mode.on()
+        visual_collector.start()
         helpers.selection_is(3, {
             "<li>FAQ</li>",
             "<li>Contacts</li>",

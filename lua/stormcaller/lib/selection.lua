@@ -1,5 +1,5 @@
 local aggregator = require("stormcaller.lib.tree-sitter.language_aggregator")
-local visual_mode = require("stormcaller.api.visual_mode")
+local visual_collector = require("stormcaller.api.visual_collector")
 local indicator = require("stormcaller.lib.indicator")
 
 local M = {}
@@ -101,20 +101,9 @@ end
 
 ---@param select_move boolean | nil
 M.update = function(select_move)
-    if visual_mode.is_active() then
-        local match = false
-        for _, item in ipairs(selection) do
-            if items_are_identical(item, current_catalyst_info) then
-                match = true
-                break
-            end
-        end
-
-        if match then
-            insert_or_remove_item(previous_catalyst_info)
-        else
-            insert_or_remove_item(current_catalyst_info)
-        end
+    if visual_collector.is_active() then
+        insert_or_remove_item(current_catalyst_info)
+        select_move_active = true
     else
         if select_move and select_move_active then insert_or_remove_item(previous_catalyst_info) end
 
