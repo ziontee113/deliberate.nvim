@@ -8,24 +8,10 @@ local find_longest_line = function(lines)
     return longest
 end
 
-local get_lines_from_items = function(items)
-    local lines = {}
-    for _, item in ipairs(items) do
-        if type(item) == "string" then
-            table.insert(lines, item)
-        else
-            local keymap_prefix = ""
-            if item.keymaps and item.keymaps[1] then keymap_prefix = item.keymaps[1] .. " " end
-            table.insert(lines, keymap_prefix .. item.text)
-        end
-    end
-    return lines
-end
-
 -------------------------------------------- PopUp
 
 local PopUp = {
-    current_step = 0,
+    step_index = 0,
     steps = {},
     results = {},
 }
@@ -36,19 +22,19 @@ PopUp.__index = PopUp
 function PopUp:_find_number_of_jumps(direction)
     local cursor_linenr = unpack(vim.api.nvim_win_get_cursor(0))
     local number_of_jumps = direction
-    while type(self.steps[self.current_step].items[cursor_linenr + number_of_jumps]) == "string" do
+    while type(self.current_step.items[cursor_linenr + number_of_jumps]) == "string" do
         number_of_jumps = number_of_jumps + direction
     end
     return math.abs(number_of_jumps)
 end
 
 function PopUp:_execute_callback(item_index)
-    local item = self.steps[self.current_step].items[item_index]
+    local item = self.current_step.items[item_index]
     if not item or type(item) == "string" then return end
 
     table.insert(self.results, item.text)
 
-    local callback = self.steps[self.current_step].callback
+    local callback = self.current_step.callback
     if callback then
         callback(self.results, { target_win = self.target_win, target_buf = self.target_buf })
     end
@@ -102,7 +88,7 @@ function PopUp:_set_confirm_keymaps()
 end
 
 function PopUp:_set_user_keymaps()
-    for item_index, item in ipairs(self.steps[self.current_step].items) do
+    for item_index, item in ipairs(self.current_step.items) do
         if item.keymaps then
             for _, keymap in ipairs(item.keymaps) do
                 vim.keymap.set(
@@ -116,24 +102,51 @@ function PopUp:_set_user_keymaps()
     end
 end
 
-function PopUp:_next()
-    self.current_step = self.current_step + 1
+function PopUp:_get_lines()
+    local lines = {}
+    for _, item in ipairs(self.current_step.items) do
+        if item.hidden then break end
+        if type(item) == "string" then
+            table.insert(lines, item)
+        else
+            local keymap_prefix = ""
+            if item.keymaps and item.keymaps[1] then
+                local visible_keymaps = {}
+                for i = 1, item.visible_keymaps or 1 do
+                    table.insert(visible_keymaps, item.keymaps[i])
+                    keymap_prefix = table.concat(visible_keymaps, " ") .. " "
+                end
+            end
 
-    if self.current_step > #self.steps then
+            local line_content = item.text
+            if self.current_step.format then
+                line_content = self.current_step.format(self.results, item) or line_content
+            end
+            table.insert(lines, keymap_prefix .. line_content)
+        end
+    end
+    return lines
+end
+
+function PopUp:_next()
+    self.step_index = self.step_index + 1
+
+    if self.step_index > #self.steps then
         self:hide()
         return
     end
 
-    if self.current_step == 1 then self.buf = vim.api.nvim_create_buf(false, true) end
+    self.current_step = self.steps[self.step_index]
 
-    local items = self.steps[self.current_step].items
-    local lines = get_lines_from_items(items)
+    if self.step_index == 1 then self.buf = vim.api.nvim_create_buf(false, true) end
+
+    local lines = self:_get_lines()
     vim.api.nvim_buf_set_lines(self.buf, 0, -1, false, lines)
 
     self.width = find_longest_line(lines)
-    self.height = #items
+    self.height = #lines
 
-    if self.current_step > 1 then
+    if self.step_index > 1 then
         vim.api.nvim_win_set_width(self.win, self.width)
         vim.api.nvim_win_set_height(self.win, self.height)
     end
@@ -151,7 +164,9 @@ function PopUp:new(opts)
 end
 
 function PopUp:show()
-    self.current_step = 0
+    self.step_index = 0
+    self.results = {}
+
     self:_next()
 
     self.target_win = vim.api.nvim_get_current_win()
@@ -181,30 +196,4 @@ end
 
 function PopUp:hide() vim.api.nvim_win_hide(self.win) end
 
-local pop = PopUp:new({
-    steps = {
-        {
-            items = {
-                { keymaps = { "1" }, text = "1st - " },
-                "",
-                { keymaps = { "2" }, text = "2nd - " },
-            },
-        },
-        {
-            items = {
-                { keymaps = { "l" }, text = "LE SSERAFIM" },
-                "",
-                { keymaps = { "u" }, text = "UNFORGIVEN" },
-            },
-            callback = function(results, metadata)
-                N(results)
-                -- TODO:
-            end,
-        },
-    },
-})
-
-vim.keymap.set("n", "<leader>a", function() pop:show() end, {})
-
 return PopUp
--- {{{nvim-execute-on-save}}}

@@ -2,7 +2,7 @@ local DynamicPopUp = require("stormcaller.lib.ui.DynamicPopUp")
 local utils = require("stormcaller.lib.utils")
 
 describe("DynamicPopUp", function()
-    it("...", function()
+    it("works", function()
         local final_result
 
         local popup = DynamicPopUp:new({
@@ -13,10 +13,8 @@ describe("DynamicPopUp", function()
                         "",
                         { keymaps = { "2" }, text = "2nd - " },
                     },
-                    callback = function(result, metadata)
-                        -- some processing
-
-                        return result, metadata
+                    format = function(results, current_item)
+                        return string.format("%s - %s", results[1], current_item.text)
                     end,
                 },
                 {
@@ -25,7 +23,7 @@ describe("DynamicPopUp", function()
                         "",
                         { keymaps = { "u" }, text = "UNFORGIVEN" },
                     },
-                    callback = function(result, metadata) final_result = result end,
+                    callback = function(results) final_result = table.concat(results, "") end,
                 },
             },
         })
@@ -34,6 +32,6 @@ describe("DynamicPopUp", function()
         utils.feed_keys("1")
         utils.feed_keys("l")
 
-        -- assert.equals("1st - LE SSERAFIM", final_result)
+        assert.equals("1st - LE SSERAFIM", final_result)
     end)
 end)
