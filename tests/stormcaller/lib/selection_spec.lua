@@ -25,12 +25,11 @@ describe("typescriptreact selection.nodes()", function()
             "<li>Contacts</li>",
         }, { "<li>", h.catalyst_first })
     end)
-    it("returned nodes stays the same due to new node already in selection table", function()
+    it("remove 1 item from selection due to 'selecting over' an already selected node", function()
         navigator.move({ destination = "next" })
-        mova({ "next", true }, 3, {
+        mova({ "next", true }, 2, {
             "<OtherComponent />",
             "<li>FAQ</li>",
-            "<li>Contacts</li>",
         }, "<li>FAQ</li>")
     end)
     it("returns only current catalyst node after clear() was called", function()
@@ -77,12 +76,11 @@ describe("svelte selection.nodes()", function()
             "<h1>Ligma</h1>",
         }, { "<section>", h.catalyst_first })
     end)
-    it("returned nodes stays the same due to new node already in selection table", function()
+    it("remove 1 item from selection due to 'selecting over' an already selected node", function()
         navigator.move({ destination = "next" })
-        mova({ "next", true }, 3, {
+        mova({ "next", true }, 2, {
             "<p>that gained popularity as part of an Internet prank or meme.</p>",
             "<h3>is a made-up term</h3>",
-            "<h1>Ligma</h1>",
         }, "<h3>is a made-up term</h3>")
     end)
     it("returns only current catalyst node after clear() was called", function()
