@@ -1,5 +1,4 @@
 local aggregator = require("stormcaller.lib.tree-sitter.language_aggregator")
-local visual_collector = require("stormcaller.api.visual_collector")
 local indicator = require("stormcaller.lib.indicator")
 
 local M = {}
@@ -101,7 +100,7 @@ end
 
 ---@param select_move boolean | nil
 M.update = function(select_move)
-    if visual_collector.is_active() then
+    if require("stormcaller.api.visual_collector").is_active() then
         insert_or_remove_item(current_catalyst_info)
         select_move_active = true
     else

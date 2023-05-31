@@ -46,8 +46,9 @@ jobs:
           curl -sL "https://github.com/neovim/neovim/releases/download/${{ matrix.nvim }}/nvim-linux64.tar.gz" | tar xzf - --strip-components=1 -C ~/.local/share/nvim/
           git clone --depth 1 https://github.com/nvim-treesitter/nvim-treesitter.git ~/.local/share/nvim/site/pack/vendor/start/nvim-treesitter
           git clone --depth 1 https://github.com/nvim-lua/plenary.nvim ~/.local/share/nvim/site/pack/vendor/start/plenary.nvim
+          git clone --depth 1 https://github.com/anuvyklack/hydra.nvim ~/.local/share/nvim/site/pack/vendor/start/hydra.nvim
           ln -s $(pwd) ~/.local/share/nvim/site/pack/vendor/start
-          nvim --headless -c "lua require('nvim-treesitter').setup {}" -c 'TSInstallSync all' -c 'q'
+          nvim --headless -c "lua require('nvim-treesitter').setup {}" -c 'TSInstallSync all' -c "lua require('hydra')" -c 'q'
           
       - name: Run tests
         run: |

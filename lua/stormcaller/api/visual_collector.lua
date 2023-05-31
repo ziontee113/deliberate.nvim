@@ -1,16 +1,15 @@
 local M = {}
 
 local visual_collector_active = false
+local selection = require("stormcaller.lib.selection")
 
 M.start = function()
     visual_collector_active = true
-    if require("stormcaller.lib.selection").select_move_is_active() then
-        require("stormcaller.lib.selection").update()
-    end
+    if selection.select_move_is_active() then selection.update() end
 end
 M.stop = function()
     visual_collector_active = false
-    require("stormcaller.lib.selection").update()
+    selection.update()
 end
 M.toggle = function()
     if visual_collector_active then

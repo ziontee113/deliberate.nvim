@@ -6,7 +6,7 @@ local helpers = require("stormcaller.helpers")
 describe("visual_collector", function()
     helpers.set_buffer_content_as_multiple_react_components()
 
-    it("works when only selecting items with visual_mode.on()", function()
+    it("starts collecting nodes on move with visual_collector.on()", function()
         helpers.initiate("22gg^", "<li>Contacts</li>")
 
         visual_collector.start()
@@ -26,7 +26,7 @@ describe("visual_collector", function()
         })
     end)
 
-    it("...", function()
+    it("stops collecting nodes on move with visual_collector.on()", function()
         visual_collector.stop()
 
         helpers.selection_is(3, {

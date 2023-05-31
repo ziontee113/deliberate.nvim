@@ -7,5 +7,8 @@ require("plenary.busted")
 vim.opt.rtp:append("~/.local/share/nvim/lazy/nvim-treesitter")
 require("nvim-treesitter")
 
+vim.opt.rtp:append("~/.local/share/nvim/lazy/hydra.nvim")
+require("hydra")
+
 -- Setup Editor Options
 vim.opt.rtp:append(".")
