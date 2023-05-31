@@ -7,12 +7,11 @@ local helpers = require("stormcaller.helpers")
 describe("visual_mode", function()
     helpers.set_buffer_content_as_multiple_react_components()
 
-    vim.cmd("norm! 22gg^") -- cursor to <li>Contacts</li>
-
     it("works when only selecting items with visual_mode.on()", function()
+        helpers.initiate("22gg^", "<li>Contacts</li>")
+
         visual_mode.on()
 
-        catalyst.initiate({ win = 0, buf = 0 })
         navigator.move({ destination = "next" })
 
         assert.equals(2, #selection.nodes())
@@ -49,6 +48,45 @@ describe("visual_mode", function()
         assert.equals(2, #selection.nodes())
         helpers.node_has_text(selection.nodes()[1], "<li>FAQ</li>")
         helpers.node_has_text(selection.nodes()[2], "<li>Contacts</li>")
+    end)
+
+    helpers.clean_up()
+end)
+
+describe("combine `select_move` with `visual_mode`", function()
+    helpers.set_buffer_content_as_multiple_react_components()
+
+    it("works", function()
+        helpers.initiate("23gg^", "<li>FAQ</li>")
+
+        -- select nodes using select_move
+        navigator.move({ destination = "previous", select_move = true })
+        navigator.move({ destination = "previous", select_move = true })
+        helpers.selection_is(2, {
+            "<li>FAQ</li>",
+            "<li>Contacts</li>",
+        })
+
+        -- select nodes with Visual Mode
+        helpers.move("previous", "<li>Home</li>")
+        helpers.selection_is(2, {
+            "<li>FAQ</li>",
+            "<li>Contacts</li>",
+        })
+        visual_mode.on()
+        helpers.selection_is(3, {
+            "<li>FAQ</li>",
+            "<li>Contacts</li>",
+            "<li>Home</li>",
+        })
+
+        navigator.move({ destination = "previous" })
+        helpers.selection_is(4, {
+            "<li>FAQ</li>",
+            "<li>Contacts</li>",
+            "<li>Home</li>",
+            { '<div className="h-screen w-screen bg-zinc-900">', helpers.node_first_line },
+        })
     end)
 
     helpers.clean_up()
