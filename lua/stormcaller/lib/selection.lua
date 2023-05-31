@@ -184,7 +184,7 @@ end
 M.clear = function()
     select_move_active = false
     M.update()
-    indicator.clear(current_catalyst_info.buf)
+    if current_catalyst_info then indicator.clear(current_catalyst_info.buf) end
 end
 
 return M

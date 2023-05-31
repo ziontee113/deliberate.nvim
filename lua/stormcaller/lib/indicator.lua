@@ -44,7 +44,7 @@ M.highlight_selection = function(selection)
 
     for _, item in ipairs(selection) do
         local start_row = item.node:range()
-        vim.api.nvim_buf_set_extmark(buf, selection_ns, start_row, 0, {
+        pcall(vim.api.nvim_buf_set_extmark, buf, selection_ns, start_row, 0, {
             virt_text = { { "←", "Normal" } },
             virt_text_pos = "eol",
         })
