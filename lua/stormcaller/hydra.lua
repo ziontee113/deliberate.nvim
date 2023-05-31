@@ -3,6 +3,8 @@ local catalyst = require("stormcaller.lib.catalyst")
 local selection = require("stormcaller.lib.selection")
 local navigator = require("stormcaller.api.navigator")
 
+local exit_hydra = function() vim.api.nvim_input("<Plug>DeliberateExitHydra") end
+
 Hydra({
     name = "Deliberate",
     config = {
@@ -47,6 +49,19 @@ Hydra({
             { nowait = true },
         },
 
-        { "<Esc>", nil, { exit = true, nowait = true } },
+        {
+            "<Esc>",
+            function()
+                if selection.select_move_is_active() then
+                    selection.clear(true)
+                else
+                    exit_hydra()
+                end
+            end,
+            { nowait = true },
+        },
+
+        -- workaround to programmatically exit Hydra
+        { "<Plug>DeliberateExitHydra", nil, { exit = true } },
     },
 })

@@ -182,10 +182,15 @@ M.refresh_tree = function()
     )
 end
 
-M.clear = function()
+M.clear = function(keep_indicators)
     select_move_active = false
     M.update()
-    if current_catalyst_info then indicator.clear(current_catalyst_info.buf) end
+
+    if not keep_indicators and current_catalyst_info then
+        indicator.clear(current_catalyst_info.buf)
+    end
 end
+
+M.select_move_is_active = function() return select_move_active end
 
 return M
