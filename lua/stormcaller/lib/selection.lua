@@ -114,9 +114,11 @@ M.update = function(select_move)
     end
 
     previous_catalyst_info = current_catalyst_info
-    indicator.highlight_catalyst(current_catalyst_info)
 
     remove_unused_extmarks()
+
+    -- indicator.highlight_catalyst(current_catalyst_info)
+    indicator.highlight_selection(selection)
 end
 
 --------------------------------------------

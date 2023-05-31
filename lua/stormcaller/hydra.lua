@@ -4,15 +4,11 @@ local selection = require("stormcaller.lib.selection")
 local navigator = require("stormcaller.api.navigator")
 
 Hydra({
-    name = "Telescope",
-    hint = false,
+    name = "Deliberate",
     config = {
+        hint = false,
         color = "pink",
         invoke_on_body = true,
-        hint = {
-            position = "bottom-right",
-            border = "rounded",
-        },
         on_enter = function()
             catalyst.initiate({
                 win = vim.api.nvim_get_current_win(),
@@ -32,6 +28,22 @@ Hydra({
         {
             "k",
             function() navigator.move({ destination = "previous" }) end,
+            { nowait = true },
+        },
+
+        {
+            "<Tab>",
+            function() navigator.move({ destination = "next", select_move = true }) end,
+            { nowait = true },
+        },
+        {
+            "<S-Tab>",
+            function() navigator.move({ destination = "previous", select_move = true }) end,
+            { nowait = true },
+        },
+        {
+            "<A-Tab>",
+            function() catalyst.move_to(true) end,
             { nowait = true },
         },
 
