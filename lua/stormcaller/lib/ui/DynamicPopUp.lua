@@ -39,12 +39,11 @@ function PopUp:_execute_callback(item_index)
         callback(self.results, { target_win = self.target_win, target_buf = self.target_buf })
     end
 
-    self:_next()
+    self:_advance()
 end
 
 function PopUp:_set_navigation_keymaps()
     if not self.keymaps then self.keymaps = {} end
-
     if not self.keymaps.next then self.keymaps.next = { "j" } end
     if not self.keymaps.previous then self.keymaps.previous = { "k" } end
 
@@ -89,15 +88,14 @@ end
 
 function PopUp:_set_user_keymaps()
     for item_index, item in ipairs(self.current_step.items) do
-        if item.keymaps then
-            for _, keymap in ipairs(item.keymaps) do
-                vim.keymap.set(
-                    "n",
-                    keymap,
-                    function() self:_execute_callback(item_index) end,
-                    { buffer = self.buf, nowait = true }
-                )
-            end
+        if not item.keymaps then break end
+        for _, keymap in ipairs(item.keymaps) do
+            vim.keymap.set(
+                "n",
+                keymap,
+                function() self:_execute_callback(item_index) end,
+                { buffer = self.buf, nowait = true }
+            )
         end
     end
 end
@@ -106,6 +104,7 @@ function PopUp:_get_lines()
     local lines = {}
     for _, item in ipairs(self.current_step.items) do
         if item.hidden then break end
+
         if type(item) == "string" then
             table.insert(lines, item)
         else
@@ -122,15 +121,25 @@ function PopUp:_get_lines()
             if self.current_step.format then
                 line_content = self.current_step.format(self.results, item) or line_content
             end
+
             table.insert(lines, keymap_prefix .. line_content)
         end
     end
     return lines
 end
 
-function PopUp:_next()
-    self.step_index = self.step_index + 1
+function PopUp:_set_window_size(lines)
+    self.width = find_longest_line(lines)
+    self.height = #lines
 
+    if self.step_index > 1 then
+        vim.api.nvim_win_set_width(self.win, self.width)
+        vim.api.nvim_win_set_height(self.win, self.height)
+    end
+end
+
+function PopUp:_advance()
+    self.step_index = self.step_index + 1
     if self.step_index > #self.steps then
         self:hide()
         return
@@ -143,35 +152,19 @@ function PopUp:_next()
     local lines = self:_get_lines()
     vim.api.nvim_buf_set_lines(self.buf, 0, -1, false, lines)
 
-    self.width = find_longest_line(lines)
-    self.height = #lines
-
-    if self.step_index > 1 then
-        vim.api.nvim_win_set_width(self.win, self.width)
-        vim.api.nvim_win_set_height(self.win, self.height)
-    end
-
+    self:_set_window_size(lines)
     self:_set_user_keymaps()
     self:_set_navigation_keymaps()
     self:_set_confirm_keymaps()
+    self:_set_hide_keymaps()
 end
 
--- Public
-
-function PopUp:new(opts)
-    local popup = setmetatable(opts, PopUp)
-    return popup
-end
-
-function PopUp:show()
+function PopUp:_reset_state()
     self.step_index = 0
     self.results = {}
+end
 
-    self:_next()
-
-    self.target_win = vim.api.nvim_get_current_win()
-    self.target_buf = vim.api.nvim_get_current_buf()
-
+function PopUp:_mount()
     self.win = vim.api.nvim_open_win(self.buf, true, {
         relative = "cursor",
         row = 1,
@@ -190,8 +183,23 @@ function PopUp:show()
         self.winhl or "Normal:Normal,FloatBorder:@function"
     )
     vim.api.nvim_win_set_option(self.win, "cursorline", true)
+end
 
-    self:_set_hide_keymaps()
+-- Public
+
+function PopUp:new(opts)
+    local popup = setmetatable(opts, PopUp)
+    return popup
+end
+
+function PopUp:show()
+    self:_reset_state()
+    self:_advance()
+
+    self.target_win = vim.api.nvim_get_current_win()
+    self.target_buf = vim.api.nvim_get_current_buf()
+
+    self:_mount()
 end
 
 function PopUp:hide() vim.api.nvim_win_hide(self.win) end
