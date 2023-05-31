@@ -102,7 +102,19 @@ end
 ---@param select_move boolean | nil
 M.update = function(select_move)
     if visual_mode.is_active() then
-        insert_or_remove_item(current_catalyst_info)
+        local match = false
+        for _, item in ipairs(selection) do
+            if items_are_identical(item, current_catalyst_info) then
+                match = true
+                break
+            end
+        end
+
+        if match then
+            insert_or_remove_item(previous_catalyst_info)
+        else
+            insert_or_remove_item(current_catalyst_info)
+        end
     else
         if select_move and select_move_active then insert_or_remove_item(previous_catalyst_info) end
 

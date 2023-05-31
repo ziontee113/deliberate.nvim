@@ -1,5 +1,6 @@
 local Hydra = require("hydra")
 local catalyst = require("stormcaller.lib.catalyst")
+local visual_mode = require("stormcaller.api.visual_mode")
 local selection = require("stormcaller.lib.selection")
 local navigator = require("stormcaller.api.navigator")
 
@@ -50,13 +51,19 @@ Hydra({
         },
 
         {
+            "v",
+            function() visual_mode.toogle() end,
+            { nowait = true },
+        },
+
+        {
             "<Esc>",
             function()
-                if selection.select_move_is_active() then
-                    selection.clear(true)
-                else
+                if not selection.select_move_is_active() and not visual_mode.is_active() then
                     exit_hydra()
                 end
+                if selection.select_move_is_active() then selection.clear(true) end
+                if visual_mode.is_active() then visual_mode.off() end
             end,
             { nowait = true },
         },
