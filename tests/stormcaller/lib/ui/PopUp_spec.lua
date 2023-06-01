@@ -83,10 +83,7 @@ describe("PopUp combined with Input", function()
         local myvar
 
         local input = Input:new({
-            callback = function(result)
-                myvar = result
-                print(string.format("result from input == %s", result))
-            end,
+            callback = function(result) myvar = result end,
         })
 
         local popup = PopUp:new({

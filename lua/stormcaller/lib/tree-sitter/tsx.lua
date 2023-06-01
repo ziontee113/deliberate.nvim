@@ -67,7 +67,7 @@ end
 ---@return string[], TSNode|nil
 M.extract_class_names = function(buf, node)
     local className_string_node = M.get_className_property_string_node(buf, node)
-    local attribute_string_text = vim.treesitter.get_node_text(className_string_node, 0)
+    local attribute_string_text = vim.treesitter.get_node_text(className_string_node, buf)
     local string_content = attribute_string_text:match('"([^"]+)"') or ""
 
     local class_names = vim.split(string_content, " ")

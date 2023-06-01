@@ -9,10 +9,7 @@ describe("Input", function()
         local myvar
 
         local input = Input:new({
-            callback = function(result)
-                myvar = result
-                print(result)
-            end,
+            callback = function(result) myvar = result end,
         })
 
         input:show()
