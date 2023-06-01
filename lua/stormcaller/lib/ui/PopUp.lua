@@ -89,6 +89,7 @@ end
 function PopUp:_set_user_keymaps()
     for item_index, item in ipairs(self.current_step.items) do
         if item.keymaps then
+            if type(item.keymaps) == "string" then item.keymaps = { item.keymaps } end
             for _, keymap in ipairs(item.keymaps) do
                 vim.keymap.set(
                     "n",
