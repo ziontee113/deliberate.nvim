@@ -73,6 +73,21 @@ M.add = function(args, has_text, cursor, has_entire_line)
     if has_entire_line then M.catalyst_entire_first_line(has_entire_line) end
 end
 
+M.print_catalyst_parent = function()
+    local text = vim.treesitter.get_node_text(catalyst.node():parent(), 0)
+    print(text)
+end
+
+M.print_catalyst_grandfather = function()
+    local text = vim.treesitter.get_node_text(catalyst.node():parent():parent(), 0)
+    print(text)
+end
+
+M.print_buffer = function(buf, start, stop)
+    local lines = vim.api.nvim_buf_get_lines(buf or 0, start or 0, stop or -1, false)
+    print(table.concat(lines, "\n"))
+end
+
 --------------------------------------------
 
 M.clean_up = function()

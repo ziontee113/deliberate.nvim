@@ -230,4 +230,8 @@ M.current_catalyst_info = function() return current_catalyst_info end
 ---@return CatalystInfo[]
 M.items = function() return selection end
 
+M.archive_current_state = function()
+    -- TODO:
+end
+
 return M
