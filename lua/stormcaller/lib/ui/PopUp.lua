@@ -105,11 +105,9 @@ end
 function PopUp:_get_lines()
     local lines = {}
     for _, item in ipairs(self.current_step.items) do
-        if item.hidden then break end
-
         if type(item) == "string" then
             table.insert(lines, item)
-        else
+        elseif not item.hidden then
             local keymap_prefix = ""
             if item.keymaps and item.keymaps[1] then
                 local visible_keymaps = {}
