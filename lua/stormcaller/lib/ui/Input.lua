@@ -20,7 +20,7 @@ function Input:_set_hide_keymaps()
         vim.keymap.set(
             "n",
             mapping,
-            function() vim.api.nvim_win_hide(self.win) end,
+            function() vim.api.nvim_win_close(self.win, true) end,
             { buffer = self.buf, nowait = true }
         )
     end

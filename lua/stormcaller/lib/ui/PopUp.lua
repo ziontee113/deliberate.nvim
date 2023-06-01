@@ -8,6 +8,34 @@ local find_longest_line = function(lines)
     return longest
 end
 
+local sanitize_items = function(steps)
+    for _, current_step in ipairs(steps) do
+        for _, item in ipairs(current_step.items) do
+            if type(item.keymaps) == "string" then item.keymaps = { item.keymaps } end
+        end
+    end
+    return steps
+end
+
+local function find_keymap_prefix(item)
+    local keymap_prefix = ""
+    if item.keymaps then
+        local keys_to_show = {}
+        if not item.visible_keymaps then item.visible_keymaps = 1 end
+        for i = 1, item.visible_keymaps do
+            table.insert(keys_to_show, item.keymaps[i])
+            keymap_prefix = table.concat(keys_to_show, " ") .. " "
+        end
+    end
+    return keymap_prefix
+end
+
+local function find_line_content(item, format_fn, results)
+    local line_content = item.text
+    if format_fn then line_content = format_fn(results, item) or line_content end
+    return line_content
+end
+
 -------------------------------------------- PopUp
 
 local PopUp = {
@@ -20,9 +48,9 @@ PopUp.__index = PopUp
 -- Private
 
 function PopUp:_find_number_of_jumps(direction)
-    local cursor_linenr = unpack(vim.api.nvim_win_get_cursor(0))
+    local cursor_linenr = unpack(vim.api.nvim_win_get_cursor(self.win))
     local number_of_jumps = direction
-    while type(self.current_step.items[cursor_linenr + number_of_jumps]) == "string" do
+    while self.lines[cursor_linenr + number_of_jumps] == "" do
         number_of_jumps = number_of_jumps + direction
     end
     return math.abs(number_of_jumps)
@@ -89,7 +117,6 @@ end
 function PopUp:_set_user_keymaps()
     for item_index, item in ipairs(self.current_step.items) do
         if item.keymaps then
-            if type(item.keymaps) == "string" then item.keymaps = { item.keymaps } end -- TODO: duplicate code, please refactor
             for _, keymap in ipairs(item.keymaps) do
                 vim.keymap.set(
                     "n",
@@ -108,24 +135,8 @@ function PopUp:_get_lines()
         if type(item) == "string" then
             table.insert(lines, item)
         elseif not item.hidden then
-            local keymap_prefix = ""
-            if type(item.keymaps) == "string" then item.keymaps = { item.keymaps } end -- TODO: duplicate code, please refactor
-            if item.keymaps then
-                if not item.visible_keymaps then item.visible_keymaps = 1 end
-
-                local visible_keymaps = {}
-
-                for i = 1, item.visible_keymaps do
-                    table.insert(visible_keymaps, item.keymaps[i])
-                    keymap_prefix = table.concat(visible_keymaps, " ") .. " "
-                end
-            end
-
-            local line_content = item.text
-            if self.current_step.format_fn then
-                line_content = self.current_step.format_fn(self.results, item) or line_content
-            end
-
+            local keymap_prefix = find_keymap_prefix(item)
+            local line_content = find_line_content(item, self.current_step.format_fn, self.results)
             table.insert(lines, keymap_prefix .. line_content)
         end
     end
@@ -160,10 +171,10 @@ function PopUp:_advance()
 
     if self.step_index == 1 then self.buf = vim.api.nvim_create_buf(false, true) end
 
-    local lines = self:_get_lines()
-    vim.api.nvim_buf_set_lines(self.buf, 0, -1, false, lines)
+    self.lines = self:_get_lines()
+    vim.api.nvim_buf_set_lines(self.buf, 0, -1, false, self.lines)
 
-    self:_set_window_size(lines)
+    self:_set_window_size(self.lines)
     self:_set_all_keymaps()
 end
 
@@ -182,7 +193,7 @@ function PopUp:_mount()
         style = "minimal",
         border = "single",
         title = self.title or "",
-        title_pos = self.title_pos or "center",
+        title_pos = self.title_position or "center",
         noautocmd = true,
     })
 
@@ -197,6 +208,7 @@ end
 -- Public
 
 function PopUp:new(opts)
+    opts.steps = sanitize_items(opts.steps)
     local popup = setmetatable(opts, vim.deepcopy(PopUp))
     return popup
 end
@@ -212,7 +224,7 @@ function PopUp:show()
 end
 
 function PopUp:hide()
-    vim.api.nvim_win_hide(self.win)
+    vim.api.nvim_win_close(self.win, true)
     pcall(vim.api.nvim_buf_del, self.buf)
 end
 
