@@ -4,6 +4,7 @@ local visual_collector = require("stormcaller.api.visual_collector")
 local selection = require("stormcaller.lib.selection")
 local navigator = require("stormcaller.api.navigator")
 local pms_menu = require("stormcaller.ui.pms_menu")
+local tag = require("stormcaller.api.html_tag")
 
 local exit_hydra = function() vim.api.nvim_input("<Plug>DeliberateExitHydra") end
 local heads = {
@@ -37,6 +38,17 @@ local heads = {
     {
         "v",
         function() visual_collector.toggle() end,
+        { nowait = true },
+    },
+
+    {
+        "D",
+        function() tag.add({ tag = "div", destination = "next", content = "" }) end,
+        { nowait = true },
+    },
+    {
+        "U",
+        function() tag.add({ tag = "ul", destination = "next", content = "" }) end,
         { nowait = true },
     },
 

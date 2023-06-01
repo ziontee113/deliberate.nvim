@@ -110,6 +110,8 @@ M.add = function(o)
         catalyst.set_node_point("start")
         catalyst.move_to()
     end
+
+    require("stormcaller.lib.indicator").highlight_selection(selection.items())
 end
 
 return M
