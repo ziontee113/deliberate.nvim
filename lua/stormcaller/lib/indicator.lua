@@ -35,6 +35,18 @@ M.highlight_catalyst = function(catalyst_info, hl_group)
     )
 end
 
+local pick_selection_icon = function()
+    if require("stormcaller.api.visual_collector").is_active() then return "" end
+    if require("stormcaller.lib.selection").select_move_is_active() then return "" end
+    return "☾"
+end
+
+local pick_selection_hl_group = function()
+    if require("stormcaller.api.visual_collector").is_active() then return "@function" end
+    if require("stormcaller.lib.selection").select_move_is_active() then return "@float" end
+    return "Normal"
+end
+
 ---@param selection CatalystInfo[]
 M.highlight_selection = function(selection)
     if #selection == 0 then return end
@@ -45,7 +57,7 @@ M.highlight_selection = function(selection)
     for _, item in ipairs(selection) do
         local start_row = item.node:range()
         pcall(vim.api.nvim_buf_set_extmark, buf, selection_ns, start_row, 0, {
-            virt_text = { { "←", "Normal" } },
+            virt_text = { { pick_selection_icon(), pick_selection_hl_group() } },
             virt_text_pos = "eol",
         })
     end

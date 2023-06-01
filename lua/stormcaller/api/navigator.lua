@@ -71,7 +71,8 @@ local function change_catalyst_node_to_its_sibling(o)
 
     if next_siblings[1] then
         catalyst.set_node(next_siblings[1])
-        catalyst.set_node_point(find_cursor_node_point_for_sibling(o))
+        catalyst.set_node_point("start")
+        -- catalyst.set_node_point(find_cursor_node_point_for_sibling(o))
         return next_siblings[1]
     end
 end
