@@ -202,6 +202,9 @@ function PopUp:show()
     self:_mount()
 end
 
-function PopUp:hide() vim.api.nvim_win_hide(self.win) end
+function PopUp:hide()
+    vim.api.nvim_win_hide(self.win)
+    vim.api.nvim_buf_del(self.buf)
+end
 
 return PopUp
