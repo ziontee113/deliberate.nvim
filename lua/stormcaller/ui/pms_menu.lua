@@ -49,21 +49,17 @@ local key_value_dictionary = {
 ---@class pms_menu_Opts
 ---@field axis "" | "x" | "y" | "l" | "r" | "t" | "b"
 
----@param o pms_menu_Opts
-M.change_padding = function(o)
+local change_pms = function(property, axis, fn)
     local popup = PopUp:new({
         steps = {
             {
                 items = key_value_dictionary,
                 format_fn = function(_, current_item)
-                    return string.format("p%s-%s", o.axis, current_item.text)
+                    return string.format("%s%s-%s", property, axis, current_item.text)
                 end,
                 callback = function(results)
-                    local value = string.format("p%s-%s", o.axis, results[1])
-                    tcm.change_padding({
-                        axis = o.axis,
-                        value = value,
-                    })
+                    local value = string.format("%s%s-%s", property, axis, results[1])
+                    fn({ axis = axis, value = value })
                 end,
             },
         },
@@ -71,5 +67,14 @@ M.change_padding = function(o)
 
     popup:show()
 end
+
+---@param o pms_menu_Opts
+M.change_padding = function(o) change_pms("p", o.axis, tcm.change_padding) end
+
+---@param o pms_menu_Opts
+M.change_margin = function(o) change_pms("m", o.axis, tcm.change_margin) end
+
+---@param o pms_menu_Opts
+M.change_spacing = function(o) change_pms("s", o.axis, tcm.change_spacing) end
 
 return M

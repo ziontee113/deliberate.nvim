@@ -44,6 +44,16 @@ describe("...", function()
 
         utils.feed_keys("r")
 
-        h.catalyst_last('<li className="p-12">Contacts</li>')
+        h.catalyst_has('<li className="p-12">Contacts</li>')
+
+        -- 2nd try
+        pms.change_padding({ axis = "" })
+        utils.feed_keys("1")
+        h.catalyst_has('<li className="p-1">Contacts</li>')
+
+        -- 3rd try
+        pms.change_padding({ axis = "y" })
+        utils.feed_keys("4")
+        h.catalyst_has('<li className="p-1 py-4">Contacts</li>')
     end)
 end)
