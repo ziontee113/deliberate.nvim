@@ -100,8 +100,35 @@ end
 
 ---@param select_move boolean | nil
 M.update = function(select_move)
-    if require("stormcaller.api.visual_collector").is_active() then
-        insert_or_remove_item(current_catalyst_info)
+    local visual_collector = require("stormcaller.api.visual_collector")
+
+    if visual_collector.is_active() then
+        local previous_match, previous_match_index = false, nil
+        for i, item in ipairs(visual_collector.collection()) do
+            if items_are_identical(item, previous_catalyst_info) then
+                previous_match, previous_match_index = true, i
+                break
+            end
+        end
+
+        local current_match = false
+        for _, item in ipairs(visual_collector.collection()) do
+            if items_are_identical(item, current_catalyst_info) then
+                current_match = true
+                break
+            end
+        end
+
+        if previous_match and current_match then
+            insert_or_remove_item(previous_catalyst_info)
+            visual_collector.remove(previous_match_index)
+        end
+
+        if not current_match then
+            insert_or_remove_item(current_catalyst_info)
+            visual_collector.collect(current_catalyst_info)
+        end
+
         select_move_active = true
     else
         if select_move and select_move_active then insert_or_remove_item(previous_catalyst_info) end
@@ -191,6 +218,13 @@ M.clear = function(keep_indicators)
     end
 end
 
+---@return boolean
 M.select_move_is_active = function() return select_move_active end
+
+---@return CatalystInfo
+M.current_catalyst_info = function() return current_catalyst_info end
+
+---@return CatalystInfo[]
+M.items = function() return selection end
 
 return M
