@@ -98,47 +98,50 @@ local insert_or_remove_item = function(item)
     if match then table.remove(selection, match_index) end
 end
 
+local function handle_visual_collector()
+    local visual_collector = require("stormcaller.api.visual_collector")
+    local previous_match, previous_match_index = false, nil
+    for i, item in ipairs(visual_collector.collection()) do
+        if items_are_identical(item, previous_catalyst_info) then
+            previous_match, previous_match_index = true, i
+            break
+        end
+    end
+    local current_match = false
+    for _, item in ipairs(visual_collector.collection()) do
+        if items_are_identical(item, current_catalyst_info) then
+            current_match = true
+            break
+        end
+    end
+
+    if previous_match and current_match then
+        insert_or_remove_item(previous_catalyst_info)
+        visual_collector.remove(previous_match_index)
+    end
+    if not current_match then
+        insert_or_remove_item(current_catalyst_info)
+        visual_collector.collect(current_catalyst_info)
+    end
+
+    select_move_active = true
+end
+
+local function handle_select_move(select_move)
+    if select_move and select_move_active then insert_or_remove_item(previous_catalyst_info) end
+    if select_move and not select_move_active then
+        select_move_active = true
+        selection = { previous_catalyst_info }
+    end
+    if not select_move and not select_move_active then selection = { current_catalyst_info } end
+end
+
 ---@param select_move boolean | nil
 M.update = function(select_move)
-    local visual_collector = require("stormcaller.api.visual_collector")
-
-    if visual_collector.is_active() then
-        local previous_match, previous_match_index = false, nil
-        for i, item in ipairs(visual_collector.collection()) do
-            if items_are_identical(item, previous_catalyst_info) then
-                previous_match, previous_match_index = true, i
-                break
-            end
-        end
-
-        local current_match = false
-        for _, item in ipairs(visual_collector.collection()) do
-            if items_are_identical(item, current_catalyst_info) then
-                current_match = true
-                break
-            end
-        end
-
-        if previous_match and current_match then
-            insert_or_remove_item(previous_catalyst_info)
-            visual_collector.remove(previous_match_index)
-        end
-
-        if not current_match then
-            insert_or_remove_item(current_catalyst_info)
-            visual_collector.collect(current_catalyst_info)
-        end
-
-        select_move_active = true
+    if require("stormcaller.api.visual_collector").is_active() then
+        handle_visual_collector()
     else
-        if select_move and select_move_active then insert_or_remove_item(previous_catalyst_info) end
-
-        if select_move and not select_move_active then
-            select_move_active = true
-            selection = { previous_catalyst_info }
-        end
-
-        if not select_move and not select_move_active then selection = { current_catalyst_info } end
+        handle_select_move(select_move)
     end
 
     previous_catalyst_info = current_catalyst_info
