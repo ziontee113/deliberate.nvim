@@ -1,8 +1,9 @@
+local PopUp = require("stormcaller.lib.ui.PopUp")
 local tcm = require("stormcaller.api.tailwind_class_modifier")
 
 local M = {}
 
-local dict = {
+local key_value_dictionary = {
     { keymaps = "0", text = "", hide = true },
     { keymaps = "1", text = "1", hide = true },
     { keymaps = "2", text = "2", hide = true },
@@ -44,6 +45,19 @@ local dict = {
     { keymaps = "@", text = "2.5", hide = true },
     { keymaps = "#", text = "3.5", hide = true },
 }
+
+local popup_format_fn
+local popup_callback
+
+local popup = PopUp:new({
+    steps = {
+        {
+            items = key_value_dictionary,
+            format_fn = popup_format_fn,
+            callback = popup_callback,
+        },
+    },
+})
 
 M.change_padding = function()
     -- TODO:

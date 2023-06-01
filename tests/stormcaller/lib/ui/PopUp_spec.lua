@@ -55,7 +55,7 @@ describe("PopUp", function()
                         "",
                         { keymaps = { "2" }, text = "2nd - " },
                     },
-                    format = function(results, current_item)
+                    format_fn = function(results, current_item)
                         return string.format("%s - %s", results[1], current_item.text)
                     end,
                 },

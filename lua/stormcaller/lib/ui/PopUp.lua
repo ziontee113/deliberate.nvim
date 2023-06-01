@@ -120,8 +120,8 @@ function PopUp:_get_lines()
             end
 
             local line_content = item.text
-            if self.current_step.format then
-                line_content = self.current_step.format(self.results, item) or line_content
+            if self.current_step.format_fn then
+                line_content = self.current_step.format_fn(self.results, item) or line_content
             end
 
             table.insert(lines, keymap_prefix .. line_content)
