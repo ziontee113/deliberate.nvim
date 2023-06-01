@@ -110,6 +110,16 @@ local function change_catalyst_node_to_previous_closest_html_element()
     end
 end
 
+local function change_catalyst_to_its_last_child(html_children)
+    local last_child = html_children[#html_children]
+    local node_point = "end"
+    local start_row, _, end_row, _ = last_child:range()
+    if start_row == end_row then node_point = "start" end
+
+    catalyst.set_node(last_child)
+    catalyst.set_node_point(node_point)
+end
+
 ---@param o navigator_move_Args
 M.move = function(o)
     if not catalyst.is_active() then return end
@@ -134,8 +144,7 @@ M.move = function(o)
     elseif o.destination == "previous" then
         if #html_children > 0 then
             if lib_ts.cursor_is_at_end_of_node(catalyst.win(), catalyst.node()) then
-                catalyst.set_node(html_children[#html_children])
-                catalyst.set_node_point("end")
+                change_catalyst_to_its_last_child(html_children)
             elseif not change_catalyst_node_to_its_parent(o) then
                 change_catalyst_node_to_previous_closest_html_element()
             end
