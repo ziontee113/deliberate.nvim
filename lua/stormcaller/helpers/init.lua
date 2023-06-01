@@ -14,6 +14,13 @@ M.initiate = function(cmd, wanted_text, assert_fn)
     assert_fn(wanted_text)
 end
 
+M.initiate_for_ui = function(cmd, wanted_text, assert_fn)
+    vim.cmd(string.format("norm! %s", cmd))
+    catalyst.initiate({ win = vim.api.nvim_get_current_win(), buf = vim.api.nvim_get_current_buf() })
+    assert_fn = assert_fn or M.catalyst_has
+    assert_fn(wanted_text)
+end
+
 M.initiate_and_check_cursor_positon = function(cmd, wanted_text, assert_fn, pos)
     M.initiate(cmd, wanted_text, assert_fn)
     if not pos then return end

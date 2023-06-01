@@ -54,10 +54,6 @@ end
 ---@param value string
 ---@return string
 local function process_new_class_names(class_names, patterns, value)
-    ---- To support "Change Classes Groups"
-    -- TODO: remove all classes from given `patterns_to_remove`.
-    -- TODO: remove all classes from given table.
-
     local replaced, new_class_names = replace_class_names(class_names, patterns, value)
     if replaced then
         class_names = new_class_names
