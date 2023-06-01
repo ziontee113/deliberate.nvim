@@ -71,7 +71,7 @@ end
 
 function Input:hide()
     vim.api.nvim_win_hide(self.win)
-    vim.api.nvim_buf_del(self.buf)
+    pcall(vim.api.nvim_buf_del, self.buf)
 end
 
 function Input:new(opts)

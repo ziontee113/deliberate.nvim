@@ -60,7 +60,6 @@ M.change_padding = function(o)
                 end,
                 callback = function(results)
                     local value = string.format("p%s-%s", o.axis, results[1])
-                    print(value)
                     tcm.change_padding({
                         axis = o.axis,
                         value = value,
