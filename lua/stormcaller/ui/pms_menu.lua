@@ -58,7 +58,10 @@ local change_pms = function(property, axis, fn)
                     return string.format("%s%s-%s", property, axis, current_item.text)
                 end,
                 callback = function(results)
-                    local value = string.format("%s%s-%s", property, axis, results[1])
+                    local value = ""
+                    if results[1] ~= "" then
+                        value = string.format("%s%s-%s", property, axis, results[1])
+                    end
                     fn({ axis = axis, value = value })
                 end,
             },
