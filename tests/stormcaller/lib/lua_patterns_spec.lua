@@ -15,7 +15,7 @@ end
 describe("Lua patterns for Tailwind PMS classes", function()
     it("padding pattern for omni axis works correctly", function()
         local inputs = { "p-4", "p-69", "p-[20px]", "p-[4rem]", "p-[4pt]", "p-[10vh]" }
-        patterns_matches_inputs(lua_patterns.padding["omni"], inputs)
+        patterns_matches_inputs(lua_patterns.padding[""], inputs)
     end)
     it("padding pattern for y axis works correctly", function()
         local inputs = { "py-4", "py-69", "py-[20px]", "py-[4rem]", "py-[4pt]", "py-[10vh]" }

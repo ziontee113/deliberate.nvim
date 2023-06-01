@@ -66,7 +66,7 @@ end
 
 ---@class change_tailwind_classes_Args
 ---@field property  "padding" | "margin" | "spacing" | "text_color" | "background_color"
----@field axis "omni" | "x" | "y" | "l" | "r" | "t" | "b"
+---@field axis "" | "x" | "y" | "l" | "r" | "t" | "b"
 ---@field value string
 
 ---@param o change_tailwind_classes_Args
