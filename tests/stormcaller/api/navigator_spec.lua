@@ -28,7 +28,7 @@ describe("typescriptreact navigator.move()", function()
     it("direction = previous-sibling", function()
         initiate("23gg^", "<li>FAQ</li>")
         move("previous-sibling", "<li>Contacts</li>", { 22, 8 })
-        move("previous-sibling", h.long_li_tag, { 21, 12 }) -- put cursor at end of tag since we're moving up and target start and end not on same line
+        move("previous-sibling", h.long_li_tag, { 18, 8 }) -- put cursor at end of tag since we're moving up and target start and end not on same line
         move("previous-sibling", "<li>Home</li>", { 17, 8 })
         move("previous-sibling", "<li>Home</li>", { 17, 8 }) -- stays in place since no more prevous sibling
     end)
@@ -48,7 +48,7 @@ describe("typescriptreact navigator.move()", function()
 
     it("direction = previous", function()
         initiate("22gg^", "<li>Contacts</li>")
-        move("previous", h.long_li_tag, { 21, 12 })
+        move("previous", h.long_li_tag, { 18, 8 })
         move("previous", "<li>Home</li>", { 17, 8 })
         move("previous", '<div className="h-screen w-screen bg-zinc-900">', { 16, 6 }, first_line)
         move("previous", "<>", { 15, 4 }, first_line)

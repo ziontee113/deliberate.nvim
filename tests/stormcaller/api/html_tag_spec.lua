@@ -94,7 +94,7 @@ describe("tag.add() on multiple (all) selected nodes", function()
         move("previous", "<li>FAQ</li>")
         move("previous", "<li>first_add</li>")
         move("previous", "<li>Contacts</li>")
-        move("previous", "        </li>", { 21, 12 }, h.catalyst_last)
+        move("previous", h.long_li_tag, { 18, 8 })
         move("previous", "<li>Home</li>")
         mova({ "previous", true }, 2, {
             "<OtherComponent />",
