@@ -128,6 +128,13 @@ function PopUp:_get_lines()
     return lines
 end
 
+function PopUp:_set_all_keymaps()
+    self:_set_user_keymaps()
+    self:_set_navigation_keymaps()
+    self:_set_confirm_keymaps()
+    self:_set_hide_keymaps()
+end
+
 function PopUp:_set_window_size(lines)
     self.width = find_longest_line(lines)
     self.height = #lines
@@ -153,10 +160,7 @@ function PopUp:_advance()
     vim.api.nvim_buf_set_lines(self.buf, 0, -1, false, lines)
 
     self:_set_window_size(lines)
-    self:_set_user_keymaps()
-    self:_set_navigation_keymaps()
-    self:_set_confirm_keymaps()
-    self:_set_hide_keymaps()
+    self:_set_all_keymaps()
 end
 
 function PopUp:_reset_state()
@@ -183,6 +187,8 @@ function PopUp:_mount()
         self.winhl or "Normal:Normal,FloatBorder:@function"
     )
     vim.api.nvim_win_set_option(self.win, "cursorline", true)
+
+    self:_set_all_keymaps() -- set local keymaps again to overwrite Hydra keymaps
 end
 
 -- Public
