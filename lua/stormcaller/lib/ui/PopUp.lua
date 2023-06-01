@@ -183,6 +183,7 @@ function PopUp:_mount()
         border = "single",
         title = self.title or "",
         title_pos = self.title_pos or "center",
+        noautocmd = true,
     })
 
     vim.api.nvim_win_set_option(
@@ -191,8 +192,6 @@ function PopUp:_mount()
         self.winhl or "Normal:Normal,FloatBorder:@function"
     )
     vim.api.nvim_win_set_option(self.win, "cursorline", true)
-
-    self:_set_all_keymaps() -- set local keymaps again to overwrite Hydra keymaps
 end
 
 -- Public
