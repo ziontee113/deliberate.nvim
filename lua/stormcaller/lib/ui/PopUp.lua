@@ -89,7 +89,7 @@ end
 function PopUp:_set_user_keymaps()
     for item_index, item in ipairs(self.current_step.items) do
         if item.keymaps then
-            if type(item.keymaps) == "string" then item.keymaps = { item.keymaps } end
+            if type(item.keymaps) == "string" then item.keymaps = { item.keymaps } end -- TODO: duplicate code, please refactor
             for _, keymap in ipairs(item.keymaps) do
                 vim.keymap.set(
                     "n",
@@ -109,9 +109,13 @@ function PopUp:_get_lines()
             table.insert(lines, item)
         elseif not item.hidden then
             local keymap_prefix = ""
-            if item.keymaps and item.keymaps[1] then
+            if type(item.keymaps) == "string" then item.keymaps = { item.keymaps } end -- TODO: duplicate code, please refactor
+            if item.keymaps then
+                if not item.visible_keymaps then item.visible_keymaps = 1 end
+
                 local visible_keymaps = {}
-                for i = 1, item.visible_keymaps or 1 do
+
+                for i = 1, item.visible_keymaps do
                     table.insert(visible_keymaps, item.keymaps[i])
                     keymap_prefix = table.concat(visible_keymaps, " ") .. " "
                 end
