@@ -6,7 +6,10 @@ local navigator = require("stormcaller.api.navigator")
 local pms_menu = require("stormcaller.ui.pms_menu")
 local tag = require("stormcaller.api.html_tag")
 
+local M = {}
+
 local exit_hydra = function() vim.api.nvim_input("<Plug>DeliberateExitHydra") end
+
 local heads = {
     {
         "j",
@@ -124,3 +127,7 @@ Hydra({
     body = "<Esc>",
     heads = heads,
 })
+
+return {
+    exit_hydra = exit_hydra,
+}

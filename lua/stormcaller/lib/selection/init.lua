@@ -221,7 +221,8 @@ M.archive_empty_state = function() require("stormcaller.lib.selection.extmark_ar
 M.restore_previous_state = function()
     local extmark_locations = require("stormcaller.lib.selection.extmark_archive").pop()
 
-    if #extmark_locations == 0 then return end
+    if not extmark_locations then return false end
+    if #extmark_locations == 0 then return true end
 
     selection = {}
     vim.api.nvim_buf_clear_namespace(current_catalyst_info.buf, ns, 0, -1)

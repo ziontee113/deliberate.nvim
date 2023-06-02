@@ -4,10 +4,8 @@ local M = {}
 
 M.call = function()
     vim.cmd("undo")
-
-    -- TODO:
-
-    selection.restore_previous_state()
+    local ok = selection.restore_previous_state()
+    if not ok then require("stormcaller.hydra").exit_hydra() end
 end
 
 return M
