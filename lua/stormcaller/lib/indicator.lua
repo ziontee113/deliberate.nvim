@@ -47,8 +47,8 @@ local pick_selection_hl_group = function()
     return "Normal"
 end
 
----@param selection CatalystInfo[]
-M.highlight_selection = function(selection)
+M.highlight_selection = function()
+    local selection = require("stormcaller.lib.selection").items()
     if #selection == 0 then return end
 
     local buf = selection[1].buf

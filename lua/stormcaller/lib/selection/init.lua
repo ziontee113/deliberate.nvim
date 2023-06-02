@@ -199,7 +199,7 @@ M.update = function(select_move)
     remove_unused_extmarks()
 
     -- indicator.highlight_catalyst(current_catalyst_info)
-    indicator.highlight_selection(selection)
+    indicator.highlight_selection()
 end
 
 M.clear = function(keep_indicators)
@@ -247,7 +247,7 @@ M.restore_previous_state = function()
     current_catalyst_info = selection[1]
     previous_catalyst_info = selection[1]
 
-    indicator.highlight_selection(selection)
+    indicator.highlight_selection()
 end
 
 -------------------------------------------- Public Getters / Checkers

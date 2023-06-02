@@ -114,7 +114,7 @@ M.add = function(o)
         catalyst.move_to()
     end
 
-    require("stormcaller.lib.indicator").highlight_selection(selection.items())
+    require("stormcaller.lib.indicator").highlight_selection()
 end
 
 return M

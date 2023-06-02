@@ -21,7 +21,7 @@ M.start = function()
     table.insert(collected_items, selection.current_catalyst_info())
 
     if not selection.select_move_is_active() then
-        require("stormcaller.lib.indicator").highlight_selection(selection.items())
+        require("stormcaller.lib.indicator").highlight_selection()
     else
         selection.update()
     end
