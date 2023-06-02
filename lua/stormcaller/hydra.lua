@@ -7,7 +7,15 @@ local pms_menu = require("stormcaller.ui.pms_menu")
 local tag = require("stormcaller.api.html_tag")
 local uniform = require("stormcaller.api.uniform")
 
-local exit_hydra = function() vim.api.nvim_input("<Plug>DeliberateExitHydra") end
+local augroup = vim.api.nvim_create_augroup("Deliberate Hydra Exit", { clear = true })
+local autocmd_id
+
+local exit_hydra = function()
+    vim.api.nvim_input("<Plug>DeliberateExitHydra")
+    if visual_collector.is_active() then visual_collector.stop() end
+    if selection.select_move_is_active() then selection.clear(true) end
+    vim.api.nvim_del_autocmd(autocmd_id)
+end
 
 local heads = {
     {
@@ -134,6 +142,12 @@ Hydra({
             catalyst.initiate({
                 win = vim.api.nvim_get_current_win(),
                 buf = vim.api.nvim_get_current_buf(),
+            })
+
+            autocmd_id = vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+                buffer = vim.api.nvim_get_current_buf(),
+                group = augroup,
+                callback = function() exit_hydra() end,
             })
         end,
         on_exit = function() selection.clear() end,

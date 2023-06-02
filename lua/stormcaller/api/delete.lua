@@ -14,6 +14,7 @@ M.call = function()
         vim.api.nvim_buf_set_lines(catalyst.buf(), start_row, end_row + 1, false, {})
     end
 
+    require("stormcaller.api.visual_collector").stop()
     selection.clear()
     catalyst.initiate({ win = catalyst.win(), buf = catalyst.buf() })
 end
