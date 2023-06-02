@@ -70,6 +70,11 @@ local heads = {
         function() require("stormcaller.api.undo").call() end,
         { nowait = true },
     },
+    {
+        "d",
+        function() require("stormcaller.api.delete").call() end,
+        { nowait = true },
+    },
 
     {
         "<Esc>",

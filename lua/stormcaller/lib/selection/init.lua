@@ -276,4 +276,19 @@ M.nodes = function()
     return nodes
 end
 
+M.sorted_nodes = function()
+    local sorted_nodes = {}
+    local sorted_rows = {}
+    for _, item in ipairs(selection) do
+        local start_row = item.node:range()
+        local insert_index = 1
+        for i, row in ipairs(sorted_rows) do
+            if start_row > row then insert_index = i + 1 end
+        end
+        table.insert(sorted_nodes, insert_index, item.node)
+        table.insert(sorted_rows, insert_index, start_row)
+    end
+    return sorted_nodes
+end
+
 return M

@@ -98,6 +98,7 @@ M.initiate = function(o)
 
     vim.cmd("norm! ^")
 
+    aggregator.get_updated_root() -- refresh Language Tree
     local node_at_cursor = ts_utils.get_node_at_cursor(o.win)
     local parent = aggregator.get_html_node(node_at_cursor)
 
