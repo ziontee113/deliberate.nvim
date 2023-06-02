@@ -1,3 +1,5 @@
+require("tests.editor_config")
+
 local visual_collector = require("stormcaller.api.visual_collector")
 local selection = require("stormcaller.lib.selection")
 local helpers = require("stormcaller.helpers")

@@ -83,6 +83,8 @@ end
 local change_tailwind_classes = function(o)
     if not catalyst.is_active() then return end
 
+    selection.archive_empty_state()
+
     for i = 1, #selection.nodes() do
         -- QUESTION: why use `selection.nodes()[i]` instead of using `for i, node in ipairs(selection.nodes())`?
         -- ANSWER: `selection.nodes()[i]` makes sure we get the "latest updated version of the node" (handled by `selection` module).

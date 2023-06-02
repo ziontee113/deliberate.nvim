@@ -231,7 +231,40 @@ M.current_catalyst_info = function() return current_catalyst_info end
 M.items = function() return selection end
 
 M.archive_current_state = function()
-    -- TODO:
+    require("stormcaller.lib.selection.extmark_archive").push(selection, ns)
+end
+M.archive_empty_state = function() require("stormcaller.lib.selection.extmark_archive").push({}) end
+
+M.restore_previous_state = function()
+    local extmark_locations = require("stormcaller.lib.selection.extmark_archive").pop()
+
+    if #extmark_locations == 0 then return end
+
+    selection = {}
+    vim.api.nvim_buf_clear_namespace(current_catalyst_info.buf, ns, 0, -1)
+
+    local buf = current_catalyst_info.buf
+    local root = aggregator.get_updated_root()
+
+    for _, pos in ipairs(extmark_locations) do
+        local row, col = unpack(pos)
+        local node = get_updated_node_from_position(root, row, col)
+        local extmark_id = set_extmark_for_node(buf, node)
+
+        local item = {
+            buf = current_catalyst_info.buf,
+            win = current_catalyst_info.win,
+            node = node,
+            extmark_id = extmark_id,
+        }
+
+        table.insert(selection, item)
+    end
+
+    current_catalyst_info = selection[1]
+    previous_catalyst_info = selection[1]
+
+    indicator.highlight_selection(selection)
 end
 
 return M

@@ -53,6 +53,12 @@ local heads = {
     },
 
     {
+        "u",
+        function() require("stormcaller.api.undo").call() end,
+        { nowait = true },
+    },
+
+    {
         "<Esc>",
         function()
             if not selection.select_move_is_active() and not visual_collector.is_active() then

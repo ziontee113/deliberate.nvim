@@ -1,5 +1,6 @@
-local pms = require("stormcaller.ui.pms_menu")
+require("tests.editor_config")
 
+local pms = require("stormcaller.ui.pms_menu")
 local utils = require("stormcaller.lib.utils")
 local h = require("stormcaller.helpers")
 local initiate = h.initiate_for_ui

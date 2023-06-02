@@ -1,3 +1,5 @@
+require("tests.editor_config")
+
 local navigator = require("stormcaller.api.navigator")
 local selection = require("stormcaller.lib.selection")
 
