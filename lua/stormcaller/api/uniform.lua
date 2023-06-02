@@ -88,6 +88,8 @@ M.move = function(o)
     if o.destination == "previous" or o.destination == "next" then
         handle_previous_or_next(o.destination)
     end
+
+    require("stormcaller.lib.indicator").highlight_selection()
 end
 
 return M
