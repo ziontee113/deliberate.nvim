@@ -3,6 +3,8 @@ local indicator = require("stormcaller.lib.indicator")
 
 local M = {}
 
+-------------------------------------------- Local Variabbles
+
 local ns = vim.api.nvim_create_namespace("Stormcaller Selection Namespace")
 
 local select_move_active = false
@@ -30,19 +32,7 @@ local function set_extmark_for_node(buf, node)
     return vim.api.nvim_buf_set_extmark(buf, ns, start_row, start_col, {})
 end
 
----@param win number
----@param buf number
----@param node TSNode
-M.update_current_catalyst_info = function(win, buf, node)
-    local extmark_id = set_extmark_for_node(buf, node)
-
-    current_catalyst_info = {
-        win = win,
-        buf = buf,
-        node = node,
-        extmark_id = extmark_id,
-    }
-end
+-------------------------------------------- Local functions
 
 ---@param a CatalystInfo
 ---@param b CatalystInfo
@@ -51,11 +41,6 @@ local items_are_identical = function(a, b)
     local row_a, col_a = unpack(vim.api.nvim_buf_get_extmark_by_id(a.buf, ns, a.extmark_id, {}))
     local row_b, col_b = unpack(vim.api.nvim_buf_get_extmark_by_id(b.buf, ns, b.extmark_id, {}))
     return row_a == row_b and col_a == col_b
-end
-
----@param index number
-M.item_matches_catalyst = function(index)
-    return items_are_identical(selection[index], current_catalyst_info)
 end
 
 local remove_unused_extmarks = function()
@@ -136,33 +121,6 @@ local function handle_select_move(select_move)
     if not select_move and not select_move_active then selection = { current_catalyst_info } end
 end
 
----@param select_move boolean | nil
-M.update = function(select_move)
-    if require("stormcaller.api.visual_collector").is_active() then
-        handle_visual_collector()
-    else
-        handle_select_move(select_move)
-    end
-
-    previous_catalyst_info = current_catalyst_info
-
-    remove_unused_extmarks()
-
-    -- indicator.highlight_catalyst(current_catalyst_info)
-    indicator.highlight_selection(selection)
-end
-
---------------------------------------------
-
----@return TSNode[]
-M.nodes = function()
-    local nodes = {}
-    for _, item in ipairs(selection) do
-        table.insert(nodes, item.node)
-    end
-    return nodes
-end
-
 ---@param root TSNode
 ---@param row number
 ---@param col number
@@ -179,6 +137,22 @@ end
 local get_updated_node_from_item = function(root, item)
     local row, col = unpack(vim.api.nvim_buf_get_extmark_by_id(item.buf, ns, item.extmark_id, {}))
     return get_updated_node_from_position(root, row, col)
+end
+
+-------------------------------------------- Public Methods
+
+---@param win number
+---@param buf number
+---@param node TSNode
+M.update_current_catalyst_info = function(win, buf, node)
+    local extmark_id = set_extmark_for_node(buf, node)
+
+    current_catalyst_info = {
+        win = win,
+        buf = buf,
+        node = node,
+        extmark_id = extmark_id,
+    }
 end
 
 ---@param index number
@@ -212,6 +186,22 @@ M.refresh_tree = function()
     )
 end
 
+---@param select_move boolean | nil
+M.update = function(select_move)
+    if require("stormcaller.api.visual_collector").is_active() then
+        handle_visual_collector()
+    else
+        handle_select_move(select_move)
+    end
+
+    previous_catalyst_info = current_catalyst_info
+
+    remove_unused_extmarks()
+
+    -- indicator.highlight_catalyst(current_catalyst_info)
+    indicator.highlight_selection(selection)
+end
+
 M.clear = function(keep_indicators)
     select_move_active = false
     M.update()
@@ -221,14 +211,7 @@ M.clear = function(keep_indicators)
     end
 end
 
----@return boolean
-M.select_move_is_active = function() return select_move_active end
-
----@return CatalystInfo
-M.current_catalyst_info = function() return current_catalyst_info end
-
----@return CatalystInfo[]
-M.items = function() return selection end
+----------------- Undo State Management
 
 M.archive_current_state = function()
     require("stormcaller.lib.selection.extmark_archive").push(selection, ns)
@@ -265,6 +248,31 @@ M.restore_previous_state = function()
     previous_catalyst_info = selection[1]
 
     indicator.highlight_selection(selection)
+end
+
+-------------------------------------------- Public Getters / Checkers
+
+---@param index number
+M.item_matches_catalyst = function(index)
+    return items_are_identical(selection[index], current_catalyst_info)
+end
+
+---@return boolean
+M.select_move_is_active = function() return select_move_active end
+
+---@return CatalystInfo
+M.current_catalyst_info = function() return current_catalyst_info end
+
+---@return CatalystInfo[]
+M.items = function() return selection end
+
+---@return TSNode[]
+M.nodes = function()
+    local nodes = {}
+    for _, item in ipairs(selection) do
+        table.insert(nodes, item.node)
+    end
+    return nodes
 end
 
 return M
