@@ -17,7 +17,7 @@ local default_yank_Opts = {
 
 ---@param opts yank_Opts | nil
 M.call = function(opts)
-    opts = vim.tbl_deep_extend("force", default_yank_Opts, opts)
+    opts = vim.tbl_deep_extend("force", default_yank_Opts, opts or {})
 
     contents = {}
     local buf = selection.buf()

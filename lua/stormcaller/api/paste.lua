@@ -11,14 +11,47 @@ local find_row_offset = function(destination, lines)
     end
 end
 
+local reindent = function(lines, target_start_col)
+    local shortest_indent_amount = #string.match(lines[1], "^%s+") or 0
+    for _, line in ipairs(lines) do
+        local this_line_indent = string.match(line, "^%s+")
+        if #this_line_indent < shortest_indent_amount then
+            shortest_indent_amount = #this_line_indent
+        end
+    end
+
+    if shortest_indent_amount ~= target_start_col then
+        local deficit = shortest_indent_amount - target_start_col
+        if shortest_indent_amount > target_start_col then
+            for i, _ in ipairs(lines) do
+                lines[i] = string.sub(lines[i], deficit + 1)
+            end
+        else
+            local spaces = string.rep(" ", math.abs(deficit))
+            for i, _ in ipairs(lines) do
+                lines[i] = spaces .. lines[i]
+            end
+        end
+    end
+
+    return lines
+end
+
 ---@class paste_Args
 ---@field destination "previous" | "next"
 ---@field join boolean | nil
+---@field reindent boolean
 
----@param o paste_Args | nil
-local paste = function(o)
-    o = o or {}
-    o.join = o.join or true
+---@type paste_Args
+local default_paste_opts = {
+    destination = "next",
+    join = true,
+    reindent = true,
+}
+
+---@param opts paste_Args | nil
+local paste = function(opts)
+    opts = vim.tbl_deep_extend("force", default_paste_opts, opts or {})
 
     local joined_contents = {}
     for _, yanked_lines in ipairs(yank.contents()) do
@@ -33,13 +66,15 @@ local paste = function(o)
     end
 
     for i, item in ipairs(selection.items()) do
-        local lines = o.join and joined_contents or yank.contents()[i]
+        local lines = opts.join and joined_contents or yank.contents()[i]
 
         local buf = item.buf
         local start_row, start_col, end_row, _ = item.node:range()
 
-        local target_row = o.destination == "previous" and start_row or end_row
-        local row_offset = find_row_offset(o.destination, lines)
+        if opts.reindent then lines = reindent(lines, start_col) end
+
+        local target_row = opts.destination == "previous" and start_row or end_row
+        local row_offset = find_row_offset(opts.destination, lines)
         target_row = target_row + row_offset
 
         vim.api.nvim_buf_set_lines(buf, target_row, target_row, false, lines)
