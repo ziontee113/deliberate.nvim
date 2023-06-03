@@ -20,13 +20,13 @@ describe("yank.call()", function()
         mova({ "previous", true }, 2, { "<li>Contacts</li>", h.long_li_tag })
         yank.call()
         assert.same({
-            { "        <li>Contacts</li>" },
             {
                 "        <li>",
                 "          A new study found that coffee drinkers have a lower risk of liver",
                 "          cancer. So, drink up!",
                 "        </li>",
             },
+            { "        <li>Contacts</li>" },
         }, yank.contents())
         h.selection_is(1, "<li>Home</li>")
     end)
@@ -42,13 +42,13 @@ describe("yank.call({keep_selection = true})", function()
         mova({ "previous", true }, 2, { "<li>Contacts</li>", h.long_li_tag })
         yank.call({ keep_selection = true })
         assert.same({
-            { "        <li>Contacts</li>" },
             {
                 "        <li>",
                 "          A new study found that coffee drinkers have a lower risk of liver",
                 "          cancer. So, drink up!",
                 "        </li>",
             },
+            { "        <li>Contacts</li>" },
         }, yank.contents())
         h.selection_is(2, { "<li>Contacts</li>", h.long_li_tag })
     end)

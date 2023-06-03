@@ -2,15 +2,9 @@ local catalyst = require("stormcaller.lib.catalyst")
 local selection = require("stormcaller.lib.selection")
 local yank = require("stormcaller.api.yank")
 
-local find_row_offset = function(destination, lines)
-    if destination == "previous" then return 0 end
-    if #selection.nodes() == 1 then
-        return 1
-    else
-        return #lines - 1
-    end
-end
-
+---@param lines string[]
+---@param target_start_col integer
+---@return string[]
 local reindent = function(lines, target_start_col)
     local shortest_indent_amount = #string.match(lines[1], "^%s+") or 0
     for _, line in ipairs(lines) do
@@ -65,19 +59,18 @@ local paste = function(opts)
         should_move_to_newly_created_tag = true
     end
 
-    for i, item in ipairs(selection.items()) do
+    for i = 1, #selection.sorted_nodes() do
         local lines = opts.join and joined_contents or yank.contents()[i]
 
-        local buf = item.buf
-        local start_row, start_col, end_row, _ = item.node:range()
+        local start_row, start_col, end_row, _ = selection.sorted_nodes()[i]:range()
 
         if opts.reindent then lines = reindent(lines, start_col) end
 
         local target_row = opts.destination == "previous" and start_row or end_row
-        local row_offset = find_row_offset(opts.destination, lines)
+        local row_offset = opts.destination == "previous" and 0 or 1
         target_row = target_row + row_offset
 
-        vim.api.nvim_buf_set_lines(buf, target_row, target_row, false, lines)
+        vim.api.nvim_buf_set_lines(selection.buf(), target_row, target_row, false, lines)
 
         selection.refresh_tree()
         selection.update_item(i, target_row, start_col)
@@ -88,6 +81,8 @@ local paste = function(opts)
         catalyst.set_node_point("start")
         catalyst.move_to()
     end
+
+    require("stormcaller.lib.indicator").highlight_selection()
 end
 
 return paste
