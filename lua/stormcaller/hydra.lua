@@ -12,8 +12,10 @@ local autocmd_id
 
 local exit_hydra = function()
     vim.api.nvim_input("<Plug>DeliberateExitHydra")
-    if visual_collector.is_active() then visual_collector.stop() end
-    if selection.select_move_is_active() then selection.clear(true) end
+
+    visual_collector.stop()
+    selection.clear(true)
+
     vim.api.nvim_del_autocmd(autocmd_id)
 end
 
@@ -21,12 +23,27 @@ local heads = {
     {
         "j",
         function() navigator.move({ destination = "next" }) end,
-        { nowait = true, desc = "Navigator Move Down" },
+        { nowait = true },
     },
     {
         "k",
         function() navigator.move({ destination = "previous" }) end,
-        { nowait = true, desc = "Navigator Move Up" },
+        { nowait = true },
+    },
+    {
+        "J",
+        function() navigator.move({ destination = "next-sibling" }) end,
+        { nowait = true },
+    },
+    {
+        "K",
+        function() navigator.move({ destination = "previous-sibling" }) end,
+        { nowait = true },
+    },
+    {
+        "H",
+        function() navigator.move({ destination = "parent" }) end,
+        { nowait = true },
     },
 
     {
@@ -53,6 +70,22 @@ local heads = {
     {
         "<A-Tab>",
         function() catalyst.move_to(true) end,
+        { nowait = true },
+    },
+
+    {
+        "y",
+        function() require("stormcaller.api.yank").call() end,
+        { nowait = true },
+    },
+    {
+        "pa",
+        function() require("stormcaller.api.paste")({ destination = "next" }) end,
+        { nowait = true },
+    },
+    {
+        "pA",
+        function() require("stormcaller.api.paste")({ destination = "previous" }) end,
         { nowait = true },
     },
 
