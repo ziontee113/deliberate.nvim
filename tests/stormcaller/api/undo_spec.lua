@@ -15,7 +15,7 @@ describe("...", function()
         tag.add({ tag = "div", content = "", destination = "next" })
         h.selection_is(1, "<div></div>")
 
-        undo.call()
+        undo.call(true)
 
         h.selection_is(1, "<li>Contacts</li>")
     end)
