@@ -2,10 +2,12 @@ local M = {}
 
 local catalyst = require("stormcaller.lib.catalyst")
 local selection = require("stormcaller.lib.selection")
+local yank = require("stormcaller.api.yank")
 
 M.call = function()
     vim.bo[catalyst.buf()].undolevels = vim.bo[catalyst.buf()].undolevels
     selection.archive_current_state()
+    yank.call({ keep_selection = true })
 
     local sorted_nodes = selection.sorted_nodes()
     for i = #sorted_nodes, 1, -1 do
