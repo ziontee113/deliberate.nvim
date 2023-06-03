@@ -1,5 +1,6 @@
 require("tests.editor_config")
 
+local selection = require("stormcaller.lib.selection")
 local yank = require("stormcaller.api.yank")
 local paste = require("stormcaller.api.paste")
 local h = require("stormcaller.helpers")
@@ -17,16 +18,33 @@ describe("paste()", function()
         h.move("next", "<li>FAQ</li>", { 24, 8 })
     end)
 
-    it("destination = after, multi selection, clear after yank, join on by default", function()
-        h.initiate("22gg^", "<li>Contacts</li>")
-        movA({ "next", true }, 1, "<li>Contacts</li>")
-        movA({ "next", true }, 2, { "<li>Contacts</li>", "<li>FAQ</li>" })
+    it(
+        "destination = after, consecutive multi selection, clear after yank, join on by default",
+        function()
+            h.initiate("22gg^", "<li>Contacts</li>")
+            movA({ "next", true }, 1, "<li>Contacts</li>")
+            movA({ "next", true }, 2, { "<li>Contacts</li>", "<li>FAQ</li>" })
 
-        yank.call()
-        h.selection_is(1, "<OtherComponent />")
+            yank.call()
+            h.selection_is(1, "<OtherComponent />") -- selection gets cleared if `yank.call()` with no args
 
-        paste()
-
-        h.catalyst_has("<li>Contacts</li>", { 25, 8 })
-    end)
+            paste({ destination = "next" })
+            h.catalyst_has("<li>Contacts</li>", { 25, 8 })
+            h.node_has_text(
+                selection.nodes()[1]:parent(),
+                [[<div className="h-screen w-screen bg-zinc-900">
+        <li>Home</li>
+        <li>
+          A new study found that coffee drinkers have a lower risk of liver
+          cancer. So, drink up!
+        </li>
+        <li>Contacts</li>
+        <li>FAQ</li>
+        <OtherComponent />
+        <li>Contacts</li>
+        <li>FAQ</li>
+      </div>]]
+            )
+        end
+    )
 end)

@@ -71,8 +71,7 @@ local function change_catalyst_node_to_its_sibling(o)
 
     if next_siblings[1] then
         catalyst.set_node(next_siblings[1])
-        catalyst.set_node_point("start")
-        -- catalyst.set_node_point(find_cursor_node_point_for_sibling(o))
+        catalyst.set_node_point(find_cursor_node_point_for_sibling(o))
         return next_siblings[1]
     end
 end
@@ -110,6 +109,13 @@ local function change_catalyst_node_to_previous_closest_html_element()
     end
 end
 
+---@param html_children TSNode[]
+local change_catalyst_to_its_first_child = function(html_children)
+    catalyst.set_node(html_children[1])
+    catalyst.set_node_point("start")
+end
+
+---@param html_children TSNode[]
 local function change_catalyst_to_its_last_child(html_children)
     local last_child = html_children[#html_children]
     local node_point = "end"
@@ -127,13 +133,11 @@ M.move = function(o)
     local html_children = aggregator.get_html_children(catalyst.node())
 
     if o.destination == "next" then
-        if #html_children > 0 then
-            if lib_ts.cursor_is_at_start_of_node(catalyst.win(), catalyst.node()) then
-                catalyst.set_node(html_children[1])
-                catalyst.set_node_point("start")
-            elseif not change_catalyst_node_to_its_parent(o) then
-                change_catalyst_node_to_next_closest_html_element()
-            end
+        if
+            #html_children > 0
+            and lib_ts.cursor_is_at_start_of_node(catalyst.win(), catalyst.node())
+        then
+            change_catalyst_to_its_first_child(html_children)
         else
             if not change_catalyst_node_to_its_sibling(o) then
                 if not change_catalyst_node_to_its_parent(o) then
@@ -142,12 +146,10 @@ M.move = function(o)
             end
         end
     elseif o.destination == "previous" then
-        if #html_children > 0 then
-            if lib_ts.cursor_is_at_end_of_node(catalyst.win(), catalyst.node()) then
-                change_catalyst_to_its_last_child(html_children)
-            elseif not change_catalyst_node_to_its_parent(o) then
-                change_catalyst_node_to_previous_closest_html_element()
-            end
+        if
+            #html_children > 0 and lib_ts.cursor_is_at_end_of_node(catalyst.win(), catalyst.node())
+        then
+            change_catalyst_to_its_last_child(html_children)
         else
             if not change_catalyst_node_to_its_sibling(o) then
                 if not change_catalyst_node_to_its_parent(o) then
