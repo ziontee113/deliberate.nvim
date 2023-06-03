@@ -276,6 +276,9 @@ M.nodes = function()
     return nodes
 end
 
+---@return number
+M.buf = function() return current_catalyst_info.buf end
+
 M.sorted_nodes = function()
     local sorted_nodes = {}
     local sorted_rows = {}

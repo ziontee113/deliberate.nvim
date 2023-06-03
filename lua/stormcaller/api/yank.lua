@@ -6,20 +6,28 @@ local M = {}
 ---@type string[][]
 local contents = {}
 
----@class yank_Args
+---@class yank_Opts
+---@field sort_selection boolean
 ---@field keep_selection boolean
 
----@param opts yank_Args | nil
+local default_yank_Opts = {
+    sort_selection = true,
+    keep_selection = false,
+}
+
+---@param opts yank_Opts | nil
 M.call = function(opts)
+    opts = vim.tbl_deep_extend("force", default_yank_Opts, opts)
+
     contents = {}
-    for _, item in ipairs(selection.items()) do
-        local start_row, _, end_row, _ = item.node:range()
-        local lines = vim.api.nvim_buf_get_lines(item.buf, start_row, end_row + 1, false)
+    local buf = selection.buf()
+    local nodes = opts.sort_selection and selection.sorted_nodes() or selection.nodes()
+
+    for _, node in ipairs(nodes) do
+        local start_row, _, end_row, _ = node:range()
+        local lines = vim.api.nvim_buf_get_lines(buf, start_row, end_row + 1, false)
         table.insert(contents, lines)
     end
-
-    opts = opts or {}
-    opts.keep_selection = opts.keep_selection or false
 
     if opts.keep_selection == false then
         visual_collector.stop()
