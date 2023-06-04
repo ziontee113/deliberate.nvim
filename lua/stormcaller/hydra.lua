@@ -7,6 +7,7 @@ local pms_menu = require("stormcaller.ui.pms_menu")
 local colors_menu = require("stormcaller.ui.colors_menu")
 local tag = require("stormcaller.api.html_tag")
 local uniform = require("stormcaller.api.uniform")
+local utils = require("stormcaller.lib.utils")
 
 local augroup = vim.api.nvim_create_augroup("Deliberate Hydra Exit", { clear = true })
 local autocmd_id
@@ -21,32 +22,6 @@ local exit_hydra = function()
 end
 
 local heads = {
-    {
-        "j",
-        function() navigator.move({ destination = "next" }) end,
-        { nowait = true },
-    },
-    {
-        "k",
-        function() navigator.move({ destination = "previous" }) end,
-        { nowait = true },
-    },
-    {
-        "J",
-        function() navigator.move({ destination = "next-sibling" }) end,
-        { nowait = true },
-    },
-    {
-        "K",
-        function() navigator.move({ destination = "previous-sibling" }) end,
-        { nowait = true },
-    },
-    {
-        "H",
-        function() navigator.move({ destination = "parent" }) end,
-        { nowait = true },
-    },
-
     {
         "<A-j>",
         function() uniform.move({ destination = "next" }) end,
@@ -145,7 +120,7 @@ local heads = {
     { "<Plug>DeliberateExitHydra", nil, { exit = true } },
 }
 
---------------------------------------------
+-------------------------------------------- Padding / Margin / Spacing heads
 
 local properties = {
     p = { "", "x", "y", "t", "b", "l", "r" },
@@ -175,7 +150,26 @@ for property, axies in pairs(properties) do
     end
 end
 
---------------------------------------------
+-------------------------------------------- Navigation
+
+local destinations = {
+    ["j"] = "next",
+    ["k"] = "previous",
+    ["J"] = "next-sibling",
+    ["K"] = "previous-sibling",
+    ["H"] = "parent",
+}
+
+for keymap, destination in pairs(destinations) do
+    local hydra_mapping = {
+        keymap,
+        function() utils.execute_with_count(navigator.move, { destination = destination }) end,
+        { nowait = true },
+    }
+    table.insert(heads, hydra_mapping)
+end
+
+-------------------------------------------- Hydra
 
 Hydra({
     name = "Deliberate",
