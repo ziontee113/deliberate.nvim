@@ -24,7 +24,7 @@ end
 ---@param choice string
 ---@return string
 M.apply = function(input, tbl, choice)
-    local pseudo_classes_manager = require("stormcaller.lib.pseudo_classes.manager")
+    local current_pseudo_classes = require("stormcaller.lib.pseudo_classes.manager").get_current()
     local classes_to_remove = find_classes_to_remove(tbl)
 
     local classes
@@ -37,10 +37,7 @@ M.apply = function(input, tbl, choice)
     for i = #classes, 1, -1 do
         local pseudo_prefix, class = utils.pseudo_split(classes[i])
         for _, class_to_remove in ipairs(classes_to_remove) do
-            if
-                class == class_to_remove
-                and pseudo_prefix == pseudo_classes_manager.get_current()
-            then
+            if class == class_to_remove and pseudo_prefix == current_pseudo_classes then
                 table.remove(classes, i)
                 break
             end
@@ -48,6 +45,11 @@ M.apply = function(input, tbl, choice)
     end
 
     local choice_split = vim.split(choice, " ")
+    for i, _ in ipairs(choice_split) do
+        if choice_split[i] ~= "" then
+            choice_split[i] = current_pseudo_classes .. choice_split[i]
+        end
+    end
     choice = table.concat(utils.remove_empty_strings(choice_split), " ")
 
     table.insert(classes, choice)

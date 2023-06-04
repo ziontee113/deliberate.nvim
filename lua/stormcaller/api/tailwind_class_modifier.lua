@@ -104,16 +104,16 @@ M._change_tailwind_classes = function(o)
         local class_names, className_string_node =
             aggregator.extract_class_names(catalyst.buf(), selection.nodes()[i])
 
-        local pseudoed_value = pseudo_classes_manager.get_current() .. o.value
         local replacement
         if o.classes_groups then
             replacement = require("stormcaller.lib.classes_group").apply(
                 class_names,
                 o.classes_groups,
-                pseudoed_value
+                o.value
             )
             replacement = string.format('"%s"', replacement)
         else
+            local pseudoed_value = pseudo_classes_manager.get_current() .. o.value
             replacement = process_new_class_names(class_names, find_patterns(o), pseudoed_value)
         end
 
