@@ -37,7 +37,7 @@ end
 
 -- Public
 
-function Input:show(metadata)
+function Input:show(metadata, row, col)
     metadata = metadata or {}
 
     vim.api.nvim_buf_set_lines(self.buf, 0, -1, false, {})
@@ -46,11 +46,11 @@ function Input:show(metadata)
     self.target_buf = vim.api.nvim_get_current_buf()
 
     self.win = vim.api.nvim_open_win(self.buf, true, {
-        relative = "cursor",
-        row = 1,
-        col = 1,
-        width = self.width,
-        height = self.height,
+        relative = "editor",
+        row = row or 1,
+        col = col or 1,
+        width = self.width or 20,
+        height = self.height or 1,
         style = "minimal",
         border = "single",
         title = self.title or "",
@@ -79,9 +79,6 @@ function Input:new(opts)
 
     input.buf = vim.api.nvim_create_buf(false, true)
     input.keymaps = input.keymaps or {}
-
-    input.width = 20
-    input.height = 1
 
     input:_set_confirm_keymaps()
 

@@ -251,7 +251,7 @@ function PopUp:show()
 end
 
 function PopUp:hide()
-    vim.api.nvim_win_close(self.win, true)
+    pcall(vim.api.nvim_win_close, self.win, true)
     pcall(vim.api.nvim_buf_del, self.buf)
 end
 

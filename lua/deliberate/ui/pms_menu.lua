@@ -1,5 +1,7 @@
 local PopUp = require("deliberate.lib.ui.PopUp")
+local Input = require("deliberate.lib.ui.Input")
 local tcm = require("deliberate.api.tailwind_class_modifier")
+local transformer = require("deliberate.lib.arbitrary_transformer")
 
 local M = {}
 
@@ -44,7 +46,24 @@ local key_value_dictionary = {
     { keymaps = "!", text = "1.5", hidden = true },
     { keymaps = "@", text = "2.5", hidden = true },
     { keymaps = "#", text = "3.5", hidden = true },
+
+    { keymaps = ",", text = "", hidden = true, arbitrary = true },
 }
+
+local show_arbitrary_input = function(metadata, property, axis, fn)
+    local input = Input:new({
+        title = "Input Value",
+        width = 15,
+        callback = function(result)
+            local value = transformer.input_to_pms_value(result)
+            value = string.format("%s%s-[%s]", property, axis, value)
+            fn({ axis = axis, value = value })
+        end,
+    })
+
+    local row, col = unpack(vim.api.nvim_win_get_position(0))
+    input:show(metadata, row, col)
+end
 
 ---@class pms_menu_Opts
 ---@field axis "" | "x" | "y" | "l" | "r" | "t" | "b"
@@ -57,12 +76,17 @@ local change_pms = function(property, axis, fn)
                 format_fn = function(_, current_item)
                     return string.format("%s%s-%s", property, axis, current_item.text)
                 end,
-                callback = function(results)
-                    local value = ""
-                    if results[1] ~= "" then
-                        value = string.format("%s%s-%s", property, axis, results[1])
+                callback = function(_, current_item, metadata)
+                    if current_item.arbitrary == true then
+                        show_arbitrary_input(metadata, property, axis, fn)
+                        return
+                    else
+                        local value = ""
+                        if current_item.text ~= "" then
+                            value = string.format("%s%s-%s", property, axis, current_item.text)
+                        end
+                        fn({ axis = axis, value = value })
                     end
-                    fn({ axis = axis, value = value })
                 end,
             },
         },
