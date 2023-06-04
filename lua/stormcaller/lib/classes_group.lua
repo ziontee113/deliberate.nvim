@@ -24,6 +24,7 @@ end
 ---@param choice string
 ---@return string
 M.apply = function(input, tbl, choice)
+    local pseudo_classes_manager = require("stormcaller.lib.pseudo_classes.manager")
     local classes_to_remove = find_classes_to_remove(tbl)
 
     local classes
@@ -34,8 +35,12 @@ M.apply = function(input, tbl, choice)
     end
 
     for i = #classes, 1, -1 do
-        for _, class in ipairs(classes_to_remove) do
-            if classes[i] == class then
+        local pseudo_prefix, class = utils.pseudo_split(classes[i])
+        for _, class_to_remove in ipairs(classes_to_remove) do
+            if
+                class == class_to_remove
+                and pseudo_prefix == pseudo_classes_manager.get_current()
+            then
                 table.remove(classes, i)
                 break
             end

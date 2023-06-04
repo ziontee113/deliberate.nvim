@@ -21,10 +21,12 @@ M.highlight_pseudo_classes = function()
 
     local pseudo_classes = require("stormcaller.lib.pseudo_classes.manager").get_current()
 
-    vim.api.nvim_buf_set_extmark(catalyst.buf(), pseudo_ns, start_row, 0, {
-        virt_text = { { "  " .. pseudo_classes, "Normal" } },
-        virt_text_pos = "eol",
-    })
+    if pseudo_classes ~= "" then
+        pcall(vim.api.nvim_buf_set_extmark, catalyst.buf(), pseudo_ns, start_row, 0, {
+            virt_text = { { "  " .. pseudo_classes, "Normal" } },
+            virt_text_pos = "eol",
+        })
+    end
 end
 
 -------------------------------------------- Catalyst

@@ -1,6 +1,6 @@
 local M = {}
 
--------------------------------------------- Lua Utils
+-------------------------------------------- String Related
 
 ---@param class_names string[]
 ---@return string[]
@@ -9,6 +9,16 @@ M.remove_empty_strings = function(class_names)
         if class_names[i] == "" then table.remove(class_names, i) end
     end
     return class_names
+end
+
+M.pseudo_split = function(single_class)
+    local lua_patterns = require("stormcaller.lib.lua_patterns")
+    local pseudo_prefix, style = string.match(single_class, lua_patterns.pseudo_splitter)
+    if not style then
+        style = single_class
+        pseudo_prefix = ""
+    end
+    return pseudo_prefix, style
 end
 
 -------------------------------------------- Vim Utils

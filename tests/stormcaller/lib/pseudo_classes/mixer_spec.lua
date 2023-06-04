@@ -1,4 +1,4 @@
-local mixer = require("stormcaller.lib.pseudo_class_mixer")
+local mixer = require("stormcaller.lib.pseudo_classes.mixer")
 
 describe("translate_alias_string", function()
     it("returns empty string if input is empty", function()

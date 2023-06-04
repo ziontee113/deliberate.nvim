@@ -6,6 +6,7 @@ local lib_ts = require("stormcaller.lib.tree-sitter")
 local aggregator = require("stormcaller.lib.tree-sitter.language_aggregator")
 local lua_patterns = require("stormcaller.lib.lua_patterns")
 local utils = require("stormcaller.lib.utils")
+local pseudo_classes_manager = require("stormcaller.lib.pseudo_classes.manager")
 
 ---@param buf number
 ---@param node TSNode
@@ -38,8 +39,13 @@ local replace_class_names = function(class_names, patterns, replacement)
     if type(patterns) == "string" then patterns = { patterns } end
     local replaced = false
     for i = #class_names, 1, -1 do
+        local pseudo_prefix, class = utils.pseudo_split(class_names[i])
         for _, pattern in ipairs(patterns) do
-            if class_names[i] and string.match(class_names[i], pattern) then
+            if
+                class
+                and string.match(class, pattern)
+                and pseudo_prefix == pseudo_classes_manager.get_current()
+            then
                 class_names[i] = replacement
                 replaced = true
                 break
@@ -98,16 +104,17 @@ M._change_tailwind_classes = function(o)
         local class_names, className_string_node =
             aggregator.extract_class_names(catalyst.buf(), selection.nodes()[i])
 
+        local pseudoed_value = pseudo_classes_manager.get_current() .. o.value
         local replacement
         if o.classes_groups then
             replacement = require("stormcaller.lib.classes_group").apply(
                 class_names,
                 o.classes_groups,
-                o.value
+                pseudoed_value
             )
             replacement = string.format('"%s"', replacement)
         else
-            replacement = process_new_class_names(class_names, find_patterns(o), o.value)
+            replacement = process_new_class_names(class_names, find_patterns(o), pseudoed_value)
         end
 
         lib_ts.replace_node_text({
