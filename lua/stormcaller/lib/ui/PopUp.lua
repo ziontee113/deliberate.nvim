@@ -17,13 +17,21 @@ local sanitize_items = function(steps)
     return steps
 end
 
-local function find_keymap_prefix(item)
+local function align_keymap(keymap, longest_keymap_hint_length)
+    if #keymap < longest_keymap_hint_length then
+        keymap = string.rep(" ", longest_keymap_hint_length - #keymap) .. keymap
+    end
+    return keymap
+end
+
+local function find_keymap_prefix(item, longest_keymap_hint_length)
     local keymap_prefix = ""
     if item.keymaps then
         local keys_to_show = {}
         if not item.visible_keymaps then item.visible_keymaps = 1 end
         for i = 1, item.visible_keymaps do
-            table.insert(keys_to_show, item.keymaps[i])
+            local keymap = align_keymap(item.keymaps[i], longest_keymap_hint_length)
+            table.insert(keys_to_show, keymap)
             keymap_prefix = table.concat(keys_to_show, " ") .. " "
         end
     end
@@ -130,12 +138,23 @@ function PopUp:_set_user_keymaps()
 end
 
 function PopUp:_get_lines()
+    local longest_keymap_hint_length = 0
+    for _, item in ipairs(self.current_step.items) do
+        if not item.hidden and item.keymaps then
+            for _, keymap in ipairs(item.keymaps) do
+                if #keymap > longest_keymap_hint_length then
+                    longest_keymap_hint_length = #keymap
+                end
+            end
+        end
+    end
+
     local lines = {}
     for _, item in ipairs(self.current_step.items) do
         if type(item) == "string" then
             table.insert(lines, item)
         elseif not item.hidden then
-            local keymap_prefix = find_keymap_prefix(item)
+            local keymap_prefix = find_keymap_prefix(item, longest_keymap_hint_length)
             local line_content = find_line_content(item, self.current_step.format_fn, self.results)
             table.insert(lines, keymap_prefix .. line_content)
         end

@@ -44,6 +44,31 @@ describe("PopUp", function()
         assert.equals("LE SSERAFIM", myvar)
     end)
 
+    it("aligns keymap hints to the right correctly", function()
+        local popup = PopUp:new({
+            steps = {
+                {
+                    items = {
+                        { keymaps = { "le" }, text = "LE SSERAFIM" },
+                        { keymaps = { "u" }, text = "UNFORGIVEN" },
+                        { keymaps = { "f" }, text = "FEARLESS" },
+                        { keymaps = { "bl" }, text = "BLUE FLAME" },
+                    },
+                    callback = function() end,
+                },
+            },
+        })
+        popup:show()
+        local popup_lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+        local want = {
+            "le LE SSERAFIM",
+            " u UNFORGIVEN",
+            " f FEARLESS",
+            "bl BLUE FLAME",
+        }
+        assert.same(want, popup_lines)
+    end)
+
     it("returns correct results - double PopUps", function()
         local final_result
 
