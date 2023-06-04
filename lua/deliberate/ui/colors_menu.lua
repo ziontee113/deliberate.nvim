@@ -1,5 +1,7 @@
 local PopUp = require("deliberate.lib.ui.PopUp")
+local Input = require("deliberate.lib.ui.Input")
 local tcm = require("deliberate.api.tailwind_class_modifier")
+local transformer = require("deliberate.lib.arbitrary_transformer")
 
 local M = {}
 
@@ -29,6 +31,8 @@ local colors = {
     { text = "rose", keymaps = { "R" } },
     { text = "white", keymaps = { "w" }, single = true },
     { text = "black", keymaps = { "B" }, single = true },
+
+    { text = "", keymaps = { "," }, arbitrary = true },
 }
 
 local steps = {
@@ -43,6 +47,21 @@ local steps = {
     { text = "900", keymaps = { "o", "9", "g" } },
 }
 
+local show_arbitrary_input = function(metadata, prefix, fn)
+    local input = Input:new({
+        title = "Input Color",
+        width = 15,
+        callback = function(result)
+            local value = transformer.input_to_color(result)
+            value = string.format("%s-[%s]", prefix, value)
+            fn({ value = value })
+        end,
+    })
+
+    local row, col = unpack(vim.api.nvim_win_get_position(0))
+    input:show(metadata, row, col)
+end
+
 local color_class_picker_menu = function(filetype, prefix, fn)
     local popup = PopUp:new({
         filetype = filetype,
@@ -52,7 +71,11 @@ local color_class_picker_menu = function(filetype, prefix, fn)
                 format_fn = function(_, current_item)
                     return string.format("%s-%s", prefix, current_item.text)
                 end,
-                callback = function(_, current_item)
+                callback = function(_, current_item, metadata)
+                    if current_item.arbitrary == true then
+                        show_arbitrary_input(metadata, prefix, fn)
+                        return true
+                    end
                     if current_item.text == "" then
                         fn({ value = "" })
                         return true

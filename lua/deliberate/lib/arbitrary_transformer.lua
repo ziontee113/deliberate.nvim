@@ -1,6 +1,13 @@
 local M = {}
 
+local input_matches_css_color = function(input)
+    local lua_patterns = require("deliberate.lib.lua_patterns")
+    return vim.tbl_contains(lua_patterns.css_colors, input)
+end
+
 M.input_to_color = function(input)
+    if input_matches_css_color(input) then return input end
+
     local _, commas = string.gsub(input, ",", "")
     if commas > 0 then
         if commas == 3 then

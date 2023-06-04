@@ -43,9 +43,9 @@ local M = {
         "^text%-black",
         "^text%-white",
         "text%-%[rgb%([%d%s,]+%)]",
-        "text%-%[rgba%([%d%s,%.]+%)]",
+        "text%-%[rgba%([%d%s,%.%%]+%)]",
         "text%-%[hsl%([%d%s%%,]+%)]",
-        "text%-%[hsla%([%d%s%%,%.]+%)]",
+        "text%-%[hsla%([%d%s,%.%%]+%)]",
         "text%-%[#[%da-fA-F]+]",
     },
     background_color = {
@@ -53,9 +53,9 @@ local M = {
         "^bg%-black",
         "^bg%-white",
         "bg%-%[rgb%([%d%s,]+%)]",
-        "bg%-%[rgba%([%d%s,%.]+%)]",
+        "bg%-%[rgba%([%d%s,%.%%]+%)]",
         "bg%-%[hsl%([%d%s%%,]+%)]",
-        "bg%-%[hsla%([%d%s%%,%.]+%)]",
+        "bg%-%[hsla%([%d%s,%.%%]+%)]",
         "bg%-%[#[%da-fA-F]+]",
     },
 
