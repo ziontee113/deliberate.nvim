@@ -1,5 +1,6 @@
 require("tests.editor_config")
 
+local pseudo = require("stormcaller.lib.pseudo_classes.manager")
 local tcm = require("stormcaller.api.tailwind_class_modifier")
 local h = require("stormcaller.helpers")
 local initiate = h.initiate
@@ -94,6 +95,44 @@ describe("change_padding()", function()
     end)
 end)
 
+describe("change_padding() with pseudo_classes", function()
+    before_each(function() h.set_buffer_content_as_multiple_react_components() end)
+    after_each(function() h.clean_up() end)
+
+    it("works", function()
+        initiate("22gg^", "<li>Contacts</li>")
+        mova({ "next", true }, 1, "<li>Contacts</li>")
+        mova({ "next", true }, 2, { "<li>Contacts</li>", "<li>FAQ</li>" })
+
+        tcm.change_padding({ axis = "", value = "p-4" })
+        selection_is(2, {
+            '<li className="p-4">Contacts</li>',
+            '<li className="p-4">FAQ</li>',
+        })
+
+        pseudo.update("sm:hover:")
+        tcm.change_padding({ axis = "", value = "p-20" })
+        selection_is(2, {
+            '<li className="p-4 sm:hover:p-20">Contacts</li>',
+            '<li className="p-4 sm:hover:p-20">FAQ</li>',
+        })
+
+        pseudo.update("")
+        tcm.change_padding({ axis = "", value = "p-12" })
+        selection_is(2, {
+            '<li className="p-12 sm:hover:p-20">Contacts</li>',
+            '<li className="p-12 sm:hover:p-20">FAQ</li>',
+        })
+
+        pseudo.update("sm:hover:")
+        tcm.change_padding({ axis = "", value = "" })
+        selection_is(2, {
+            '<li className="p-12">Contacts</li>',
+            '<li className="p-12">FAQ</li>',
+        })
+    end)
+end)
+
 describe("change_padding() for all `selected_nodes`", function()
     before_each(function() h.set_buffer_content_as_multiple_react_components() end)
     after_each(function() h.clean_up() end)
@@ -168,6 +207,27 @@ describe("change Classes Groups", function()
         initiate("17gg^", "<li>Home</li>")
         tcm.change_classes_groups({ classes_groups = { "flex", "flex row" }, value = "flex" })
         h.catalyst_has('<li className="flex">Home</li>')
+    end)
+end)
+
+describe("change Classes Groups with pseudo_classes", function()
+    before_each(function() h.set_buffer_content_as_multiple_react_components() end)
+    after_each(function() h.clean_up() end)
+
+    it("works on current catalyst", function()
+        initiate("17gg^", "<li>Home</li>")
+
+        pseudo.update("hover:")
+        tcm.change_classes_groups({ classes_groups = { "flex", "flex row" }, value = "flex" })
+        h.catalyst_has('<li className="hover:flex">Home</li>')
+
+        pseudo.update("")
+        tcm.change_classes_groups({ classes_groups = { "flex", "flex row" }, value = "flex row" })
+        h.catalyst_has('<li className="hover:flex flex row">Home</li>')
+
+        pseudo.update("hover:")
+        tcm.change_classes_groups({ classes_groups = { "flex", "flex row" }, value = "" })
+        h.catalyst_has('<li className="flex row">Home</li>')
     end)
 end)
 

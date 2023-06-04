@@ -93,6 +93,7 @@ end
 M.clean_up = function()
     vim.api.nvim_buf_delete(0, { force = true })
     selection.clear()
+    require("stormcaller.lib.pseudo_classes.manager").update("")
 end
 
 M.set_buf_content = function(content)

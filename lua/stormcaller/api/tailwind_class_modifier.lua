@@ -113,7 +113,8 @@ M._change_tailwind_classes = function(o)
             )
             replacement = string.format('"%s"', replacement)
         else
-            local pseudoed_value = pseudo_classes_manager.get_current() .. o.value
+            local current_pseudo_classes = pseudo_classes_manager.get_current()
+            local pseudoed_value = o.value ~= "" and current_pseudo_classes .. o.value or o.value
             replacement = process_new_class_names(class_names, find_patterns(o), pseudoed_value)
         end
 
