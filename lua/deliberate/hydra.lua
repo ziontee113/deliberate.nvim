@@ -80,6 +80,17 @@ local heads = {
     },
 
     {
+        "o",
+        function() require("deliberate.lib.destination").cycle_next_prev() end,
+        { nowait = true },
+    },
+    {
+        "<A-o>",
+        function() require("deliberate.lib.destination").cycle_next_parent() end,
+        { nowait = true },
+    },
+
+    {
         "<Esc>",
         function()
             if not selection.select_move_is_active() and not visual_collector.is_active() then
