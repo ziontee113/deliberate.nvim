@@ -29,6 +29,17 @@ local stop_insert_and_close_window = function(win)
     vim.api.nvim_win_close(win, true)
 end
 
+local set_close_keymaps = function(win, buf, keymaps_tbl)
+    for _, keymap in ipairs(keymaps_tbl) do
+        vim.keymap.set(
+            { "n", "i" },
+            keymap,
+            function() stop_insert_and_close_window(win) end,
+            { buffer = buf }
+        )
+    end
+end
+
 local augroup =
     vim.api.nvim_create_augroup("Deliberate Pseudo Classes Input Augroup", { clear = true })
 M.show = function()
@@ -46,19 +57,7 @@ M.show = function()
 
     vim.cmd("startinsert")
 
-    vim.keymap.set(
-        { "n", "i" },
-        "<Esc>",
-        function() stop_insert_and_close_window(win) end,
-        { buffer = buf }
-    )
-
-    vim.keymap.set(
-        { "n", "i" },
-        "<CR>",
-        function() stop_insert_and_close_window(win) end,
-        { buffer = buf }
-    )
+    set_close_keymaps(win, buf, { "<Esc>", "<CR>", "`", "~" })
 
     return buf, win
 end
