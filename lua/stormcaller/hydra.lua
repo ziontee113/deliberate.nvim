@@ -5,6 +5,7 @@ local selection = require("stormcaller.lib.selection")
 local navigator = require("stormcaller.api.navigator")
 local pms_menu = require("stormcaller.ui.pms_menu")
 local colors_menu = require("stormcaller.ui.colors_menu")
+local classes_groups_menu = require("stormcaller.ui.classes_groups_menu")
 local tag = require("stormcaller.api.html_tag")
 local uniform = require("stormcaller.api.uniform")
 local utils = require("stormcaller.lib.utils")
@@ -22,6 +23,12 @@ local exit_hydra = function()
 end
 
 local heads = {
+    {
+        "fl",
+        function() classes_groups_menu.change_flex_properties() end,
+        { nowait = true },
+    },
+
     {
         "y",
         function() require("stormcaller.api.yank").call() end,
