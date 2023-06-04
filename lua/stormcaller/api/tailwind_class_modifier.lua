@@ -67,6 +67,7 @@ end
 ---@class change_tailwind_classes_Args
 ---@field property  "padding" | "margin" | "spacing" | "text_color" | "background_color"
 ---@field axis "" | "x" | "y" | "l" | "r" | "t" | "b"
+---@field classes_groups string[]
 ---@field value string
 
 ---@param o change_tailwind_classes_Args
@@ -96,7 +97,17 @@ local change_tailwind_classes = function(o)
         local class_names, className_string_node =
             aggregator.extract_class_names(catalyst.buf(), selection.nodes()[i])
 
-        local replacement = process_new_class_names(class_names, find_patterns(o), o.value)
+        local replacement
+        if o.classes_groups then
+            replacement = require("stormcaller.lib.classes_group").apply(
+                class_names,
+                o.classes_groups,
+                o.value
+            )
+            replacement = string.format('"%s"', replacement)
+        else
+            replacement = process_new_class_names(class_names, find_patterns(o), o.value)
+        end
 
         lib_ts.replace_node_text({
             node = className_string_node,
@@ -123,6 +134,9 @@ M.change_text_color = function(o)
 end
 M.change_background_color = function(o)
     change_tailwind_classes({ property = "background_color", value = o.value })
+end
+M.change_classes_groups = function(o)
+    change_tailwind_classes({ classes_groups = o.classes_groups, value = o.value })
 end
 
 return M

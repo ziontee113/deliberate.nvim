@@ -19,14 +19,20 @@ local find_classes_to_remove = function(tbl)
     return to_remove
 end
 
----@param input_str string
+---@param input string | string[]
 ---@param tbl string[]
 ---@param choice string
 ---@return string
-M.apply = function(input_str, tbl, choice)
+M.apply = function(input, tbl, choice)
     local classes_to_remove = find_classes_to_remove(tbl)
 
-    local classes = vim.split(input_str, " ")
+    local classes
+    if type(input) == "string" then
+        classes = vim.split(input, " ")
+    else
+        classes = input
+    end
+
     for i = #classes, 1, -1 do
         for _, class in ipairs(classes_to_remove) do
             if classes[i] == class then

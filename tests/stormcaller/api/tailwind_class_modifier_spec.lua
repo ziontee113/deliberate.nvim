@@ -160,6 +160,17 @@ describe("change_text_color() & change_background_color()", function()
     end)
 end)
 
+describe("change Classes Groups", function()
+    before_each(function() h.set_buffer_content_as_multiple_react_components() end)
+    after_each(function() h.clean_up() end)
+
+    it("works on current catalyst", function()
+        initiate("17gg^", "<li>Home</li>")
+        tcm.change_classes_groups({ classes_groups = { "flex", "flex row" }, value = "flex" })
+        h.catalyst_has('<li className="flex">Home</li>')
+    end)
+end)
+
 -------------------------------------------- Svelte
 
 describe("change_padding()", function()
