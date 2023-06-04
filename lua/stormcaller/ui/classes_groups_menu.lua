@@ -42,17 +42,17 @@ local flex_group = {
     { keymaps = { "f", "l" }, classes = { "flex" } },
     { keymaps = { "r" }, classes = { "flex", "flex-row" } },
 }
-
 M.change_flex_properties = function() classes_group_changer_menu(flex_group) end
 
-local align_group = {
+local flex_align_group = {
     { keymaps = { "0" }, classes = {}, hidden = true },
     { keymaps = { "i" }, classes = { "items-center" } },
     { keymaps = { "j" }, classes = { "justify-center" } },
     { keymaps = { "b" }, classes = { "justify-between" } },
+    { keymaps = { "c" }, classes = { "items-center", "justify-center" } },
     { keymaps = { "cb" }, classes = { "content-between" } },
-    { keymaps = { "cc" }, classes = { "items-center", "justify-center" } },
 }
+M.change_flex_align_properties = function() classes_group_changer_menu(flex_align_group) end
 
 local font_weight_group = {
     { keymaps = { "0" }, classes = {}, hidden = true },
@@ -66,6 +66,7 @@ local font_weight_group = {
     { keymaps = { "E", "8" }, classes = { "font-extrabold" } },
     { keymaps = { "B", "9" }, classes = { "font-black" } },
 }
+M.change_font_weight = function() classes_group_changer_menu(font_weight_group) end
 
 local text_decoration_group = {
     { keymaps = { "0" }, classes = {}, hidden = true },
@@ -74,12 +75,14 @@ local text_decoration_group = {
     { keymaps = { "l", "L" }, classes = { "line-through" } },
     { keymaps = { "n", "N" }, classes = { "no-underline" } },
 }
+M.change_text_decoration = function() classes_group_changer_menu(text_decoration_group) end
 
 local font_style_group = {
     { keymaps = { "0" }, classes = {}, hidden = true },
     { keymaps = { "i" }, classes = { "italic" } },
     { keymaps = { "n" }, classes = { "not-italic" } },
 }
+M.change_font_style = function() classes_group_changer_menu(font_style_group) end
 
 local font_size_group = {
     { keymaps = { "0" }, classes = {}, hidden = true },
@@ -97,6 +100,7 @@ local font_size_group = {
     { keymaps = { "d", "8" }, classes = { "text-8xl" } },
     { keymaps = { "f", "9" }, classes = { "text-9xl" } },
 }
+M.change_font_size = function() classes_group_changer_menu(font_size_group) end
 
 local text_align_group = {
     { keymaps = { "0" }, classes = {}, hidden = true },
@@ -105,6 +109,7 @@ local text_align_group = {
     { keymaps = { "k" }, classes = { "text-center" } },
     { keymaps = { "j" }, classes = { "text-justify" } },
 }
+M.change_text_align = function() classes_group_changer_menu(text_align_group) end
 
 local opacity_group = {
     { keymaps = { "0" }, classes = {}, hidden = true },
@@ -123,5 +128,6 @@ local opacity_group = {
     { keymaps = { "i" }, classes = { "opacity-90" } },
     { keymaps = { "o" }, classes = { "opacity-100" } },
 }
+M.change_opacity = function() classes_group_changer_menu(opacity_group) end
 
 return M

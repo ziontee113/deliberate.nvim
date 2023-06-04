@@ -24,12 +24,6 @@ end
 
 local heads = {
     {
-        "fl",
-        function() classes_groups_menu.change_flex_properties() end,
-        { nowait = true },
-    },
-
-    {
         "y",
         function() require("stormcaller.api.yank").call() end,
         { nowait = true },
@@ -128,6 +122,30 @@ for property, axies in pairs(properties) do
         }
         table.insert(heads, hydra_mapping)
     end
+end
+
+-------------------------------------------- Replace Classes Groups
+
+local classes_groups_dict = {
+    ["fl"] = classes_groups_menu.change_flex_properties,
+    ["a"] = classes_groups_menu.change_flex_align_properties,
+
+    ["z"] = classes_groups_menu.change_font_size,
+    ["fs"] = classes_groups_menu.change_font_style,
+    ["fw"] = classes_groups_menu.change_font_weight,
+    ["<A-a>"] = classes_groups_menu.change_text_align,
+    ["<A-d>"] = classes_groups_menu.change_text_decoration,
+
+    ["O"] = classes_groups_menu.change_opacity,
+}
+
+for keymap, fn in pairs(classes_groups_dict) do
+    local hydra_mapping = {
+        keymap,
+        function() fn() end,
+        { nowait = true },
+    }
+    table.insert(heads, hydra_mapping)
 end
 
 -------------------------------------------- Navigation & Selection
