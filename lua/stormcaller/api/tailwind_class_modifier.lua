@@ -81,10 +81,11 @@ local find_patterns = function(o)
 end
 
 ---@param o change_tailwind_classes_Args
-local change_tailwind_classes = function(o)
+M._change_tailwind_classes = function(o)
     if not catalyst.is_active() then return end
 
     selection.archive_empty_state()
+    require("stormcaller.api.dot_repeater").register(M._change_tailwind_classes, o)
 
     for i = 1, #selection.nodes() do
         -- QUESTION: why use `selection.nodes()[i]` instead of using `for i, node in ipairs(selection.nodes())`?
@@ -120,23 +121,23 @@ local change_tailwind_classes = function(o)
 end
 
 M.change_padding = function(o)
-    change_tailwind_classes({ property = "padding", axis = o.axis, value = o.value })
+    M._change_tailwind_classes({ property = "padding", axis = o.axis, value = o.value })
 end
 M.change_margin = function(o)
-    change_tailwind_classes({ property = "margin", axis = o.axis, value = o.value })
+    M._change_tailwind_classes({ property = "margin", axis = o.axis, value = o.value })
 end
 M.change_spacing = function(o)
-    change_tailwind_classes({ property = "spacing", axis = o.axis, value = o.value })
+    M._change_tailwind_classes({ property = "spacing", axis = o.axis, value = o.value })
 end
 
 M.change_text_color = function(o)
-    change_tailwind_classes({ property = "text_color", value = o.value })
+    M._change_tailwind_classes({ property = "text_color", value = o.value })
 end
 M.change_background_color = function(o)
-    change_tailwind_classes({ property = "background_color", value = o.value })
+    M._change_tailwind_classes({ property = "background_color", value = o.value })
 end
 M.change_classes_groups = function(o)
-    change_tailwind_classes({ classes_groups = o.classes_groups, value = o.value })
+    M._change_tailwind_classes({ classes_groups = o.classes_groups, value = o.value })
 end
 
 return M

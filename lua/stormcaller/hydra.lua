@@ -46,6 +46,12 @@ local heads = {
     },
 
     {
+        ".",
+        function() require("stormcaller.api.dot_repeater").call() end,
+        { nowait = true },
+    },
+
+    {
         "u",
         function() require("stormcaller.api.undo").call() end,
         { nowait = true },

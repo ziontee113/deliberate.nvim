@@ -84,6 +84,7 @@ end
 M.add = function(o)
     vim.bo[catalyst.buf()].undolevels = vim.bo[catalyst.buf()].undolevels
     selection.archive_current_state()
+    require("stormcaller.api.dot_repeater").register(M.add, o)
 
     local should_move_to_newly_created_tag
     if #selection.nodes() == 1 and selection.item_matches_catalyst(1) then
