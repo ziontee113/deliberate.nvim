@@ -23,33 +23,6 @@ end
 
 local heads = {
     {
-        "<A-j>",
-        function() uniform.move({ destination = "next" }) end,
-        { nowait = true },
-    },
-    {
-        "<A-k>",
-        function() uniform.move({ destination = "previous" }) end,
-        { nowait = true },
-    },
-
-    {
-        "<Tab>",
-        function() navigator.move({ destination = "next", select_move = true }) end,
-        { nowait = true },
-    },
-    {
-        "<S-Tab>",
-        function() navigator.move({ destination = "previous", select_move = true }) end,
-        { nowait = true },
-    },
-    {
-        "<A-Tab>",
-        function() catalyst.move_to(true) end,
-        { nowait = true },
-    },
-
-    {
         "y",
         function() require("stormcaller.api.yank").call() end,
         { nowait = true },
@@ -150,20 +123,44 @@ for property, axies in pairs(properties) do
     end
 end
 
--------------------------------------------- Navigation
+-------------------------------------------- Navigation & Selection
 
-local destinations = {
-    ["j"] = "next",
-    ["k"] = "previous",
-    ["J"] = "next-sibling",
-    ["K"] = "previous-sibling",
-    ["H"] = "parent",
+local basic_navigation = {
+    ["j"] = { destination = "next" },
+    ["k"] = { destination = "previous" },
+    ["J"] = { destination = "next-sibling" },
+    ["K"] = { destination = "previous-sibling" },
+    ["H"] = { destination = "parent" },
+    ["<Tab>"] = { destination = "next", select_move = true },
+    ["<S-Tab>"] = { destination = "previous", select_move = true },
 }
 
-for keymap, destination in pairs(destinations) do
+for keymap, args in pairs(basic_navigation) do
     local hydra_mapping = {
         keymap,
-        function() utils.execute_with_count(navigator.move, { destination = destination }) end,
+        function() utils.execute_with_count(navigator.move, args) end,
+        { nowait = true },
+    }
+    table.insert(heads, hydra_mapping)
+end
+
+-- Toggle current selection
+table.insert(heads, {
+    "<A-Tab>",
+    function() catalyst.move_to(true) end,
+    { nowait = true },
+})
+
+-- Uniform Navigation
+local uniform_navigation = {
+    ["<A-j>"] = { destination = "next" },
+    ["<A-k>"] = { destination = "previous" },
+}
+
+for keymap, args in pairs(uniform_navigation) do
+    local hydra_mapping = {
+        keymap,
+        function() utils.execute_with_count(uniform.move, args) end,
         { nowait = true },
     }
     table.insert(heads, hydra_mapping)
