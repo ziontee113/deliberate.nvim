@@ -74,6 +74,12 @@ local heads = {
     },
 
     {
+        "`",
+        function() require("stormcaller.ui.pseudo_classes_input").show() end,
+        { nowait = true },
+    },
+
+    {
         "<Esc>",
         function()
             if not selection.select_move_is_active() and not visual_collector.is_active() then

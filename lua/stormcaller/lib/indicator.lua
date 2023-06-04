@@ -1,6 +1,7 @@
 local M = {}
 
 local catalyst_ns = vim.api.nvim_create_namespace("Deliberate Catalyst Namespace")
+local pseudo_ns = vim.api.nvim_create_namespace("Deliberate Pseudo Classes Namespace")
 local selection_ns = vim.api.nvim_create_namespace("Deliberate Selection Namespace")
 
 local clear_catalyst_namespace = function(buf)
@@ -9,6 +10,24 @@ end
 local clear_selection_namespace = function(buf)
     vim.api.nvim_buf_clear_namespace(buf, selection_ns, 0, -1)
 end
+local clear_pasudo_namespace = function(buf) vim.api.nvim_buf_clear_namespace(buf, pseudo_ns, 0, -1) end
+
+-------------------------------------------- Pseudo Classes
+
+M.highlight_pseudo_classes = function()
+    local catalyst = require("stormcaller.lib.catalyst")
+    local start_row = catalyst.node():range()
+    clear_pasudo_namespace(catalyst.buf())
+
+    local pseudo_classes = require("stormcaller.lib.pseudo_classes.manager").get_current()
+
+    vim.api.nvim_buf_set_extmark(catalyst.buf(), pseudo_ns, start_row, 0, {
+        virt_text = { { "  " .. pseudo_classes, "Normal" } },
+        virt_text_pos = "eol",
+    })
+end
+
+-------------------------------------------- Catalyst
 
 ---@param catalyst_info CatalystInfo
 M.highlight_catalyst = function(catalyst_info, hl_group)
@@ -34,6 +53,8 @@ M.highlight_catalyst = function(catalyst_info, hl_group)
         { end_row, end_col }
     )
 end
+
+-------------------------------------------- Selection
 
 local pick_selection_icon = function()
     if require("stormcaller.api.visual_collector").is_active() then return "" end
@@ -61,11 +82,14 @@ M.highlight_selection = function()
             virt_text_pos = "eol",
         })
     end
+
+    M.highlight_pseudo_classes()
 end
 
 M.clear = function(buf)
     clear_catalyst_namespace(buf)
     clear_selection_namespace(buf)
+    clear_pasudo_namespace(buf)
 end
 
 return M
