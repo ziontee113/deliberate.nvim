@@ -52,6 +52,17 @@ local color_class_picker_menu = function(filetype, prefix, fn)
                 format_fn = function(_, current_item)
                     return string.format("%s-%s", prefix, current_item.text)
                 end,
+                callback = function(_, current_item)
+                    if current_item.text == "" then
+                        fn({ value = "" })
+                        return true
+                    end
+                    if current_item.single then
+                        local value = string.format("%s-%s", prefix, current_item.text)
+                        fn({ value = value })
+                        return true
+                    end
+                end,
             },
             {
                 items = steps,

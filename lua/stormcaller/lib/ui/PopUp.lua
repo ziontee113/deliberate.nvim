@@ -65,14 +65,19 @@ function PopUp:_find_number_of_jumps(direction)
 end
 
 function PopUp:_execute_callback(item_index)
-    local item = self.current_step.items[item_index]
-    if not item or type(item) == "string" then return end
+    local current_item = self.current_step.items[item_index]
+    if not current_item or type(current_item) == "string" then return end
 
-    table.insert(self.results, item.text)
+    table.insert(self.results, current_item.text)
 
     local callback = self.current_step.callback
     if callback then
-        callback(self.results, { target_win = self.target_win, target_buf = self.target_buf })
+        local close_popup_early = callback(
+            self.results,
+            current_item,
+            { target_win = self.target_win, target_buf = self.target_buf }
+        )
+        if close_popup_early then self.step_index = #self.steps end
     end
 
     self:_advance()
