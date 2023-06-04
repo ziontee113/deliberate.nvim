@@ -6,7 +6,7 @@ local navigator = require("stormcaller.api.navigator")
 local pms_menu = require("stormcaller.ui.pms_menu")
 local colors_menu = require("stormcaller.ui.colors_menu")
 local classes_groups_menu = require("stormcaller.ui.classes_groups_menu")
-local tag = require("stormcaller.api.html_tag")
+local html_tags = require("stormcaller.api.html_tag")
 local uniform = require("stormcaller.api.uniform")
 local utils = require("stormcaller.lib.utils")
 
@@ -42,17 +42,6 @@ local heads = {
     {
         "v",
         function() visual_collector.toggle() end,
-        { nowait = true },
-    },
-
-    {
-        "D",
-        function() tag.add({ tag = "div", destination = "next", content = "" }) end,
-        { nowait = true },
-    },
-    {
-        "U",
-        function() tag.add({ tag = "ul", destination = "next", content = "" }) end,
         { nowait = true },
     },
 
@@ -186,6 +175,21 @@ for keymap, args in pairs(uniform_navigation) do
     local hydra_mapping = {
         keymap,
         function() utils.execute_with_count(uniform.move, args) end,
+        { nowait = true },
+    }
+    table.insert(heads, hydra_mapping)
+end
+
+-------------------------------------------- Add Tags
+
+local tags_dict = {
+    ["D"] = { tag = "div", destination = "next", content = "" },
+    ["U"] = { tag = "ul", destination = "next", content = "" },
+}
+for keymap, args in pairs(tags_dict) do
+    local hydra_mapping = {
+        keymap,
+        function() utils.execute_with_count(html_tags.add, args) end,
         { nowait = true },
     }
     table.insert(heads, hydra_mapping)
