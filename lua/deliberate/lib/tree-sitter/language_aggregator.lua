@@ -16,6 +16,12 @@ local ft = function()
     return vim.api.nvim_buf_get_option(catalyst.buf(), "ft")
 end
 
+M.should_exit = function()
+    local filetype = ft()
+    local module = m[filetype]
+    return not module
+end
+
 local invoke = function(method_name, ...)
     local filetype = ft()
     local module = m[filetype]

@@ -14,12 +14,12 @@ local augroup = vim.api.nvim_create_augroup("Deliberate Hydra Exit", { clear = t
 local autocmd_id
 
 local exit_hydra = function()
-    vim.api.nvim_input("<Plug>DeliberateExitHydra")
+    vim.api.nvim_input("<Nul>")
 
     visual_collector.stop()
     selection.clear(true)
 
-    vim.api.nvim_del_autocmd(autocmd_id)
+    pcall(vim.api.nvim_del_autocmd, autocmd_id)
 end
 
 local heads = {
@@ -92,7 +92,7 @@ local heads = {
     },
 
     -- workaround to programmatically exit Hydra
-    { "<Plug>DeliberateExitHydra", nil, { exit = true } },
+    { "<Nul>", nil, { exit = true } },
 }
 
 -------------------------------------------- Padding / Margin / Spacing heads
