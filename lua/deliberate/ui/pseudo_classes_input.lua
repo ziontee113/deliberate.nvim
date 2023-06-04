@@ -29,10 +29,11 @@ local stop_insert_and_close_window = function(win)
     vim.api.nvim_win_close(win, true)
 end
 
-local augroup = vim.api.nvim_create_augroup("Ligma Augroup", { clear = true })
+local augroup =
+    vim.api.nvim_create_augroup("Deliberate Pseudo Classes Input Augroup", { clear = true })
 M.show = function()
     local buf = vim.api.nvim_create_buf(false, true)
-    local win = show_input_window(buf, 20, 1, "Ligma")
+    local win = show_input_window(buf, 20, 1, "Pseudo Classes")
 
     vim.api.nvim_create_autocmd({ "TextChanged", "TextChangedI" }, {
         buffer = buf,
