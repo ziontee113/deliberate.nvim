@@ -163,10 +163,10 @@ function PopUp:_get_lines()
 end
 
 function PopUp:_set_all_keymaps()
-    self:_set_user_keymaps()
     self:_set_navigation_keymaps()
     self:_set_confirm_keymaps()
     self:_set_hide_keymaps()
+    self:_set_user_keymaps()
 end
 
 function PopUp:_set_window_size(lines)
@@ -188,7 +188,10 @@ function PopUp:_advance()
 
     self.current_step = self.steps[self.step_index]
 
-    if self.step_index == 1 then self.buf = vim.api.nvim_create_buf(false, true) end
+    if self.step_index == 1 then
+        self.buf = vim.api.nvim_create_buf(false, true)
+        vim.api.nvim_buf_set_option(self.buf, "filetype", self.filetype or "")
+    end
 
     self.lines = self:_get_lines()
     vim.api.nvim_buf_set_lines(self.buf, 0, -1, false, self.lines)

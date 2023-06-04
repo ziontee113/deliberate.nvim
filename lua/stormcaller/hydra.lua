@@ -4,6 +4,7 @@ local visual_collector = require("stormcaller.api.visual_collector")
 local selection = require("stormcaller.lib.selection")
 local navigator = require("stormcaller.api.navigator")
 local pms_menu = require("stormcaller.ui.pms_menu")
+local colors_menu = require("stormcaller.ui.colors_menu")
 local tag = require("stormcaller.api.html_tag")
 local uniform = require("stormcaller.api.uniform")
 
@@ -114,6 +115,17 @@ local heads = {
     {
         "d",
         function() require("stormcaller.api.delete").call() end,
+        { nowait = true },
+    },
+
+    {
+        "t",
+        function() colors_menu.change_text_color() end,
+        { nowait = true },
+    },
+    {
+        "b",
+        function() colors_menu.change_background_color() end,
         { nowait = true },
     },
 
