@@ -260,7 +260,7 @@ end)
 describe("cursor_is_at_end_of_node", function()
     it("works", function()
         helpers.set_buffer_content_as_react_component()
-        vim.cmd("norm! G3k^") -- cursor to end of <div> tag
+        vim.cmd("norm! G3k$") -- cursor to end of <div> tag
 
         local current_jsx_node = ts_utils.get_node_at_cursor(0):parent()
         assert.is_true(lib_ts.cursor_is_at_end_of_node(0, current_jsx_node))

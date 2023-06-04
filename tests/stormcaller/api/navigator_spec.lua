@@ -131,3 +131,23 @@ describe("navigator.move() with `select_move` option", function()
         }, "<OtherComponent />")
     end)
 end)
+
+describe("navigator.move() with in-line HTML elements", function()
+    local h2_tag = [[<h2>
+    try editing <strong>src/<i>routes</i>/+page.svelte</strong>
+</h2>]]
+
+    before_each(function()
+        vim.bo.ft = "svelte"
+        h.set_buf_content(h2_tag)
+    end)
+    after_each(function() h.clean_up() end)
+
+    it("works", function()
+        h.initiate("0gg^", h2_tag)
+        move("next", "<strong>src/<i>routes</i>/+page.svelte</strong>", { 2, 16 })
+        move("next", "<i>routes</i>", { 2, 28 })
+        move("next", "<strong>src/<i>routes</i>/+page.svelte</strong>", { 2, 62 })
+        move("next", h2_tag, { 3, 4 })
+    end)
+end)

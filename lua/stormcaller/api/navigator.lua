@@ -57,7 +57,7 @@ local function find_node_point_for_parent(o)
     local destination_on_node = "end"
     if
         string.find(o.destination, "previous")
-        and not lib_ts.node_start_and_end_on_same_line(catalyst.node())
+        -- and not lib_ts.node_start_and_end_on_same_line(catalyst.node())
     then
         destination_on_node = "start"
     end
@@ -120,7 +120,11 @@ local function change_catalyst_to_its_last_child(html_children)
     local last_child = html_children[#html_children]
     local node_point = "end"
     local start_row, _, end_row, _ = last_child:range()
+
     if start_row == end_row then node_point = "start" end
+
+    local last_child_children = aggregator.get_html_children(last_child)
+    if #last_child_children > 0 then node_point = "end" end
 
     catalyst.set_node(last_child)
     catalyst.set_node_point(node_point)

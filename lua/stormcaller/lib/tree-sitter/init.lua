@@ -185,18 +185,18 @@ end
 ---@param node TSNode
 ---@return boolean
 M.cursor_is_at_start_of_node = function(win, node)
-    local start_row = node:range()
-    local cursor_line = unpack(vim.api.nvim_win_get_cursor(win))
-    return start_row + 1 == cursor_line
+    local start_row, start_col = node:range()
+    local cursor_line, cursor_col = unpack(vim.api.nvim_win_get_cursor(win))
+    return start_row + 1 == cursor_line and start_col == cursor_col
 end
 
 ---@param win number
 ---@param node TSNode
 ---@return boolean
 M.cursor_is_at_end_of_node = function(win, node)
-    local _, _, end_row = node:range()
-    local cursor_line = unpack(vim.api.nvim_win_get_cursor(win))
-    return end_row + 1 == cursor_line
+    local _, _, end_row, end_col = node:range()
+    local cursor_line, cursor_col = unpack(vim.api.nvim_win_get_cursor(win))
+    return end_row + 1 == cursor_line and end_col == cursor_col + 1
 end
 
 ---@class get_children_with_types_Opts
