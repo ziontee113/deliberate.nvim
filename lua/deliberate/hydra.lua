@@ -225,6 +225,7 @@ for keymap, args in pairs(tags_dict) do
         keymap,
         function()
             utils.execute_with_count(function()
+                args.destination = require("deliberate.lib.destination").get()
                 html_tags.add(args)
                 if args.after then destination.set(args.after) end
             end)

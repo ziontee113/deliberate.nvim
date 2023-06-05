@@ -86,8 +86,6 @@ M.add = function(o)
     selection.archive_current_state()
     require("deliberate.api.dot_repeater").register(M.add, o)
 
-    o.destination = require("deliberate.lib.destination").get()
-
     local should_move_to_newly_created_tag
     if #selection.nodes() == 1 and selection.item_matches_catalyst(1) then
         should_move_to_newly_created_tag = true
