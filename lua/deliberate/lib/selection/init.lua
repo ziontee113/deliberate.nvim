@@ -248,6 +248,9 @@ M.restore_previous_state = function()
     current_catalyst_info = selection[1]
     previous_catalyst_info = selection[1]
 
+    require("deliberate.lib.catalyst").set_node(selection[1].node)
+    require("deliberate.lib.catalyst").set_node_point("start")
+
     indicator.highlight_selection()
 end
 

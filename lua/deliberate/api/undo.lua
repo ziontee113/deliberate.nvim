@@ -4,8 +4,10 @@ local M = {}
 
 M.call = function(testing)
     vim.cmd("undo")
-    local ok = selection.restore_previous_state()
-    if not testing and not ok then require("deliberate.hydra").exit_hydra() end
+    local should_exit = selection.restore_previous_state()
+    if not testing then
+        if should_exit then require("deliberate.hydra").exit_hydra() end
+    end
 end
 
 return M
