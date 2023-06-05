@@ -262,6 +262,18 @@ Hydra({
     heads = heads,
 })
 
-return {
-    exit_hydra = exit_hydra,
-}
+-------------------------------------------- Autocmd
+
+vim.api.nvim_create_autocmd({ "BufEnter" }, {
+    pattern = "*",
+    group = augroup,
+    callback = function()
+        if require("deliberate.lib.tree-sitter.language_aggregator").should_exit() then
+            exit_hydra()
+        end
+    end,
+})
+
+-------------------------------------------- Return
+
+return { exit_hydra = exit_hydra }
