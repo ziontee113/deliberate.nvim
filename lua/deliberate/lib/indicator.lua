@@ -21,7 +21,7 @@ end
 local destination_icons = {
     ["next"] = "",
     ["previous"] = "⬆",
-    ["parent"] = "⤴",
+    ["inside"] = "👶",
 }
 
 M.highlight_destination = function()
@@ -120,6 +120,7 @@ M.clear = function(buf)
     clear_catalyst_namespace(buf)
     clear_selection_namespace(buf)
     clear_pasudo_namespace(buf)
+    clear_destination_namespace(buf)
 end
 
 return M

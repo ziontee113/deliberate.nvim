@@ -8,6 +8,7 @@ local colors_menu = require("deliberate.ui.colors_menu")
 local classes_groups_menu = require("deliberate.ui.classes_groups_menu")
 local html_tags = require("deliberate.api.html_tag")
 local uniform = require("deliberate.api.uniform")
+local destination = require("deliberate.lib.destination")
 local utils = require("deliberate.lib.utils")
 
 local augroup = vim.api.nvim_create_augroup("Deliberate Hydra Exit", { clear = true })
@@ -81,12 +82,12 @@ local heads = {
 
     {
         "o",
-        function() require("deliberate.lib.destination").cycle_next_prev() end,
+        function() require("deliberate.lib.destination").cycle_next_inside() end,
         { nowait = true },
     },
     {
         "<A-o>",
-        function() require("deliberate.lib.destination").cycle_next_parent() end,
+        function() require("deliberate.lib.destination").cycle_next_prev() end,
         { nowait = true },
     },
 
@@ -206,13 +207,24 @@ end
 -------------------------------------------- Add Tags
 
 local tags_dict = {
-    ["D"] = { tag = "div", destination = "next", content = "" },
-    ["U"] = { tag = "ul", destination = "next", content = "" },
+    ["D"] = { tag = "div", content = "", after = "inside" },
+    ["U"] = { tag = "ul", content = "", after = "inside" },
+    ["h1"] = { tag = "h1", content = "h1", after = "next" },
+    ["h2"] = { tag = "h2", content = "h2", after = "next" },
+    ["h3"] = { tag = "h3", content = "h3", after = "next" },
+    ["h4"] = { tag = "h4", content = "h4", after = "next" },
+    ["h5"] = { tag = "h5", content = "h5", after = "next" },
+    ["h6"] = { tag = "h6", content = "h6", after = "next" },
 }
 for keymap, args in pairs(tags_dict) do
     local hydra_mapping = {
         keymap,
-        function() utils.execute_with_count(html_tags.add, args) end,
+        function()
+            utils.execute_with_count(function()
+                html_tags.add(args)
+                if args.after then destination.set(args.after) end
+            end)
+        end,
         { nowait = true },
     }
     table.insert(heads, hydra_mapping)
@@ -227,6 +239,11 @@ Hydra({
         color = "pink",
         invoke_on_body = true,
         on_enter = function()
+            if require("deliberate.lib.tree-sitter.language_aggregator").should_exit() then
+                exit_hydra()
+                return
+            end
+
             catalyst.initiate({
                 win = vim.api.nvim_get_current_win(),
                 buf = vim.api.nvim_get_current_buf(),

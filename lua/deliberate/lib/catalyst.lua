@@ -96,11 +96,6 @@ end
 M.initiate = function(o)
     _catalyst = { buf = o.buf } -- temporary solution so aggregator can work correctly
 
-    if aggregator.should_exit() then
-        require("deliberate.hydra").exit_hydra()
-        return
-    end
-
     vim.cmd("norm! ^")
 
     aggregator.get_updated_root() -- refresh Language Tree

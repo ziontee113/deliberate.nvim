@@ -17,7 +17,7 @@ local ft = function()
 end
 
 M.should_exit = function()
-    local filetype = ft()
+    local filetype = vim.bo.ft
     local module = m[filetype]
     return not module
 end
