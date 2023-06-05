@@ -16,10 +16,8 @@ local autocmd_id
 
 local exit_hydra = function()
     vim.api.nvim_input("<Nul>")
-
     visual_collector.stop()
     selection.clear(true)
-
     pcall(vim.api.nvim_del_autocmd, autocmd_id)
 end
 
@@ -92,7 +90,7 @@ local heads = {
     },
 
     {
-        "<Esc>",
+        "<Plug>DeliberateHydraEsc",
         function()
             if not selection.select_move_is_active() and not visual_collector.is_active() then
                 exit_hydra()
@@ -239,11 +237,6 @@ Hydra({
         color = "pink",
         invoke_on_body = true,
         on_enter = function()
-            if require("deliberate.lib.tree-sitter.language_aggregator").should_exit() then
-                exit_hydra()
-                return
-            end
-
             catalyst.initiate({
                 win = vim.api.nvim_get_current_win(),
                 buf = vim.api.nvim_get_current_buf(),
@@ -258,22 +251,10 @@ Hydra({
         on_exit = function() selection.clear() end,
     },
     mode = "n",
-    body = "<Esc>",
+    body = "<Plug>DeliberateHydraEsc",
     heads = heads,
 })
 
--------------------------------------------- Autocmd
-
-vim.api.nvim_create_autocmd({ "BufEnter" }, {
-    pattern = "*",
-    group = augroup,
-    callback = function()
-        if require("deliberate.lib.tree-sitter.language_aggregator").should_exit() then
-            exit_hydra()
-        end
-    end,
-})
-
--------------------------------------------- Return
-
-return { exit_hydra = exit_hydra }
+return {
+    exit_hydra = exit_hydra,
+}
