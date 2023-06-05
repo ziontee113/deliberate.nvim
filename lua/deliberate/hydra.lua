@@ -40,12 +40,12 @@ local heads = {
     },
     {
         "pa",
-        function() require("deliberate.api.paste")({ destination = "next" }) end,
+        function() require("deliberate.api.paste").call({ destination = "next" }) end,
         { nowait = true },
     },
     {
         "pA",
-        function() require("deliberate.api.paste")({ destination = "previous" }) end,
+        function() require("deliberate.api.paste").call({ destination = "previous" }) end,
         { nowait = true },
     },
 

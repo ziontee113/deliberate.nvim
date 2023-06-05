@@ -13,7 +13,7 @@ describe("paste()", function()
     it("works for destination = after, catalyst selection", function()
         h.initiate("22gg^", "<li>Contacts</li>")
         yank.call()
-        paste({ destination = "next" })
+        paste.call({ destination = "next" })
         h.catalyst_has("<li>Contacts</li>", { 23, 8 })
         h.move("next", "<li>FAQ</li>", { 24, 8 })
     end)
@@ -28,7 +28,7 @@ describe("paste()", function()
             yank.call()
             h.selection_is(1, "<OtherComponent />") -- selection gets cleared if `yank.call()` with no args
 
-            paste({ destination = "next" })
+            paste.call({ destination = "next" })
             h.catalyst_has("<li>Contacts</li>", { 25, 8 })
             h.node_has_text(
                 selection.nodes()[1]:parent(),

@@ -43,9 +43,15 @@ local default_paste_opts = {
     reindent = true,
 }
 
+local M = {}
+
 ---@param opts paste_Args | nil
-local paste = function(opts)
+M.call = function(opts)
     opts = vim.tbl_deep_extend("force", default_paste_opts, opts or {})
+
+    vim.bo[catalyst.buf()].undolevels = vim.bo[catalyst.buf()].undolevels
+    selection.archive_current_state()
+    require("deliberate.api.dot_repeater").register(M.call, opts)
 
     local joined_contents = {}
     for _, yanked_lines in ipairs(yank.contents()) do
@@ -85,4 +91,4 @@ local paste = function(opts)
     require("deliberate.lib.indicator").highlight_selection()
 end
 
-return paste
+return M
