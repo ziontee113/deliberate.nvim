@@ -27,6 +27,11 @@ local heads = {
         function() require("deliberate.ui.content_replacer_menu").replace("contents.txt") end,
         { nowait = true },
     },
+    {
+        "sr",
+        function() require("deliberate.ui.image_src_menu").change_image_src() end,
+        { nowait = true },
+    },
 
     {
         "y",
