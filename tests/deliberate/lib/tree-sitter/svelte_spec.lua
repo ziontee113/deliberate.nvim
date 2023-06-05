@@ -183,3 +183,24 @@ describe("get_opening_and_closing_tags()", function()
         h.node_has_text(ending, "</h3>")
     end)
 end)
+
+describe("get_src_property_string_node", function()
+    before_each(function()
+        vim.bo.ft = "svelte"
+        h.set_buf_content([[<section>
+<div className="h-screen w-screen bg-zinc-900">
+    <li>Home</li>
+    <img src="public/image.jpg" />
+</div>
+</section>]])
+    end)
+    after_each(function() vim.api.nvim_buf_delete(0, { force = true }) end)
+
+    it("works", function()
+        vim.cmd("norm! 4gg^")
+        local html_node = svelte.get_html_node(ts_utils.get_node_at_cursor())
+        h.node_has_text(html_node, '<img src="public/image.jpg" />')
+        local src_string_node = svelte.get_src_property_string_node(0, html_node)
+        h.node_has_text(src_string_node, '"public/image.jpg"')
+    end)
+end)

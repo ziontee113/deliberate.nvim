@@ -143,12 +143,14 @@ end)
 describe("node_is_component()", function()
     before_each(function() h.set_buffer_content_as_multiple_react_components() end)
     after_each(function() vim.api.nvim_buf_delete(0, { force = true }) end)
+
     it("detects node isn't a component", function()
         vim.cmd("norm! 23gg^")
         local html_node = tsx.get_html_node(ts_utils.get_node_at_cursor())
         h.node_has_text(html_node, "<li>FAQ</li>")
         assert.equals(false, tsx.node_is_component(html_node))
     end)
+
     it("detects node is a component", function()
         vim.cmd("norm! 24gg^")
         local html_node = tsx.get_html_node(ts_utils.get_node_at_cursor())
@@ -157,15 +159,39 @@ describe("node_is_component()", function()
     end)
 end)
 
-describe("get_opening_and_closing_tags", function()
+describe("get_opening_and_closing_tags()", function()
     before_each(function() h.set_buffer_content_as_multiple_react_components() end)
     after_each(function() vim.api.nvim_buf_delete(0, { force = true }) end)
-    it("detects node isn't a component", function()
+
+    it("works", function()
         vim.cmd("norm! 23gg^")
         local html_node = tsx.get_html_node(ts_utils.get_node_at_cursor())
         h.node_has_text(html_node, "<li>FAQ</li>")
         local opening, ending = tsx.get_opening_and_closing_tags(html_node)
         h.node_has_text(opening, "<li>")
         h.node_has_text(ending, "</li>")
+    end)
+end)
+
+describe("get_src_property_string_node", function()
+    before_each(function()
+        vim.bo.ft = "typescriptreact"
+        h.set_buf_content([[export default function Home() {
+  return (
+    <div className="h-screen w-screen bg-zinc-900">
+      <li>Home</li>
+      <img src="public/image.jpg" />
+    </div>
+  )
+}]])
+    end)
+    after_each(function() vim.api.nvim_buf_delete(0, { force = true }) end)
+
+    it("works", function()
+        vim.cmd("norm! 5gg^")
+        local html_node = tsx.get_html_node(ts_utils.get_node_at_cursor())
+        h.node_has_text(html_node, '<img src="public/image.jpg" />')
+        local src_string_node = tsx.get_src_property_string_node(0, html_node)
+        h.node_has_text(src_string_node, '"public/image.jpg"')
     end)
 end)

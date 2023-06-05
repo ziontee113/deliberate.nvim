@@ -1,6 +1,30 @@
 local lib_ts = require("deliberate.lib.tree-sitter")
-
 local M = {}
+
+-------------------------------------------- Local Functions
+
+local get_property_string_node = function(buf, node, property)
+    local _, grouped_captures = lib_ts.capture_nodes_with_queries({
+        buf = buf,
+        root = node,
+        parser_name = "svelte",
+        queries = {
+            string.format(
+                [[ ;query
+(attribute
+  (attribute_name) @attr_name (#eq? @attr_name "%s")
+  (quoted_attribute_value) @string
+)
+]],
+                property
+            ),
+        },
+        capture_groups = { "string" },
+    })
+    return grouped_captures["string"][1]
+end
+
+-------------------------------------------- Public Functions
 
 ---@param buf number
 ---@return TSNode[], TSNode[]
@@ -32,27 +56,6 @@ end
 
 ---@param buf number
 ---@param node TSNode
----@return TSNode
-M.get_className_property_string_node = function(buf, node)
-    local _, grouped_captures = lib_ts.capture_nodes_with_queries({
-        buf = buf,
-        root = node,
-        parser_name = "svelte",
-        queries = {
-            [[ ;query
-(attribute
-  (attribute_name) @attr_name (#eq? @attr_name "class")
-  (quoted_attribute_value) @string
-)
-]],
-        },
-        capture_groups = { "string" },
-    })
-    return grouped_captures["string"][1]
-end
-
----@param buf number
----@param node TSNode
 ---@return string[], TSNode|nil
 M.extract_class_names = function(buf, node)
     local className_string_node = M.get_className_property_string_node(buf, node)
@@ -63,24 +66,38 @@ M.extract_class_names = function(buf, node)
     return class_names, className_string_node
 end
 
---------------------------------------------
-
+---@param buf number
+---@return TSNode
 M.get_updated_root = function(buf) return lib_ts.get_updated_root(buf, "svelte") end
 
+---@param node TSNode
+---@return TSNode | nil
 M.get_html_node = function(node) return lib_ts.get_html_node(node, { "element" }) end
 
+---@param buf number
+---@param node TSNode
+---@return TSNode | nil
 M.get_first_closing_bracket = function(buf, node)
     return lib_ts.get_first_closing_bracket(buf, node, "svelte")
 end
 
+---@param node TSNode
+---@return TSNode[]
 M.get_html_children = function(node) return lib_ts.get_html_children(node, { "element" }) end
 
+---@param node TSNode
+---@param direction "previous" | "next"
+---@return TSNode[], TSNode
 M.get_html_siblings = function(node, direction)
     return lib_ts.get_html_siblings(node, direction, { "element" })
 end
 
+---@param node TSNode
+---@return TSNode[]
 M.get_text_nodes = function(node) return lib_ts.get_html_children(node, { "text" }) end
 
+---@param node TSNode
+---@return boolean
 M.node_is_component = function(node)
     local children =
         lib_ts.get_children_with_types({ node = node, desired_types = { "self_closing_tag" } })
@@ -88,8 +105,26 @@ M.node_is_component = function(node)
     return false
 end
 
+---@param node TSNode
+---@return TSNode
 M.get_opening_and_closing_tags = function(node)
     return unpack(lib_ts.get_html_children(node, { "start_tag", "end_tag" }))
+end
+
+-------------------------------------------- Get Property String Nodes
+
+---@param buf number
+---@param node TSNode
+---@return TSNode | nil
+M.get_className_property_string_node = function(buf, node)
+    return get_property_string_node(buf, node, "class")
+end
+
+---@param buf number
+---@param node TSNode
+---@return TSNode | nil
+M.get_src_property_string_node = function(buf, node)
+    return get_property_string_node(buf, node, "src")
 end
 
 return M

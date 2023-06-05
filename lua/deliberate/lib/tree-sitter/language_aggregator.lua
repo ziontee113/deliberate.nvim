@@ -52,6 +52,7 @@ M.get_html_siblings = function(...) return invoke("get_html_siblings", ...) end
 M.get_text_nodes = function(...) return invoke("get_text_nodes", ...) end
 M.node_is_component = function(...) return invoke("node_is_component", ...) end
 M.get_opening_and_closing_tags = function(...) return invoke("get_opening_and_closing_tags", ...) end
+M.get_src_property_string_node = function(...) return invoke("get_src_property_string_node", ...) end
 
 --------------------------------------------
 
