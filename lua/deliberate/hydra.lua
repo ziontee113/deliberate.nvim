@@ -23,6 +23,12 @@ end
 
 local heads = {
     {
+        "<space>a",
+        function() require("deliberate.ui.content_replacer").replace("contents.txt") end,
+        { nowait = true },
+    },
+
+    {
         "y",
         function() require("deliberate.api.yank").call() end,
         { nowait = true },

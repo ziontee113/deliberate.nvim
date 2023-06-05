@@ -8,10 +8,12 @@ local find_longest_line = function(lines)
     return longest
 end
 
-local sanitize_items = function(steps)
+local sanitize_items_keymaps = function(steps)
     for _, current_step in ipairs(steps) do
-        for _, item in ipairs(current_step.items) do
-            if type(item.keymaps) == "string" then item.keymaps = { item.keymaps } end
+        if type(current_step.items) == "table" then
+            for _, item in ipairs(current_step.items) do
+                if type(item.keymaps) == "string" then item.keymaps = { item.keymaps } end
+            end
         end
     end
     return steps
@@ -198,6 +200,15 @@ function PopUp:_advance()
         vim.api.nvim_buf_set_option(self.buf, "filetype", self.filetype or "")
     end
 
+    if type(self.current_step.items) == "function" then
+        local arguments = self.current_step.arguments or {}
+        table.insert(arguments, self.results)
+
+        self.steps[self.step_index].items = self.current_step.items(unpack(arguments))
+
+        self.current_step.items = self.steps[self.step_index].items
+    end
+
     self.lines = self:_get_lines()
     vim.api.nvim_buf_set_lines(self.buf, 0, -1, false, self.lines)
 
@@ -235,7 +246,7 @@ end
 -- Public
 
 function PopUp:new(opts)
-    opts.steps = sanitize_items(opts.steps)
+    opts.steps = sanitize_items_keymaps(opts.steps)
     local popup = setmetatable(opts, vim.deepcopy(PopUp))
     return popup
 end

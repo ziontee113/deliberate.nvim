@@ -16,8 +16,6 @@ M.replace = function(content)
         local _, _, start_row, start_col = opening:range()
         local end_row, end_col = closing:range()
 
-        print(vim.inspect({ start_row, start_col, end_row, end_col }))
-
         vim.api.nvim_buf_set_text(
             buf,
             start_row,
