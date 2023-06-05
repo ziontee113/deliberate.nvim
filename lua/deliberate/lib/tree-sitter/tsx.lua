@@ -94,4 +94,6 @@ M.get_html_siblings = function(node, direction)
     return lib_ts.get_html_siblings(node, direction, { "jsx_element", "jsx_self_closing_element" })
 end
 
+M.get_text_nodes = function(node) return lib_ts.get_html_children(node, { "jsx_text" }) end
+
 return M

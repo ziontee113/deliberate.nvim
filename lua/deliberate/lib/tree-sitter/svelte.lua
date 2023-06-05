@@ -79,4 +79,6 @@ M.get_html_siblings = function(node, direction)
     return lib_ts.get_html_siblings(node, direction, { "element" })
 end
 
+M.get_text_nodes = function(node) return lib_ts.get_html_children(node, { "text" }) end
+
 return M

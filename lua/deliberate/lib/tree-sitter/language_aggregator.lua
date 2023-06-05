@@ -49,6 +49,7 @@ M.get_html_node = function(...) return invoke("get_html_node", ...) end
 M.get_first_closing_bracket = function(...) return invoke("get_first_closing_bracket", ...) end
 M.get_html_children = function(...) return invoke("get_html_children", ...) end
 M.get_html_siblings = function(...) return invoke("get_html_siblings", ...) end
+M.get_text_nodes = function(...) return invoke("get_text_nodes", ...) end
 
 --------------------------------------------
 
