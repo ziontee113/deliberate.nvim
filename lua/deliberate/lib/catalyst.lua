@@ -41,10 +41,10 @@ M.set_win = function(win) _catalyst.win = win end
 -------------------------------------------- Actions
 
 ---@param select_move boolean | nil
-M.move_to = function(select_move)
+M.move_to = function(select_move, keep_selection)
     if not _catalyst then return end
 
-    selection.update(select_move)
+    selection.update(select_move, keep_selection)
 
     lib_ts.put_cursor_at_node({
         node = _catalyst.node,

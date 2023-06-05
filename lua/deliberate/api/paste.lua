@@ -60,11 +60,6 @@ M.call = function(opts)
         end
     end
 
-    local should_move_to_newly_created_tag
-    if #selection.nodes() == 1 and selection.item_matches_catalyst(1) then
-        should_move_to_newly_created_tag = true
-    end
-
     for i = 1, #selection.nodes() do
         local lines = opts.join and joined_contents or yank.contents()[i]
 
@@ -82,11 +77,9 @@ M.call = function(opts)
         selection.update_item(i, target_row, start_col)
     end
 
-    if should_move_to_newly_created_tag then
-        catalyst.set_node(selection.nodes()[1])
-        catalyst.set_node_point("start")
-        catalyst.move_to()
-    end
+    catalyst.set_node(selection.nodes()[1])
+    catalyst.set_node_point("start")
+    catalyst.move_to(false, true)
 
     require("deliberate.lib.indicator").highlight_selection()
 end

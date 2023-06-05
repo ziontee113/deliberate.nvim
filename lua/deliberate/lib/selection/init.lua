@@ -187,11 +187,13 @@ M.refresh_tree = function()
 end
 
 ---@param select_move boolean | nil
-M.update = function(select_move)
-    if require("deliberate.api.visual_collector").is_active() then
-        handle_visual_collector()
-    else
-        handle_select_move(select_move)
+M.update = function(select_move, keep_selection)
+    if not keep_selection then
+        if require("deliberate.api.visual_collector").is_active() then
+            handle_visual_collector()
+        else
+            handle_select_move(select_move)
+        end
     end
 
     previous_catalyst_info = current_catalyst_info
