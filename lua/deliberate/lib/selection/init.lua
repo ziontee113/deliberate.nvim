@@ -223,8 +223,8 @@ M.archive_empty_state = function() require("deliberate.lib.selection.extmark_arc
 M.restore_previous_state = function()
     local extmark_locations = require("deliberate.lib.selection.extmark_archive").pop()
 
-    if not extmark_locations then return false end
-    if #extmark_locations == 0 then return true end
+    if not extmark_locations then return true end
+    if #extmark_locations == 0 then return false end
 
     selection = {}
     vim.api.nvim_buf_clear_namespace(current_catalyst_info.buf, ns, 0, -1)
@@ -250,7 +250,7 @@ M.restore_previous_state = function()
     current_catalyst_info = selection[1]
     previous_catalyst_info = selection[1]
 
-    require("deliberate.lib.catalyst").set_node(selection[1].node)
+    require("deliberate.lib.catalyst").set_node(selection[#selection].node)
     require("deliberate.lib.catalyst").set_node_point("start")
 
     indicator.highlight_selection()
