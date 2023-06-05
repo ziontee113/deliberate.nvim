@@ -100,4 +100,8 @@ M.get_text_nodes = function(node) return lib_ts.get_html_children(node, { "jsx_t
 ---@return boolean
 M.node_is_component = function(node) return node:type() == "jsx_self_closing_element" end
 
+M.get_opening_and_closing_tags = function(node)
+    return unpack(lib_ts.get_html_children(node, { "jsx_opening_element", "jsx_closing_element" }))
+end
+
 return M
