@@ -106,7 +106,7 @@ describe("uniform.move()", function()
       </div>]]
         )
         h.selection_is(4, { "<li>3rd</li>", "<li>3rd</li>", "<li>3rd</li>", "<li>3rd</li>" })
-        h.catalyst_first("<div>", { 39, 6 })
+        h.catalyst_first("<li>3rd</li>", { 43, 10 })
 
         uniform.move({ destination = "previous" })
         h.selection_is(4, { "<li>2nd</li>", "<li>2nd</li>", "<li>2nd</li>", "<li>2nd</li>" })

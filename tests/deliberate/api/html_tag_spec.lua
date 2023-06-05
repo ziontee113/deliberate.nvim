@@ -85,11 +85,12 @@ describe("tag.add() on multiple (all) selected nodes", function()
         <OtherComponent />
       </div>]]
         )
-        h.catalyst_has("<OtherComponent />", { 26, 8 })
+        h.catalyst_has("<li>first_add</li>", { 25, 8 })
     end)
 
     it("clear current selection, select 2 tags, add new tag after each selection", function()
         selection.clear()
+        move("next", "<OtherComponent />")
         mova({ "previous", true }, 1, "<OtherComponent />", "<li>first_add</li>")
         move("previous", "<li>FAQ</li>")
         move("previous", "<li>first_add</li>")
@@ -261,7 +262,7 @@ describe("typescriptreact navigator.move() with count", function()
 
         vim.cmd("norm! 3")
         u.execute_with_count(html_tag.add, { tag = "h3", destination = "previous", content = "C3" })
-        h.catalyst_has("<li>Sign Up</li>", { 37, 8 })
+        h.catalyst_has("<h3>C3</h3>", { 38, 8 })
         h.node_has_text(
             catalyst.node():parent(),
             [[<ul>

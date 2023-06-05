@@ -86,11 +86,6 @@ M.add = function(o)
     selection.archive_current_state()
     require("deliberate.api.dot_repeater").register(M.add, o)
 
-    local should_move_to_newly_created_tag
-    if #selection.nodes() == 1 and selection.item_matches_catalyst(1) then
-        should_move_to_newly_created_tag = true
-    end
-
     for i = 1, #selection.nodes() do
         local update_row, update_col
         local og_node = selection.nodes()[i]
@@ -113,11 +108,9 @@ M.add = function(o)
         selection.update_item(i, update_row, update_col)
     end
 
-    if should_move_to_newly_created_tag then
-        catalyst.set_node(selection.nodes()[1])
-        catalyst.set_node_point("start")
-        catalyst.move_to()
-    end
+    catalyst.set_node(selection.nodes()[#selection.nodes()])
+    catalyst.set_node_point("start")
+    catalyst.move_to(false, true)
 
     require("deliberate.lib.indicator").highlight_selection()
 end

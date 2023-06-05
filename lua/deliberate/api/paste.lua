@@ -77,7 +77,7 @@ M.call = function(opts)
         selection.update_item(i, target_row, start_col)
     end
 
-    catalyst.set_node(selection.nodes()[1])
+    catalyst.set_node(selection.nodes()[#selection.nodes()])
     catalyst.set_node_point("start")
     catalyst.move_to(false, true)
 
