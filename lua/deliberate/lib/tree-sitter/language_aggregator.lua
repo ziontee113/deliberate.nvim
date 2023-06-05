@@ -50,6 +50,7 @@ M.get_first_closing_bracket = function(...) return invoke("get_first_closing_bra
 M.get_html_children = function(...) return invoke("get_html_children", ...) end
 M.get_html_siblings = function(...) return invoke("get_html_siblings", ...) end
 M.get_text_nodes = function(...) return invoke("get_text_nodes", ...) end
+M.node_is_component = function(...) return invoke("node_is_component", ...) end
 
 --------------------------------------------
 

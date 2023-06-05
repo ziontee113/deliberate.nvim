@@ -81,4 +81,13 @@ end
 
 M.get_text_nodes = function(node) return lib_ts.get_html_children(node, { "text" }) end
 
+---@param node TSNode
+---@return boolean
+M.node_is_component = function(node)
+    local children =
+        lib_ts.get_children_with_types({ node = node, desired_types = { "self_closing_tag" } })
+    if #children > 0 then return true end
+    return false
+end
+
 return M

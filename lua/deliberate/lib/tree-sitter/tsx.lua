@@ -96,4 +96,8 @@ end
 
 M.get_text_nodes = function(node) return lib_ts.get_html_children(node, { "jsx_text" }) end
 
+---@param node TSNode
+---@return boolean
+M.node_is_component = function(node) return node:type() == "jsx_self_closing_element" end
+
 return M

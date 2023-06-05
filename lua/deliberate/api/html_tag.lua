@@ -102,7 +102,11 @@ M.add = function(o)
         local replacement = string.format("%s<%s>%s</%s>", indents, o.tag, content, o.tag)
 
         if o.destination == "inside" then
-            update_row, update_col = handle_destination_inside(i, replacement, indents)
+            if aggregator.node_is_component(og_node) then
+                update_row, update_col = add_tag_after_node(o.destination, replacement, og_node)
+            else
+                update_row, update_col = handle_destination_inside(i, replacement, indents)
+            end
         else
             update_row, update_col = add_tag_after_node(o.destination, replacement, og_node)
         end
