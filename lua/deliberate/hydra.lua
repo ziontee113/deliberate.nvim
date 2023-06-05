@@ -24,7 +24,7 @@ end
 local heads = {
     {
         "<space>a",
-        function() require("deliberate.ui.content_replacer").replace("contents.txt") end,
+        function() require("deliberate.ui.content_replacer_menu").replace("contents.txt") end,
         { nowait = true },
     },
 
