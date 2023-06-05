@@ -65,10 +65,10 @@ M.call = function(opts)
         should_move_to_newly_created_tag = true
     end
 
-    for i = 1, #selection.sorted_nodes() do
+    for i = 1, #selection.nodes() do
         local lines = opts.join and joined_contents or yank.contents()[i]
 
-        local start_row, start_col, end_row, _ = selection.sorted_nodes()[i]:range()
+        local start_row, start_col, end_row, _ = selection.nodes()[i]:range()
 
         if opts.reindent then lines = reindent(lines, start_col) end
 
