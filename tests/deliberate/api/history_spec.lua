@@ -1,6 +1,6 @@
 require("tests.editor_config")
 
-local undo = require("deliberate.api.undo")
+local history = require("deliberate.api.history")
 local tag = require("deliberate.api.html_tag")
 local selection = require("deliberate.lib.selection")
 
@@ -24,7 +24,7 @@ describe("undo.call()", function()
       </ul>]]
         )
 
-        undo.call(true)
+        history.undo(true)
 
         h.catalyst_has("<li>Log In</li>", { 36, 8 })
         h.node_has_text(

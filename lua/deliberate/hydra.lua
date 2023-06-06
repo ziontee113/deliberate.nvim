@@ -63,7 +63,7 @@ local heads = {
 
     {
         "u",
-        function() require("deliberate.api.undo").call() end,
+        function() require("deliberate.api.history").undo() end,
         { nowait = true },
     },
     {

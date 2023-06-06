@@ -2,7 +2,7 @@ local selection = require("deliberate.lib.selection")
 
 local M = {}
 
-M.call = function(testing)
+M.undo = function(testing)
     vim.cmd("undo")
     local should_exit = selection.restore_previous_state()
     if not testing then
