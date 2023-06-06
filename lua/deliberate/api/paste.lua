@@ -50,7 +50,7 @@ M.call = function(opts)
     opts = vim.tbl_deep_extend("force", default_paste_opts, opts or {})
 
     vim.bo[catalyst.buf()].undolevels = vim.bo[catalyst.buf()].undolevels
-    selection.archive_current_state()
+    selection.archive_for_undo()
     require("deliberate.api.dot_repeater").register(M.call, opts)
 
     local joined_contents = {}

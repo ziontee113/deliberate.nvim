@@ -14,7 +14,7 @@ describe("...", function()
         tag.add({ tag = "div", content = "", destination = "next" })
         h.selection_is(1, "<div></div>")
 
-        local latest_archive = archive.pop()
+        local latest_archive = archive.pop_undo_stack()
         assert.same({ { 21, 8 } }, latest_archive)
     end)
 end)

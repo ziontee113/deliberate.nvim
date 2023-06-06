@@ -6,7 +6,7 @@ local yank = require("deliberate.api.yank")
 
 M.call = function()
     vim.bo[catalyst.buf()].undolevels = vim.bo[catalyst.buf()].undolevels
-    selection.archive_current_state()
+    selection.archive_for_undo()
     yank.call({ keep_selection = true })
 
     local sorted_nodes = selection.sorted_nodes()

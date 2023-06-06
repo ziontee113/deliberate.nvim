@@ -90,7 +90,7 @@ end
 M._change_tailwind_classes = function(o)
     if not catalyst.is_active() then return end
 
-    selection.archive_empty_state()
+    selection.archive_empty_state_for_undo()
     require("deliberate.api.dot_repeater").register(M._change_tailwind_classes, o)
 
     for i = 1, #selection.nodes() do

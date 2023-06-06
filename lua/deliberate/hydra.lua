@@ -67,6 +67,12 @@ local heads = {
         { nowait = true },
     },
     {
+        "<C-r>",
+        function() require("deliberate.api.history").redo() end,
+        { nowait = true },
+    },
+
+    {
         "d",
         function() require("deliberate.api.delete").call() end,
         { nowait = true },

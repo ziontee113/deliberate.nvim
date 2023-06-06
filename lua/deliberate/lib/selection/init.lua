@@ -215,14 +215,18 @@ end
 
 ----------------- Undo State Management
 
-M.archive_current_state = function()
-    require("deliberate.lib.selection.extmark_archive").push(selection, ns)
+M.archive_for_undo = function()
+    require("deliberate.lib.selection.extmark_archive").push_to_undo_stack(selection, ns)
 end
-M.archive_empty_state = function() require("deliberate.lib.selection.extmark_archive").push({}) end
+M.archive_empty_state_for_undo = function()
+    require("deliberate.lib.selection.extmark_archive").push_to_undo_stack({})
+end
 
-M.restore_previous_state = function()
-    local extmark_locations = require("deliberate.lib.selection.extmark_archive").pop()
+M.archive_for_redo = function()
+    require("deliberate.lib.selection.extmark_archive").push_to_redo_stack(selection, ns)
+end
 
+local restore_state = function(extmark_locations)
     if not extmark_locations then return true end
     if #extmark_locations == 0 then return false end
 
@@ -254,6 +258,16 @@ M.restore_previous_state = function()
     require("deliberate.lib.catalyst").set_node_point("start")
 
     indicator.highlight_selection()
+end
+
+M.undo = function()
+    local extmark_locations = require("deliberate.lib.selection.extmark_archive").pop_undo_stack()
+    return restore_state(extmark_locations)
+end
+
+M.redo = function()
+    local extmark_locations = require("deliberate.lib.selection.extmark_archive").pop_redo_stack()
+    return restore_state(extmark_locations)
 end
 
 -------------------------------------------- Public Getters / Checkers
