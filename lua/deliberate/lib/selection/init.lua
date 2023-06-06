@@ -251,8 +251,8 @@ local restore_state = function(extmark_locations)
         table.insert(selection, item)
     end
 
-    current_catalyst_info = selection[1]
-    previous_catalyst_info = selection[1]
+    current_catalyst_info = selection[#selection]
+    previous_catalyst_info = selection[#selection]
 
     require("deliberate.lib.catalyst").set_node(selection[#selection].node)
     require("deliberate.lib.catalyst").set_node_point("start")

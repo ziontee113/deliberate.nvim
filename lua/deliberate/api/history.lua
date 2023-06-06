@@ -17,13 +17,13 @@ M.undo = function(testing)
     exit_hyra(testing, should_exit)
 end
 
-M.redo = function(testing)
+M.redo = function()
+    if #require("deliberate.lib.selection.extmark_archive").redo_stack() == 0 then return end
+
     selection.archive_for_undo()
 
     vim.cmd("redo")
-    local should_exit = selection.redo()
-
-    exit_hyra(testing, should_exit)
+    selection.redo()
 end
 
 return M

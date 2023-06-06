@@ -52,6 +52,8 @@ M.pop_redo_stack = function()
     return latest
 end
 
+M.redo_stack = function() return redo_stack end
+
 --------------------------------------------
 
 return M

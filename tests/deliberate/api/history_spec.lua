@@ -67,7 +67,7 @@ describe("history.redo()", function()
         h.selection_is(2, { "<li>Log In</li>", "<li>Sign Up</li>" })
         h.node_has_text(selection.nodes()[1]:parent(), after_undo)
 
-        history.redo(true)
+        history.redo()
         h.selection_is(2, { "<h1>okman</h1>", "<h1>okman</h1>" })
         h.node_has_text(selection.nodes()[1]:parent(), before_undo)
 
@@ -75,7 +75,7 @@ describe("history.redo()", function()
         h.selection_is(2, { "<li>Log In</li>", "<li>Sign Up</li>" })
         h.node_has_text(selection.nodes()[1]:parent(), after_undo)
 
-        history.redo(true)
+        history.redo()
         h.selection_is(2, { "<h1>okman</h1>", "<h1>okman</h1>" })
         h.node_has_text(selection.nodes()[1]:parent(), before_undo)
     end)
