@@ -5,6 +5,11 @@ local M = {}
 
 M.replace = function(content)
     local buf = selection.current_catalyst_info().buf
+
+    vim.bo[buf].undolevels = vim.bo[buf].undolevels
+    selection.archive_for_undo()
+    require("deliberate.api.dot_repeater").register(M.replace, content)
+
     for i = 1, #selection.sorted_nodes() do
         local node = selection.sorted_nodes()[i]
 

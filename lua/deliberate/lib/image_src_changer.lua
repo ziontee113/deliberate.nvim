@@ -20,6 +20,10 @@ local function set_empty_className_property_if_needed(buf, node)
 end
 
 M.replace = function(src)
+    vim.bo[catalyst.buf()].undolevels = vim.bo[catalyst.buf()].undolevels
+    selection.archive_for_undo()
+    require("deliberate.api.dot_repeater").register(M.replace, src)
+
     for i = 1, #selection.nodes() do
         set_empty_className_property_if_needed(catalyst.buf(), selection.nodes()[i])
 
