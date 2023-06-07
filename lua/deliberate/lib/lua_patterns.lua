@@ -181,6 +181,7 @@ local M = {
         ["r"] = { "^border%-r%-%d+$", "^border%-r%-%[%d+%a+]$" },
     },
     opacity = { "^opacity%-%d+$", "^opacity%-%[%d+%%]$" },
+    ["border-opacity"] = { "^border%-opacity%-%d+$", "^border%-opacity%-%[%d+%%]$" },
 
     ----------------------------------
 

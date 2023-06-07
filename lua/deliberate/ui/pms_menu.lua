@@ -89,7 +89,7 @@ end
 local format_class = function(property, axis, current_item)
     if current_item.text == "" then return "" end
     if not axis or axis == "" then return string.format("%s-%s", property, current_item.text) end
-    if property == "border" or property == "space" then
+    if property == "border" or property == "space" or property == "border-opacity" then
         return get_3_separator_class(axis, property, current_item)
     end
     return string.format("%s%s-%s", property, axis, current_item.text)
@@ -115,7 +115,7 @@ local show_arbitrary_input = function(metadata, property, axis, fn)
         on_change = function(result)
             local value = transformer.input_to_pms_value(result, property)
 
-            if property == "border" or property == "opacity" then
+            if property == "border" or property == "opacity" or property == "border-opacity" then
                 if not axis or axis == "" then
                     value = string.format("%s-[%s]", property, value)
                 else
@@ -166,9 +166,14 @@ end
 M.change_padding = function(o) M._menu("p", o.axis, tcm.change_padding, pms_dict) end
 M.change_margin = function(o) M._menu("m", o.axis, tcm.change_margin, pms_dict) end
 M.change_spacing = function(o) M._menu("space", o.axis, tcm.change_spacing, pms_dict) end
+
 M.change_border = function(o)
     M._menu("border", o.axis, tcm._change_tailwind_classes, border_width_dict)
 end
+
 M.change_opacity = function() M._menu("opacity", false, tcm._change_tailwind_classes, opacity_dict) end
+M.change_border_opacity = function()
+    M._menu("border-opacity", false, tcm._change_tailwind_classes, opacity_dict)
+end
 
 return M

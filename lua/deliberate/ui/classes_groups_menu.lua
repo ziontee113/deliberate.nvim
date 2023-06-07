@@ -216,11 +216,6 @@ M.change_ring_offset_width = function() M._classes_group_changer_menu(ring_offse
 local ring_opacity_group = make_opacity_group("ring-opacity")
 M.change_ring_opacity = function() M._classes_group_changer_menu(ring_opacity_group) end
 
--- Border Related
-
-local border_opacity_group = make_opacity_group("border-opacity")
-M.change_border_opacity = function() M._classes_group_changer_menu(border_opacity_group) end
-
 local border_style_group = {
     { keymaps = { "0" }, classes = {}, hidden = true },
     { keymaps = { "s" }, classes = { "border-solid" } },
