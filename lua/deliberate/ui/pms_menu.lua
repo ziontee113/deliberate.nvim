@@ -6,6 +6,8 @@ local menu_repeater = require("deliberate.api.menu_repeater")
 
 local M = {}
 
+-------------------------------------------- Dictionaries
+
 local pms_dict = {
     { keymaps = "0", text = "", hidden = true },
     { keymaps = "1", text = "1", hidden = true },
@@ -53,15 +55,33 @@ local pms_dict = {
 
 local border_width_dict = {
     { keymaps = "0", text = "", hidden = true },
-    { keymaps = "2", text = "2", hidden = true },
-    { keymaps = "4", text = "4", hidden = true },
-    { keymaps = "8", text = "8", hidden = true },
+    { keymaps = ",", text = "", hidden = true, arbitrary = true },
 
-    { keymaps = { "j" }, text = "2" },
-    { keymaps = { "k" }, text = "4" },
-    { keymaps = { "l" }, text = "8" },
+    { keymaps = { "j", "2" }, text = "2" },
+    { keymaps = { "k", "4" }, text = "4" },
+    { keymaps = { "l", "8" }, text = "8" },
     { keymaps = { "m" }, text = "0" },
 }
+
+-------------------------------------------- Format Functions
+
+local get_border_class = function(axis, property, current_item)
+    if axis == "" then
+        return string.format("%s-%s", property, current_item.text)
+    else
+        return string.format("%s-%s-%s", property, axis, current_item.text)
+    end
+end
+
+local format_class = function(property, axis, current_item)
+    if property == "border" then
+        return get_border_class(axis, property, current_item)
+    else
+        return string.format("%s%s-%s", property, axis, current_item.text)
+    end
+end
+
+-------------------------------------------- Window Functions
 
 local show_arbitrary_input = function(metadata, property, axis, fn)
     local input = Input:new({
@@ -78,45 +98,19 @@ local show_arbitrary_input = function(metadata, property, axis, fn)
     input:show(metadata, row, col)
 end
 
-local get_border_class = function(axis, property, current_item)
-    if axis == "" then
-        return string.format("%s-%s", property, current_item.text)
-    else
-        return string.format("%s-%s-%s", property, axis, current_item.text)
-    end
-end
-
----@class pms_menu_Opts
----@field axis "" | "x" | "y" | "l" | "r" | "t" | "b"
-
-M._change_pms = function(property, axis, fn, items)
-    menu_repeater.register(M._change_pms, property, axis, fn, items)
+M._menu = function(property, axis, fn, items)
+    menu_repeater.register(M._menu, property, axis, fn, items)
 
     local popup = PopUp:new({
         steps = {
             {
                 items = items,
-                format_fn = function(_, current_item)
-                    if property == "border" then
-                        return get_border_class(axis, property, current_item)
-                    else
-                        return string.format("%s%s-%s", property, axis, current_item.text)
-                    end
-                end,
+                format_fn = function(_, current_item) format_class(property, axis, current_item) end,
                 callback = function(_, current_item, metadata)
                     if current_item.arbitrary == true then
-                        show_arbitrary_input(metadata, property, axis, fn)
-                        return
+                        return show_arbitrary_input(metadata, property, axis, fn)
                     else
-                        local value = ""
-                        if current_item.text ~= "" then
-                            if property == "border" then
-                                value = get_border_class(axis, property, current_item)
-                            else
-                                value = string.format("%s%s-%s", property, axis, current_item.text)
-                            end
-                        end
-                        fn({ axis = axis, value = value })
+                        fn({ axis = axis, value = format_class(property, axis, current_item) })
                     end
                 end,
             },
@@ -126,16 +120,11 @@ M._change_pms = function(property, axis, fn, items)
     popup:show()
 end
 
----@param o pms_menu_Opts
-M.change_padding = function(o) M._change_pms("p", o.axis, tcm.change_padding, pms_dict) end
+-------------------------------------------- Public Methods
 
----@param o pms_menu_Opts
-M.change_margin = function(o) M._change_pms("m", o.axis, tcm.change_margin, pms_dict) end
-
----@param o pms_menu_Opts
-M.change_spacing = function(o) M._change_pms("s", o.axis, tcm.change_spacing, pms_dict) end
-
----@param o pms_menu_Opts
-M.change_border = function(o) M._change_pms("border", o.axis, tcm.change_border, border_width_dict) end
+M.change_padding = function(o) M._menu("p", o.axis, tcm.change_padding, pms_dict) end
+M.change_margin = function(o) M._menu("m", o.axis, tcm.change_margin, pms_dict) end
+M.change_spacing = function(o) M._menu("s", o.axis, tcm.change_spacing, pms_dict) end
+M.change_border = function(o) M._menu("border", o.axis, tcm.change_border, border_width_dict) end
 
 return M
