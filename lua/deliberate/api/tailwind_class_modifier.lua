@@ -71,7 +71,7 @@ local function process_new_class_names(class_names, patterns, value)
 end
 
 ---@class change_tailwind_classes_Args
----@field property  "padding" | "margin" | "spacing" | "border" | "text_color" | "background_color"
+---@field property  "padding" | "margin" | "spacing" | "border" | "text_color" | "background_color" | "border_color"
 ---@field axis "" | "x" | "y" | "l" | "r" | "t" | "b"
 ---@field classes_groups string[]
 ---@field negative_patterns string[]
@@ -165,6 +165,10 @@ end
 M.change_background_color = function(o)
     M._change_tailwind_classes({ property = "background_color", value = o.value })
 end
+M.change_border_color = function(o)
+    M._change_tailwind_classes({ property = "border_color", value = o.value })
+end
+
 M.change_classes_groups = function(o)
     M._change_tailwind_classes({ classes_groups = o.classes_groups, value = o.value })
 end

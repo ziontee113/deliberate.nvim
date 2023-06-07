@@ -88,6 +88,11 @@ local heads = {
         function() colors_menu.change_background_color() end,
         { nowait = true },
     },
+    {
+        "bc",
+        function() colors_menu.change_border_color() end,
+        { nowait = true },
+    },
 
     {
         "`",

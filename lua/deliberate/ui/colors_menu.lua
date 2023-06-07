@@ -109,5 +109,8 @@ end
 M.change_background_color = function()
     color_class_picker_menu("tailwind-bg-color-picker", "bg", tcm.change_background_color)
 end
+M.change_border_color = function()
+    color_class_picker_menu("tailwind-bg-color-picker", "border", tcm.change_border_color)
+end
 
 return M

@@ -58,6 +58,16 @@ local M = {
         "bg%-%[hsla%([%d%s,%.%%]+%)]",
         "bg%-%[#[%da-fA-F]+]",
     },
+    border_color = {
+        "^border%-%a+%-%d+",
+        "^border%-black",
+        "^border%-white",
+        "border%-%[rgb%([%d%s,]+%)]",
+        "border%-%[rgba%([%d%s,%.%%]+%)]",
+        "border%-%[hsl%([%d%s%%,]+%)]",
+        "border%-%[hsla%([%d%s,%.%%]+%)]",
+        "border%-%[#[%da-fA-F]+]",
+    },
 
     --stylua: ignore
     css_colors = {
