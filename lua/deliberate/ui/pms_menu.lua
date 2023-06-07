@@ -65,14 +65,16 @@ local border_width_dict = {
 
 -------------------------------------------- Format Functions
 
-local get_border_class = function(axis, property, current_item)
+local get_3_separator_class = function(axis, property, current_item)
     if axis == "" then return string.format("%s-%s", property, current_item.text) end
     return string.format("%s-%s-%s", property, axis, current_item.text)
 end
 
 local format_class = function(property, axis, current_item)
     if current_item.text == "" then return "" end
-    if property == "border" then return get_border_class(axis, property, current_item) end
+    if property == "border" or property == "space" then
+        return get_3_separator_class(axis, property, current_item)
+    end
     return string.format("%s%s-%s", property, axis, current_item.text)
 end
 
@@ -121,7 +123,7 @@ end
 
 M.change_padding = function(o) M._menu("p", o.axis, tcm.change_padding, pms_dict) end
 M.change_margin = function(o) M._menu("m", o.axis, tcm.change_margin, pms_dict) end
-M.change_spacing = function(o) M._menu("s", o.axis, tcm.change_spacing, pms_dict) end
+M.change_spacing = function(o) M._menu("space", o.axis, tcm.change_spacing, pms_dict) end
 M.change_border = function(o) M._menu("border", o.axis, tcm.change_border, border_width_dict) end
 
 return M
