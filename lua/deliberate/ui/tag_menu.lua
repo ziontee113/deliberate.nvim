@@ -1,4 +1,6 @@
 local PopUp = require("deliberate.lib.ui.PopUp")
+local catalyst = require("deliberate.lib.catalyst")
+local selection = require("deliberate.lib.selection")
 local html_tag = require("deliberate.api.html_tag")
 local utils = require("deliberate.lib.utils")
 local M = {}
@@ -20,6 +22,22 @@ local tag_map = {
     { keymaps = { "b" }, text = "button" },
 }
 
+M._add_tag_with_count = function(tag, destination, count)
+    vim.bo[catalyst.buf()].undolevels = vim.bo[catalyst.buf()].undolevels
+    selection.archive_for_undo()
+    require("deliberate.api.dot_repeater").register(M._add_tag_with_count, tag, destination, count)
+
+    for i = 1, count do
+        if destination == "inside" and i > 1 then destination = "next" end
+
+        html_tag.add({
+            destination = destination,
+            tag = tag,
+            content = "",
+        })
+    end
+end
+
 local add_tag_menu = function(destination)
     local count = utils.get_count()
 
@@ -29,15 +47,7 @@ local add_tag_menu = function(destination)
             {
                 items = tag_map,
                 callback = function(_, current_item)
-                    for i = 1, count do
-                        if destination == "inside" and i > 1 then destination = "next" end
-
-                        html_tag.add({
-                            destination = destination,
-                            tag = current_item.text,
-                            content = "",
-                        })
-                    end
+                    M._add_tag_with_count(current_item.text, destination, count)
                 end,
             },
         },

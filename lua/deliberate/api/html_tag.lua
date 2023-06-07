@@ -85,10 +85,6 @@ end
 
 ---@param o tag_add_Opts
 M.add = function(o)
-    vim.bo[catalyst.buf()].undolevels = vim.bo[catalyst.buf()].undolevels
-    selection.archive_for_undo()
-    require("deliberate.api.dot_repeater").register(M.add, o)
-
     for i = 1, #selection.nodes() do
         local update_row, update_col
         local og_node = selection.nodes()[i]
