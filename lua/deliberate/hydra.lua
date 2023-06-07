@@ -189,6 +189,11 @@ local classes_groups_dict = {
     ["<A-a>"] = { classes_groups_menu.change_text_align },
     ["<A-d>"] = { classes_groups_menu.change_text_decoration },
 
+    ["dx"] = { classes_groups_menu.change_divide_x },
+    ["dy"] = { classes_groups_menu.change_divide_y },
+    ["ds"] = { classes_groups_menu.change_divide_style },
+    ["do"] = { classes_groups_menu.change_divide_opacity },
+
     ["O"] = { classes_groups_menu.change_opacity },
 
     ["bo"] = { classes_groups_menu.change_border_opacity },

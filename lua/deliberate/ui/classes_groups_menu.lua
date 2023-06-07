@@ -115,6 +115,8 @@ local text_align_group = {
 }
 M.change_text_align = function() classes_group_changer_menu(text_align_group) end
 
+-- Opacity
+
 local opacity_group = {
     { keymaps = { "0" }, classes = {}, hidden = true },
     { keymaps = { "n" }, classes = { "opacity-0" } },
@@ -134,6 +136,60 @@ local opacity_group = {
     { keymaps = { "p" }, classes = { "opacity-100" } },
 }
 M.change_opacity = function() classes_group_changer_menu(opacity_group) end
+
+-- Divide
+
+local divide_x_group = {
+    { keymaps = { "0" }, classes = {}, hidden = true },
+    { keymaps = { "x" }, classes = { "divide-x" } },
+    { keymaps = { "m" }, classes = { "divide-x-0" } },
+    { keymaps = { "2" }, classes = { "divide-x-2" } },
+    { keymaps = { "4" }, classes = { "divide-x-4" } },
+    { keymaps = { "8" }, classes = { "divide-x-8" } },
+    { keymaps = { "r" }, classes = { "divide-x-reverse" } },
+}
+M.change_divide_x = function() classes_group_changer_menu(divide_x_group) end
+
+local divide_y_group = {
+    { keymaps = { "0" }, classes = {}, hidden = true },
+    { keymaps = { "y" }, classes = { "divide-y" } },
+    { keymaps = { "m" }, classes = { "divide-y-0" } },
+    { keymaps = { "2" }, classes = { "divide-y-2" } },
+    { keymaps = { "4" }, classes = { "divide-y-4" } },
+    { keymaps = { "8" }, classes = { "divide-y-8" } },
+    { keymaps = { "r" }, classes = { "divide-y-reverse" } },
+}
+M.change_divide_y = function() classes_group_changer_menu(divide_y_group) end
+
+local divide_style_group = {
+    { keymaps = { "0" }, classes = {}, hidden = true },
+    { keymaps = { "s" }, classes = { "divide-solid" } },
+    { keymaps = { "d" }, classes = { "divide-dashed" } },
+    { keymaps = { "." }, classes = { "divide-dotted" } },
+    { keymaps = { "2" }, classes = { "divide-double" } },
+    { keymaps = { "n" }, classes = { "divide-none" } },
+}
+M.change_divide_style = function() classes_group_changer_menu(divide_style_group) end
+
+local divide_opacity_group = {
+    { keymaps = { "0" }, classes = {}, hidden = true },
+    { keymaps = { "n" }, classes = { "divide-opacity-0" } },
+    { keymaps = { "q" }, classes = { "divide-opacity-5" } },
+    { keymaps = { "w" }, classes = { "divide-opacity-10" } },
+    { keymaps = { "e" }, classes = { "divide-opacity-20" } },
+    { keymaps = { "r" }, classes = { "divide-opacity-25" } },
+    { keymaps = { "t" }, classes = { "divide-opacity-30" } },
+    { keymaps = { "a" }, classes = { "divide-opacity-40" } },
+    { keymaps = { "s" }, classes = { "divide-opacity-50" } },
+    { keymaps = { "d" }, classes = { "divide-opacity-60" } },
+    { keymaps = { "f" }, classes = { "divide-opacity-70" } },
+    { keymaps = { "g" }, classes = { "divide-opacity-75" } },
+    { keymaps = { "u" }, classes = { "divide-opacity-80" } },
+    { keymaps = { "i" }, classes = { "divide-opacity-90" } },
+    { keymaps = { "o" }, classes = { "divide-opacity-95" } },
+    { keymaps = { "p" }, classes = { "divide-opacity-100" } },
+}
+M.change_divide_opacity = function() classes_group_changer_menu(divide_opacity_group) end
 
 -- Border Related
 
