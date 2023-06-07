@@ -32,7 +32,7 @@ local function format_class_names(class_names)
 end
 
 ---@param class_names string[]
----@param patterns string[] | string
+---@param patterns string[]
 ---@param replacement string
 ---@return boolean, string[]
 local replace_class_names = function(class_names, patterns, replacement)
@@ -56,7 +56,7 @@ local replace_class_names = function(class_names, patterns, replacement)
 end
 
 ---@param class_names string[]
----@param patterns string[] | string
+---@param patterns string[]
 ---@param value string
 ---@return string
 local function process_new_class_names(class_names, patterns, value)
@@ -74,21 +74,31 @@ end
 ---@field property  "padding" | "margin" | "spacing" | "border" | "text_color" | "background_color"
 ---@field axis "" | "x" | "y" | "l" | "r" | "t" | "b"
 ---@field classes_groups string[]
+---@field negative_patterns string[]
 ---@field value string
 
 ---@param o change_tailwind_classes_Args
----@return string[] | string
+---@return string[]
 local find_patterns = function(o)
+    local patterns = {}
     if
         o.property == "padding"
         or o.property == "margin"
         or o.property == "spacing"
         or o.property == "border"
     then
-        return lua_patterns[o.property][o.axis]
+        patterns = lua_patterns[o.property][o.axis]
     else
-        return lua_patterns[o.property]
+        patterns = lua_patterns[o.property]
     end
+
+    if type(patterns) == "string" then patterns = {} end
+
+    for _, negative_pattern in ipairs(o.negative_patterns or {}) do
+        table.insert(patterns, negative_pattern)
+    end
+
+    return patterns
 end
 
 ---@param o change_tailwind_classes_Args
@@ -97,6 +107,8 @@ M._change_tailwind_classes = function(o)
 
     selection.archive_empty_state_for_undo()
     require("deliberate.api.dot_repeater").register(M._change_tailwind_classes, o)
+
+    o.negative_patterns = vim.tbl_flatten(o.negative_patterns or {})
 
     for i = 1, #selection.nodes() do
         -- QUESTION: why use `selection.nodes()[i]` instead of using `for i, node in ipairs(selection.nodes())`?
@@ -114,7 +126,8 @@ M._change_tailwind_classes = function(o)
             replacement = require("deliberate.lib.classes_group").apply(
                 class_names,
                 o.classes_groups,
-                o.value
+                o.value,
+                o.negative_patterns
             )
             replacement = string.format('"%s"', replacement)
         else
