@@ -2,6 +2,7 @@ local PopUp = require("deliberate.lib.ui.PopUp")
 local Input = require("deliberate.lib.ui.Input")
 local tcm = require("deliberate.api.tailwind_class_modifier")
 local transformer = require("deliberate.lib.arbitrary_transformer")
+local menu_repeater = require("deliberate.api.menu_repeater")
 
 local M = {}
 
@@ -88,7 +89,9 @@ end
 ---@class pms_menu_Opts
 ---@field axis "" | "x" | "y" | "l" | "r" | "t" | "b"
 
-local change_pms = function(property, axis, fn, items)
+M._change_pms = function(property, axis, fn, items)
+    menu_repeater.register(M._change_pms, property, axis, fn, items)
+
     local popup = PopUp:new({
         steps = {
             {
@@ -124,15 +127,15 @@ local change_pms = function(property, axis, fn, items)
 end
 
 ---@param o pms_menu_Opts
-M.change_padding = function(o) change_pms("p", o.axis, tcm.change_padding, pms_dict) end
+M.change_padding = function(o) M._change_pms("p", o.axis, tcm.change_padding, pms_dict) end
 
 ---@param o pms_menu_Opts
-M.change_margin = function(o) change_pms("m", o.axis, tcm.change_margin, pms_dict) end
+M.change_margin = function(o) M._change_pms("m", o.axis, tcm.change_margin, pms_dict) end
 
 ---@param o pms_menu_Opts
-M.change_spacing = function(o) change_pms("s", o.axis, tcm.change_spacing, pms_dict) end
+M.change_spacing = function(o) M._change_pms("s", o.axis, tcm.change_spacing, pms_dict) end
 
 ---@param o pms_menu_Opts
-M.change_border = function(o) change_pms("border", o.axis, tcm.change_border, border_width_dict) end
+M.change_border = function(o) M._change_pms("border", o.axis, tcm.change_border, border_width_dict) end
 
 return M

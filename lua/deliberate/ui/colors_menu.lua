@@ -2,6 +2,7 @@ local PopUp = require("deliberate.lib.ui.PopUp")
 local Input = require("deliberate.lib.ui.Input")
 local tcm = require("deliberate.api.tailwind_class_modifier")
 local transformer = require("deliberate.lib.arbitrary_transformer")
+local menu_repeater = require("deliberate.api.menu_repeater")
 
 local M = {}
 
@@ -64,7 +65,9 @@ local show_arbitrary_input = function(metadata, prefix, fn)
     input:show(metadata, row, col)
 end
 
-local color_class_picker_menu = function(filetype, prefix, fn)
+M._color_class_picker_menu = function(filetype, prefix, fn)
+    menu_repeater.register(M._color_class_picker_menu, filetype, prefix, fn)
+
     local popup = PopUp:new({
         filetype = filetype,
         steps = {
@@ -106,22 +109,26 @@ local color_class_picker_menu = function(filetype, prefix, fn)
 end
 
 M.change_text_color = function()
-    color_class_picker_menu("tailwind-text-color-picker", "text", tcm.change_text_color)
+    M._color_class_picker_menu("tailwind-text-color-picker", "text", tcm.change_text_color)
 end
 M.change_background_color = function()
-    color_class_picker_menu("tailwind-bg-color-picker", "bg", tcm.change_background_color)
+    M._color_class_picker_menu("tailwind-bg-color-picker", "bg", tcm.change_background_color)
 end
 M.change_border_color = function()
-    color_class_picker_menu("tailwind-bg-color-picker", "border", tcm.change_border_color)
+    M._color_class_picker_menu("tailwind-bg-color-picker", "border", tcm.change_border_color)
 end
 M.change_divide_color = function()
-    color_class_picker_menu("tailwind-bg-color-picker", "divide", tcm.change_divide_color)
+    M._color_class_picker_menu("tailwind-bg-color-picker", "divide", tcm.change_divide_color)
 end
 M.change_ring_color = function()
-    color_class_picker_menu("tailwind-bg-color-picker", "ring", tcm.change_ring_color)
+    M._color_class_picker_menu("tailwind-bg-color-picker", "ring", tcm.change_ring_color)
 end
 M.change_ring_offset_color = function()
-    color_class_picker_menu("tailwind-bg-color-picker", "ring-offset", tcm.change_ring_offset_color)
+    M._color_class_picker_menu(
+        "tailwind-bg-color-picker",
+        "ring-offset",
+        tcm.change_ring_offset_color
+    )
 end
 
 return M

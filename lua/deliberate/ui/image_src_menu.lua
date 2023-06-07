@@ -1,5 +1,6 @@
 local PopUp = require("deliberate.lib.ui.PopUp")
 local src_changer = require("deliberate.lib.image_src_changer")
+local menu_repeater = require("deliberate.api.menu_repeater")
 local M = {}
 
 -------------------------------------------- Local Functions
@@ -25,7 +26,9 @@ local find_image_paths = function(callback)
     })
 end
 
-local image_src_changer_menu = function(paths)
+M._image_src_changer_menu = function(paths)
+    menu_repeater.register(M._image_src_changer_menu, paths)
+
     local items = {}
     for _, path in ipairs(paths) do
         table.insert(items, { text = path })
@@ -44,6 +47,6 @@ end
 
 -------------------------------------------- Public API
 
-M.change_image_src = function() find_image_paths(image_src_changer_menu) end
+M.change_image_src = function() find_image_paths(M._image_src_changer_menu) end
 
 return M

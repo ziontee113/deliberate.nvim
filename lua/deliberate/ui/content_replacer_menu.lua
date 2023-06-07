@@ -1,5 +1,6 @@
 local PopUp = require("deliberate.lib.ui.PopUp")
 local replacer = require("deliberate.lib.content_replacer")
+local menu_repeater = require("deliberate.api.menu_repeater")
 
 local M = {}
 
@@ -101,7 +102,9 @@ local get_second_step_items = function(content_groups, results)
     return items
 end
 
-local show_content_replacer_menu = function(file_path)
+M._show_content_replacer_menu = function(file_path)
+    menu_repeater.register(M._show_content_replacer_menu, file_path)
+
     local content_groups = get_content_groups_from_file(file_path)
 
     local popup = PopUp:new({
@@ -121,6 +124,6 @@ local show_content_replacer_menu = function(file_path)
     popup:show()
 end
 
-M.replace = function(file_path) show_content_replacer_menu(file_path) end
+M.replace = function(file_path) M._show_content_replacer_menu(file_path) end
 
 return M

@@ -1,3 +1,4 @@
+local menu_repeater = require("deliberate.api.menu_repeater")
 local M = {}
 
 local show_input_window = function(buf, width, height, title, winhl)
@@ -43,6 +44,8 @@ end
 local augroup =
     vim.api.nvim_create_augroup("Deliberate Pseudo Classes Input Augroup", { clear = true })
 M.show = function()
+    menu_repeater.register(M.show)
+
     local buf = vim.api.nvim_create_buf(false, true)
     local win = show_input_window(buf, 20, 1, "Pseudo Classes")
 
@@ -57,7 +60,7 @@ M.show = function()
 
     vim.cmd("startinsert")
 
-    set_close_keymaps(win, buf, { "<Esc>", "<CR>", "`", "~" })
+    set_close_keymaps(win, buf, { "<Esc>", "<CR>", "`", "~", ">" })
 
     return buf, win
 end

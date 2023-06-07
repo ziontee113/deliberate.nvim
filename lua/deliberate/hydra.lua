@@ -74,6 +74,11 @@ local heads = {
         function() require("deliberate.api.dot_repeater").call() end,
         { nowait = true },
     },
+    {
+        ">",
+        function() require("deliberate.api.menu_repeater").call() end,
+        { nowait = true },
+    },
 
     {
         "u",
