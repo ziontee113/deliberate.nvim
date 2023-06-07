@@ -84,7 +84,7 @@ local heads = {
         { nowait = true },
     },
     {
-        "b",
+        "B",
         function() colors_menu.change_background_color() end,
         { nowait = true },
     },
@@ -128,12 +128,21 @@ local properties = {
     p = { "", "x", "y", "t", "b", "l", "r" },
     m = { "", "x", "y", "t", "b", "l", "r" },
     s = { "x", "y" },
+    border = { "", "t", "b", "l", "r" },
 }
 
 for property, axies in pairs(properties) do
     for _, axis in ipairs(axies) do
         local keymap = property .. axis
         if axis == "" then keymap = string.upper(property) end
+
+        if property == "border" then
+            if axis == "" then
+                keymap = "bo"
+            else
+                keymap = "b" .. axis
+            end
+        end
 
         local hydra_mapping = {
             keymap,
@@ -144,6 +153,8 @@ for property, axies in pairs(properties) do
                     pms_menu.change_margin({ axis = axis })
                 elseif property == "s" then
                     pms_menu.change_spacing({ axis = axis })
+                elseif property == "border" then
+                    pms_menu.change_border({ axis = axis })
                 end
             end,
             { nowait = true },
@@ -224,6 +235,7 @@ end
 local tags_dict = {
     ["D"] = { tag = "div", content = "", after = "inside" },
     ["U"] = { tag = "ul", content = "", after = "inside" },
+    ["li"] = { tag = "li", content = "li", after = "next" },
     ["h1"] = { tag = "h1", content = "h1", after = "next" },
     ["h2"] = { tag = "h2", content = "h2", after = "next" },
     ["h3"] = { tag = "h3", content = "h3", after = "next" },

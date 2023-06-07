@@ -5,7 +5,7 @@ local transformer = require("deliberate.lib.arbitrary_transformer")
 
 local M = {}
 
-local key_value_dictionary = {
+local pms_dict = {
     { keymaps = "0", text = "", hidden = true },
     { keymaps = "1", text = "1", hidden = true },
     { keymaps = "2", text = "2", hidden = true },
@@ -50,6 +50,18 @@ local key_value_dictionary = {
     { keymaps = ",", text = "", hidden = true, arbitrary = true },
 }
 
+local border_width_dict = {
+    { keymaps = "0", text = "", hidden = true },
+    { keymaps = "2", text = "2", hidden = true },
+    { keymaps = "4", text = "4", hidden = true },
+    { keymaps = "8", text = "8", hidden = true },
+
+    { keymaps = { "j" }, text = "2" },
+    { keymaps = { "k" }, text = "4" },
+    { keymaps = { "l" }, text = "8" },
+    { keymaps = { "m" }, text = "0" },
+}
+
 local show_arbitrary_input = function(metadata, property, axis, fn)
     local input = Input:new({
         title = "Input Value",
@@ -68,12 +80,20 @@ end
 ---@class pms_menu_Opts
 ---@field axis "" | "x" | "y" | "l" | "r" | "t" | "b"
 
-local change_pms = function(property, axis, fn)
+local change_pms = function(property, axis, fn, items)
     local popup = PopUp:new({
         steps = {
             {
-                items = key_value_dictionary,
+                items = items,
                 format_fn = function(_, current_item)
+                    if property == "border" then
+                        if axis == "" then
+                            return string.format("%s-%s", property, current_item.text)
+                        else
+                            return string.format("%s-%s-%s", property, axis, current_item.text)
+                        end
+                    end
+
                     return string.format("%s%s-%s", property, axis, current_item.text)
                 end,
                 callback = function(_, current_item, metadata)
@@ -83,7 +103,16 @@ local change_pms = function(property, axis, fn)
                     else
                         local value = ""
                         if current_item.text ~= "" then
-                            value = string.format("%s%s-%s", property, axis, current_item.text)
+                            if property == "border" then
+                                if axis == "" then
+                                    value = string.format("%s-%s", property, current_item.text)
+                                else
+                                    value =
+                                        string.format("%s-%s-%s", property, axis, current_item.text)
+                                end
+                            else
+                                value = string.format("%s%s-%s", property, axis, current_item.text)
+                            end
                         end
                         fn({ axis = axis, value = value })
                     end
@@ -96,12 +125,15 @@ local change_pms = function(property, axis, fn)
 end
 
 ---@param o pms_menu_Opts
-M.change_padding = function(o) change_pms("p", o.axis, tcm.change_padding) end
+M.change_padding = function(o) change_pms("p", o.axis, tcm.change_padding, pms_dict) end
 
 ---@param o pms_menu_Opts
-M.change_margin = function(o) change_pms("m", o.axis, tcm.change_margin) end
+M.change_margin = function(o) change_pms("m", o.axis, tcm.change_margin, pms_dict) end
 
 ---@param o pms_menu_Opts
-M.change_spacing = function(o) change_pms("s", o.axis, tcm.change_spacing) end
+M.change_spacing = function(o) change_pms("s", o.axis, tcm.change_spacing, pms_dict) end
+
+---@param o pms_menu_Opts
+M.change_border = function(o) change_pms("border", o.axis, tcm.change_border, border_width_dict) end
 
 return M

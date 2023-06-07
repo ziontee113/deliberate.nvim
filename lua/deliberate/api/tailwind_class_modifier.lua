@@ -71,7 +71,7 @@ local function process_new_class_names(class_names, patterns, value)
 end
 
 ---@class change_tailwind_classes_Args
----@field property  "padding" | "margin" | "spacing" | "text_color" | "background_color"
+---@field property  "padding" | "margin" | "spacing" | "border" | "text_color" | "background_color"
 ---@field axis "" | "x" | "y" | "l" | "r" | "t" | "b"
 ---@field classes_groups string[]
 ---@field value string
@@ -79,7 +79,12 @@ end
 ---@param o change_tailwind_classes_Args
 ---@return string[] | string
 local find_patterns = function(o)
-    if o.property == "padding" or o.property == "margin" or o.property == "spacing" then
+    if
+        o.property == "padding"
+        or o.property == "margin"
+        or o.property == "spacing"
+        or o.property == "border"
+    then
         return lua_patterns[o.property][o.axis]
     else
         return lua_patterns[o.property]
@@ -136,6 +141,9 @@ M.change_margin = function(o)
 end
 M.change_spacing = function(o)
     M._change_tailwind_classes({ property = "spacing", axis = o.axis, value = o.value })
+end
+M.change_border = function(o)
+    M._change_tailwind_classes({ property = "border", axis = o.axis, value = o.value })
 end
 
 M.change_text_color = function(o)
