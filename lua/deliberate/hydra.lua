@@ -143,7 +143,7 @@ for property, axies in pairs(properties) do
 
         if property == "border" then
             if axis == "" then
-                keymap = "bo"
+                keymap = "bd"
             else
                 keymap = "b" .. axis
             end
@@ -181,6 +181,9 @@ local classes_groups_dict = {
     ["<A-d>"] = { classes_groups_menu.change_text_decoration },
 
     ["O"] = { classes_groups_menu.change_opacity },
+
+    ["bo"] = { classes_groups_menu.change_border_opacity },
+    ["bs"] = { classes_groups_menu.change_border_style },
 
     ["R"] = { classes_groups_menu.change_border_radius, { "" } },
     ["rt"] = { classes_groups_menu.change_border_radius, { "t" } },

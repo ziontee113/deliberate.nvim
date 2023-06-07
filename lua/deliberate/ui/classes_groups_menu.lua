@@ -130,9 +130,42 @@ local opacity_group = {
     { keymaps = { "g" }, classes = { "opacity-75" } },
     { keymaps = { "u" }, classes = { "opacity-80" } },
     { keymaps = { "i" }, classes = { "opacity-90" } },
-    { keymaps = { "o" }, classes = { "opacity-100" } },
+    { keymaps = { "o" }, classes = { "opacity-95" } },
+    { keymaps = { "p" }, classes = { "opacity-100" } },
 }
 M.change_opacity = function() classes_group_changer_menu(opacity_group) end
+
+-- Border Related
+
+local border_opacity_group = {
+    { keymaps = { "0" }, classes = {}, hidden = true },
+    { keymaps = { "n" }, classes = { "border-opacity-0" } },
+    { keymaps = { "q" }, classes = { "border-opacity-5" } },
+    { keymaps = { "w" }, classes = { "border-opacity-10" } },
+    { keymaps = { "e" }, classes = { "border-opacity-20" } },
+    { keymaps = { "r" }, classes = { "border-opacity-25" } },
+    { keymaps = { "t" }, classes = { "border-opacity-30" } },
+    { keymaps = { "a" }, classes = { "border-opacity-40" } },
+    { keymaps = { "s" }, classes = { "border-opacity-50" } },
+    { keymaps = { "d" }, classes = { "border-opacity-60" } },
+    { keymaps = { "f" }, classes = { "border-opacity-70" } },
+    { keymaps = { "g" }, classes = { "border-opacity-75" } },
+    { keymaps = { "u" }, classes = { "border-opacity-80" } },
+    { keymaps = { "i" }, classes = { "border-opacity-90" } },
+    { keymaps = { "o" }, classes = { "border-opacity-95" } },
+    { keymaps = { "p" }, classes = { "border-opacity-100" } },
+}
+M.change_border_opacity = function() classes_group_changer_menu(border_opacity_group) end
+
+local border_style_group = {
+    { keymaps = { "0" }, classes = {}, hidden = true },
+    { keymaps = { "s" }, classes = { "border-solid" } },
+    { keymaps = { "d" }, classes = { "border-dashed" } },
+    { keymaps = { "." }, classes = { "border-dotted" } },
+    { keymaps = { "2" }, classes = { "border-double" } },
+    { keymaps = { "n" }, classes = { "border-none" } },
+}
+M.change_border_style = function() classes_group_changer_menu(border_style_group) end
 
 -------------------------------------------- Border Radius
 
