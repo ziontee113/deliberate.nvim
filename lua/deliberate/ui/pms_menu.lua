@@ -77,6 +77,14 @@ local show_arbitrary_input = function(metadata, property, axis, fn)
     input:show(metadata, row, col)
 end
 
+local get_border_class = function(axis, property, current_item)
+    if axis == "" then
+        return string.format("%s-%s", property, current_item.text)
+    else
+        return string.format("%s-%s-%s", property, axis, current_item.text)
+    end
+end
+
 ---@class pms_menu_Opts
 ---@field axis "" | "x" | "y" | "l" | "r" | "t" | "b"
 
@@ -87,14 +95,10 @@ local change_pms = function(property, axis, fn, items)
                 items = items,
                 format_fn = function(_, current_item)
                     if property == "border" then
-                        if axis == "" then
-                            return string.format("%s-%s", property, current_item.text)
-                        else
-                            return string.format("%s-%s-%s", property, axis, current_item.text)
-                        end
+                        return get_border_class(axis, property, current_item)
+                    else
+                        return string.format("%s%s-%s", property, axis, current_item.text)
                     end
-
-                    return string.format("%s%s-%s", property, axis, current_item.text)
                 end,
                 callback = function(_, current_item, metadata)
                     if current_item.arbitrary == true then
@@ -104,12 +108,7 @@ local change_pms = function(property, axis, fn, items)
                         local value = ""
                         if current_item.text ~= "" then
                             if property == "border" then
-                                if axis == "" then
-                                    value = string.format("%s-%s", property, current_item.text)
-                                else
-                                    value =
-                                        string.format("%s-%s-%s", property, axis, current_item.text)
-                                end
+                                value = get_border_class(axis, property, current_item)
                             else
                                 value = string.format("%s%s-%s", property, axis, current_item.text)
                             end
