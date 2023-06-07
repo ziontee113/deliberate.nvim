@@ -117,5 +117,11 @@ end
 M.change_divide_color = function()
     color_class_picker_menu("tailwind-bg-color-picker", "divide", tcm.change_divide_color)
 end
+M.change_ring_color = function()
+    color_class_picker_menu("tailwind-bg-color-picker", "ring", tcm.change_ring_color)
+end
+M.change_ring_offset_color = function()
+    color_class_picker_menu("tailwind-bg-color-picker", "ring-offset", tcm.change_ring_offset_color)
+end
 
 return M

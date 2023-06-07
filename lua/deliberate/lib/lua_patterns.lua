@@ -86,6 +86,30 @@ local M = {
         "divide%-%[hsla%([%d%s,%.%%]+%)]",
         "divide%-%[#[%da-fA-F]+]",
     },
+    ring_color = {
+        "^ring%-%a+%-%d+",
+        "^ring%-black",
+        "^ring%-white",
+        "^ring%-transparent",
+        "^ring%-current",
+        "ring%-%[rgb%([%d%s,]+%)]",
+        "ring%-%[rgba%([%d%s,%.%%]+%)]",
+        "ring%-%[hsl%([%d%s%%,]+%)]",
+        "ring%-%[hsla%([%d%s,%.%%]+%)]",
+        "ring%-%[#[%da-fA-F]+]",
+    },
+    ring_offset_color = {
+        "^ring-offset%-%a+%-%d+",
+        "^ring-offset%-black",
+        "^ring-offset%-white",
+        "^ring-offset%-transparent",
+        "^ring-offset%-current",
+        "ring-offset%-%[rgb%([%d%s,]+%)]",
+        "ring-offset%-%[rgba%([%d%s,%.%%]+%)]",
+        "ring-offset%-%[hsl%([%d%s%%,]+%)]",
+        "ring-offset%-%[hsla%([%d%s,%.%%]+%)]",
+        "ring-offset%-%[#[%da-fA-F]+]",
+    },
 
     --stylua: ignore
     css_colors = {

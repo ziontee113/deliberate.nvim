@@ -113,6 +113,16 @@ local heads = {
         function() colors_menu.change_divide_color() end,
         { nowait = true },
     },
+    {
+        "Rc",
+        function() colors_menu.change_ring_color() end,
+        { nowait = true },
+    },
+    {
+        "RC",
+        function() colors_menu.change_ring_offset_color() end,
+        { nowait = true },
+    },
 
     {
         "`",
@@ -198,6 +208,10 @@ local classes_groups_dict = {
 
     ["bo"] = { classes_groups_menu.change_border_opacity },
     ["bs"] = { classes_groups_menu.change_border_style },
+
+    ["Rw"] = { classes_groups_menu.change_ring_width },
+    ["Ro"] = { classes_groups_menu.change_ring_offset_width },
+    ["RO"] = { classes_groups_menu.change_ring_opacity },
 
     ["R"] = { classes_groups_menu.change_border_radius, { "" } },
     ["rt"] = { classes_groups_menu.change_border_radius, { "t" } },

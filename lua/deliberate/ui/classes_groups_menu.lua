@@ -191,6 +191,50 @@ local divide_opacity_group = {
 }
 M.change_divide_opacity = function() classes_group_changer_menu(divide_opacity_group) end
 
+-- Ring
+
+local ring_width_group = {
+    { keymaps = { "0" }, classes = {}, hidden = true },
+    { keymaps = { "m" }, classes = { "ring-0" } },
+    { keymaps = { "1" }, classes = { "ring-1" } },
+    { keymaps = { "2" }, classes = { "ring-2" } },
+    { keymaps = { "4" }, classes = { "ring-4" } },
+    { keymaps = { "8" }, classes = { "ring-8" } },
+    { keymaps = { "r" }, classes = { "ring" } },
+    { keymaps = { "r" }, classes = { "ring-inset" } },
+}
+M.change_ring_width = function() classes_group_changer_menu(ring_width_group) end
+
+local ring_offset_width_group = {
+    { keymaps = { "0" }, classes = {}, hidden = true },
+    { keymaps = { "m" }, classes = { "ring-offset-0" } },
+    { keymaps = { "1" }, classes = { "ring-offset-1" } },
+    { keymaps = { "2" }, classes = { "ring-offset-2" } },
+    { keymaps = { "4" }, classes = { "ring-offset-4" } },
+    { keymaps = { "8" }, classes = { "ring-offset-8" } },
+}
+M.change_ring_offset_width = function() classes_group_changer_menu(ring_offset_width_group) end
+
+local ring_opacity_group = {
+    { keymaps = { "0" }, classes = {}, hidden = true },
+    { keymaps = { "n" }, classes = { "ring-opacity-0" } },
+    { keymaps = { "q" }, classes = { "ring-opacity-5" } },
+    { keymaps = { "w" }, classes = { "ring-opacity-10" } },
+    { keymaps = { "e" }, classes = { "ring-opacity-20" } },
+    { keymaps = { "r" }, classes = { "ring-opacity-25" } },
+    { keymaps = { "t" }, classes = { "ring-opacity-30" } },
+    { keymaps = { "a" }, classes = { "ring-opacity-40" } },
+    { keymaps = { "s" }, classes = { "ring-opacity-50" } },
+    { keymaps = { "d" }, classes = { "ring-opacity-60" } },
+    { keymaps = { "f" }, classes = { "ring-opacity-70" } },
+    { keymaps = { "g" }, classes = { "ring-opacity-75" } },
+    { keymaps = { "u" }, classes = { "ring-opacity-80" } },
+    { keymaps = { "i" }, classes = { "ring-opacity-90" } },
+    { keymaps = { "o" }, classes = { "ring-opacity-95" } },
+    { keymaps = { "p" }, classes = { "ring-opacity-100" } },
+}
+M.change_ring_opacity = function() classes_group_changer_menu(ring_opacity_group) end
+
 -- Border Related
 
 local border_opacity_group = {
