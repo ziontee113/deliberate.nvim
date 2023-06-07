@@ -8,8 +8,12 @@ local M = {}
 
 -------------------------------------------- Dictionaries
 
-local pms_dict = {
+local general_dict = {
     { keymaps = "0", text = "", hidden = true },
+    { keymaps = ",", text = "", hidden = true, arbitrary = true },
+}
+
+local pms_dict = {
     { keymaps = "1", text = "1", hidden = true },
     { keymaps = "2", text = "2", hidden = true },
     { keymaps = "3", text = "3", hidden = true },
@@ -49,18 +53,31 @@ local pms_dict = {
     { keymaps = "!", text = "1.5", hidden = true },
     { keymaps = "@", text = "2.5", hidden = true },
     { keymaps = "#", text = "3.5", hidden = true },
-
-    { keymaps = ",", text = "", hidden = true, arbitrary = true },
 }
 
 local border_width_dict = {
-    { keymaps = "0", text = "", hidden = true },
-    { keymaps = ",", text = "", hidden = true, arbitrary = true },
-
     { keymaps = { "j", "2" }, text = "2" },
     { keymaps = { "k", "4" }, text = "4" },
     { keymaps = { "l", "8" }, text = "8" },
     { keymaps = { "m" }, text = "0" },
+}
+
+local opacity_dict = {
+    { keymaps = { "m" }, text = "0" },
+    { keymaps = { "~" }, text = "5" },
+    { keymaps = { "m", "1" }, text = "10" },
+    { keymaps = { ",", "2" }, text = "20" },
+    { keymaps = { "@" }, text = "25" },
+    { keymaps = { ".", "3" }, text = "30" },
+    { keymaps = { "j", "4" }, text = "40" },
+    { keymaps = { "k", "5" }, text = "50" },
+    { keymaps = { "l", "6" }, text = "60" },
+    { keymaps = { "u", "7" }, text = "70" },
+    { keymaps = { "&" }, text = "75" },
+    { keymaps = { "i", "8" }, text = "80" },
+    { keymaps = { "o", "9" }, text = "90" },
+    { keymaps = { "(" }, text = "95" },
+    { keymaps = { ")", ";" }, text = "100" },
 }
 
 -------------------------------------------- Format Functions
@@ -80,6 +97,17 @@ end
 
 -------------------------------------------- Window Functions
 
+local prepare_popup_items = function(...)
+    local items_tbl, dictionaries = {}, { ... }
+    table.insert(dictionaries, general_dict)
+    for _, dict in ipairs(dictionaries) do
+        for _, item in ipairs(dict) do
+            table.insert(items_tbl, item)
+        end
+    end
+    return items_tbl
+end
+
 local show_arbitrary_input = function(metadata, property, axis, fn)
     local input = Input:new({
         title = "Input Value",
@@ -95,13 +123,13 @@ local show_arbitrary_input = function(metadata, property, axis, fn)
     input:show(metadata, row, col)
 end
 
-M._menu = function(property, axis, fn, items)
-    menu_repeater.register(M._menu, property, axis, fn, items)
+M._menu = function(property, axis, fn, ...)
+    menu_repeater.register(M._menu, property, axis, fn, ...)
 
     local popup = PopUp:new({
         steps = {
             {
-                items = items,
+                items = prepare_popup_items(...),
                 format_fn = function(_, current_item)
                     return format_class(property, axis, current_item)
                 end,
