@@ -44,9 +44,12 @@ local function handle_inside_has_no_children(indents, index, replacement)
 
     api.nvim_buf_set_text(catalyst.buf(), b_row, b_col, b_row, b_col, { "", replacement, indents })
 
+    local tag_node = aggregator.get_tag_identifier_node(selection.nodes()[index])
+    local _, tag_identifier_start = tag_node:range()
+
     local row_offset = 1
     local update_row = b_row + row_offset
-    local update_col = b_col + vim.bo.tabstop
+    local update_col = tag_identifier_start - 1 + vim.bo.tabstop
     return update_row, update_col
 end
 

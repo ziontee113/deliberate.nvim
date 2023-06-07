@@ -39,6 +39,8 @@ describe("tag.add() on current catalyst node", function()
           <h1>inside the div</h1>
         </div>]]
         )
+        h.catalyst_has("<h1>inside the div</h1>", { 24, 10 })
+
         add({ "p", "next", "Lorem ipsum" }, "<p>Lorem ipsum</p>", { 25, 10 })
         h.node_has_text(
             catalyst.node():parent(),

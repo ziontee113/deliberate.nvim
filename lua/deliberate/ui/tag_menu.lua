@@ -1,5 +1,6 @@
 local PopUp = require("deliberate.lib.ui.PopUp")
 local html_tag = require("deliberate.api.html_tag")
+local utils = require("deliberate.lib.utils")
 local M = {}
 
 local tag_map = {
@@ -20,17 +21,23 @@ local tag_map = {
 }
 
 local add_tag_menu = function(destination)
+    local count = utils.get_count()
+
     local popup = PopUp:new({
         title = string.format(" %s ", destination),
         steps = {
             {
                 items = tag_map,
                 callback = function(_, current_item)
-                    html_tag.add({
-                        destination = destination,
-                        tag = current_item.text,
-                        content = "",
-                    })
+                    for i = 1, count do
+                        if destination == "inside" and i > 1 then destination = "next" end
+
+                        html_tag.add({
+                            destination = destination,
+                            tag = current_item.text,
+                            content = "",
+                        })
+                    end
                 end,
             },
         },
