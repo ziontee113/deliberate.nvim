@@ -66,19 +66,14 @@ local border_width_dict = {
 -------------------------------------------- Format Functions
 
 local get_border_class = function(axis, property, current_item)
-    if axis == "" then
-        return string.format("%s-%s", property, current_item.text)
-    else
-        return string.format("%s-%s-%s", property, axis, current_item.text)
-    end
+    if axis == "" then return string.format("%s-%s", property, current_item.text) end
+    return string.format("%s-%s-%s", property, axis, current_item.text)
 end
 
 local format_class = function(property, axis, current_item)
-    if property == "border" then
-        return get_border_class(axis, property, current_item)
-    else
-        return string.format("%s%s-%s", property, axis, current_item.text)
-    end
+    if current_item.text == "" then return "" end
+    if property == "border" then return get_border_class(axis, property, current_item) end
+    return string.format("%s%s-%s", property, axis, current_item.text)
 end
 
 -------------------------------------------- Window Functions
@@ -105,7 +100,9 @@ M._menu = function(property, axis, fn, items)
         steps = {
             {
                 items = items,
-                format_fn = function(_, current_item) format_class(property, axis, current_item) end,
+                format_fn = function(_, current_item)
+                    return format_class(property, axis, current_item)
+                end,
                 callback = function(_, current_item, metadata)
                     if current_item.arbitrary == true then
                         return show_arbitrary_input(metadata, property, axis, fn)

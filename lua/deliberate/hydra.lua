@@ -151,7 +151,7 @@ local heads = {
     { "<Nul>", nil, { exit = true } },
 }
 
--------------------------------------------- Padding / Margin / Spacing heads
+-------------------------------------------- Tailwind Classes that can have Arbitrary Values
 
 local properties = {
     p = { "", "x", "y", "t", "b", "l", "r" },
@@ -160,32 +160,35 @@ local properties = {
     border = { "", "t", "b", "l", "r" },
 }
 
+local find_keymap = function(property, axis)
+    if property == "border" then
+        if axis == "" then
+            return "bd"
+        else
+            return "b" .. axis
+        end
+    end
+    if axis == "" then return string.upper(property) end
+    return property .. axis
+end
+
+local find_callback = function(property, axis)
+    if property == "p" then
+        pms_menu.change_padding({ axis = axis })
+    elseif property == "m" then
+        pms_menu.change_margin({ axis = axis })
+    elseif property == "s" then
+        pms_menu.change_spacing({ axis = axis })
+    elseif property == "border" then
+        pms_menu.change_border({ axis = axis })
+    end
+end
+
 for property, axies in pairs(properties) do
     for _, axis in ipairs(axies) do
-        local keymap = property .. axis
-        if axis == "" then keymap = string.upper(property) end
-
-        if property == "border" then
-            if axis == "" then
-                keymap = "bd"
-            else
-                keymap = "b" .. axis
-            end
-        end
-
         local hydra_mapping = {
-            keymap,
-            function()
-                if property == "p" then
-                    pms_menu.change_padding({ axis = axis })
-                elseif property == "m" then
-                    pms_menu.change_margin({ axis = axis })
-                elseif property == "s" then
-                    pms_menu.change_spacing({ axis = axis })
-                elseif property == "border" then
-                    pms_menu.change_border({ axis = axis })
-                end
-            end,
+            find_keymap(property, axis),
+            function() find_callback(property, axis) end,
             { nowait = true },
         }
         table.insert(heads, hydra_mapping)
