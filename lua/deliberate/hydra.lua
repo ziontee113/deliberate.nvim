@@ -157,7 +157,9 @@ local properties = {
     p = { "", "x", "y", "t", "b", "l", "r" },
     m = { "", "x", "y", "t", "b", "l", "r" },
     s = { "x", "y" },
+
     border = { "", "t", "b", "l", "r" },
+    opacity = { "" },
 }
 
 local find_keymap = function(property, axis)
@@ -168,6 +170,7 @@ local find_keymap = function(property, axis)
             return "b" .. axis
         end
     end
+    if property == "opacity" then return "O" end
     if axis == "" then return string.upper(property) end
     return property .. axis
 end
@@ -181,6 +184,8 @@ local find_callback = function(property, axis)
         pms_menu.change_spacing({ axis = axis })
     elseif property == "border" then
         pms_menu.change_border({ axis = axis })
+    elseif property == "opacity" then
+        pms_menu.change_opacity()
     end
 end
 
@@ -211,8 +216,6 @@ local classes_groups_dict = {
     ["dy"] = { classes_groups_menu.change_divide_y },
     ["ds"] = { classes_groups_menu.change_divide_style },
     ["do"] = { classes_groups_menu.change_divide_opacity },
-
-    ["O"] = { classes_groups_menu.change_opacity },
 
     ["bo"] = { classes_groups_menu.change_border_opacity },
     ["bs"] = { classes_groups_menu.change_border_style },

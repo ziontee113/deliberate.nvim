@@ -180,6 +180,7 @@ local M = {
         ["l"] = { "^border%-l%-%d+$", "^border%-l%-%[%d+%a+]$" },
         ["r"] = { "^border%-r%-%d+$", "^border%-r%-%[%d+%a+]$" },
     },
+    opacity = { "^opacity%-%d+$", "^opacity%-%[%d+%a+]$" },
 
     ----------------------------------
 

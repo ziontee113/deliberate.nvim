@@ -152,9 +152,6 @@ local make_opacity_group = function(property)
     return items
 end
 
-local opacity_group = make_opacity_group("opacity")
-M.change_opacity = function() M._classes_group_changer_menu(opacity_group) end
-
 -- Divide
 
 local divide_x_group = {

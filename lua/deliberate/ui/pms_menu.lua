@@ -23,7 +23,7 @@ local pms_dict = {
     { keymaps = "7", text = "7", hidden = true },
     { keymaps = "8", text = "8", hidden = true },
     { keymaps = "9", text = "9", hidden = true },
-    -- "",
+
     { keymaps = "w", text = "10" },
     { keymaps = "e", text = "11" },
     { keymaps = "r", text = "12" },
@@ -47,7 +47,7 @@ local pms_dict = {
     { keymaps = "v", text = "72" },
     { keymaps = "b", text = "80" },
     { keymaps = "n", text = "96" },
-    { keymaps = "m", text = "0" },
+    { keymaps = "/", text = "0" },
 
     { keymaps = ")", text = "0.5", hidden = true },
     { keymaps = "!", text = "1.5", hidden = true },
@@ -59,11 +59,11 @@ local border_width_dict = {
     { keymaps = { "j", "2" }, text = "2" },
     { keymaps = { "k", "4" }, text = "4" },
     { keymaps = { "l", "8" }, text = "8" },
-    { keymaps = { "m" }, text = "0" },
+    { keymaps = { "/" }, text = "0" },
 }
 
 local opacity_dict = {
-    { keymaps = { "m" }, text = "0" },
+    { keymaps = { "/" }, text = "0" },
     { keymaps = { "~" }, text = "5" },
     { keymaps = { "m", "1" }, text = "10" },
     { keymaps = { ",", "2" }, text = "20" },
@@ -83,12 +83,12 @@ local opacity_dict = {
 -------------------------------------------- Format Functions
 
 local get_3_separator_class = function(axis, property, current_item)
-    if axis == "" then return string.format("%s-%s", property, current_item.text) end
     return string.format("%s-%s-%s", property, axis, current_item.text)
 end
 
 local format_class = function(property, axis, current_item)
     if current_item.text == "" then return "" end
+    if not axis or axis == "" then return string.format("%s-%s", property, current_item.text) end
     if property == "border" or property == "space" then
         return get_3_separator_class(axis, property, current_item)
     end
@@ -137,7 +137,11 @@ M._menu = function(property, axis, fn, ...)
                     if current_item.arbitrary == true then
                         return show_arbitrary_input(metadata, property, axis, fn)
                     else
-                        fn({ axis = axis, value = format_class(property, axis, current_item) })
+                        fn({
+                            property = property,
+                            axis = axis,
+                            value = format_class(property, axis, current_item),
+                        })
                     end
                 end,
             },
@@ -153,5 +157,6 @@ M.change_padding = function(o) M._menu("p", o.axis, tcm.change_padding, pms_dict
 M.change_margin = function(o) M._menu("m", o.axis, tcm.change_margin, pms_dict) end
 M.change_spacing = function(o) M._menu("space", o.axis, tcm.change_spacing, pms_dict) end
 M.change_border = function(o) M._menu("border", o.axis, tcm.change_border, border_width_dict) end
+M.change_opacity = function() M._menu("opacity", false, tcm._change_tailwind_classes, opacity_dict) end
 
 return M
