@@ -12,7 +12,7 @@ local patterns_matches_inputs = function(patterns, inputs)
     assert.equals(true, result)
 end
 
-describe("Lua patterns for Tailwind PMS classes", function()
+describe("pms", function()
     it("padding pattern for omni axis works correctly", function()
         local inputs = { "p-4", "p-69", "p-[20px]", "p-[4rem]", "p-[4pt]", "p-[10vh]" }
         patterns_matches_inputs(lua_patterns.padding[""], inputs)

@@ -6,13 +6,17 @@ local M = {}
 local prepare_ingredients = function(group)
     local items, classes_groups = {}, {}
     for _, group_item in ipairs(group) do
-        local text = table.concat(group_item.classes, " ")
-        table.insert(items, {
-            text = text,
-            keymaps = group_item.keymaps,
-            hidden = group_item.hidden,
-        })
-        table.insert(classes_groups, text)
+        if type(group_item) == "table" then
+            local text = table.concat(group_item.classes, " ")
+            table.insert(items, {
+                text = text,
+                keymaps = group_item.keymaps,
+                hidden = group_item.hidden,
+            })
+            table.insert(classes_groups, text)
+        else
+            table.insert(items, "")
+        end
     end
     return items, classes_groups
 end
@@ -129,5 +133,61 @@ local opacity_group = {
     { keymaps = { "o" }, classes = { "opacity-100" } },
 }
 M.change_opacity = function() classes_group_changer_menu(opacity_group) end
+
+-------------------------------------------- Border Radius
+
+local prefix = "rounded"
+local axies = { "", "t", "b", "l", "r", "tl", "tr", "bl", "br" }
+local keymap_to_size_tbl = {
+    { "0", false },
+
+    { "s", "sm" },
+    { "r", "" },
+    { "m", "md" },
+    { "l", "lg" },
+    "",
+    { "1", "xl" },
+    { "2", "2xl" },
+    { "3", "3xl" },
+    "",
+    { "f", "full" },
+    { "n", "none" },
+}
+
+local border_radius_groups = {}
+for _, axis in ipairs(axies) do
+    local group = {}
+    for _, item_ingredients in ipairs(keymap_to_size_tbl) do
+        if type(item_ingredients) == "table" then
+            local keymap, size = unpack(item_ingredients)
+            local classes = {}
+
+            local class = ""
+            if axis == "" then
+                class = string.format("%s-%s", prefix, size)
+            else
+                if size == "" then
+                    class = string.format("%s-%s", prefix, axis)
+                else
+                    class = string.format("%s-%s-%s", prefix, axis, size)
+                end
+            end
+
+            if size then table.insert(classes, class) end
+
+            local item = {
+                keymaps = { keymap },
+                classes = classes,
+                hidden = size == false and true or nil,
+            }
+            table.insert(group, item)
+        else
+            table.insert(group, "")
+        end
+    end
+    border_radius_groups[axis] = group
+end
+
+M.change_border_radius = function(axis) classes_group_changer_menu(border_radius_groups[axis]) end
 
 return M

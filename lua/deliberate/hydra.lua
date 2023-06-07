@@ -166,22 +166,34 @@ end
 -------------------------------------------- Replace Classes Groups
 
 local classes_groups_dict = {
-    ["fl"] = classes_groups_menu.change_flex_properties,
-    ["a"] = classes_groups_menu.change_flex_align_properties,
+    ["fl"] = { classes_groups_menu.change_flex_properties },
+    ["a"] = { classes_groups_menu.change_flex_align_properties },
 
-    ["z"] = classes_groups_menu.change_font_size,
-    ["fs"] = classes_groups_menu.change_font_style,
-    ["fw"] = classes_groups_menu.change_font_weight,
-    ["<A-a>"] = classes_groups_menu.change_text_align,
-    ["<A-d>"] = classes_groups_menu.change_text_decoration,
+    ["z"] = { classes_groups_menu.change_font_size },
+    ["fs"] = { classes_groups_menu.change_font_style },
+    ["fw"] = { classes_groups_menu.change_font_weight },
+    ["<A-a>"] = { classes_groups_menu.change_text_align },
+    ["<A-d>"] = { classes_groups_menu.change_text_decoration },
 
-    ["O"] = classes_groups_menu.change_opacity,
+    ["O"] = { classes_groups_menu.change_opacity },
+
+    ["R"] = { classes_groups_menu.change_border_radius, { "" } },
+    ["rt"] = { classes_groups_menu.change_border_radius, { "t" } },
+    ["rb"] = { classes_groups_menu.change_border_radius, { "b" } },
+    ["rl"] = { classes_groups_menu.change_border_radius, { "l" } },
+    ["rr"] = { classes_groups_menu.change_border_radius, { "r" } },
+
+    ["ru"] = { classes_groups_menu.change_border_radius, { "tl" } },
+    ["ro"] = { classes_groups_menu.change_border_radius, { "tr" } },
+    ["rj"] = { classes_groups_menu.change_border_radius, { "bl" } },
+    ["rk"] = { classes_groups_menu.change_border_radius, { "br" } },
 }
 
-for keymap, fn in pairs(classes_groups_dict) do
+for keymap, fn_and_args in pairs(classes_groups_dict) do
+    local fn, args = unpack(fn_and_args)
     local hydra_mapping = {
         keymap,
-        function() fn() end,
+        function() fn(unpack(args or {})) end,
         { nowait = true },
     }
     table.insert(heads, hydra_mapping)
