@@ -87,7 +87,7 @@ local heads = {
     },
 
     {
-        "d",
+        "dl",
         function() require("deliberate.api.delete").call() end,
         { nowait = true },
     },
@@ -105,6 +105,12 @@ local heads = {
     {
         "bc",
         function() colors_menu.change_border_color() end,
+        { nowait = true },
+    },
+
+    {
+        "dc",
+        function() colors_menu.change_divide_color() end,
         { nowait = true },
     },
 

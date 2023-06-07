@@ -31,6 +31,8 @@ local colors = {
     { text = "rose", keymaps = { "R" } },
     { text = "white", keymaps = { "w" }, single = true },
     { text = "black", keymaps = { "B" }, single = true },
+    { text = "transparent", keymaps = { "T" }, single = true },
+    { text = "current", keymaps = { "C" }, single = true },
 
     { text = "", keymaps = { "," }, arbitrary = true },
 }
@@ -111,6 +113,9 @@ M.change_background_color = function()
 end
 M.change_border_color = function()
     color_class_picker_menu("tailwind-bg-color-picker", "border", tcm.change_border_color)
+end
+M.change_divide_color = function()
+    color_class_picker_menu("tailwind-bg-color-picker", "divide", tcm.change_divide_color)
 end
 
 return M
