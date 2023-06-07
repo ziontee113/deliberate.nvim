@@ -3,11 +3,16 @@ Input.__index = Input
 
 -- Private
 
+local augroup = vim.api.nvim_create_augroup("Deliberate Input", { clear = true })
+
 function Input:_execute_callback()
     vim.cmd("stopinsert")
 
-    local result = vim.api.nvim_buf_get_lines(0, 0, -1, false)[1]
-    self.callback(result)
+    if self.callback then
+        local result = vim.api.nvim_buf_get_lines(0, 0, -1, false)[1]
+        self.callback(result)
+    end
+
     self:hide()
 
     vim.api.nvim_set_current_win(self.target_win)
@@ -33,6 +38,17 @@ function Input:_set_confirm_keymaps()
         function() self:_execute_callback() end,
         { buffer = self.buf, nowait = true }
     )
+end
+
+function Input:_create_on_change_autocmd()
+    vim.api.nvim_create_autocmd({ "TextChanged", "TextChangedI" }, {
+        buffer = self.buf,
+        group = augroup,
+        callback = function()
+            local line = vim.api.nvim_buf_get_lines(self.buf, 0, -1, false)[1]
+            self.on_change(line)
+        end,
+    })
 end
 
 -- Public
@@ -65,6 +81,7 @@ function Input:show(metadata, row, col)
     vim.api.nvim_win_set_option(self.win, "cursorline", true)
 
     self:_set_hide_keymaps()
+    self:_create_on_change_autocmd()
 
     vim.cmd("startinsert")
 end

@@ -82,7 +82,7 @@ local show_arbitrary_input = function(metadata, property, axis, fn)
     local input = Input:new({
         title = "Input Value",
         width = 15,
-        callback = function(result)
+        on_change = function(result)
             local value = transformer.input_to_pms_value(result)
             value = string.format("%s%s-[%s]", property, axis, value)
             fn({ axis = axis, value = value })
