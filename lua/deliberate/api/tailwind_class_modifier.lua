@@ -155,9 +155,6 @@ end
 M.change_spacing = function(o)
     M._change_tailwind_classes({ property = "spacing", axis = o.axis, value = o.value })
 end
-M.change_border = function(o)
-    M._change_tailwind_classes({ property = "border", axis = o.axis, value = o.value })
-end
 
 M.change_text_color = function(o)
     M._change_tailwind_classes({ property = "text_color", value = o.value })

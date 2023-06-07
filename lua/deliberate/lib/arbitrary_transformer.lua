@@ -30,9 +30,10 @@ M.input_to_color = function(input)
     return string.format("#%s", input)
 end
 
-M.input_to_pms_value = function(input)
+M.input_to_pms_value = function(input, property)
     if input == "" then input = "0" end
 
+    if string.find(property, "opacity") then return input .. "%" end
     if tonumber(input) then return input .. "px" end
 
     local _, idx = string.find(input, "%D")

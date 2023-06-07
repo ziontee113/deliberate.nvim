@@ -113,9 +113,19 @@ local show_arbitrary_input = function(metadata, property, axis, fn)
         title = "Input Value",
         width = 15,
         on_change = function(result)
-            local value = transformer.input_to_pms_value(result)
-            value = string.format("%s%s-[%s]", property, axis, value)
-            fn({ axis = axis, value = value })
+            local value = transformer.input_to_pms_value(result, property)
+
+            if property == "border" or property == "opacity" then
+                if not axis or axis == "" then
+                    value = string.format("%s-[%s]", property, value)
+                else
+                    value = string.format("%s-%s-[%s]", property, axis, value)
+                end
+            else
+                value = string.format("%s%s-[%s]", property, axis, value)
+            end
+
+            fn({ property = property, axis = axis, value = value })
         end,
     })
 
@@ -156,7 +166,9 @@ end
 M.change_padding = function(o) M._menu("p", o.axis, tcm.change_padding, pms_dict) end
 M.change_margin = function(o) M._menu("m", o.axis, tcm.change_margin, pms_dict) end
 M.change_spacing = function(o) M._menu("space", o.axis, tcm.change_spacing, pms_dict) end
-M.change_border = function(o) M._menu("border", o.axis, tcm.change_border, border_width_dict) end
+M.change_border = function(o)
+    M._menu("border", o.axis, tcm._change_tailwind_classes, border_width_dict)
+end
 M.change_opacity = function() M._menu("opacity", false, tcm._change_tailwind_classes, opacity_dict) end
 
 return M
