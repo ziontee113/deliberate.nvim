@@ -2,7 +2,6 @@ local M = {}
 
 local catalyst_ns = vim.api.nvim_create_namespace("Deliberate Catalyst Namespace")
 local pseudo_ns = vim.api.nvim_create_namespace("Deliberate Pseudo Classes Namespace")
-local destination_ns = vim.api.nvim_create_namespace("Deliberate Destination Namespace")
 local selection_ns = vim.api.nvim_create_namespace("Deliberate Selection Namespace")
 
 local clear_catalyst_namespace = function(buf)
@@ -12,32 +11,6 @@ local clear_selection_namespace = function(buf)
     vim.api.nvim_buf_clear_namespace(buf, selection_ns, 0, -1)
 end
 local clear_pasudo_namespace = function(buf) vim.api.nvim_buf_clear_namespace(buf, pseudo_ns, 0, -1) end
-local clear_destination_namespace = function(buf)
-    vim.api.nvim_buf_clear_namespace(buf, destination_ns, 0, -1)
-end
-
--------------------------------------------- Destination
-
-local destination_icons = {
-    ["next"] = "",
-    ["previous"] = "⬆",
-    ["inside"] = "👶",
-}
-
-M.highlight_destination = function()
-    local catalyst = require("deliberate.lib.catalyst")
-    local start_row = catalyst.node():range()
-    clear_destination_namespace(catalyst.buf())
-
-    local current_destination = require("deliberate.lib.destination").get()
-
-    if destination_icons[current_destination] ~= "" then
-        pcall(vim.api.nvim_buf_set_extmark, catalyst.buf(), destination_ns, start_row, 0, {
-            virt_text = { { destination_icons[current_destination], "Normal" } },
-            virt_text_pos = "eol",
-        })
-    end
-end
 
 -------------------------------------------- Pseudo Classes
 
@@ -113,14 +86,12 @@ M.highlight_selection = function()
     end
 
     M.highlight_pseudo_classes()
-    M.highlight_destination()
 end
 
 M.clear = function(buf)
     clear_catalyst_namespace(buf)
     clear_selection_namespace(buf)
     clear_pasudo_namespace(buf)
-    clear_destination_namespace(buf)
 end
 
 return M
