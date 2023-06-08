@@ -21,116 +21,7 @@ local M = {
         "not-italic",
     },
 
-    --------------------------------------------
-
-    text_color = {
-        "^text%-%a+%-%d+",
-        "^text%-black",
-        "^text%-white",
-        "^text%-transparent",
-        "^text%-current",
-        "text%-%[rgb%([%d%s,]+%)]",
-        "text%-%[rgba%([%d%s,%.%%]+%)]",
-        "text%-%[hsl%([%d%s%%,]+%)]",
-        "text%-%[hsla%([%d%s,%.%%]+%)]",
-        "text%-%[#[%da-fA-F]+]",
-    },
-    background_color = {
-        "^bg%-%a+%-%d+",
-        "^bg%-black",
-        "^bg%-white",
-        "^bg%-transparent",
-        "^bg%-current",
-        "bg%-%[rgb%([%d%s,]+%)]",
-        "bg%-%[rgba%([%d%s,%.%%]+%)]",
-        "bg%-%[hsl%([%d%s%%,]+%)]",
-        "bg%-%[hsla%([%d%s,%.%%]+%)]",
-        "bg%-%[#[%da-fA-F]+]",
-    },
-    border_color = {
-        "^border%-%a+%-%d+",
-        "^border%-black",
-        "^border%-white",
-        "^border%-transparent",
-        "^border%-current",
-        "border%-%[rgb%([%d%s,]+%)]",
-        "border%-%[rgba%([%d%s,%.%%]+%)]",
-        "border%-%[hsl%([%d%s%%,]+%)]",
-        "border%-%[hsla%([%d%s,%.%%]+%)]",
-        "border%-%[#[%da-fA-F]+]",
-    },
-    divide_color = {
-        "^divide%-%a+%-%d+",
-        "^divide%-black",
-        "^divide%-white",
-        "^divide%-transparent",
-        "^divide%-current",
-        "divide%-%[rgb%([%d%s,]+%)]",
-        "divide%-%[rgba%([%d%s,%.%%]+%)]",
-        "divide%-%[hsl%([%d%s%%,]+%)]",
-        "divide%-%[hsla%([%d%s,%.%%]+%)]",
-        "divide%-%[#[%da-fA-F]+]",
-    },
-    ring_color = {
-        "^ring%-%a+%-%d+",
-        "^ring%-black",
-        "^ring%-white",
-        "^ring%-transparent",
-        "^ring%-current",
-        "ring%-%[rgb%([%d%s,]+%)]",
-        "ring%-%[rgba%([%d%s,%.%%]+%)]",
-        "ring%-%[hsl%([%d%s%%,]+%)]",
-        "ring%-%[hsla%([%d%s,%.%%]+%)]",
-        "ring%-%[#[%da-fA-F]+]",
-    },
-    ring_offset_color = {
-        "^ring-offset%-%a+%-%d+",
-        "^ring-offset%-black",
-        "^ring-offset%-white",
-        "^ring-offset%-transparent",
-        "^ring-offset%-current",
-        "ring-offset%-%[rgb%([%d%s,]+%)]",
-        "ring-offset%-%[rgba%([%d%s,%.%%]+%)]",
-        "ring-offset%-%[hsl%([%d%s%%,]+%)]",
-        "ring-offset%-%[hsla%([%d%s,%.%%]+%)]",
-        "ring-offset%-%[#[%da-fA-F]+]",
-    },
-    from_color = {
-        "^from%-%a+%-%d+",
-        "^from%-black",
-        "^from%-white",
-        "^from%-transparent",
-        "^from%-current",
-        "from%-%[rgb%([%d%s,]+%)]",
-        "from%-%[rgba%([%d%s,%.%%]+%)]",
-        "from%-%[hsl%([%d%s%%,]+%)]",
-        "from%-%[hsla%([%d%s,%.%%]+%)]",
-        "from%-%[#[%da-fA-F]+]",
-    },
-    via_color = {
-        "^via%-%a+%-%d+",
-        "^via%-black",
-        "^via%-white",
-        "^via%-transparent",
-        "^via%-current",
-        "via%-%[rgb%([%d%s,]+%)]",
-        "via%-%[rgba%([%d%s,%.%%]+%)]",
-        "via%-%[hsl%([%d%s%%,]+%)]",
-        "via%-%[hsla%([%d%s,%.%%]+%)]",
-        "via%-%[#[%da-fA-F]+]",
-    },
-    to_color = {
-        "^to%-%a+%-%d+",
-        "^to%-black",
-        "^to%-white",
-        "^to%-transparent",
-        "^to%-current",
-        "to%-%[rgb%([%d%s,]+%)]",
-        "to%-%[rgba%([%d%s,%.%%]+%)]",
-        "to%-%[hsl%([%d%s%%,]+%)]",
-        "to%-%[hsla%([%d%s,%.%%]+%)]",
-        "to%-%[#[%da-fA-F]+]",
-    },
+    ----------------------------------
 
     --stylua: ignore
     css_colors = {
@@ -310,5 +201,41 @@ local M = {
     pseudo_splitter = "^(.-:)([^:]+)$",
     pseudo_element_content = "^content%-%['.*']$",
 }
+
+-------------------------------------------- Colors
+
+local color_postfixes = {
+    "%-%a+%-%d+",
+    "%-black",
+    "%-white",
+    "%-transparent",
+    "%-current",
+    "%-%[rgb%([%d%s,]+%)]",
+    "%-%[rgba%([%d%s,%.%%]+%)]",
+    "%-%[hsl%([%d%s%%,]+%)]",
+    "%-%[hsla%([%d%s,%.%%]+%)]",
+    "%-%[#[%da-fA-F]+]",
+}
+
+local color_properties = {
+    ["text-color"] = "text",
+    ["background-color"] = "bg",
+    ["border-color"] = "border",
+    ["divide-color"] = "divide",
+    ["ring-color"] = "ring",
+    ["ring-offset-color"] = "ring-offset",
+    ["from-color"] = "from",
+    ["via-color"] = "via",
+    ["to-color"] = "to",
+}
+
+for key, property in pairs(color_properties) do
+    local patterns_tbl = {}
+    for _, postfix in ipairs(color_postfixes) do
+        local pattern = "^" .. string.gsub(property, "%-", "%%%-") .. postfix
+        table.insert(patterns_tbl, pattern)
+    end
+    M[key] = patterns_tbl
+end
 
 return M

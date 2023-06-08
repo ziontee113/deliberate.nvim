@@ -116,12 +116,12 @@ local fn = tcm._change_tailwind_classes
 
 M.text = function() M._menu(txt_ft, "text", tcm.change_text_color) end
 M.background = function() M._menu(bg_ft, "bg", tcm.change_background_color) end
-M.border = function() M._menu(bg_ft, "border", fn, "border_color") end
-M.divide = function() M._menu(bg_ft, "divide", fn, "divide_color") end
-M.ring = function() M._menu(bg_ft, "ring", fn, "ring_color") end
-M.ring_offset = function() M._menu(bg_ft, "ring-offset", fn, "ring_offset_color") end
-M.from = function() M._menu(bg_ft, "from", fn, "from_color") end
-M.via = function() M._menu(bg_ft, "via", fn, "via_color") end
-M.to = function() M._menu(bg_ft, "to", fn, "to_color") end
+M.border = function() M._menu(bg_ft, "border", fn, "border-color") end
+M.divide = function() M._menu(bg_ft, "divide", fn, "divide-color") end
+M.ring = function() M._menu(bg_ft, "ring", fn, "ring-color") end
+M.ring_offset = function() M._menu(bg_ft, "ring-offset", fn, "ring-offset-color") end
+M.from = function() M._menu(bg_ft, "from", fn, "from-color") end
+M.via = function() M._menu(bg_ft, "via", fn, "via-color") end
+M.to = function() M._menu(bg_ft, "to", fn, "to-color") end
 
 return M

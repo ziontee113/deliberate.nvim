@@ -156,10 +156,10 @@ M.change_classes_groups = function(o)
 end
 
 M.change_text_color = function(o)
-    M._change_tailwind_classes({ property = "text_color", value = o.value })
+    M._change_tailwind_classes({ property = "text-color", value = o.value })
 end
 M.change_background_color = function(o)
-    M._change_tailwind_classes({ property = "background_color", value = o.value })
+    M._change_tailwind_classes({ property = "background-color", value = o.value })
 end
 
 return M
