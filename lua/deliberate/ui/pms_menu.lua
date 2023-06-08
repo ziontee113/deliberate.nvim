@@ -24,6 +24,10 @@ local dashy_group = {
     "ring-offset",
     "w",
     "h",
+    "min-w",
+    "min-h",
+    "max-w",
+    "max-h",
 }
 local in_dashy_group = function(property) return vim.tbl_contains(dashy_group, property) end
 
@@ -333,6 +337,26 @@ M.change_width = function()
 end
 M.change_height = function()
     M._menu("h", false, tcm._change_tailwind_classes, pms_dict, width_height_dict)
+end
+
+-- min Width / min Height
+
+local min_width_dict = {
+    { keymaps = { "/" }, text = "0" },
+    { keymaps = { "f" }, text = "full" },
+    { keymaps = { "m" }, text = "min" },
+    { keymaps = { "x" }, text = "max" },
+}
+M.change_min_width = function()
+    M._menu("min-w", false, tcm._change_tailwind_classes, min_width_dict)
+end
+local min_height_dict = {
+    { keymaps = { "/" }, text = "0" },
+    { keymaps = { "f" }, text = "full" },
+    { keymaps = { "s" }, text = "screen" },
+}
+M.change_min_height = function()
+    M._menu("min-h", false, tcm._change_tailwind_classes, min_height_dict)
 end
 
 return M

@@ -172,6 +172,10 @@ local properties = {
 
     ["w"] = { "" },
     ["h"] = { "" },
+    ["min-width"] = { "" },
+    ["min-height"] = { "" },
+    ["max-width"] = { "" },
+    ["max-height"] = { "" },
 }
 
 local find_keymap = function(property, axis)
@@ -192,6 +196,10 @@ local find_keymap = function(property, axis)
     if property == "ring-offset" then return "Ro" end
     if property == "w" then return "w" end
     if property == "h" then return "e" end
+    if property == "min-width" then return "mw" end
+    if property == "min-height" then return "me" end
+    if property == "max-width" then return "xw" end
+    if property == "max-height" then return "xe" end
 
     if axis == "" then return string.upper(property) end
     return property .. axis
@@ -234,6 +242,11 @@ local find_callback = function(property, axis)
         pms_menu.change_width()
     elseif property == "h" then
         pms_menu.change_height()
+        -------------------------------------------
+    elseif property == "min-width" then
+        pms_menu.change_min_width()
+    elseif property == "min-height" then
+        pms_menu.change_min_height()
     end
 end
 
