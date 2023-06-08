@@ -50,14 +50,14 @@ local steps = {
     { text = "900", keymaps = { "o", "9", "g" } },
 }
 
-local show_arbitrary_input = function(metadata, prefix, fn)
+local show_arbitrary_input = function(metadata, prefix, fn, property)
     local input = Input:new({
         title = "Input Color",
         width = 15,
         on_change = function(result)
             local value = transformer.input_to_color(result)
             value = string.format("%s-[%s]", prefix, value)
-            fn({ value = value })
+            fn({ value = value, property = property })
         end,
     })
 
@@ -65,8 +65,8 @@ local show_arbitrary_input = function(metadata, prefix, fn)
     input:show(metadata, row, col)
 end
 
-M._color_class_picker_menu = function(filetype, prefix, fn)
-    menu_repeater.register(M._color_class_picker_menu, filetype, prefix, fn)
+M._menu = function(filetype, prefix, fn, property)
+    menu_repeater.register(M._menu, filetype, prefix, fn)
 
     local popup = PopUp:new({
         filetype = filetype,
@@ -78,16 +78,16 @@ M._color_class_picker_menu = function(filetype, prefix, fn)
                 end,
                 callback = function(_, current_item, metadata)
                     if current_item.arbitrary == true then
-                        show_arbitrary_input(metadata, prefix, fn)
+                        show_arbitrary_input(metadata, prefix, fn, property)
                         return true
                     end
                     if current_item.text == "" then
-                        fn({ value = "" })
+                        fn({ value = "", property = property })
                         return true
                     end
                     if current_item.single then
                         local value = string.format("%s-%s", prefix, current_item.text)
-                        fn({ value = value })
+                        fn({ value = value, property = property })
                         return true
                     end
                 end,
@@ -99,7 +99,7 @@ M._color_class_picker_menu = function(filetype, prefix, fn)
                 end,
                 callback = function(results)
                     local value = string.format("%s-%s-%s", prefix, results[1], results[2])
-                    fn({ value = value })
+                    fn({ value = value, property = property })
                 end,
             },
         },
@@ -108,27 +108,20 @@ M._color_class_picker_menu = function(filetype, prefix, fn)
     popup:show()
 end
 
-M.change_text_color = function()
-    M._color_class_picker_menu("tailwind-text-color-picker", "text", tcm.change_text_color)
-end
-M.change_background_color = function()
-    M._color_class_picker_menu("tailwind-bg-color-picker", "bg", tcm.change_background_color)
-end
-M.change_border_color = function()
-    M._color_class_picker_menu("tailwind-bg-color-picker", "border", tcm.change_border_color)
-end
-M.change_divide_color = function()
-    M._color_class_picker_menu("tailwind-bg-color-picker", "divide", tcm.change_divide_color)
-end
-M.change_ring_color = function()
-    M._color_class_picker_menu("tailwind-bg-color-picker", "ring", tcm.change_ring_color)
-end
-M.change_ring_offset_color = function()
-    M._color_class_picker_menu(
-        "tailwind-bg-color-picker",
-        "ring-offset",
-        tcm.change_ring_offset_color
-    )
-end
+-------------------------------------------- Public Methods
+
+local txt_ft = "tailwind-text-color-picker"
+local bg_ft = "tailwind-bg-color-picker"
+local fn = tcm._change_tailwind_classes
+
+M.text = function() M._menu(txt_ft, "text", tcm.change_text_color) end
+M.background = function() M._menu(bg_ft, "bg", tcm.change_background_color) end
+M.border = function() M._menu(bg_ft, "border", fn, "border_color") end
+M.divide = function() M._menu(bg_ft, "divide", fn, "divide_color") end
+M.ring = function() M._menu(bg_ft, "ring", fn, "ring_color") end
+M.ring_offset = function() M._menu(bg_ft, "ring-offset", fn, "ring_offset_color") end
+M.from = function() M._menu(bg_ft, "from", fn, "from_color") end
+M.via = function() M._menu(bg_ft, "via", fn, "via_color") end
+M.to = function() M._menu(bg_ft, "to", fn, "to_color") end
 
 return M

@@ -99,17 +99,17 @@ local heads = {
 
     {
         "dc",
-        function() colors_menu.change_divide_color() end,
+        function() colors_menu.divide() end,
         { nowait = true },
     },
     {
         "Rc",
-        function() colors_menu.change_ring_color() end,
+        function() colors_menu.ring() end,
         { nowait = true },
     },
     {
         "RC",
-        function() colors_menu.change_ring_offset_color() end,
+        function() colors_menu.ring_offset() end,
         { nowait = true },
     },
 
@@ -151,12 +151,15 @@ end
 -------------------------------------------- Colors Menus
 
 local keymap_to_color_menu_fn = {
-    ["t"] = colors_menu.change_text_color,
-    ["B"] = colors_menu.change_background_color,
-    ["bc"] = colors_menu.change_border_color,
-    ["dc"] = colors_menu.change_divide_color,
-    ["Rc"] = colors_menu.change_ring_color,
-    ["RC"] = colors_menu.change_ring_offset_color,
+    ["t"] = colors_menu.text,
+    ["B"] = colors_menu.background,
+    ["bc"] = colors_menu.border,
+    ["dc"] = colors_menu.divide,
+    ["Rc"] = colors_menu.ring,
+    ["RC"] = colors_menu.ring_offset,
+    ["zf"] = colors_menu.from,
+    ["zv"] = colors_menu.via,
+    ["zt"] = colors_menu.to,
 }
 add_heads_from_tbl(keymap_to_color_menu_fn)
 

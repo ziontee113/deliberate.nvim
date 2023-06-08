@@ -151,27 +151,15 @@ M.change_spacing = function(o)
     M._change_tailwind_classes({ property = "spacing", axis = o.axis, value = o.value })
 end
 
+M.change_classes_groups = function(o)
+    M._change_tailwind_classes({ classes_groups = o.classes_groups, value = o.value })
+end
+
 M.change_text_color = function(o)
     M._change_tailwind_classes({ property = "text_color", value = o.value })
 end
 M.change_background_color = function(o)
     M._change_tailwind_classes({ property = "background_color", value = o.value })
-end
-M.change_border_color = function(o)
-    M._change_tailwind_classes({ property = "border_color", value = o.value })
-end
-M.change_divide_color = function(o)
-    M._change_tailwind_classes({ property = "divide_color", value = o.value })
-end
-M.change_ring_color = function(o)
-    M._change_tailwind_classes({ property = "ring_color", value = o.value })
-end
-M.change_ring_offset_color = function(o)
-    M._change_tailwind_classes({ property = "ring_offset_color", value = o.value })
-end
-
-M.change_classes_groups = function(o)
-    M._change_tailwind_classes({ classes_groups = o.classes_groups, value = o.value })
 end
 
 return M
