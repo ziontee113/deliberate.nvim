@@ -135,6 +135,19 @@ local heads = {
     { "<Nul>", nil, { exit = true } },
 }
 
+-------------------------------------------- Local Helpers
+
+local add_heads_from_tbl = function(tbl)
+    for keymap, fn in pairs(tbl) do
+        local hydra_mapping = {
+            keymap,
+            function() fn() end,
+            { nowait = true },
+        }
+        table.insert(heads, hydra_mapping)
+    end
+end
+
 -------------------------------------------- Colors Menus
 
 local keymap_to_color_menu_fn = {
@@ -145,125 +158,49 @@ local keymap_to_color_menu_fn = {
     ["Rc"] = colors_menu.change_ring_color,
     ["RC"] = colors_menu.change_ring_offset_color,
 }
-
-for keymap, fn in pairs(keymap_to_color_menu_fn) do
-    local hydra_mapping = {
-        keymap,
-        function() fn() end,
-        { nowait = true },
-    }
-    table.insert(heads, hydra_mapping)
-end
+add_heads_from_tbl(keymap_to_color_menu_fn)
 
 -------------------------------------------- Tailwind Classes that can have Arbitrary Values
 
-local properties = {
-    p = { "", "x", "y", "t", "b", "l", "r" }, -- padding
-    m = { "", "x", "y", "t", "b", "l", "r" }, -- margin
-    s = { "x", "y" }, -- spacing
-    d = { "x", "y" }, -- divide
+-- Non Axis
+local non_axis_map = {
+    ["O"] = pms_menu.change_opacity,
+    ["z"] = pms_menu.change_font_size,
+    ["bo"] = pms_menu.change_border_opacity,
+    ["do"] = pms_menu.change_divide_opacity,
+    ["Rw"] = pms_menu.change_ring_width,
+    ["Ro"] = pms_menu.change_ring_offset,
+    ["RO"] = pms_menu.change_ring_opacity,
+    ["w"] = pms_menu.change_width,
+    ["e"] = pms_menu.change_height,
+    ["mw"] = pms_menu.change_min_width,
+    ["me"] = pms_menu.change_min_height,
+    ["xw"] = pms_menu.change_max_width,
+    ["xe"] = pms_menu.change_max_height,
+}
+add_heads_from_tbl(non_axis_map)
 
-    border = { "", "t", "b", "l", "r" },
-
-    opacity = { "" },
-    ["border-opacity"] = { "" },
-    ["divide-opacity"] = { "" },
-    ["ring-opacity"] = { "" },
-
-    ["font-size"] = { "" },
-    ["ring"] = { "" },
-    ["ring-offset"] = { "" },
-
-    ["w"] = { "" },
-    ["h"] = { "" },
-    ["min-width"] = { "" },
-    ["min-height"] = { "" },
-    ["max-width"] = { "" },
-    ["max-height"] = { "" },
+-- With Axis
+local axis_map = {
+    p = { { "", "x", "y", "t", "b", "l", "r" }, pms_menu.change_padding },
+    m = { { "", "x", "y", "t", "b", "l", "r" }, pms_menu.change_margin },
+    s = { { "x", "y" }, pms_menu.change_spacing },
+    d = { { "x", "y" }, pms_menu.change_divide },
+    b = { { "", "t", "b", "l", "r" }, pms_menu.change_border_width },
 }
 
-local find_keymap = function(property, axis)
-    if property == "border" then
-        if axis == "" then
-            return "bd"
-        else
-            return "b" .. axis
-        end
-    end
-
-    if property == "opacity" then return "O" end
-    if property == "border-opacity" then return "bo" end
-    if property == "divide-opacity" then return "do" end
-    if property == "ring-opacity" then return "RO" end
-    if property == "font-size" then return "z" end
-    if property == "ring" then return "Rw" end
-    if property == "ring-offset" then return "Ro" end
-    if property == "w" then return "w" end
-    if property == "h" then return "e" end
-    if property == "min-width" then return "mw" end
-    if property == "min-height" then return "me" end
-    if property == "max-width" then return "xw" end
-    if property == "max-height" then return "xe" end
-
+local find_axis_keymap = function(property, axis)
+    if property == "b" and axis == "" then return "bd" end
     if axis == "" then return string.upper(property) end
     return property .. axis
 end
 
-local find_callback = function(property, axis)
-    if property == "p" then
-        pms_menu.change_padding({ axis = axis })
-    elseif property == "m" then
-        pms_menu.change_margin({ axis = axis })
-    elseif property == "s" then
-        pms_menu.change_spacing({ axis = axis })
-    -------------------------------------------
-    elseif property == "d" then
-        if axis == "x" then
-            pms_menu.change_divide_x({ axis = axis })
-        elseif axis == "y" then
-            pms_menu.change_divide_y({ axis = axis })
-        end
-    -------------------------------------------
-    elseif property == "border" then
-        pms_menu.change_border({ axis = axis })
-    -------------------------------------------
-    elseif property == "opacity" then
-        pms_menu.change_opacity()
-    elseif property == "border-opacity" then
-        pms_menu.change_border_opacity()
-    elseif property == "divide-opacity" then
-        pms_menu.change_divide_opacity()
-    elseif property == "ring-opacity" then
-        pms_menu.change_ring_opacity()
-    elseif property == "font-size" then
-        pms_menu.change_font_size()
-    elseif property == "ring" then
-        pms_menu.change_ring_wdith()
-    elseif property == "ring-offset" then
-        pms_menu.change_ring_offset()
-    -------------------------------------------
-    elseif property == "w" then
-        pms_menu.change_width()
-    elseif property == "h" then
-        pms_menu.change_height()
-    -------------------------------------------
-    elseif property == "min-width" then
-        pms_menu.change_min_width()
-    elseif property == "min-height" then
-        pms_menu.change_min_height()
-    -------------------------------------------
-    elseif property == "max-width" then
-        pms_menu.change_max_width()
-    elseif property == "max-height" then
-        pms_menu.change_max_height()
-    end
-end
-
-for property, axies in pairs(properties) do
+for property, value_tbl in pairs(axis_map) do
+    local axies, fn = unpack(value_tbl)
     for _, axis in ipairs(axies) do
         local hydra_mapping = {
-            find_keymap(property, axis),
-            function() find_callback(property, axis) end,
+            find_axis_keymap(property, axis),
+            function() fn({ axis = axis }) end,
             { nowait = true },
         }
         table.insert(heads, hydra_mapping)
@@ -282,7 +219,6 @@ local classes_groups_dict = {
     ["<A-d>"] = { classes_groups_menu.change_text_decoration },
 
     ["ds"] = { classes_groups_menu.change_divide_style },
-
     ["bs"] = { classes_groups_menu.change_border_style },
 
     ["ra"] = { classes_groups_menu.change_border_radius, { "" } },

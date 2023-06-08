@@ -197,7 +197,7 @@ local border_width_dict = {
     { keymaps = { "l", "8" }, text = "8" },
     { keymaps = { "/" }, text = "0" },
 }
-M.change_border = function(o)
+M.change_border_width = function(o)
     M._menu("border", o.axis, tcm._change_tailwind_classes, border_width_dict)
 end
 
@@ -258,13 +258,21 @@ local divide_dict = {
 }
 
 local divide_x_dict = { { keymaps = { "x" }, text = "", absolute = "divide-x" } }
-M.change_divide_x = function(o)
-    M._menu("divide", o.axis, tcm._change_tailwind_classes, divide_x_dict, divide_dict)
+local change_divide_x = function()
+    M._menu("divide", "y", tcm._change_tailwind_classes, divide_x_dict, divide_dict)
 end
 
 local divide_y_dict = { { keymaps = { "y" }, text = "", absolute = "divide-y" } }
-M.change_divide_y = function(o)
-    M._menu("divide", o.axis, tcm._change_tailwind_classes, divide_y_dict, divide_dict)
+local change_divide_y = function()
+    M._menu("divide", "x", tcm._change_tailwind_classes, divide_y_dict, divide_dict)
+end
+
+M.change_divide = function(o)
+    if o.axis == "x" then
+        change_divide_x()
+    else
+        change_divide_y()
+    end
 end
 
 -- Ring
@@ -279,7 +287,7 @@ local ring_width_dict = {
     { keymaps = { "r" }, text = "", absolute = "ring" },
     { keymaps = { "i" }, text = "inset" },
 }
-M.change_ring_wdith = function()
+M.change_ring_width = function()
     M._menu("ring", false, tcm._change_tailwind_classes, ring_width_dict, ring_dict)
 end
 
