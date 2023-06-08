@@ -173,7 +173,7 @@ local M = {
     ["divide-opacity"] = { "^divide%-opacity%-[%d%.]+$", "^divide%-opacity%-%[[%d%.]+%%]$" },
     ["ring-opacity"] = { "^ring%-opacity%-[%d%.]+$", "^ring%-opacity%-%[[%d%.]+%%]$" },
 
-    ["text"] = {
+    text = {
         "text%-xs",
         "text%-sm",
         "text%-base",
@@ -188,6 +188,12 @@ local M = {
         "text%-8xl",
         "text%-9xl",
         "^text%-%[[%d%.]+%a+]$",
+    },
+
+    ring = {
+        "ring",
+        "ring%-inset",
+        "^ring%-%[[%d%.]+%a+]$",
     },
 
     ----------------------------------
