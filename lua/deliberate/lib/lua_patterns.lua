@@ -60,59 +60,6 @@ local M = {
 
     ----------------------------------
 
-    padding = {
-        [""] = { "^p%-[%d%.%a]+$", "^p%-%[[%d%.]+%a+]$" },
-        ["x"] = { "^px%-[%d%.%a]+$", "^px%-%[[%d%.]+%a+]$" },
-        ["y"] = { "^py%-[%d%.%a]+$", "^py%-%[[%d%.]+%a+]$" },
-        ["t"] = { "^pt%-[%d%.%a]+$", "^pt%-%[[%d%.]+%a+]$" },
-        ["b"] = { "^pb%-[%d%.%a]+$", "^pb%-%[[%d%.]+%a+]$" },
-        ["l"] = { "^pl%-[%d%.%a]+$", "^pl%-%[[%d%.]+%a+]$" },
-        ["r"] = { "^pr%-[%d%.%a]+$", "^pr%-%[[%d%.]+%a+]$" },
-        ["all"] = { "^p[xytblr]?%-[%d%.%a]+$", "^p[xytblr]?%-%[[%d%.]+%a+]$" },
-    },
-    margin = {
-        [""] = { "^m%-[%d%.%a]+$", "^m%-%[[%d%.]+%a+]$" },
-        ["x"] = { "^mx%-[%d%.%a]+$", "^mx%-%[[%d%.]+%a+]$" },
-        ["y"] = { "^my%-[%d%.%a]+$", "^my%-%[[%d%.]+%a+]$" },
-        ["t"] = { "^mt%-[%d%.%a]+$", "^mt%-%[[%d%.]+%a+]$" },
-        ["b"] = { "^mb%-[%d%.%a]+$", "^mb%-%[[%d%.]+%a+]$" },
-        ["l"] = { "^ml%-[%d%.%a]+$", "^ml%-%[[%d%.]+%a+]$" },
-        ["r"] = { "^mr%-[%d%.%a]+$", "^mr%-%[[%d%.]+%a+]$" },
-        ["all"] = { "^m[xytblr]?%-[%d%.%a]+$", "^m[xytblr]?%-%[[%d%.]+%a+]$" },
-    },
-    rounded = {
-        [""] = { "^rounded$", "^rounded%-[%d?%a?][^tblr]+$", "^rounded%-%[[%d%.]+%a+]$" },
-        ["x"] = { "^rounded%-x$", "^rounded%-x%-[%d?%a?]+$", "^rounded%-x%-%[[%d%.]+%a+]$" },
-        ["y"] = { "^rounded%-y$", "^rounded%-y%-[%d?%a?]+$", "^rounded%-y%-%[[%d%.]+%a+]$" },
-        ["t"] = { "^rounded%-t$", "^rounded%-t%-[%d?%a?]+$", "^rounded%-t%-%[[%d%.]+%a+]$" },
-        ["b"] = { "^rounded%-b$", "^rounded%-b%-[%d?%a?]+$", "^rounded%-b%-%[[%d%.]+%a+]$" },
-        ["l"] = { "^rounded%-l$", "^rounded%-l%-[%d?%a?]+$", "^rounded%-l%-%[[%d%.]+%a+]$" },
-        ["r"] = { "^rounded%-r$", "^rounded%-r%-[%d?%a?]+$", "^rounded%-r%-%[[%d%.]+%a+]$" },
-        ["tl"] = { "^rounded%-tl$", "^rounded%-tl%-[%d?%a?]+$", "^rounded%-tl%-%[[%d%.]+%a+]$" },
-        ["tr"] = { "^rounded%-tr$", "^rounded%-tr%-[%d?%a?]+$", "^rounded%-tr%-%[[%d%.]+%a+]$" },
-        ["bl"] = { "^rounded%-bl$", "^rounded%-bl%-[%d?%a?]+$", "^rounded%-bl%-%[[%d%.]+%a+]$" },
-        ["br"] = { "^rounded%-br$", "^rounded%-br%-[%d?%a?]+$", "^rounded%-br%-%[[%d%.]+%a+]$" },
-    },
-    spacing = {
-        ["x"] = { "^space%-x%-[%d%.%a]+$", "^space%-x%-%[[%d%.]+%a+]$" },
-        ["y"] = { "^space%-y%-[%d%.%a]+$", "^space%-y%-%[[%d%.]+%a+]$" },
-    },
-    divide = {
-        ["x"] = { "divide%-x", "^divide%-x%-[%d%.%a]+$", "^divide%-x%-%[[%d%.]+%a+]$" },
-        ["y"] = { "divide%-y", "^divide%-y%-[%d%.%a]+$", "^divide%-y%-%[[%d%.]+%a+]$" },
-    },
-    border = {
-        [""] = { "^border%-[%d%.%a]+$", "^border%-%[[%d%.]+%a+]$" },
-        ["t"] = { "^border%-t%-[%d%.%a]+$", "^border%-t%-%[[%d%.]+%a+]$" },
-        ["b"] = { "^border%-b%-[%d%.%a]+$", "^border%-b%-%[[%d%.]+%a+]$" },
-        ["l"] = { "^border%-l%-[%d%.%a]+$", "^border%-l%-%[[%d%.]+%a+]$" },
-        ["r"] = { "^border%-r%-[%d%.%a]+$", "^border%-r%-%[[%d%.]+%a+]$" },
-    },
-    opacity = { "^opacity%-[%d%a%.]+$", "^opacity%-%[[%d%.]+%%]$" },
-    ["border-opacity"] = { "^border%-opacity%-[%d%a%.]+$", "^border%-opacity%-%[[%d%.]+%%]$" },
-    ["divide-opacity"] = { "^divide%-opacity%-[%d%a%.]+$", "^divide%-opacity%-%[[%d%.]+%%]$" },
-    ["ring-opacity"] = { "^ring%-opacity%-[%d%a%.]+$", "^ring%-opacity%-%[[%d%.]+%%]$" },
-
     text = {
         "text%-xs",
         "text%-sm",
@@ -202,6 +149,106 @@ local M = {
     pseudo_element_content = "^content%-%['.*']$",
 }
 
+-------------------------------------------- PMS
+
+local general_pms_postfixes = { "%-[%d%.%a]+$", "%-%[[%d%.]+[%a%%]+]$" }
+local property_specific_patterns = {
+    ["divide"] = {
+        ["x"] = { "^divide%-x$" },
+        ["y"] = { "^divide%-y$" },
+    },
+    ["rounded"] = {
+        [""] = { "^rounded$" },
+        ["t"] = { "^rounded%-t$" },
+        ["b"] = { "^rounded%-b$" },
+        ["l"] = { "^rounded%-l$" },
+        ["r"] = { "^rounded%-r$" },
+        ["tl"] = { "^rounded%-tl$" },
+        ["tr"] = { "^rounded%-tr$" },
+        ["bl"] = { "^rounded%-bl$" },
+        ["br"] = { "^rounded%-br$" },
+    },
+}
+
+local pms_property_map = {
+    ["padding"] = {
+        [""] = "p",
+        ["x"] = "px",
+        ["y"] = "py",
+        ["t"] = "pt",
+        ["b"] = "pb",
+        ["l"] = "pl",
+        ["r"] = "pr",
+    },
+    ["margin"] = {
+        [""] = "m",
+        ["x"] = "mx",
+        ["y"] = "my",
+        ["t"] = "mt",
+        ["b"] = "mb",
+        ["l"] = "ml",
+        ["r"] = "mr",
+    },
+    ["spacing"] = {
+        ["x"] = "space%-x",
+        ["y"] = "space%-y",
+    },
+    ["divide"] = {
+        ["x"] = "divide%-x",
+        ["y"] = "divide%-y",
+    },
+    ["border"] = {
+        [""] = "border",
+        ["t"] = "border%-t",
+        ["b"] = "border%-b",
+        ["l"] = "border%-l",
+        ["r"] = "border%-r",
+    },
+    ["rounded"] = {
+        [""] = "rounded",
+        ["t"] = "rounded%-t",
+        ["b"] = "rounded%-b",
+        ["l"] = "rounded%-l",
+        ["r"] = "rounded%-r",
+        ["tl"] = "rounded%-tl",
+        ["tr"] = "rounded%-tr",
+        ["bl"] = "rounded%-bl",
+        ["br"] = "rounded%-br",
+    },
+    ["opacity"] = "opacity",
+    ["border-opacity"] = "border%-opacity",
+    ["divide-opacity"] = "divide%-opacity",
+    ["ring-opacity"] = "ring%-opacity",
+}
+
+for property, map in pairs(pms_property_map) do
+    local tbl = {}
+    if type(map) == "table" then
+        for axis, prefix in pairs(map) do
+            tbl[axis] = {}
+            for i, postfix in ipairs(general_pms_postfixes) do
+                local pattern = "^" .. prefix .. postfix
+                if property == "rounded" and axis == "" and i == 1 then
+                    pattern = "^rounded%-[%d?%a?][^tblr]+$"
+                end
+                table.insert(tbl[axis], pattern)
+            end
+            if property_specific_patterns[property] then
+                for _, pattern in ipairs(property_specific_patterns[property][axis] or {}) do
+                    table.insert(tbl[axis], pattern)
+                end
+            end
+        end
+    elseif type(map) == "string" then
+        local prefix = map
+        for _, postfix in ipairs(general_pms_postfixes) do
+            local pattern = "^" .. prefix .. postfix
+            table.insert(tbl, pattern)
+        end
+    end
+    M[property] = tbl
+end
+
 -------------------------------------------- Colors
 
 local color_postfixes = {
@@ -217,7 +264,7 @@ local color_postfixes = {
     "%-%[#[%da-fA-F]+]",
 }
 
-local color_properties = {
+local color_key_properties_map = {
     ["text-color"] = "text",
     ["background-color"] = "bg",
     ["border-color"] = "border",
@@ -229,7 +276,7 @@ local color_properties = {
     ["to-color"] = "to",
 }
 
-for key, property in pairs(color_properties) do
+for key, property in pairs(color_key_properties_map) do
     local patterns_tbl = {}
     for _, postfix in ipairs(color_postfixes) do
         local pattern = "^" .. string.gsub(property, "%-", "%%%-") .. postfix

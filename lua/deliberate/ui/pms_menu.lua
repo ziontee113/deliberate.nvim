@@ -16,6 +16,7 @@ local dashy_group = {
     "border",
     "space",
     "divide",
+    "opacity",
     "border-opacity",
     "divide-opacity",
     "ring-opacity",
@@ -212,19 +213,19 @@ end
 -- Opacity
 local opacity_dict = {
     { keymaps = { "/" }, text = "0" },
-    { keymaps = { "~" }, text = "5" },
+    { keymaps = { "?", "~" }, text = "5" },
     { keymaps = { "m", "1" }, text = "10" },
     { keymaps = { ",", "2" }, text = "20" },
-    { keymaps = { "@" }, text = "25" },
+    { keymaps = { "<", "@" }, text = "25" },
     { keymaps = { ".", "3" }, text = "30" },
     { keymaps = { "j", "4" }, text = "40" },
     { keymaps = { "k", "5" }, text = "50" },
     { keymaps = { "l", "6" }, text = "60" },
     { keymaps = { "u", "7" }, text = "70" },
-    { keymaps = { "&" }, text = "75" },
+    { keymaps = { "U", "&" }, text = "75" },
     { keymaps = { "i", "8" }, text = "80" },
     { keymaps = { "o", "9" }, text = "90" },
-    { keymaps = { "(" }, text = "95" },
+    { keymaps = { "O", "(" }, text = "95" },
     { keymaps = { ")", ";" }, text = "100" },
 }
 M.change_opacity = function() M._menu("opacity", false, tcm._change_tailwind_classes, opacity_dict) end
@@ -267,12 +268,12 @@ local divide_dict = {
 
 local divide_x_dict = { { keymaps = { "x" }, text = "", absolute = "divide-x" } }
 local change_divide_x = function()
-    M._menu("divide", "y", tcm._change_tailwind_classes, divide_x_dict, divide_dict)
+    M._menu("divide", "x", tcm._change_tailwind_classes, divide_x_dict, divide_dict)
 end
 
 local divide_y_dict = { { keymaps = { "y" }, text = "", absolute = "divide-y" } }
 local change_divide_y = function()
-    M._menu("divide", "x", tcm._change_tailwind_classes, divide_y_dict, divide_dict)
+    M._menu("divide", "y", tcm._change_tailwind_classes, divide_y_dict, divide_dict)
 end
 
 M.change_divide = function(o)
