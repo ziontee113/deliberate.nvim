@@ -21,6 +21,7 @@ local dashy_group = {
     "ring-opacity",
     "text",
     "ring",
+    "ring-offset",
 }
 local in_dashy_group = function(property) return vim.tbl_contains(dashy_group, property) end
 
@@ -235,11 +236,17 @@ local ring_dict = {
     { keymaps = { "2" }, text = "2" },
     { keymaps = { "4" }, text = "4" },
     { keymaps = { "8" }, text = "8" },
+}
+local ring_width_dict = {
+    { keymaps = { "r" }, text = "", absolute = "ring" },
     { keymaps = { "i" }, text = "inset" },
 }
-local ring_width_dict = { { keymaps = { "r" }, text = "", absolute = "ring" } }
 M.change_ring_wdith = function()
     M._menu("ring", false, tcm._change_tailwind_classes, ring_width_dict, ring_dict)
+end
+
+M.change_ring_offset = function()
+    M._menu("ring-offset", false, tcm._change_tailwind_classes, ring_dict)
 end
 
 return M

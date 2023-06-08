@@ -168,6 +168,7 @@ local properties = {
 
     ["font-size"] = { "" },
     ["ring"] = { "" },
+    ["ring-offset"] = { "" },
 }
 
 local find_keymap = function(property, axis)
@@ -185,6 +186,7 @@ local find_keymap = function(property, axis)
     if property == "ring-opacity" then return "RO" end
     if property == "font-size" then return "z" end
     if property == "ring" then return "Rw" end
+    if property == "ring-offset" then return "Ro" end
 
     if axis == "" then return string.upper(property) end
     return property .. axis
@@ -220,6 +222,8 @@ local find_callback = function(property, axis)
         pms_menu.change_font_size()
     elseif property == "ring" then
         pms_menu.change_ring_wdith()
+    elseif property == "ring-offset" then
+        pms_menu.change_ring_offset()
     end
 end
 
@@ -248,8 +252,6 @@ local classes_groups_dict = {
     ["ds"] = { classes_groups_menu.change_divide_style },
 
     ["bs"] = { classes_groups_menu.change_border_style },
-
-    ["Ro"] = { classes_groups_menu.change_ring_offset_width },
 
     ["ra"] = { classes_groups_menu.change_border_radius, { "" } },
     ["rt"] = { classes_groups_menu.change_border_radius, { "t" } },

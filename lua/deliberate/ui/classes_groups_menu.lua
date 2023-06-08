@@ -112,17 +112,7 @@ local divide_style_group = {
 }
 M.change_divide_style = function() M._classes_group_changer_menu(divide_style_group) end
 
--- Ring
-
-local ring_offset_width_group = {
-    { keymaps = { "0" }, classes = {}, hidden = true },
-    { keymaps = { "m" }, classes = { "ring-offset-0" } },
-    { keymaps = { "1" }, classes = { "ring-offset-1" } },
-    { keymaps = { "2" }, classes = { "ring-offset-2" } },
-    { keymaps = { "4" }, classes = { "ring-offset-4" } },
-    { keymaps = { "8" }, classes = { "ring-offset-8" } },
-}
-M.change_ring_offset_width = function() M._classes_group_changer_menu(ring_offset_width_group) end
+-- Border
 
 local border_style_group = {
     { keymaps = { "0" }, classes = {}, hidden = true },
