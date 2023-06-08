@@ -60,91 +60,6 @@ local M = {
 
     ----------------------------------
 
-    text = {
-        "text%-xs",
-        "text%-sm",
-        "text%-base",
-        "text%-lg",
-        "text%-xl",
-        "text%-2xl",
-        "text%-3xl",
-        "text%-4xl",
-        "text%-5xl",
-        "text%-6xl",
-        "text%-7xl",
-        "text%-8xl",
-        "text%-9xl",
-        "^text%-%[[%d%a%.]+%a+]$",
-    },
-
-    ring = {
-        "ring",
-        "ring%-inset",
-        "^ring%-%[[%d%a%.]+%a+]$",
-    },
-
-    ["ring-offset"] = {
-        "^ring%-offset%-[%d%a%.]+$",
-        "^ring%-offset%-%[[%d%a%.]+%a+]$",
-    },
-
-    ["w"] = {
-        "^w%-[%d%a%.?/?]+$",
-        "^w%-%[[%d%a%.?]+%a+]$",
-        "^w%-auto",
-        "^w%-full",
-        "^w%-screen",
-        "^w%-min",
-        "^w%-max",
-    },
-    ["h"] = {
-        "^h%-[%d%a%.?/?]+$",
-        "^h%-%[[%d%a%.?]+%a+]$",
-        "^h%-auto",
-        "^h%-full",
-        "^h%-screen",
-        "^h%-min",
-        "^h%-max",
-    },
-
-    ["min-w"] = {
-        "^min%-w%-[%d%a%.?/?]+$",
-        "^min%-w%-%[[%d%a%.?]+%a+]$",
-        "^min-%-w%-full",
-        "^min-%-w%-min",
-        "^min-%-w%-max",
-    },
-    ["min-h"] = {
-        "^min%-h%-[%d%a%.?/?]+$",
-        "^min%-h%-%[[%d%a%.?]+%a+]$",
-        "^min-%-h%-full",
-        "^min-%-h%-screen",
-    },
-
-    ["max-w"] = {
-        "^max%-w%-[%d%%a?]+$",
-        "^max%-w%-%[[%d%a%.?]+%a+]$",
-        "^max%-w%-none",
-        "^max%-w%-xs",
-        "^max%-w%-sm",
-        "^max%-w%-lg",
-        "^max%-w%-full",
-        "^max%-w%-min",
-        "^max%-w%-max",
-        "^max%-w%-prose",
-        "^max%-w%-screen%-sm",
-        "^max%-w%-screen%-md",
-        "^max%-w%-screen%-lg",
-        "^max%-w%-screen%-xl",
-        "^max%-w%-screen%-2xl",
-    },
-    ["max-h"] = {
-        "^max%-h%-[%d%.%a]+$",
-        "^max%-h%-%[[%d%.]+%a+]$",
-    },
-
-    ----------------------------------
-
     pseudo_splitter = "^(.-:)([^:]+)$",
     pseudo_element_content = "^content%-%['.*']$",
 }
@@ -219,6 +134,15 @@ local pms_property_map = {
     ["border-opacity"] = "border%-opacity",
     ["divide-opacity"] = "divide%-opacity",
     ["ring-opacity"] = "ring%-opacity",
+    ["text"] = "text",
+    ["ring"] = "ring",
+    ["ring-offset"] = "ring%-offset",
+    ["w"] = "w",
+    ["h"] = "h",
+    ["min-w"] = "min%-w",
+    ["min-h"] = "min%-h",
+    ["max-w"] = "max%-w",
+    ["max-h"] = "max%-h",
 }
 
 for property, map in pairs(pms_property_map) do
@@ -226,11 +150,8 @@ for property, map in pairs(pms_property_map) do
     if type(map) == "table" then
         for axis, prefix in pairs(map) do
             tbl[axis] = {}
-            for i, postfix in ipairs(general_pms_postfixes) do
+            for _, postfix in ipairs(general_pms_postfixes) do
                 local pattern = "^" .. prefix .. postfix
-                if property == "rounded" and axis == "" and i == 1 then
-                    pattern = "^rounded%-[%d?%a?][^tblr]+$"
-                end
                 table.insert(tbl[axis], pattern)
             end
             if property_specific_patterns[property] then
@@ -248,6 +169,8 @@ for property, map in pairs(pms_property_map) do
     end
     M[property] = tbl
 end
+
+M["rounded"][""][1] = "^rounded%-[%d?%a?][^tblr]+$"
 
 -------------------------------------------- Colors
 

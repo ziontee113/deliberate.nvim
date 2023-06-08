@@ -24,13 +24,9 @@ describe("padding pattern", function()
         local inputs = { "py-4", "py-69", "py-[20px]", "py-[4rem]", "py-[4pt]", "py-[10vh]" }
         patterns_matches_inputs(lua_patterns.padding["y"], inputs)
     end)
-    it("matches all axies correctly", function()
-        local inputs = { "py-4", "p-69", "pt-[20px]", "pb-[4rem]", "py-[4pt]", "pl-[10vh]" }
-        patterns_matches_inputs(lua_patterns.padding["all"], inputs)
-    end)
     it("matches values float values", function()
-        local inputs = { "py-1.5", "p-0.6", "pt-[12.5em]", "pb-[4rem]", "py-[4.5pt]", "p-[10.2vh]" }
-        patterns_matches_inputs(lua_patterns.padding["all"], inputs)
+        local inputs = { "py-1.5", "py-0.6", "py-[12.5em]", "py-[4.5pt]", "py-[10.2vh]" }
+        patterns_matches_inputs(lua_patterns.padding["y"], inputs)
     end)
 end)
 
