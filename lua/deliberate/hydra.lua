@@ -169,6 +169,9 @@ local properties = {
     ["font-size"] = { "" },
     ["ring"] = { "" },
     ["ring-offset"] = { "" },
+
+    ["w"] = { "" },
+    ["h"] = { "" },
 }
 
 local find_keymap = function(property, axis)
@@ -187,6 +190,8 @@ local find_keymap = function(property, axis)
     if property == "font-size" then return "z" end
     if property == "ring" then return "Rw" end
     if property == "ring-offset" then return "Ro" end
+    if property == "w" then return "w" end
+    if property == "h" then return "e" end
 
     if axis == "" then return string.upper(property) end
     return property .. axis
@@ -224,6 +229,11 @@ local find_callback = function(property, axis)
         pms_menu.change_ring_wdith()
     elseif property == "ring-offset" then
         pms_menu.change_ring_offset()
+    -------------------------------------------
+    elseif property == "w" then
+        pms_menu.change_width()
+    elseif property == "h" then
+        pms_menu.change_height()
     end
 end
 

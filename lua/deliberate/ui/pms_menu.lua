@@ -22,6 +22,8 @@ local dashy_group = {
     "text",
     "ring",
     "ring-offset",
+    "w",
+    "h",
 }
 local in_dashy_group = function(property) return vim.tbl_contains(dashy_group, property) end
 
@@ -41,14 +43,25 @@ local general_dict = {
 }
 
 local prepare_popup_items = function(...)
-    local items_tbl, dictionaries = {}, { ... }
+    local tables = {}
+    local last_page = 1
+    local dictionaries = { ... }
+
     table.insert(dictionaries, general_dict)
+
     for _, dict in ipairs(dictionaries) do
         for _, item in ipairs(dict) do
-            table.insert(items_tbl, item)
+            if item == "" then
+                table.insert(tables[last_page], item)
+            else
+                local page = item.page or 1
+                if not tables[page] then tables[page] = {} end
+                table.insert(tables[page], item)
+                last_page = page
+            end
         end
     end
-    return items_tbl
+    return tables
 end
 
 local show_arbitrary_input = function(metadata, property, axis, fn)
@@ -74,28 +87,48 @@ local show_arbitrary_input = function(metadata, property, axis, fn)
 
     local row, col = unpack(vim.api.nvim_win_get_position(0))
     input:show(metadata, row, col)
+    return true
+end
+
+local pms_callback = function(property, axis, fn, current_item, metadata)
+    if current_item.absolute ~= "next-page" then
+        if current_item.arbitrary == true then
+            return show_arbitrary_input(metadata, property, axis, fn)
+        else
+            fn({
+                property = property,
+                axis = axis,
+                value = format_class(property, axis, current_item),
+            })
+        end
+
+        return true
+    end
 end
 
 M._menu = function(property, axis, fn, ...)
     menu_repeater.register(M._menu, property, axis, fn, ...)
 
+    local item_tables = prepare_popup_items(...)
+
     local popup = PopUp:new({
         steps = {
             {
-                items = prepare_popup_items(...),
+                items = item_tables[1],
                 format_fn = function(_, current_item)
                     return format_class(property, axis, current_item)
                 end,
                 callback = function(_, current_item, metadata)
-                    if current_item.arbitrary == true then
-                        return show_arbitrary_input(metadata, property, axis, fn)
-                    else
-                        fn({
-                            property = property,
-                            axis = axis,
-                            value = format_class(property, axis, current_item),
-                        })
-                    end
+                    return pms_callback(property, axis, fn, current_item, metadata)
+                end,
+            },
+            {
+                items = item_tables[2],
+                format_fn = function(_, current_item)
+                    return format_class(property, axis, current_item)
+                end,
+                callback = function(_, current_item, metadata)
+                    return pms_callback(property, axis, fn, current_item, metadata)
                 end,
             },
         },
@@ -247,6 +280,59 @@ end
 
 M.change_ring_offset = function()
     M._menu("ring-offset", false, tcm._change_tailwind_classes, ring_dict)
+end
+
+-- Width / Height
+
+local width_height_dict = {
+    "",
+    { keymaps = { "A" }, text = "auto" },
+    { keymaps = { "F" }, text = "full" },
+    { keymaps = { "S" }, text = "screen" },
+    { keymaps = { "m" }, text = "min" },
+    { keymaps = { "M" }, text = "max" },
+
+    "",
+    { keymaps = { "l" }, text = "", absolute = "next-page" },
+
+    { page = 2, keymaps = { "q" }, text = "1/2" },
+    { page = 2, keymaps = { "w" }, text = "1/3" },
+    { page = 2, keymaps = { "e" }, text = "1/4" },
+    { page = 2, keymaps = { "r" }, text = "1/5" },
+    { page = 2, keymaps = { "t" }, text = "1/6" },
+    "",
+    { page = 2, keymaps = { "u" }, text = "2/3" },
+    { page = 2, keymaps = { "i" }, text = "2/4" },
+    { page = 2, keymaps = { "o" }, text = "2/5" },
+    { page = 2, keymaps = { "p" }, text = "2/6" },
+    "",
+    { page = 2, keymaps = { "s" }, text = "3/4" },
+    { page = 2, keymaps = { "d" }, text = "3/5" },
+    { page = 2, keymaps = { "f" }, text = "3/6" },
+    "",
+    { page = 2, keymaps = { "x" }, text = "4/5" },
+    { page = 2, keymaps = { "c" }, text = "4/6" },
+    { page = 2, keymaps = { "v" }, text = "5/6" },
+    "",
+    { page = 2, keymaps = { "Q" }, text = "1/12" },
+    { page = 2, keymaps = { "W" }, text = "2/12" },
+    { page = 2, keymaps = { "E" }, text = "3/12" },
+    { page = 2, keymaps = { "R" }, text = "4/12" },
+    { page = 2, keymaps = { "T" }, text = "5/12" },
+    "",
+    { page = 2, keymaps = { "U" }, text = "6/12" },
+    { page = 2, keymaps = { "I" }, text = "7/12" },
+    { page = 2, keymaps = { "O" }, text = "8/12" },
+    { page = 2, keymaps = { "O" }, text = "9/12" },
+    { page = 2, keymaps = { "J" }, text = "10/12" },
+    { page = 2, keymaps = { "K" }, text = "11/12" },
+}
+
+M.change_width = function()
+    M._menu("w", false, tcm._change_tailwind_classes, pms_dict, width_height_dict)
+end
+M.change_height = function()
+    M._menu("h", false, tcm._change_tailwind_classes, pms_dict, width_height_dict)
 end
 
 return M
