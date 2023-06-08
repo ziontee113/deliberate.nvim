@@ -212,6 +212,8 @@ function PopUp:_advance()
     self.lines = self:_get_lines()
     vim.api.nvim_buf_set_lines(self.buf, 0, -1, false, self.lines)
 
+    vim.api.nvim_buf_call(self.buf, function() vim.cmd("norm! gg") end)
+
     self:_set_window_size(self.lines)
     self:_set_all_keymaps()
 end
