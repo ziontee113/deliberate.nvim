@@ -13,10 +13,13 @@ local get_3_separator_class = function(axis, property, current_item)
 end
 
 local dashy_group =
-    { "border", "space", "border-opacity", "divide-opacity", "ring-opacity", "text" }
+    { "border", "space", "divide", "border-opacity", "divide-opacity", "ring-opacity", "text" }
 local in_dashy_group = function(property) return vim.tbl_contains(dashy_group, property) end
 
 local format_class = function(property, axis, current_item)
+    if current_item.text == "" and current_item.show_property_and_axis then
+        return string.format("%s-%s", property, axis)
+    end
     if current_item.text == "" then return "" end
     if not axis or axis == "" then return string.format("%s-%s", property, current_item.text) end
     if in_dashy_group(property) then return get_3_separator_class(axis, property, current_item) end
@@ -183,7 +186,7 @@ M.change_ring_opacity = function()
 end
 
 -- Font Size
-local font_size_group = {
+local font_size_dict = {
     { keymaps = { "x" }, text = "xs" },
     { keymaps = { "m" }, text = "sm" },
     { keymaps = { "b" }, text = "base" },
@@ -198,8 +201,25 @@ local font_size_group = {
     { keymaps = { "d", "8" }, text = "8xl" },
     { keymaps = { "f", "9" }, text = "9xl" },
 }
-M.change_font_size = function()
-    M._menu("text", false, tcm._change_tailwind_classes, font_size_group)
+M.change_font_size = function() M._menu("text", false, tcm._change_tailwind_classes, font_size_dict) end
+
+-- Divide
+local divide_dict = {
+    { keymaps = { "m" }, text = "0" },
+    { keymaps = { "2" }, text = "2" },
+    { keymaps = { "4" }, text = "4" },
+    { keymaps = { "8" }, text = "8" },
+    { keymaps = { "r" }, text = "reverse" },
+}
+
+local divide_x_dict = { { keymaps = { "x" }, text = "", show_property_and_axis = true } }
+M.change_divide_x = function(o)
+    M._menu("divide", o.axis, tcm._change_tailwind_classes, divide_x_dict, divide_dict)
+end
+
+local divide_y_dict = { { keymaps = { "y" }, text = "", show_property_and_axis = true } }
+M.change_divide_y = function(o)
+    M._menu("divide", o.axis, tcm._change_tailwind_classes, divide_y_dict, divide_dict)
 end
 
 return M

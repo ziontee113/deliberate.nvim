@@ -154,9 +154,12 @@ local M = {
         ["all"] = { "^m[xytblr]?%-[%d%.]+$", "^m[xytblr]?%-%[[%d%.]+%a+]$" },
     },
     spacing = {
-        ["x"] = { "^space%-x%-[%d%.]+$", "^spacex%-%[[%d%.]+%a+]$" },
-        ["y"] = { "^space%-y%-[%d%.]+$", "^spacey%-%[[%d%.]+%a+]$" },
-        ["all"] = { "^space%-[xy]?%-[%d%.]+$", "^space[xytblr]?%-%[[%d%.]+%a+]$" },
+        ["x"] = { "^space%-x%-[%d%.]+$", "^space%-x%-%[[%d%.]+%a+]$" },
+        ["y"] = { "^space%-y%-[%d%.]+$", "^space%-y%-%[[%d%.]+%a+]$" },
+    },
+    divide = {
+        ["x"] = { "divide%-x", "^divide%-x%-[%d%.]+$", "^divide%-x%-%[[%d%.]+%a+]$" },
+        ["y"] = { "divide%-y", "^divide%-y%-[%d%.]+$", "^divide%-y%-%[[%d%.]+%a+]$" },
     },
     border = {
         [""] = { "^border%-[%d%.]+$", "^border%-%[[%d%.]+%a+]$" },

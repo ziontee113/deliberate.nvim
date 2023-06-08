@@ -33,3 +33,10 @@ describe("padding pattern", function()
         patterns_matches_inputs(lua_patterns.padding["all"], inputs)
     end)
 end)
+
+describe("divide pattern", function()
+    it("matches x axis correctly", function()
+        local inputs = { "divide-x-2", "divide-x-0" }
+        patterns_matches_inputs(lua_patterns.divide["x"], inputs)
+    end)
+end)

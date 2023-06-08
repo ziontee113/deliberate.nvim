@@ -154,9 +154,10 @@ local heads = {
 -------------------------------------------- Tailwind Classes that can have Arbitrary Values
 
 local properties = {
-    p = { "", "x", "y", "t", "b", "l", "r" },
-    m = { "", "x", "y", "t", "b", "l", "r" },
-    s = { "x", "y" },
+    p = { "", "x", "y", "t", "b", "l", "r" }, -- padding
+    m = { "", "x", "y", "t", "b", "l", "r" }, -- margin
+    s = { "x", "y" }, -- spacing
+    d = { "x", "y" }, -- divide
 
     border = { "", "t", "b", "l", "r" },
 
@@ -194,8 +195,17 @@ local find_callback = function(property, axis)
         pms_menu.change_margin({ axis = axis })
     elseif property == "s" then
         pms_menu.change_spacing({ axis = axis })
+    -------------------------------------------
+    elseif property == "d" then
+        if axis == "x" then
+            pms_menu.change_divide_x({ axis = axis })
+        elseif axis == "y" then
+            pms_menu.change_divide_y({ axis = axis })
+        end
+    -------------------------------------------
     elseif property == "border" then
         pms_menu.change_border({ axis = axis })
+    -------------------------------------------
     elseif property == "opacity" then
         pms_menu.change_opacity()
     elseif property == "border-opacity" then
@@ -231,8 +241,6 @@ local classes_groups_dict = {
     ["<A-a>"] = { classes_groups_menu.change_text_align },
     ["<A-d>"] = { classes_groups_menu.change_text_decoration },
 
-    ["dx"] = { classes_groups_menu.change_divide_x },
-    ["dy"] = { classes_groups_menu.change_divide_y },
     ["ds"] = { classes_groups_menu.change_divide_style },
 
     ["bs"] = { classes_groups_menu.change_border_style },

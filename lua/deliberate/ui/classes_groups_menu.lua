@@ -102,28 +102,6 @@ M.change_text_align = function() M._classes_group_changer_menu(text_align_group)
 
 -- Divide
 
-local divide_x_group = {
-    { keymaps = { "0" }, classes = {}, hidden = true },
-    { keymaps = { "x" }, classes = { "divide-x" } },
-    { keymaps = { "m" }, classes = { "divide-x-0" } },
-    { keymaps = { "2" }, classes = { "divide-x-2" } },
-    { keymaps = { "4" }, classes = { "divide-x-4" } },
-    { keymaps = { "8" }, classes = { "divide-x-8" } },
-    { keymaps = { "r" }, classes = { "divide-x-reverse" } },
-}
-M.change_divide_x = function() M._classes_group_changer_menu(divide_x_group) end
-
-local divide_y_group = {
-    { keymaps = { "0" }, classes = {}, hidden = true },
-    { keymaps = { "y" }, classes = { "divide-y" } },
-    { keymaps = { "m" }, classes = { "divide-y-0" } },
-    { keymaps = { "2" }, classes = { "divide-y-2" } },
-    { keymaps = { "4" }, classes = { "divide-y-4" } },
-    { keymaps = { "8" }, classes = { "divide-y-8" } },
-    { keymaps = { "r" }, classes = { "divide-y-reverse" } },
-}
-M.change_divide_y = function() M._classes_group_changer_menu(divide_y_group) end
-
 local divide_style_group = {
     { keymaps = { "0" }, classes = {}, hidden = true },
     { keymaps = { "s" }, classes = { "divide-solid" } },

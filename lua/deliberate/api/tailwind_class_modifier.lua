@@ -80,13 +80,8 @@ end
 ---@param o change_tailwind_classes_Args
 ---@return string[]
 local find_patterns = function(o)
-    local patterns = {}
-    if
-        o.property == "padding"
-        or o.property == "margin"
-        or o.property == "spacing"
-        or o.property == "border"
-    then
+    local patterns
+    if lua_patterns[o.property] and lua_patterns[o.property][o.axis] then
         patterns = lua_patterns[o.property][o.axis]
     else
         patterns = lua_patterns[o.property]
