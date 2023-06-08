@@ -35,7 +35,7 @@ local colors = {
     { text = "transparent", keymaps = { "T" }, single = true },
     { text = "current", keymaps = { "C" }, single = true },
 
-    { text = "", keymaps = { "," }, arbitrary = true },
+    { text = "", keymaps = { "," }, arbitrary = true, hidden = true },
 }
 
 local steps = {
@@ -54,7 +54,7 @@ local show_arbitrary_input = function(metadata, prefix, fn)
     local input = Input:new({
         title = "Input Color",
         width = 15,
-        callback = function(result)
+        on_change = function(result)
             local value = transformer.input_to_color(result)
             value = string.format("%s-[%s]", prefix, value)
             fn({ value = value })

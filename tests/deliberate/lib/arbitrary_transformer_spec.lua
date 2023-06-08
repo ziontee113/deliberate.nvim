@@ -34,6 +34,21 @@ describe("input_to_color()", function()
     end)
 end)
 
+describe("input_to_color() with incomplete input", function()
+    it("if input is empty, return #000", function()
+        local input = ""
+        assert.equals("#000", transformer.input_to_color(input))
+    end)
+    it("if input has a comma `,`", function()
+        local input = "22,"
+        assert.equals("rgb(22,22,22)", transformer.input_to_color(input))
+    end)
+    it("if input has a dot `.`", function()
+        local input = "22."
+        assert.equals("hsl(22,22%,22%)", transformer.input_to_color(input))
+    end)
+end)
+
 describe("input_to_pms_value()", function()
     it("given only numbers, return input value with px unit", function()
         local input = "99"

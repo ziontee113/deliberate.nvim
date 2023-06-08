@@ -1,3 +1,4 @@
+local utils = require("deliberate.lib.utils")
 local M = {}
 
 local input_matches_css_color = function(input)
@@ -8,18 +9,29 @@ end
 M.input_to_color = function(input)
     if input_matches_css_color(input) then return input end
 
+    if input == "" then input = "000" end
+
     local _, commas = string.gsub(input, ",", "")
     if commas > 0 then
         if commas == 3 then
             return string.format("rgba(%s%%)", input)
         else
-            return string.format("rgb(%s)", input)
+            local split = vim.split(input, ",")
+            split = utils.remove_empty_strings(split)
+            if #split < 2 then table.insert(split, split[1]) end
+            if #split < 3 then table.insert(split, split[1]) end
+
+            return string.format("rgb(%s)", table.concat(split, ","))
         end
     end
 
-    local _, dots = string.gsub(input, ".", "")
+    local _, dots = string.gsub(input, "%.", "")
     if dots > 0 then
         local split = vim.split(input, "%.")
+        split = utils.remove_empty_strings(split)
+        if #split < 2 then table.insert(split, split[1]) end
+        if #split < 3 then table.insert(split, split[1]) end
+
         if #split == 3 then
             return string.format("hsl(%s,%s%%,%s%%)", unpack(split))
         elseif #split == 4 then

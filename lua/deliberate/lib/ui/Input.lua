@@ -45,8 +45,10 @@ function Input:_create_on_change_autocmd()
         buffer = self.buf,
         group = augroup,
         callback = function()
-            local line = vim.api.nvim_buf_get_lines(self.buf, 0, -1, false)[1]
-            self.on_change(line)
+            if self.on_change then
+                local line = vim.api.nvim_buf_get_lines(self.buf, 0, -1, false)[1]
+                self.on_change(line)
+            end
         end,
     })
 end
