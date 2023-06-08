@@ -28,10 +28,18 @@ local dashy_group = {
     "min-h",
     "max-w",
     "max-h",
+    "rounded",
 }
 local in_dashy_group = function(property) return vim.tbl_contains(dashy_group, property) end
 
 local format_class = function(property, axis, current_item)
+    if current_item.text == "" and current_item.property_and_axis then
+        if axis == "" then
+            return property
+        else
+            return string.format("%s-%s", property, axis)
+        end
+    end
     if current_item.text == "" and current_item.absolute then return current_item.absolute end
     if current_item.text == "" then return "" end
     if not axis or axis == "" then return string.format("%s-%s", property, current_item.text) end
@@ -410,6 +418,26 @@ local max_height_dict = {
 }
 M.change_max_height = function()
     M._menu("max-h", false, tcm._change_tailwind_classes, pms_dict, max_height_dict)
+end
+
+-- Border Radius (Rounded)
+local rounded_dict = {
+    { keymaps = { "r" }, text = "", property_and_axis = true },
+    "",
+    { keymaps = { "s" }, text = "sm" },
+    { keymaps = { "m" }, text = "md" },
+    { keymaps = { "l" }, text = "lg" },
+    "",
+    { keymaps = { "1" }, text = "xl" },
+    { keymaps = { "2" }, text = "2xl" },
+    { keymaps = { "3" }, text = "3xl" },
+    "",
+    { keymaps = { "f" }, text = "full" },
+    { keymaps = { "n" }, text = "none" },
+}
+
+M.change_border_radius = function(o)
+    M._menu("rounded", o.axis, tcm._change_tailwind_classes, rounded_dict)
 end
 
 return M

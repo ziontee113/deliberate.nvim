@@ -187,20 +187,40 @@ local axis_map = {
     s = { { "x", "y" }, pms_menu.change_spacing },
     d = { { "x", "y" }, pms_menu.change_divide },
     b = { { "", "t", "b", "l", "r" }, pms_menu.change_border_width },
+    r = {
+        {
+            { "a", "" },
+            { "h", "l" },
+            { "l", "r" },
+            { "k", "t" },
+            { "j", "b" },
+            { "u", "tl" },
+            { "i", "bl" },
+            { "o", "br" },
+            { "p", "tr" },
+        },
+        pms_menu.change_border_radius,
+    },
 }
 
-local find_axis_keymap = function(property, axis)
-    if property == "b" and axis == "" then return "bd" end
-    if axis == "" then return string.upper(property) end
-    return property .. axis
+local find_axis_keymap = function(property, key_axis)
+    if property == "b" and key_axis == "" then return "bd" end
+    if key_axis == "" then return string.upper(property) end
+    return property .. key_axis
 end
 
 for property, value_tbl in pairs(axis_map) do
     local axies, fn = unpack(value_tbl)
-    for _, axis in ipairs(axies) do
+    for _, key_to_axis in ipairs(axies) do
+        local key_axis, argument_axis
+        if type(key_to_axis) == "string" then
+            key_axis, argument_axis = key_to_axis, key_to_axis
+        elseif type(key_to_axis) == "table" then
+            key_axis, argument_axis = unpack(key_to_axis)
+        end
         local hydra_mapping = {
-            find_axis_keymap(property, axis),
-            function() fn({ axis = axis }) end,
+            find_axis_keymap(property, key_axis),
+            function() fn({ axis = argument_axis }) end,
             { nowait = true },
         }
         table.insert(heads, hydra_mapping)
@@ -220,17 +240,6 @@ local classes_groups_dict = {
 
     ["ds"] = { classes_groups_menu.change_divide_style },
     ["bs"] = { classes_groups_menu.change_border_style },
-
-    ["ra"] = { classes_groups_menu.change_border_radius, { "" } },
-    ["rt"] = { classes_groups_menu.change_border_radius, { "t" } },
-    ["rb"] = { classes_groups_menu.change_border_radius, { "b" } },
-    ["rl"] = { classes_groups_menu.change_border_radius, { "l" } },
-    ["rr"] = { classes_groups_menu.change_border_radius, { "r" } },
-
-    ["ru"] = { classes_groups_menu.change_border_radius, { "tl" } },
-    ["ro"] = { classes_groups_menu.change_border_radius, { "tr" } },
-    ["rj"] = { classes_groups_menu.change_border_radius, { "bl" } },
-    ["rk"] = { classes_groups_menu.change_border_radius, { "br" } },
 }
 
 for keymap, fn_and_args in pairs(classes_groups_dict) do

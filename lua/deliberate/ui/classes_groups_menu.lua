@@ -61,6 +61,8 @@ local flex_align_group = {
 }
 M.change_flex_align_properties = function() M._classes_group_changer_menu(flex_align_group) end
 
+-- Typography
+
 local font_weight_group = {
     { keymaps = { "0" }, classes = {}, hidden = true },
     { keymaps = { "t", "1" }, classes = { "font-thin" } },
@@ -123,64 +125,5 @@ local border_style_group = {
     { keymaps = { "n" }, classes = { "border-none" } },
 }
 M.change_border_style = function() M._classes_group_changer_menu(border_style_group) end
-
--------------------------------------------- Border Radius
-
-local prefix = "rounded"
-local axies = { "", "t", "b", "l", "r", "tl", "tr", "bl", "br" }
-local keymap_to_size_tbl = {
-    { "0", false },
-
-    { "s", "sm" },
-    { "r", "" },
-    { "m", "md" },
-    { "l", "lg" },
-    "",
-    { "1", "xl" },
-    { "2", "2xl" },
-    { "3", "3xl" },
-    "",
-    { "f", "full" },
-    { "n", "none" },
-}
-
--- TODO: refactor
-local border_radius_groups = {}
-for _, axis in ipairs(axies) do
-    local group = {}
-    for _, item_ingredients in ipairs(keymap_to_size_tbl) do
-        if type(item_ingredients) == "table" then
-            local keymap, size = unpack(item_ingredients)
-            local classes = {}
-
-            local class = ""
-            if axis == "" then
-                class = string.format("%s-%s", prefix, size)
-            else
-                if size == "" then
-                    class = string.format("%s-%s", prefix, axis)
-                else
-                    class = string.format("%s-%s-%s", prefix, axis, size)
-                end
-            end
-
-            if axis == "" and size == "" then class = prefix end
-
-            if size then table.insert(classes, class) end
-
-            local item = {
-                keymaps = { keymap },
-                classes = classes,
-                hidden = size == false and true or nil,
-            }
-            table.insert(group, item)
-        else
-            table.insert(group, "")
-        end
-    end
-    border_radius_groups[axis] = group
-end
-
-M.change_border_radius = function(axis) M._classes_group_changer_menu(border_radius_groups[axis]) end
 
 return M
