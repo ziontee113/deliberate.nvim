@@ -40,6 +40,11 @@ describe("...", function()
             "b p-80",
             "n p-96",
             "/ p-0",
+            "",
+            ") p-0.5",
+            "! p-1.5",
+            "@ p-2.5",
+            "# p-3.5",
         }
         assert.same(want, popup_lines)
 

@@ -12,7 +12,8 @@ local get_3_separator_class = function(axis, property, current_item)
     return string.format("%s-%s-%s", property, axis, current_item.text)
 end
 
-local dashy_group = { "border", "space", "border-opacity", "divide-opacity", "ring-opacity" }
+local dashy_group =
+    { "border", "space", "border-opacity", "divide-opacity", "ring-opacity", "text" }
 local in_dashy_group = function(property) return vim.tbl_contains(dashy_group, property) end
 
 local format_class = function(property, axis, current_item)
@@ -95,6 +96,7 @@ end
 
 -------------------------------------------- Menus
 
+-- PMS
 local pms_dict = {
     { keymaps = "1", text = "1", hidden = true },
     { keymaps = "2", text = "2", hidden = true },
@@ -140,6 +142,7 @@ M.change_padding = function(o) M._menu("p", o.axis, tcm.change_padding, pms_dict
 M.change_margin = function(o) M._menu("m", o.axis, tcm.change_margin, pms_dict) end
 M.change_spacing = function(o) M._menu("space", o.axis, tcm.change_spacing, pms_dict) end
 
+-- Border Width
 local border_width_dict = {
     { keymaps = { "j", "2" }, text = "2" },
     { keymaps = { "k", "4" }, text = "4" },
@@ -150,6 +153,7 @@ M.change_border = function(o)
     M._menu("border", o.axis, tcm._change_tailwind_classes, border_width_dict)
 end
 
+-- Opacity
 local opacity_dict = {
     { keymaps = { "/" }, text = "0" },
     { keymaps = { "~" }, text = "5" },
@@ -176,6 +180,26 @@ M.change_divide_opacity = function()
 end
 M.change_ring_opacity = function()
     M._menu("ring-opacity", false, tcm._change_tailwind_classes, opacity_dict)
+end
+
+-- Font Size
+local font_size_group = {
+    { keymaps = { "x" }, text = "xs" },
+    { keymaps = { "m" }, text = "sm" },
+    { keymaps = { "b" }, text = "base" },
+    { keymaps = { "l" }, text = "lg" },
+    { keymaps = { "q", "1" }, text = "xl" },
+    { keymaps = { "w", "2" }, text = "2xl" },
+    { keymaps = { "e", "3" }, text = "3xl" },
+    { keymaps = { "r", "4" }, text = "4xl" },
+    { keymaps = { "t", "5" }, text = "5xl" },
+    { keymaps = { "a", "6" }, text = "6xl" },
+    { keymaps = { "s", "7" }, text = "7xl" },
+    { keymaps = { "d", "8" }, text = "8xl" },
+    { keymaps = { "f", "9" }, text = "9xl" },
+}
+M.change_font_size = function()
+    M._menu("text", false, tcm._change_tailwind_classes, font_size_group)
 end
 
 return M

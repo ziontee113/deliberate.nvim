@@ -71,7 +71,7 @@ local function process_new_class_names(class_names, patterns, value)
 end
 
 ---@class change_tailwind_classes_Args
----@field property  "padding" | "margin" | "spacing" | "border" | "opacity" | "border-opacity" | "divide-opacity" | "ring-opacity" | "text_color" | "background_color" | "border_color" | "divide_color" | "ring_color" | "ring_offset_color"
+---@field property string
 ---@field axis "" | "x" | "y" | "l" | "r" | "t" | "b"
 ---@field classes_groups string[]
 ---@field negative_patterns string[]

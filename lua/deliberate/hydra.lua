@@ -164,6 +164,8 @@ local properties = {
     ["border-opacity"] = { "" },
     ["divide-opacity"] = { "" },
     ["ring-opacity"] = { "" },
+
+    ["font-size"] = { "" },
 }
 
 local find_keymap = function(property, axis)
@@ -179,6 +181,7 @@ local find_keymap = function(property, axis)
     if property == "border-opacity" then return "bo" end
     if property == "divide-opacity" then return "do" end
     if property == "ring-opacity" then return "RO" end
+    if property == "font-size" then return "z" end
 
     if axis == "" then return string.upper(property) end
     return property .. axis
@@ -201,6 +204,8 @@ local find_callback = function(property, axis)
         pms_menu.change_divide_opacity()
     elseif property == "ring-opacity" then
         pms_menu.change_ring_opacity()
+    elseif property == "font-size" then
+        pms_menu.change_font_size()
     end
 end
 
@@ -221,7 +226,6 @@ local classes_groups_dict = {
     ["fl"] = { classes_groups_menu.change_flex_properties },
     ["a"] = { classes_groups_menu.change_flex_align_properties },
 
-    ["z"] = { classes_groups_menu.change_font_size },
     ["fs"] = { classes_groups_menu.change_font_style },
     ["fw"] = { classes_groups_menu.change_font_weight },
     ["<A-a>"] = { classes_groups_menu.change_text_align },

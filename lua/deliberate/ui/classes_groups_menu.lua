@@ -91,24 +91,6 @@ local font_style_group = {
 }
 M.change_font_style = function() M._classes_group_changer_menu(font_style_group) end
 
-local font_size_group = {
-    { keymaps = { "0" }, classes = {}, hidden = true },
-    { keymaps = { "x" }, classes = { "text-xs" } },
-    { keymaps = { "m" }, classes = { "text-sm" } },
-    { keymaps = { "b" }, classes = { "text-base" } },
-    { keymaps = { "l" }, classes = { "text-lg" } },
-    { keymaps = { "q", "1" }, classes = { "text-xl" } },
-    { keymaps = { "w", "2" }, classes = { "text-2xl" } },
-    { keymaps = { "e", "3" }, classes = { "text-3xl" } },
-    { keymaps = { "r", "4" }, classes = { "text-4xl" } },
-    { keymaps = { "t", "5" }, classes = { "text-5xl" } },
-    { keymaps = { "a", "6" }, classes = { "text-6xl" } },
-    { keymaps = { "s", "7" }, classes = { "text-7xl" } },
-    { keymaps = { "d", "8" }, classes = { "text-8xl" } },
-    { keymaps = { "f", "9" }, classes = { "text-9xl" } },
-}
-M.change_font_size = function() M._classes_group_changer_menu(font_size_group) end
-
 local text_align_group = {
     { keymaps = { "0" }, classes = {}, hidden = true },
     { keymaps = { "h" }, classes = { "text-left" } },
