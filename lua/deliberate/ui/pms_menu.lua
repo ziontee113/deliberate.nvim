@@ -86,12 +86,13 @@ local get_3_separator_class = function(axis, property, current_item)
     return string.format("%s-%s-%s", property, axis, current_item.text)
 end
 
+local dashy_group = { "border", "space", "border-opacity", "divide-opacity", "ring-opacity" }
+local in_dashy_group = function(property) return vim.tbl_contains(dashy_group, property) end
+
 local format_class = function(property, axis, current_item)
     if current_item.text == "" then return "" end
     if not axis or axis == "" then return string.format("%s-%s", property, current_item.text) end
-    if property == "border" or property == "space" or property == "border-opacity" then
-        return get_3_separator_class(axis, property, current_item)
-    end
+    if in_dashy_group(property) then return get_3_separator_class(axis, property, current_item) end
     return string.format("%s%s-%s", property, axis, current_item.text)
 end
 
@@ -115,7 +116,7 @@ local show_arbitrary_input = function(metadata, property, axis, fn)
         on_change = function(result)
             local value = transformer.input_to_pms_value(result, property)
 
-            if property == "border" or property == "opacity" or property == "border-opacity" then
+            if in_dashy_group(property) then
                 if not axis or axis == "" then
                     value = string.format("%s-[%s]", property, value)
                 else
@@ -174,6 +175,12 @@ end
 M.change_opacity = function() M._menu("opacity", false, tcm._change_tailwind_classes, opacity_dict) end
 M.change_border_opacity = function()
     M._menu("border-opacity", false, tcm._change_tailwind_classes, opacity_dict)
+end
+M.change_divide_opacity = function()
+    M._menu("divide-opacity", false, tcm._change_tailwind_classes, opacity_dict)
+end
+M.change_ring_opacity = function()
+    M._menu("ring-opacity", false, tcm._change_tailwind_classes, opacity_dict)
 end
 
 return M

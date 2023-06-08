@@ -39,7 +39,7 @@ describe("...", function()
             "v p-72",
             "b p-80",
             "n p-96",
-            "m p-0",
+            "/ p-0",
         }
         assert.same(want, popup_lines)
 

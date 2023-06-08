@@ -32,6 +32,7 @@ end
 
 M.input_to_pms_value = function(input, property)
     if input == "" then input = "0" end
+    if not property then property = "" end
 
     if string.find(property, "opacity") then return input .. "%" end
     if tonumber(input) then return input .. "px" end

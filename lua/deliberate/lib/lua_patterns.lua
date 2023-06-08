@@ -182,6 +182,8 @@ local M = {
     },
     opacity = { "^opacity%-%d+$", "^opacity%-%[%d+%%]$" },
     ["border-opacity"] = { "^border%-opacity%-%d+$", "^border%-opacity%-%[%d+%%]$" },
+    ["divide-opacity"] = { "^divide%-opacity%-%d+$", "^divide%-opacity%-%[%d+%%]$" },
+    ["ring-opacity"] = { "^ring%-opacity%-%d+$", "^ring%-opacity%-%[%d+%%]$" },
 
     ----------------------------------
 

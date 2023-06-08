@@ -159,8 +159,11 @@ local properties = {
     s = { "x", "y" },
 
     border = { "", "t", "b", "l", "r" },
+
     opacity = { "" },
     ["border-opacity"] = { "" },
+    ["divide-opacity"] = { "" },
+    ["ring-opacity"] = { "" },
 }
 
 local find_keymap = function(property, axis)
@@ -171,8 +174,12 @@ local find_keymap = function(property, axis)
             return "b" .. axis
         end
     end
+
     if property == "opacity" then return "O" end
     if property == "border-opacity" then return "bo" end
+    if property == "divide-opacity" then return "do" end
+    if property == "ring-opacity" then return "RO" end
+
     if axis == "" then return string.upper(property) end
     return property .. axis
 end
@@ -190,6 +197,10 @@ local find_callback = function(property, axis)
         pms_menu.change_opacity()
     elseif property == "border-opacity" then
         pms_menu.change_border_opacity()
+    elseif property == "divide-opacity" then
+        pms_menu.change_divide_opacity()
+    elseif property == "ring-opacity" then
+        pms_menu.change_ring_opacity()
     end
 end
 
@@ -219,13 +230,11 @@ local classes_groups_dict = {
     ["dx"] = { classes_groups_menu.change_divide_x },
     ["dy"] = { classes_groups_menu.change_divide_y },
     ["ds"] = { classes_groups_menu.change_divide_style },
-    ["do"] = { classes_groups_menu.change_divide_opacity },
 
     ["bs"] = { classes_groups_menu.change_border_style },
 
     ["Rw"] = { classes_groups_menu.change_ring_width },
     ["Ro"] = { classes_groups_menu.change_ring_offset_width },
-    ["RO"] = { classes_groups_menu.change_ring_opacity },
 
     ["R"] = { classes_groups_menu.change_border_radius, { "" } },
     ["rt"] = { classes_groups_menu.change_border_radius, { "t" } },

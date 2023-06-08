@@ -118,40 +118,6 @@ local text_align_group = {
 }
 M.change_text_align = function() M._classes_group_changer_menu(text_align_group) end
 
--- Opacity
-
-local opacity_steps = {
-    { "0", { "m" } },
-    { "5", { "~" } },
-    { "10", { "m", "1" } },
-    { "20", { ",", "2" } },
-    { "25", { "@" } },
-    { "30", { ".", "3" } },
-    { "40", { "j", "4" } },
-    { "50", { "k", "5" } },
-    { "60", { "l", "6" } },
-    { "70", { "u", "7" } },
-    { "75", { "&" } },
-    { "80", { "i", "8" } },
-    { "90", { "o", "9" } },
-    { "95", { "(" } },
-    { "100", { ")", ";" } },
-}
-
-local make_opacity_group = function(property)
-    local items = { { keymaps = { "0" }, classes = {}, hidden = true } }
-    for _, step in ipairs(opacity_steps) do
-        local value, keymaps = unpack(step)
-        local class = string.format("%s-%s", property, value)
-        local item = {
-            keymaps = keymaps,
-            classes = { class },
-        }
-        table.insert(items, item)
-    end
-    return items
-end
-
 -- Divide
 
 local divide_x_group = {
@@ -186,9 +152,6 @@ local divide_style_group = {
 }
 M.change_divide_style = function() M._classes_group_changer_menu(divide_style_group) end
 
-local divide_opacity_group = make_opacity_group("divide-opacity")
-M.change_divide_opacity = function() M._classes_group_changer_menu(divide_opacity_group) end
-
 -- Ring
 
 local ring_width_group = {
@@ -212,9 +175,6 @@ local ring_offset_width_group = {
     { keymaps = { "8" }, classes = { "ring-offset-8" } },
 }
 M.change_ring_offset_width = function() M._classes_group_changer_menu(ring_offset_width_group) end
-
-local ring_opacity_group = make_opacity_group("ring-opacity")
-M.change_ring_opacity = function() M._classes_group_changer_menu(ring_opacity_group) end
 
 local border_style_group = {
     { keymaps = { "0" }, classes = {}, hidden = true },
