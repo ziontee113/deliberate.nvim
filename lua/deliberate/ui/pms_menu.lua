@@ -350,6 +350,7 @@ local min_width_dict = {
 M.change_min_width = function()
     M._menu("min-w", false, tcm._change_tailwind_classes, min_width_dict)
 end
+
 local min_height_dict = {
     { keymaps = { "/" }, text = "0" },
     { keymaps = { "f" }, text = "full" },
@@ -357,6 +358,41 @@ local min_height_dict = {
 }
 M.change_min_height = function()
     M._menu("min-h", false, tcm._change_tailwind_classes, min_height_dict)
+end
+
+-- Max Width / Max Height
+
+local max_width_dict = {
+    { keymaps = { "/" }, text = "0" },
+    { keymaps = { "n" }, text = "none" },
+    "",
+    { keymaps = { "x" }, text = "xs" },
+    { keymaps = { "s" }, text = "sm" },
+    { keymaps = { "l" }, text = "lg" },
+    "",
+    { keymaps = { "1" }, text = "xl" },
+    { keymaps = { "2" }, text = "2xl" },
+    { keymaps = { "3" }, text = "3xl" },
+    { keymaps = { "4" }, text = "4xl" },
+    { keymaps = { "5" }, text = "5xl" },
+    { keymaps = { "6" }, text = "6xl" },
+    { keymaps = { "7" }, text = "7xl" },
+    { keymaps = { "8" }, text = "8xl" },
+    { keymaps = { "9" }, text = "9xl" },
+    "",
+    { keymaps = { "f" }, text = "full" },
+    { keymaps = { "m" }, text = "min" },
+    { keymaps = { "x" }, text = "max" },
+    { keymaps = { "p" }, text = "prose" },
+    "",
+    { keymaps = { "ss" }, text = "screen-sm" },
+    { keymaps = { "sm" }, text = "screen-md" },
+    { keymaps = { "sl" }, text = "screen-lg" },
+    { keymaps = { "s1" }, text = "screen-xl" },
+    { keymaps = { "s2" }, text = "screen-2xl" },
+}
+M.change_max_width = function()
+    M._menu("max-w", false, tcm._change_tailwind_classes, max_width_dict)
 end
 
 return M

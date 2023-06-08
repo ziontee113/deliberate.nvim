@@ -242,11 +242,16 @@ local find_callback = function(property, axis)
         pms_menu.change_width()
     elseif property == "h" then
         pms_menu.change_height()
-        -------------------------------------------
+    -------------------------------------------
     elseif property == "min-width" then
         pms_menu.change_min_width()
     elseif property == "min-height" then
         pms_menu.change_min_height()
+    -------------------------------------------
+    elseif property == "max-width" then
+        pms_menu.change_max_width()
+        -- elseif property == "max-height" then
+        --     pms_menu.change_min_height()
     end
 end
 

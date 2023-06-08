@@ -233,6 +233,25 @@ local M = {
         "^min-%-h%-full",
         "^min-%-h%-screen",
     },
+
+    ["max-w"] = {
+        "^max%-w%-[%d%%a?]+$",
+        "^max%-w%-%[[%d%.?]+%a+]$",
+        "^max%-w%-none",
+        "^max%-w%-xs",
+        "^max%-w%-sm",
+        "^max%-w%-lg",
+        "^max%-w%-full",
+        "^max%-w%-min",
+        "^max%-w%-max",
+        "^max%-w%-prose",
+        "^max%-w%-screen%-sm",
+        "^max%-w%-screen%-md",
+        "^max%-w%-screen%-lg",
+        "^max%-w%-screen%-xl",
+        "^max%-w%-screen%-2xl",
+    },
+
     ----------------------------------
 
     pseudo_splitter = "^(.-:)([^:]+)$",
