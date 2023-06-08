@@ -180,6 +180,7 @@ local pms_dict = {
     { keymaps = "n", text = "96" },
     { keymaps = "/", text = "0" },
     "",
+    { keymaps = ".", text = "px" },
     { keymaps = ")", text = "0.5" },
     { keymaps = "!", text = "1.5" },
     { keymaps = "@", text = "2.5" },
@@ -393,6 +394,14 @@ local max_width_dict = {
 }
 M.change_max_width = function()
     M._menu("max-w", false, tcm._change_tailwind_classes, max_width_dict)
+end
+
+local max_height_dict = {
+    { keymaps = { "F" }, text = "full" },
+    { keymaps = { "S" }, text = "screen" },
+}
+M.change_max_height = function()
+    M._menu("max-h", false, tcm._change_tailwind_classes, pms_dict, max_height_dict)
 end
 
 return M
