@@ -98,22 +98,6 @@ local heads = {
     },
 
     {
-        "t",
-        function() colors_menu.change_text_color() end,
-        { nowait = true },
-    },
-    {
-        "B",
-        function() colors_menu.change_background_color() end,
-        { nowait = true },
-    },
-    {
-        "bc",
-        function() colors_menu.change_border_color() end,
-        { nowait = true },
-    },
-
-    {
         "dc",
         function() colors_menu.change_divide_color() end,
         { nowait = true },
@@ -150,6 +134,26 @@ local heads = {
     -- workaround to programmatically exit Hydra
     { "<Nul>", nil, { exit = true } },
 }
+
+-------------------------------------------- Colors Menus
+
+local keymap_to_color_menu_fn = {
+    ["t"] = colors_menu.change_text_color,
+    ["B"] = colors_menu.change_background_color,
+    ["bc"] = colors_menu.change_border_color,
+    ["dc"] = colors_menu.change_divide_color,
+    ["Rc"] = colors_menu.change_ring_color,
+    ["RC"] = colors_menu.change_ring_offset_color,
+}
+
+for keymap, fn in pairs(keymap_to_color_menu_fn) do
+    local hydra_mapping = {
+        keymap,
+        function() fn() end,
+        { nowait = true },
+    }
+    table.insert(heads, hydra_mapping)
+end
 
 -------------------------------------------- Tailwind Classes that can have Arbitrary Values
 
