@@ -188,6 +188,7 @@ local keymap_to_size_tbl = {
     { "n", "none" },
 }
 
+-- TODO: refactor
 local border_radius_groups = {}
 for _, axis in ipairs(axies) do
     local group = {}
@@ -206,6 +207,8 @@ for _, axis in ipairs(axies) do
                     class = string.format("%s-%s-%s", prefix, axis, size)
                 end
             end
+
+            if axis == "" and size == "" then class = prefix end
 
             if size then table.insert(classes, class) end
 

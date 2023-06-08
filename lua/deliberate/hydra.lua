@@ -240,7 +240,7 @@ local classes_groups_dict = {
     ["Rw"] = { classes_groups_menu.change_ring_width },
     ["Ro"] = { classes_groups_menu.change_ring_offset_width },
 
-    ["R"] = { classes_groups_menu.change_border_radius, { "" } },
+    ["ra"] = { classes_groups_menu.change_border_radius, { "" } },
     ["rt"] = { classes_groups_menu.change_border_radius, { "t" } },
     ["rb"] = { classes_groups_menu.change_border_radius, { "b" } },
     ["rl"] = { classes_groups_menu.change_border_radius, { "l" } },
