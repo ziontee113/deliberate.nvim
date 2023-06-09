@@ -185,6 +185,7 @@ local non_axis_map = {
     ["fg"] = pms_menu.change_grow,
     ["fs"] = pms_menu.change_shrink,
     ["fo"] = pms_menu.change_order,
+    ["A"] = pms_menu.change_aspect_ratio,
 }
 add_heads_from_tbl(non_axis_map)
 

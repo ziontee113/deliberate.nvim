@@ -493,4 +493,15 @@ local order_dict = {
 }
 M.change_order = function() M._menu("order", false, tcm._change_tailwind_classes, order_dict) end
 
+-------------------------------------------- Aspect Ratio
+
+local aspect_ratio_dict = {
+    { keymaps = { "a" }, text = "auto" },
+    { keymaps = { "s" }, text = "square" },
+    { keymaps = { "v" }, text = "video" },
+}
+M.change_aspect_ratio = function()
+    M._menu("aspect-ratio", false, tcm._change_tailwind_classes, aspect_ratio_dict)
+end
+
 return M
