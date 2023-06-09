@@ -48,12 +48,13 @@ end
 
 local flex_group = {
     { keymaps = { "f", "l" }, classes = { "flex" } },
-    "",
+    "------------------------",
     { keymaps = { "r" }, classes = { "flex", "flex-row" } },
     { keymaps = { "R" }, classes = { "flex", "flex-row-reverse" } },
+    "------------------------",
     { keymaps = { "c" }, classes = { "flex", "flex-col" } },
     { keymaps = { "C" }, classes = { "flex", "flex-col-reverse" } },
-    "",
+    "------------------------",
     { keymaps = { "i" }, classes = { "inline-flex" } },
 }
 M.change_flex_properties = function() M._classes_group_changer_menu(flex_group) end
@@ -228,5 +229,13 @@ local display_group = {
     { keymaps = { "tf" }, classes = { "table-footer-group" } },
 }
 M.change_display = function() M._classes_group_changer_menu(display_group) end
+
+-- Float
+local float_group = {
+    { keymaps = { "r" }, classes = { "float-right" } },
+    { keymaps = { "l" }, classes = { "float-left" } },
+    { keymaps = { "n" }, classes = { "float-none" } },
+}
+M.change_float = function() M._classes_group_changer_menu(float_group) end
 
 return M

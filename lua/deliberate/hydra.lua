@@ -240,7 +240,7 @@ end
 -------------------------------------------- Replace Classes Groups
 
 local classes_groups_dict = {
-    ["fl"] = { cgm.change_flex_properties },
+    ["F"] = { cgm.change_flex_properties },
     ["fw"] = { cgm.change_flex_wrap_properties },
     ["a"] = { cgm.change_flex_align_properties },
 
@@ -261,6 +261,7 @@ local classes_groups_dict = {
     ["C"] = { cgm.change_container },
 
     ["di"] = { cgm.change_display },
+    ["fl"] = { cgm.change_float },
 }
 
 for keymap, fn_and_args in pairs(classes_groups_dict) do
