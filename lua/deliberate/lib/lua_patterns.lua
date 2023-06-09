@@ -89,7 +89,7 @@ local singles = {
     "start", "end",
 }
 
-local general_pms_postfixes = { "%-[%d%.%a/]+$", "%-%[[%d%.]+[%a%%]+]$" }
+local general_pms_postfixes = { "%-[%d%.%a/]+$", "%-%[[%-%d%.]+[%a%%]+]$" }
 local property_specific_patterns = {
     ["divide"] = {
         ["x"] = { "^divide%-x$" },
@@ -123,6 +123,8 @@ local add_axis_patterns = function(collection, prefix_format_fn)
             for _, postfix in ipairs(general_pms_postfixes) do
                 local pattern = "^" .. prefix .. postfix
                 table.insert(tbl[axis], pattern)
+                local negative_pattern = "^%-" .. prefix .. postfix
+                table.insert(tbl[axis], negative_pattern)
             end
             if property_specific_patterns[property] then
                 for _, pattern in ipairs(property_specific_patterns[property][axis] or {}) do
@@ -146,6 +148,10 @@ for _, property in ipairs(singles) do
     for _, postfix in ipairs(general_pms_postfixes) do
         local pattern = "^" .. string.gsub(property, vim.pesc("-"), vim.pesc("%-")) .. postfix
         table.insert(tbl, pattern)
+        local negative_pattern = "^%-"
+            .. string.gsub(property, vim.pesc("-"), vim.pesc("%-"))
+            .. postfix
+        table.insert(tbl, negative_pattern)
     end
     for _, pattern in ipairs(property_specific_patterns[property] or {}) do
         table.insert(tbl, pattern)

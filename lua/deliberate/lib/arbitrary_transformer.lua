@@ -58,7 +58,7 @@ end
 
 local raw_input_group = { "grow", "shrink", "order", "aspect-ratio" }
 
-M.input_to_pms_value = function(input, property)
+local input_to_pms_value = function(input, property)
     if input == "" then input = "0" end
     if not property then property = "" end
 
@@ -84,6 +84,16 @@ M.input_to_pms_value = function(input, property)
         P = "%", ["%"] = "%"
     }
     return num .. unit_tbl[chars]
+end
+
+M.input_to_pms_value = function(input, property)
+    local negative_prefix = ""
+    if string.sub(input, 1, 1) == "-" then
+        negative_prefix = "-"
+        input = string.sub(input, 2) or ""
+    end
+
+    return negative_prefix .. input_to_pms_value(input, property)
 end
 
 M.wrap_value_in_property = function(color, property)

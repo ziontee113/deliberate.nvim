@@ -257,7 +257,7 @@ end
 
 function PopUp:new(opts)
     opts.steps = sanitize_items_keymaps(opts.steps)
-    local popup = setmetatable(opts, vim.deepcopy(PopUp))
+    local popup = setmetatable(vim.deepcopy(opts), vim.deepcopy(PopUp))
     return popup
 end
 

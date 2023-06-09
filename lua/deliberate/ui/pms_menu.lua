@@ -36,11 +36,17 @@ local format_class = function(property, axis, current_item)
     end
 end
 
+local format_and_negatize_class = function(property, axis, current_item)
+    local class = format_class(property, axis, current_item)
+    if current_item.negative and not current_item.ironclad then class = "-" .. class end
+    return class
+end
+
 -------------------------------------------- Window Functions
 
 local general_dict = {
-    { keymaps = "0", text = "", hidden = true },
-    { keymaps = ",", text = "", hidden = true, arbitrary = true },
+    { keymaps = "0", text = "", hidden = true, ironclad = true },
+    { keymaps = ",", text = "", hidden = true, arbitrary = true, ironclad = true },
 }
 
 local prepare_popup_items = function(dictionaries)
@@ -92,18 +98,38 @@ local show_arbitrary_input = function(metadata, property, axis, fn, negatives)
 
     local row, col = unpack(vim.api.nvim_win_get_position(0))
     input:show(metadata, row, col)
-    return true
+end
+
+local negatize_items = function(metadata)
+    local updated_items = {}
+    for _, item in ipairs(metadata.current_step_items) do
+        if type(item) == "table" then
+            if not item.negative then
+                item.negative = true
+            else
+                item.negative = false
+            end
+        end
+        table.insert(updated_items, item)
+    end
+    return updated_items
 end
 
 local pms_callback = function(property, axis, fn, current_item, metadata, negatives)
     if current_item.absolute ~= "next-page" then
-        if current_item.arbitrary == true then
-            return show_arbitrary_input(metadata, property, axis, fn)
+        if current_item.negatize == true then
+            return {
+                increment_step_index_by = -1,
+                updated_items = negatize_items(metadata),
+            }
+        elseif current_item.arbitrary == true then
+            show_arbitrary_input(metadata, property, axis, fn)
+            return true
         else
             fn({
                 property = property,
                 axis = axis,
-                value = format_class(property, axis, current_item),
+                value = format_and_negatize_class(property, axis, current_item),
                 negative_patterns = negatives,
             })
         end
@@ -122,7 +148,7 @@ M._menu = function(property, axis, fn, dictionaries, negatives)
             {
                 items = item_tables[1],
                 format_fn = function(_, current_item)
-                    return format_class(property, axis, current_item)
+                    return format_and_negatize_class(property, axis, current_item)
                 end,
                 callback = function(_, current_item, metadata)
                     return pms_callback(property, axis, fn, current_item, metadata, negatives)
@@ -131,7 +157,7 @@ M._menu = function(property, axis, fn, dictionaries, negatives)
             {
                 items = item_tables[2],
                 format_fn = function(_, current_item)
-                    return format_class(property, axis, current_item)
+                    return format_and_negatize_class(property, axis, current_item)
                 end,
                 callback = function(_, current_item, metadata)
                     return pms_callback(property, axis, fn, current_item, metadata, negatives)
@@ -299,39 +325,39 @@ M.change_ring_offset = function() M._menu("ring-offset", false, tcm._change, { r
 
 local percentage_dict = {
     "",
-    { keymaps = { "l" }, text = "", absolute = "next-page" },
+    { keymaps = { "l" }, text = "", absolute = "next-page", ironclad = true },
 
-    { page = 2, keymaps = { "q" }, text = "1/2" },
-    { page = 2, keymaps = { "w" }, text = "1/3" },
-    { page = 2, keymaps = { "e" }, text = "1/4" },
-    { page = 2, keymaps = { "r" }, text = "1/5" },
-    { page = 2, keymaps = { "t" }, text = "1/6" },
+    { page = 2, keymaps = { "q" }, text = "1/2", ironclad = true },
+    { page = 2, keymaps = { "w" }, text = "1/3", ironclad = true },
+    { page = 2, keymaps = { "e" }, text = "1/4", ironclad = true },
+    { page = 2, keymaps = { "r" }, text = "1/5", ironclad = true },
+    { page = 2, keymaps = { "t" }, text = "1/6", ironclad = true },
     "",
-    { page = 2, keymaps = { "u" }, text = "2/3" },
-    { page = 2, keymaps = { "i" }, text = "2/4" },
-    { page = 2, keymaps = { "o" }, text = "2/5" },
-    { page = 2, keymaps = { "p" }, text = "2/6" },
+    { page = 2, keymaps = { "u" }, text = "2/3", ironclad = true },
+    { page = 2, keymaps = { "i" }, text = "2/4", ironclad = true },
+    { page = 2, keymaps = { "o" }, text = "2/5", ironclad = true },
+    { page = 2, keymaps = { "p" }, text = "2/6", ironclad = true },
     "",
-    { page = 2, keymaps = { "s" }, text = "3/4" },
-    { page = 2, keymaps = { "d" }, text = "3/5" },
-    { page = 2, keymaps = { "f" }, text = "3/6" },
+    { page = 2, keymaps = { "s" }, text = "3/4", ironclad = true },
+    { page = 2, keymaps = { "d" }, text = "3/5", ironclad = true },
+    { page = 2, keymaps = { "f" }, text = "3/6", ironclad = true },
     "",
-    { page = 2, keymaps = { "x" }, text = "4/5" },
-    { page = 2, keymaps = { "c" }, text = "4/6" },
-    { page = 2, keymaps = { "v" }, text = "5/6" },
+    { page = 2, keymaps = { "x" }, text = "4/5", ironclad = true },
+    { page = 2, keymaps = { "c" }, text = "4/6", ironclad = true },
+    { page = 2, keymaps = { "v" }, text = "5/6", ironclad = true },
     "",
-    { page = 2, keymaps = { "Q" }, text = "1/12" },
-    { page = 2, keymaps = { "W" }, text = "2/12" },
-    { page = 2, keymaps = { "E" }, text = "3/12" },
-    { page = 2, keymaps = { "R" }, text = "4/12" },
-    { page = 2, keymaps = { "T" }, text = "5/12" },
+    { page = 2, keymaps = { "Q" }, text = "1/12", ironclad = true },
+    { page = 2, keymaps = { "W" }, text = "2/12", ironclad = true },
+    { page = 2, keymaps = { "E" }, text = "3/12", ironclad = true },
+    { page = 2, keymaps = { "R" }, text = "4/12", ironclad = true },
+    { page = 2, keymaps = { "T" }, text = "5/12", ironclad = true },
     "",
-    { page = 2, keymaps = { "U" }, text = "6/12" },
-    { page = 2, keymaps = { "I" }, text = "7/12" },
-    { page = 2, keymaps = { "O" }, text = "8/12" },
-    { page = 2, keymaps = { "O" }, text = "9/12" },
-    { page = 2, keymaps = { "J" }, text = "10/12" },
-    { page = 2, keymaps = { "K" }, text = "11/12" },
+    { page = 2, keymaps = { "U" }, text = "6/12", ironclad = true },
+    { page = 2, keymaps = { "I" }, text = "7/12", ironclad = true },
+    { page = 2, keymaps = { "O" }, text = "8/12", ironclad = true },
+    { page = 2, keymaps = { "O" }, text = "9/12", ironclad = true },
+    { page = 2, keymaps = { "J" }, text = "10/12", ironclad = true },
+    { page = 2, keymaps = { "K" }, text = "11/12", ironclad = true },
 }
 
 local width_height_dict = {
@@ -524,22 +550,26 @@ end
 
 -------------------------------------------- Top / Bottom / Left / Right
 
+local negatize_dict = {
+    { keymaps = { "-", "N" }, text = "", negatize = true, hidden = true },
+}
+
 local tlbr_dict = {
-    { keymaps = "A", text = "auto" },
-    { keymaps = "F", text = "full" },
+    { keymaps = "A", text = "auto", ironclad = true },
+    { keymaps = "F", text = "full", ironclad = true },
 }
 local tlbr_percentage_dict = {
     "",
-    { keymaps = { "l" }, text = "", absolute = "next-page" },
+    { keymaps = { "l" }, text = "", absolute = "next-page", ironclad = true },
 
-    { page = 2, keymaps = { "q" }, text = "1/2" },
-    { page = 2, keymaps = { "w" }, text = "1/3" },
-    { page = 2, keymaps = { "e" }, text = "1/4" },
+    { page = 2, keymaps = { "q" }, text = "1/2", ironclad = true },
+    { page = 2, keymaps = { "w" }, text = "1/3", ironclad = true },
+    { page = 2, keymaps = { "e" }, text = "1/4", ironclad = true },
     "",
-    { page = 2, keymaps = { "u" }, text = "2/3" },
-    { page = 2, keymaps = { "i" }, text = "2/4" },
+    { page = 2, keymaps = { "u" }, text = "2/3", ironclad = true },
+    { page = 2, keymaps = { "i" }, text = "2/4", ironclad = true },
     "",
-    { page = 2, keymaps = { "s" }, text = "3/4" },
+    { page = 2, keymaps = { "s" }, text = "3/4", ironclad = true },
 }
 
 local tlbr_x = {
@@ -567,14 +597,24 @@ end
 -------------------------------------------- Inset / Start / End
 
 M.change_inset = function(o)
-    M._menu("inset", o.axis, tcm._change, { pms_dict, tlbr_dict, tlbr_percentage_dict })
+    M._menu(
+        "inset",
+        o.axis,
+        tcm._change,
+        { pms_dict, tlbr_dict, tlbr_percentage_dict, negatize_dict }
+    )
 end
 
 M.change_inset_start = function()
-    M._menu("start", false, tcm._change, { pms_dict, tlbr_dict, tlbr_percentage_dict })
+    M._menu(
+        "start",
+        false,
+        tcm._change,
+        { pms_dict, tlbr_dict, tlbr_percentage_dict, negatize_dict }
+    )
 end
 M.change_inset_end = function()
-    M._menu("end", false, tcm._change, { pms_dict, tlbr_dict, tlbr_percentage_dict })
+    M._menu("end", false, tcm._change, { pms_dict, tlbr_dict, tlbr_percentage_dict, negatize_dict })
 end
 
 return M
