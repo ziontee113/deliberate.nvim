@@ -235,6 +235,7 @@ local axis_map = {
         pms_menu.change_border_radius,
     },
     ["inset"] = { { "", "x", "y" }, pms_menu.change_inset },
+    ["gap"] = { { "", "x", "y" }, pms_menu.change_gap },
 }
 
 local find_axis_keymap = function(property, key_axis)
@@ -243,6 +244,13 @@ local find_axis_keymap = function(property, key_axis)
             return "II"
         else
             property = "I"
+        end
+    end
+    if property == "gap" then
+        if key_axis == "" then
+            return "G"
+        else
+            property = "g"
         end
     end
 

@@ -76,6 +76,7 @@ local dash_axies = {
     ["border"] = { "", "t", "b", "l", "r" },
     ["rounded"] = { "", "t", "b", "l", "r", "tl", "tr", "bl", "br" },
     ["inset"] = { "", "x", "y" },
+    ["gap"] = { "", "x", "y" },
 }
 --stylua: ignore
 local singles = {

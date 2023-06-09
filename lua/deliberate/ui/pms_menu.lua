@@ -681,4 +681,8 @@ local auto_rows_cols_D = {
 M.change_auto_rows = function() M._menu("auto-rows", false, tcm._change, { auto_rows_cols_D }) end
 M.change_auto_cols = function() M._menu("auto-cols", false, tcm._change, { auto_rows_cols_D }) end
 
+-------------------------------------------- Gap
+
+M.change_gap = function(o) M._menu("gap", o.axis, tcm._change, { pms_dict }) end
+
 return M
