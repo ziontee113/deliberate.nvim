@@ -550,15 +550,15 @@ end
 
 -------------------------------------------- Top / Bottom / Left / Right
 
-local negatize_dict = {
+local negative_D = {
     { keymaps = { "-", "N" }, text = "", negatize = true, hidden = true },
 }
 
-local tlbr_dict = {
+local tlbr_D = {
     { keymaps = "A", text = "auto", ironclad = true },
     { keymaps = "F", text = "full", ironclad = true },
 }
-local tlbr_percentage_dict = {
+local tlbr_P_D = {
     "",
     { keymaps = { "l" }, text = "", absolute = "next-page", ironclad = true },
 
@@ -582,39 +582,29 @@ local tlbr_y = {
 }
 
 M.change_top = function()
-    M._menu("top", false, tcm._change, { pms_dict, tlbr_dict, tlbr_percentage_dict }, tlbr_y)
+    M._menu("top", false, tcm._change, { pms_dict, tlbr_D, tlbr_P_D, negative_D }, tlbr_y)
 end
 M.change_bottom = function()
-    M._menu("bottom", false, tcm._change, { pms_dict, tlbr_dict, tlbr_percentage_dict }, tlbr_y)
+    M._menu("bottom", false, tcm._change, { pms_dict, tlbr_D, tlbr_P_D, negative_D }, tlbr_y)
 end
 M.change_left = function()
-    M._menu("left", false, tcm._change, { pms_dict, tlbr_dict, tlbr_percentage_dict }, tlbr_x)
+    M._menu("left", false, tcm._change, { pms_dict, tlbr_D, tlbr_P_D, negative_D }, tlbr_x)
 end
 M.change_right = function()
-    M._menu("right", false, tcm._change, { pms_dict, tlbr_dict, tlbr_percentage_dict }, tlbr_x)
+    M._menu("right", false, tcm._change, { pms_dict, tlbr_D, tlbr_P_D, negative_D }, tlbr_x)
 end
 
 -------------------------------------------- Inset / Start / End
 
 M.change_inset = function(o)
-    M._menu(
-        "inset",
-        o.axis,
-        tcm._change,
-        { pms_dict, tlbr_dict, tlbr_percentage_dict, negatize_dict }
-    )
+    M._menu("inset", o.axis, tcm._change, { pms_dict, tlbr_D, tlbr_P_D, negative_D })
 end
 
 M.change_inset_start = function()
-    M._menu(
-        "start",
-        false,
-        tcm._change,
-        { pms_dict, tlbr_dict, tlbr_percentage_dict, negatize_dict }
-    )
+    M._menu("start", false, tcm._change, { pms_dict, tlbr_D, tlbr_P_D, negative_D })
 end
 M.change_inset_end = function()
-    M._menu("end", false, tcm._change, { pms_dict, tlbr_dict, tlbr_percentage_dict, negatize_dict })
+    M._menu("end", false, tcm._change, { pms_dict, tlbr_D, tlbr_P_D, negative_D })
 end
 
 return M
