@@ -619,4 +619,23 @@ local z_index_D = {
 }
 M.change_z_index = function() M._menu("z", false, tcm._change, { z_index_D, negative_D }) end
 
+-------------------------------------------- Grid Template Columns
+
+local grid_cols_D = {
+    { keymaps = { "/", "n", "N" }, text = "none" },
+    { keymaps = { "j", "1" }, text = "1" },
+    { keymaps = { "k", "2" }, text = "2" },
+    { keymaps = { "l", "3" }, text = "3" },
+    { keymaps = { "u", "4" }, text = "4" },
+    { keymaps = { "i", "5" }, text = "5" },
+    { keymaps = { "o", "6" }, text = "6" },
+    { keymaps = { "7" }, text = "7" },
+    { keymaps = { "8" }, text = "8" },
+    { keymaps = { "9" }, text = "9" },
+    { keymaps = { "w", "a" }, text = "10" },
+    { keymaps = { "e", "s" }, text = "11" },
+    { keymaps = { "r", "d" }, text = "12" },
+}
+M.change_grid_cols = function() M._menu("grid-cols", false, tcm._change, { grid_cols_D }) end
+
 return M

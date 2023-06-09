@@ -197,6 +197,8 @@ local non_axis_map = {
     ["Ie"] = pms_menu.change_inset_end,
 
     ["zi"] = pms_menu.change_z_index,
+
+    ["gc"] = pms_menu.change_grid_cols,
 }
 add_heads_from_tbl(non_axis_map)
 
