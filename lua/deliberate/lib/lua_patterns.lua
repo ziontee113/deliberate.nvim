@@ -75,6 +75,7 @@ local dash_axies = {
     ["divide"] = { "x", "y" },
     ["border"] = { "", "t", "b", "l", "r" },
     ["rounded"] = { "", "t", "b", "l", "r", "tl", "tr", "bl", "br" },
+    ["inset"] = { "", "x", "y" },
 }
 --stylua: ignore
 local singles = {
@@ -132,7 +133,10 @@ local add_axis_patterns = function(collection, prefix_format_fn)
     end
 end
 add_axis_patterns(no_dash_axies, function(property, axis) return property .. axis end)
-add_axis_patterns(dash_axies, function(property, axis) return property .. "%-" .. axis end)
+add_axis_patterns(dash_axies, function(property, axis)
+    if axis == "" then return property end
+    return property .. "%-" .. axis
+end)
 M["rounded"][""][1] = "^rounded%-[%d?%a?][^tblr]+$"
 
 -- Add properties with no Axies

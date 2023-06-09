@@ -205,7 +205,7 @@ local border_width_dict = {
     { keymaps = { "l", "8" }, text = "8" },
     { keymaps = { "/" }, text = "0" },
 }
-M.change_border_width = function(o) M._menu("border", o.axis, tcm._change, border_width_dict) end
+M.change_border_width = function(o) M._menu("border", o.axis, tcm._change, { border_width_dict }) end
 
 -------------------------------------------- Opacity
 
@@ -562,6 +562,12 @@ M.change_left = function()
 end
 M.change_right = function()
     M._menu("right", false, tcm._change, { pms_dict, tlbr_dict, tlbr_percentage_dict }, tlbr_x)
+end
+
+-------------------------------------------- Inset
+
+M.change_inset = function(o)
+    M._menu("inset", o.axis, tcm._change, { pms_dict, tlbr_dict, tlbr_percentage_dict })
 end
 
 return M

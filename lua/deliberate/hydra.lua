@@ -216,9 +216,18 @@ local axis_map = {
         },
         pms_menu.change_border_radius,
     },
+    ["inset"] = { { "", "x", "y" }, pms_menu.change_inset },
 }
 
 local find_axis_keymap = function(property, key_axis)
+    if property == "inset" then
+        if key_axis == "" then
+            return "II"
+        else
+            property = "I"
+        end
+    end
+
     if property == "b" and key_axis == "" then return "bd" end
     if key_axis == "" then return string.upper(property) end
     return property .. key_axis
@@ -268,7 +277,7 @@ local classes_groups_dict = {
     ["di"] = { cgm.change_display },
     ["fl"] = { cgm.change_float },
     ["cl"] = { cgm.change_clear },
-    ["I"] = { cgm.change_isolate },
+    ["IS"] = { cgm.change_isolate },
     ["of"] = { cgm.change_object_fit },
     ["op"] = { cgm.change_object_positon },
 
