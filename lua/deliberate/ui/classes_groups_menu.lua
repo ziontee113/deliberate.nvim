@@ -18,7 +18,7 @@ local prepare_ingredients = function(group)
             })
             table.insert(classes_groups, text)
         else
-            table.insert(items, "")
+            table.insert(items, group_item)
         end
     end
     return items, classes_groups
@@ -191,5 +191,42 @@ local box_sizing_group = {
     { keymaps = { "c" }, classes = { "box-content" } },
 }
 M.change_box_sizing = function() M._classes_group_changer_menu(box_sizing_group) end
+
+-- Display
+local display_group = {
+    { keymaps = { "b" }, classes = { "block" } },
+    { keymaps = { "ib" }, classes = { "inline-block" } },
+    "",
+    { keymaps = { "I" }, classes = { "inline" } },
+    "",
+    { keymaps = { "f" }, classes = { "flex" } },
+    { keymaps = { "if" }, classes = { "inline-flex" } },
+    "",
+    { keymaps = { "r" }, classes = { "flow-root" } },
+    "",
+    { keymaps = { "g" }, classes = { "grid" } },
+    { keymaps = { "ig" }, classes = { "inline-grid" } },
+    "",
+    { keymaps = { "C" }, classes = { "contents" } },
+    "",
+    { keymaps = { "l" }, classes = { "list-items" } },
+    "",
+    { keymaps = { "h", "n", "/" }, classes = { "hidden" } },
+    "----------------------",
+    { keymaps = { "T" }, classes = { "table" } },
+    { keymaps = { "it", "iT" }, classes = { "inline-table" } },
+    "",
+    { keymaps = { "ca" }, classes = { "table-caption" } },
+    { keymaps = { "ce" }, classes = { "table-cell" } },
+    "",
+    { keymaps = { "tr" }, classes = { "table-row" } },
+    { keymaps = { "tR" }, classes = { "table-row-group" } },
+    { keymaps = { "tc" }, classes = { "table-column" } },
+    { keymaps = { "tC" }, classes = { "table-column-group" } },
+    "",
+    { keymaps = { "th" }, classes = { "table-header-group" } },
+    { keymaps = { "tf" }, classes = { "table-footer-group" } },
+}
+M.change_display = function() M._classes_group_changer_menu(display_group) end
 
 return M

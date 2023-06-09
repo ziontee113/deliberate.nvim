@@ -259,6 +259,8 @@ local classes_groups_dict = {
     ["bD"] = { cgm.change_box_decoration },
     ["bS"] = { cgm.change_box_sizing },
     ["C"] = { cgm.change_container },
+
+    ["di"] = { cgm.change_display },
 }
 
 for keymap, fn_and_args in pairs(classes_groups_dict) do
