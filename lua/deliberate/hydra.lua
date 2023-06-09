@@ -270,6 +270,10 @@ local classes_groups_dict = {
     ["ov"] = { cgm.change_overflow },
     ["ox"] = { cgm.change_overflow_x },
     ["oy"] = { cgm.change_overflow_y },
+
+    ["oV"] = { cgm.change_overscroll },
+    ["oX"] = { cgm.change_overscroll_x },
+    ["oY"] = { cgm.change_overscroll_y },
 }
 
 for keymap, fn_and_args in pairs(classes_groups_dict) do

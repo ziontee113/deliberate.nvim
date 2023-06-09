@@ -282,7 +282,7 @@ M.change_object_positon = function() M._classes_group_changer_menu(object_posito
 -- Overflow
 
 local overflow_group = {
-    { keymaps = { "A", "a" }, classes = { "overflow-auto" } },
+    { keymaps = { "a", "A" }, classes = { "overflow-auto" } },
     { keymaps = { "h", "H" }, classes = { "overflow-hidden" } },
     { keymaps = { "c", "C" }, classes = { "overflow-clip" } },
     { keymaps = { "v", "V" }, classes = { "overflow-visible" } },
@@ -307,5 +307,28 @@ local overflow_y_group = {
     { keymaps = { "s", "S" }, classes = { "overflow-y-scroll" } },
 }
 M.change_overflow_y = function() M._classes_group_changer_menu(overflow_y_group) end
+
+-- Overscroll
+
+local overscroll_group = {
+    { keymaps = { "a", "A" }, classes = { "overscroll-auto" } },
+    { keymaps = { "c", "C" }, classes = { "overscroll-contain" } },
+    { keymaps = { "n", "N" }, classes = { "overscroll-none" } },
+}
+M.change_overscroll = function() M._classes_group_changer_menu(overscroll_group) end
+
+local overscroll_x_group = {
+    { keymaps = { "a", "A" }, classes = { "overscroll-x-auto" } },
+    { keymaps = { "c", "C" }, classes = { "overscroll-x-contain" } },
+    { keymaps = { "n", "N" }, classes = { "overscroll-x-none" } },
+}
+M.change_overscroll_x = function() M._classes_group_changer_menu(overscroll_x_group) end
+
+local overscroll_y_group = {
+    { keymaps = { "a", "A" }, classes = { "overscroll-y-auto" } },
+    { keymaps = { "c", "C" }, classes = { "overscroll-y-contain" } },
+    { keymaps = { "n", "N" }, classes = { "overscroll-y-none" } },
+}
+M.change_overscroll_y = function() M._classes_group_changer_menu(overscroll_y_group) end
 
 return M
