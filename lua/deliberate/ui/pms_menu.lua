@@ -599,12 +599,24 @@ end
 M.change_inset = function(o)
     M._menu("inset", o.axis, tcm._change, { pms_dict, tlbr_D, tlbr_P_D, negative_D })
 end
-
 M.change_inset_start = function()
     M._menu("start", false, tcm._change, { pms_dict, tlbr_D, tlbr_P_D, negative_D })
 end
 M.change_inset_end = function()
     M._menu("end", false, tcm._change, { pms_dict, tlbr_D, tlbr_P_D, negative_D })
 end
+
+-------------------------------------------- Z-Index
+
+local z_index_D = {
+    { keymaps = { "/", "n", "z", "N" }, text = "0", ironclad = true },
+    { keymaps = { "j", "1" }, text = "10" },
+    { keymaps = { "k", "2" }, text = "20" },
+    { keymaps = { "l", "3" }, text = "30" },
+    { keymaps = { "u", "4" }, text = "40" },
+    { keymaps = { "i", "o", "5" }, text = "50" },
+    { keymaps = { "a", "A" }, text = "auto", ironclad = true },
+}
+M.change_z_index = function() M._menu("z", false, tcm._change, { z_index_D, negative_D }) end
 
 return M
