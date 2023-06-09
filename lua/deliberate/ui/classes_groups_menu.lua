@@ -5,6 +5,8 @@ local menu_repeater = require("deliberate.api.menu_repeater")
 local M = {}
 
 local prepare_ingredients = function(group)
+    table.insert(group, { keymaps = { "0" }, classes = {}, hidden = true })
+
     local items, classes_groups = {}, {}
     for _, group_item in ipairs(group) do
         if type(group_item) == "table" then
@@ -45,14 +47,25 @@ M._classes_group_changer_menu = function(group)
 end
 
 local flex_group = {
-    { keymaps = { "0" }, classes = {}, hidden = true },
     { keymaps = { "f", "l" }, classes = { "flex" } },
+    "",
     { keymaps = { "r" }, classes = { "flex", "flex-row" } },
+    { keymaps = { "R" }, classes = { "flex", "flex-row-reverse" } },
+    { keymaps = { "c" }, classes = { "flex", "flex-col" } },
+    { keymaps = { "C" }, classes = { "flex", "flex-col-reverse" } },
+    "",
+    { keymaps = { "i" }, classes = { "inline-flex" } },
 }
 M.change_flex_properties = function() M._classes_group_changer_menu(flex_group) end
 
+local flex_wrap_group = {
+    { keymaps = { "w" }, classes = { "flex-wrap" } },
+    { keymaps = { "r" }, classes = { "flex-wrap-reverse" } },
+    { keymaps = { "n" }, classes = { "flex-nowrap" } },
+}
+M.change_flex_wrap_properties = function() M._classes_group_changer_menu(flex_wrap_group) end
+
 local flex_align_group = {
-    { keymaps = { "0" }, classes = {}, hidden = true },
     { keymaps = { "i" }, classes = { "items-center" } },
     { keymaps = { "j" }, classes = { "justify-center" } },
     { keymaps = { "b" }, classes = { "justify-between" } },
@@ -64,7 +77,6 @@ M.change_flex_align_properties = function() M._classes_group_changer_menu(flex_a
 -- Typography
 
 local font_weight_group = {
-    { keymaps = { "0" }, classes = {}, hidden = true },
     { keymaps = { "t", "1" }, classes = { "font-thin" } },
     { keymaps = { "e", "2" }, classes = { "font-extralight" } },
     { keymaps = { "l", "3" }, classes = { "font-light" } },
@@ -78,7 +90,6 @@ local font_weight_group = {
 M.change_font_weight = function() M._classes_group_changer_menu(font_weight_group) end
 
 local text_decoration_group = {
-    { keymaps = { "0" }, classes = {}, hidden = true },
     { keymaps = { "u", "U" }, classes = { "underline" } },
     { keymaps = { "o", "O" }, classes = { "overline" } },
     { keymaps = { "l", "L" }, classes = { "line-through" } },
@@ -87,14 +98,12 @@ local text_decoration_group = {
 M.change_text_decoration = function() M._classes_group_changer_menu(text_decoration_group) end
 
 local font_style_group = {
-    { keymaps = { "0" }, classes = {}, hidden = true },
     { keymaps = { "i" }, classes = { "italic" } },
     { keymaps = { "n" }, classes = { "not-italic" } },
 }
 M.change_font_style = function() M._classes_group_changer_menu(font_style_group) end
 
 local text_align_group = {
-    { keymaps = { "0" }, classes = {}, hidden = true },
     { keymaps = { "h" }, classes = { "text-left" } },
     { keymaps = { "l" }, classes = { "text-right" } },
     { keymaps = { "k" }, classes = { "text-center" } },
@@ -105,7 +114,6 @@ M.change_text_align = function() M._classes_group_changer_menu(text_align_group)
 -- Divide
 
 local divide_style_group = {
-    { keymaps = { "0" }, classes = {}, hidden = true },
     { keymaps = { "s" }, classes = { "divide-solid" } },
     { keymaps = { "d" }, classes = { "divide-dashed" } },
     { keymaps = { "." }, classes = { "divide-dotted" } },
@@ -117,7 +125,6 @@ M.change_divide_style = function() M._classes_group_changer_menu(divide_style_gr
 -- Border
 
 local border_style_group = {
-    { keymaps = { "0" }, classes = {}, hidden = true },
     { keymaps = { "s" }, classes = { "border-solid" } },
     { keymaps = { "d" }, classes = { "border-dashed" } },
     { keymaps = { "." }, classes = { "border-dotted" } },

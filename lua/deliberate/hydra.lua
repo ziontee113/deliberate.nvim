@@ -234,10 +234,11 @@ end
 
 local classes_groups_dict = {
     ["fl"] = { classes_groups_menu.change_flex_properties },
+    ["fw"] = { classes_groups_menu.change_flex_wrap_properties },
     ["a"] = { classes_groups_menu.change_flex_align_properties },
 
     ["fs"] = { classes_groups_menu.change_font_style },
-    ["fw"] = { classes_groups_menu.change_font_weight },
+    ["fW"] = { classes_groups_menu.change_font_weight },
     ["<A-a>"] = { classes_groups_menu.change_text_align },
     ["<A-d>"] = { classes_groups_menu.change_text_decoration },
 
