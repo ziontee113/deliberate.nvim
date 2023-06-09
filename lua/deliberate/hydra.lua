@@ -204,6 +204,12 @@ local non_axis_map = {
     ["ce"] = pms_menu.change_col_end,
 
     ["gr"] = pms_menu.change_grid_rows,
+    ["rS"] = pms_menu.change_row_span,
+    ["rs"] = pms_menu.change_row_start,
+    ["re"] = pms_menu.change_row_end,
+
+    ["Ar"] = pms_menu.change_auto_rows,
+    ["Ac"] = pms_menu.change_auto_cols,
 }
 add_heads_from_tbl(non_axis_map)
 
@@ -268,7 +274,7 @@ end
 local classes_groups_dict = {
     ["F"] = { cgm.change_flex_properties },
     ["fw"] = { cgm.change_flex_wrap_properties },
-    ["A"] = { cgm.change_flex_align_properties },
+    ["Al"] = { cgm.change_flex_align_properties },
 
     ["fS"] = { cgm.change_font_style },
     ["fW"] = { cgm.change_font_weight },

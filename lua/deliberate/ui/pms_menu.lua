@@ -670,4 +670,15 @@ end
 M.change_row_start = function() M._menu("row-start", false, tcm._change, { grid12_D, grid_auto_D }) end
 M.change_row_end = function() M._menu("row-end", false, tcm._change, { grid12_D, grid_auto_D }) end
 
+-------------------------------------------- Grid Auto Rows / Columns
+
+local auto_rows_cols_D = {
+    { keymaps = { "a", "A" }, text = "auto" },
+    { keymaps = { "m" }, text = "min" },
+    { keymaps = { "M" }, text = "max" },
+    { keymaps = { "f" }, text = "fr" },
+}
+M.change_auto_rows = function() M._menu("auto-rows", false, tcm._change, { auto_rows_cols_D }) end
+M.change_auto_cols = function() M._menu("auto-cols", false, tcm._change, { auto_rows_cols_D }) end
+
 return M

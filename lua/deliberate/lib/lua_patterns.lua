@@ -89,6 +89,7 @@ local singles = {
     "start", "end", "z",
     "grid-cols", "col-span", "col-start", "col-end",
     "grid-rows", "row-span", "row-start", "row-end",
+    "auto-rows", "auto-cols",
 }
 
 local general_pms_postfixes = { "%-[%d%.%a/]+$", "%-%[[%-%d%.]+[%a%%]+]$" }
@@ -119,6 +120,8 @@ local property_specific_patterns = {
     ["col-start"] = { "^col%-start%-%[.+]$" },
     ["col-end"] = { "^col%-end%-%[.+]$" },
     ["grid-rows"] = { "^grid%-rows%-%[.+]$" },
+    ["auto-rows"] = { "^auto%-rows%-%[.+]$" },
+    ["auto-cols"] = { "^auto%-cols%-%[.+]$" },
 }
 
 -- Add properties with axies
