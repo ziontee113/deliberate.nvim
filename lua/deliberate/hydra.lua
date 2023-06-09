@@ -182,6 +182,8 @@ local non_axis_map = {
     ["xe"] = pms_menu.change_max_height,
     ["ff"] = pms_menu.change_flex,
     ["fb"] = pms_menu.change_basis,
+    ["fg"] = pms_menu.change_grow,
+    ["fs"] = pms_menu.change_shrink,
 }
 add_heads_from_tbl(non_axis_map)
 
@@ -239,7 +241,7 @@ local classes_groups_dict = {
     ["fw"] = { classes_groups_menu.change_flex_wrap_properties },
     ["a"] = { classes_groups_menu.change_flex_align_properties },
 
-    ["fs"] = { classes_groups_menu.change_font_style },
+    ["fS"] = { classes_groups_menu.change_font_style },
     ["fW"] = { classes_groups_menu.change_font_weight },
     ["<A-a>"] = { classes_groups_menu.change_text_align },
     ["<A-d>"] = { classes_groups_menu.change_text_decoration },

@@ -446,6 +446,20 @@ local flex_dict = {
 
 M.change_flex = function() M._menu("flex", false, tcm._change_tailwind_classes, flex_dict) end
 
+-------------------------------------------- Grow / Shrink (Flex Grow / Flex Shrink)
+
+local grow_dict = {
+    { keymaps = { "g" }, text = "", absolute = "grow" },
+    { keymaps = { "/" }, text = "0" },
+}
+M.change_grow = function() M._menu("grow", false, tcm._change_tailwind_classes, grow_dict) end
+
+local shrink_dict = {
+    { keymaps = { "g" }, text = "", absolute = "shrink" },
+    { keymaps = { "/" }, text = "0" },
+}
+M.change_shrink = function() M._menu("shrink", false, tcm._change_tailwind_classes, shrink_dict) end
+
 -------------------------------------------- Basis (Flex Basis)
 
 local basis_dict = {

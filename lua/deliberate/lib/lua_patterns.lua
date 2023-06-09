@@ -82,7 +82,7 @@ local singles = {
     "text",
     "ring", "ring-offset",
     "w", "h", "min-w", "min-h", "max-w", "max-h",
-    "flex", "basis",
+    "flex", "basis", "grow", "shrink"
 }
 
 local general_pms_postfixes = { "%-[%d%.%a/]+$", "%-%[[%d%.]+[%a%%]+]$" }
@@ -103,6 +103,8 @@ local property_specific_patterns = {
         ["br"] = { "^rounded%-br$" },
     },
     ["flex"] = { "%-%[[%_%d%%]+]$" },
+    ["grow"] = { "^grow$", "^grow%-%[[%d%.]+]$" },
+    ["shrink"] = { "^shrink$", "^shrink%-%[[%d%.]+]$" },
 }
 
 -- Add properties with axies
