@@ -274,6 +274,8 @@ local classes_groups_dict = {
     ["oV"] = { cgm.change_overscroll },
     ["oX"] = { cgm.change_overscroll_x },
     ["oY"] = { cgm.change_overscroll_y },
+
+    ["po"] = { cgm.change_position },
 }
 
 for keymap, fn_and_args in pairs(classes_groups_dict) do
