@@ -297,14 +297,7 @@ end
 
 -------------------------------------------- Width / Height
 
-local width_height_dict = {
-    "",
-    { keymaps = { "A" }, text = "auto" },
-    { keymaps = { "F" }, text = "full" },
-    { keymaps = { "S" }, text = "screen" },
-    { keymaps = { "m" }, text = "min" },
-    { keymaps = { "M" }, text = "max" },
-
+local percentage_dict = {
     "",
     { keymaps = { "l" }, text = "", absolute = "next-page" },
 
@@ -341,11 +334,20 @@ local width_height_dict = {
     { page = 2, keymaps = { "K" }, text = "11/12" },
 }
 
+local width_height_dict = {
+    "",
+    { keymaps = { "A" }, text = "auto" },
+    { keymaps = { "F" }, text = "full" },
+    { keymaps = { "S" }, text = "screen" },
+    { keymaps = { "m" }, text = "min" },
+    { keymaps = { "M" }, text = "max" },
+}
+
 M.change_width = function()
-    M._menu("w", false, tcm._change_tailwind_classes, pms_dict, width_height_dict)
+    M._menu("w", false, tcm._change_tailwind_classes, pms_dict, width_height_dict, percentage_dict)
 end
 M.change_height = function()
-    M._menu("h", false, tcm._change_tailwind_classes, pms_dict, width_height_dict)
+    M._menu("h", false, tcm._change_tailwind_classes, pms_dict, width_height_dict, percentage_dict)
 end
 
 -------------------------------------------- Min Width / Min Height

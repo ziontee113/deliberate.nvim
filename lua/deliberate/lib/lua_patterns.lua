@@ -85,7 +85,7 @@ local singles = {
     "flex",
 }
 
-local general_pms_postfixes = { "%-[%d%.%a]+$", "%-%[[%d%.]+[%a%%]+]$" }
+local general_pms_postfixes = { "%-[%d%.%a/]+$", "%-%[[%d%.]+[%a%%]+]$" }
 local property_specific_patterns = {
     ["divide"] = {
         ["x"] = { "^divide%-x$" },
