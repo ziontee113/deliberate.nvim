@@ -142,13 +142,13 @@ M._change_tailwind_classes = function(o)
 end
 
 M.change_padding = function(o)
-    M._change_tailwind_classes({ property = "padding", axis = o.axis, value = o.value })
+    M._change_tailwind_classes({ property = "p", axis = o.axis, value = o.value })
 end
 M.change_margin = function(o)
-    M._change_tailwind_classes({ property = "margin", axis = o.axis, value = o.value })
+    M._change_tailwind_classes({ property = "m", axis = o.axis, value = o.value })
 end
 M.change_spacing = function(o)
-    M._change_tailwind_classes({ property = "spacing", axis = o.axis, value = o.value })
+    M._change_tailwind_classes({ property = "space", axis = o.axis, value = o.value })
 end
 
 M.change_classes_groups = function(o)

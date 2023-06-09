@@ -66,6 +66,24 @@ local M = {
 
 -------------------------------------------- PMS
 
+local no_dash_axies = {
+    ["p"] = { "", "x", "y", "t", "b", "l", "r" },
+    ["m"] = { "", "x", "y", "t", "b", "l", "r" },
+}
+local dash_axies = {
+    ["space"] = { "x", "y" },
+    ["divide"] = { "x", "y" },
+    ["border"] = { "", "t", "b", "l", "r" },
+    ["rounded"] = { "", "t", "b", "l", "r", "tl", "tr", "bl", "br" },
+}
+--stylua: ignore
+local singles = {
+    "opacity", "border-opacity", "divide-opacity", "ring-opacity",
+    "text",
+    "ring", "ring-offset",
+    "w", "h", "min-w", "min-h", "max-w", "max-h",
+}
+
 local general_pms_postfixes = { "%-[%d%.%a]+$", "%-%[[%d%.]+[%a%%]+]$" }
 local property_specific_patterns = {
     ["divide"] = {
@@ -85,71 +103,13 @@ local property_specific_patterns = {
     },
 }
 
-local pms_property_map = {
-    ["padding"] = {
-        [""] = "p",
-        ["x"] = "px",
-        ["y"] = "py",
-        ["t"] = "pt",
-        ["b"] = "pb",
-        ["l"] = "pl",
-        ["r"] = "pr",
-    },
-    ["margin"] = {
-        [""] = "m",
-        ["x"] = "mx",
-        ["y"] = "my",
-        ["t"] = "mt",
-        ["b"] = "mb",
-        ["l"] = "ml",
-        ["r"] = "mr",
-    },
-    ["spacing"] = {
-        ["x"] = "space%-x",
-        ["y"] = "space%-y",
-    },
-    ["divide"] = {
-        ["x"] = "divide%-x",
-        ["y"] = "divide%-y",
-    },
-    ["border"] = {
-        [""] = "border",
-        ["t"] = "border%-t",
-        ["b"] = "border%-b",
-        ["l"] = "border%-l",
-        ["r"] = "border%-r",
-    },
-    ["rounded"] = {
-        [""] = "rounded",
-        ["t"] = "rounded%-t",
-        ["b"] = "rounded%-b",
-        ["l"] = "rounded%-l",
-        ["r"] = "rounded%-r",
-        ["tl"] = "rounded%-tl",
-        ["tr"] = "rounded%-tr",
-        ["bl"] = "rounded%-bl",
-        ["br"] = "rounded%-br",
-    },
-    ["opacity"] = "opacity",
-    ["border-opacity"] = "border%-opacity",
-    ["divide-opacity"] = "divide%-opacity",
-    ["ring-opacity"] = "ring%-opacity",
-    ["text"] = "text",
-    ["ring"] = "ring",
-    ["ring-offset"] = "ring%-offset",
-    ["w"] = "w",
-    ["h"] = "h",
-    ["min-w"] = "min%-w",
-    ["min-h"] = "min%-h",
-    ["max-w"] = "max%-w",
-    ["max-h"] = "max%-h",
-}
-
-for property, map in pairs(pms_property_map) do
-    local tbl = {}
-    if type(map) == "table" then
-        for axis, prefix in pairs(map) do
+-- Add properties with axies
+local add_axis_patterns = function(collection, prefix_format_fn)
+    for property, axies in pairs(collection) do
+        local tbl = {}
+        for _, axis in ipairs(axies) do
             tbl[axis] = {}
+            local prefix = prefix_format_fn(property, axis)
             for _, postfix in ipairs(general_pms_postfixes) do
                 local pattern = "^" .. prefix .. postfix
                 table.insert(tbl[axis], pattern)
@@ -160,17 +120,22 @@ for property, map in pairs(pms_property_map) do
                 end
             end
         end
-    elseif type(map) == "string" then
-        local prefix = map
-        for _, postfix in ipairs(general_pms_postfixes) do
-            local pattern = "^" .. prefix .. postfix
-            table.insert(tbl, pattern)
-        end
+        M[property] = tbl
+    end
+end
+add_axis_patterns(no_dash_axies, function(property, axis) return property .. axis end)
+add_axis_patterns(dash_axies, function(property, axis) return property .. "%-" .. axis end)
+M["rounded"][""][1] = "^rounded%-[%d?%a?][^tblr]+$"
+
+-- Add properties with no Axies
+for _, property in ipairs(singles) do
+    local tbl = {}
+    for _, postfix in ipairs(general_pms_postfixes) do
+        local pattern = "^" .. string.gsub(property, vim.pesc("-"), vim.pesc("%-")) .. postfix
+        table.insert(tbl, pattern)
     end
     M[property] = tbl
 end
-
-M["rounded"][""][1] = "^rounded%-[%d?%a?][^tblr]+$"
 
 -------------------------------------------- Colors
 

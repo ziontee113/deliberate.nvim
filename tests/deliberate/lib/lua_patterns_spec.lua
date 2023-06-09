@@ -18,15 +18,15 @@ end
 describe("padding pattern", function()
     it("matches omni axis correctly", function()
         local inputs = { "p-4", "p-69", "p-[20px]", "p-[4rem]", "p-[4pt]", "p-[10vh]" }
-        patterns_matches_inputs(lua_patterns.padding[""], inputs)
+        patterns_matches_inputs(lua_patterns.p[""], inputs)
     end)
     it("matches y axis correctly", function()
         local inputs = { "py-4", "py-69", "py-[20px]", "py-[4rem]", "py-[4pt]", "py-[10vh]" }
-        patterns_matches_inputs(lua_patterns.padding["y"], inputs)
+        patterns_matches_inputs(lua_patterns.p["y"], inputs)
     end)
     it("matches values float values", function()
         local inputs = { "py-1.5", "py-0.6", "py-[12.5em]", "py-[4.5pt]", "py-[10.2vh]" }
-        patterns_matches_inputs(lua_patterns.padding["y"], inputs)
+        patterns_matches_inputs(lua_patterns.p["y"], inputs)
     end)
 end)
 
