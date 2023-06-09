@@ -83,7 +83,7 @@ local singles = {
     "ring", "ring-offset",
     "w", "h", "min-w", "min-h", "max-w", "max-h",
     "flex", "basis", "grow", "shrink", "order",
-    "aspect-ratio",
+    "aspect-ratio", "columns",
 }
 
 local general_pms_postfixes = { "%-[%d%.%a/]+$", "%-%[[%d%.]+[%a%%]+]$" }

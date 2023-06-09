@@ -477,7 +477,7 @@ end
 
 -------------------------------------------- Order
 
-local order_dict = {
+local one_to_twelve_dict = {
     { keymaps = { "1" }, text = "1" },
     { keymaps = { "2" }, text = "2" },
     { keymaps = { "3" }, text = "3" },
@@ -490,12 +490,17 @@ local order_dict = {
     { keymaps = { "u" }, text = "10" },
     { keymaps = { "i" }, text = "11" },
     { keymaps = { "o" }, text = "12" },
+}
+
+local order_dict = {
     "",
     { keymaps = { "f" }, text = "first" },
     { keymaps = { "l" }, text = "last" },
     { keymaps = { "n" }, text = "none" },
 }
-M.change_order = function() M._menu("order", false, tcm._change_tailwind_classes, order_dict) end
+M.change_order = function()
+    M._menu("order", false, tcm._change_tailwind_classes, one_to_twelve_dict, order_dict)
+end
 
 -------------------------------------------- Aspect Ratio
 
@@ -506,6 +511,29 @@ local aspect_ratio_dict = {
 }
 M.change_aspect_ratio = function()
     M._menu("aspect-ratio", false, tcm._change_tailwind_classes, aspect_ratio_dict)
+end
+
+-------------------------------------------- Columns
+
+local columns_dict = {
+    { keymaps = { "A" }, text = "auto" },
+    "",
+    { keymaps = { "#" }, text = "3xs" },
+    { keymaps = { "@" }, text = "2xs" },
+    { keymaps = { "x" }, text = "xs" },
+    { keymaps = { "s" }, text = "sm" },
+    { keymaps = { "m" }, text = "md" },
+    { keymaps = { "l" }, text = "lg" },
+    { keymaps = { "1" }, text = "xl" },
+    { keymaps = { "2" }, text = "2xl" },
+    { keymaps = { "3" }, text = "3xl" },
+    { keymaps = { "4" }, text = "4xl" },
+    { keymaps = { "5" }, text = "5xl" },
+    { keymaps = { "6" }, text = "6xl" },
+    { keymaps = { "7" }, text = "7xl" },
+}
+M.change_columns = function()
+    M._menu("columns", false, tcm._change_tailwind_classes, one_to_twelve_dict, columns_dict)
 end
 
 return M

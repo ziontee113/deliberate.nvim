@@ -37,7 +37,7 @@ local heads = {
     },
 
     {
-        "c",
+        "T",
         function() require("deliberate.ui.content_replacer_menu").replace("contents.txt") end,
         { nowait = true },
     },
@@ -186,6 +186,7 @@ local non_axis_map = {
     ["fs"] = pms_menu.change_shrink,
     ["fo"] = pms_menu.change_order,
     ["A"] = pms_menu.change_aspect_ratio,
+    ["cl"] = pms_menu.change_columns,
 }
 add_heads_from_tbl(non_axis_map)
 
