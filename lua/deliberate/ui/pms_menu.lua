@@ -564,10 +564,17 @@ M.change_right = function()
     M._menu("right", false, tcm._change, { pms_dict, tlbr_dict, tlbr_percentage_dict }, tlbr_x)
 end
 
--------------------------------------------- Inset
+-------------------------------------------- Inset / Start / End
 
 M.change_inset = function(o)
     M._menu("inset", o.axis, tcm._change, { pms_dict, tlbr_dict, tlbr_percentage_dict })
+end
+
+M.change_inset_start = function()
+    M._menu("start", false, tcm._change, { pms_dict, tlbr_dict, tlbr_percentage_dict })
+end
+M.change_inset_end = function()
+    M._menu("end", false, tcm._change, { pms_dict, tlbr_dict, tlbr_percentage_dict })
 end
 
 return M
