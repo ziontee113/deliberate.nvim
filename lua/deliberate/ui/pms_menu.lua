@@ -130,9 +130,8 @@ M._menu = function(property, axis, fn, ...)
     popup:show()
 end
 
--------------------------------------------- Menus
+-------------------------------------------- Padding / Margin / Spacing
 
--- PMS
 local pms_dict = {
     { keymaps = "1", text = "1", hidden = true },
     { keymaps = "2", text = "2", hidden = true },
@@ -179,7 +178,8 @@ M.change_padding = function(o) M._menu("p", o.axis, tcm.change_padding, pms_dict
 M.change_margin = function(o) M._menu("m", o.axis, tcm.change_margin, pms_dict) end
 M.change_spacing = function(o) M._menu("space", o.axis, tcm.change_spacing, pms_dict) end
 
--- Border Width
+-------------------------------------------- Border Width
+
 local border_width_dict = {
     { keymaps = { "j", "2" }, text = "2" },
     { keymaps = { "k", "4" }, text = "4" },
@@ -190,7 +190,8 @@ M.change_border_width = function(o)
     M._menu("border", o.axis, tcm._change_tailwind_classes, border_width_dict)
 end
 
--- Opacity
+-------------------------------------------- Opacity
+
 local opacity_dict = {
     { keymaps = { "/" }, text = "0" },
     { keymaps = { "?", "~" }, text = "5" },
@@ -219,7 +220,8 @@ M.change_ring_opacity = function()
     M._menu("ring-opacity", false, tcm._change_tailwind_classes, opacity_dict)
 end
 
--- Font Size
+-------------------------------------------- Font Size
+
 local font_size_dict = {
     { keymaps = { "x" }, text = "xs" },
     { keymaps = { "m" }, text = "sm" },
@@ -237,7 +239,8 @@ local font_size_dict = {
 }
 M.change_font_size = function() M._menu("text", false, tcm._change_tailwind_classes, font_size_dict) end
 
--- Divide
+-------------------------------------------- Divide
+
 local divide_dict = {
     { keymaps = { "m" }, text = "0" },
     { keymaps = { "2" }, text = "2" },
@@ -264,7 +267,8 @@ M.change_divide = function(o)
     end
 end
 
--- Ring
+-------------------------------------------- Ring
+
 local ring_dict = {
     { keymaps = { "m" }, text = "0" },
     { keymaps = { "1" }, text = "1" },
@@ -284,7 +288,7 @@ M.change_ring_offset = function()
     M._menu("ring-offset", false, tcm._change_tailwind_classes, ring_dict)
 end
 
--- Width / Height
+-------------------------------------------- Width / Height
 
 local width_height_dict = {
     "",
@@ -337,7 +341,7 @@ M.change_height = function()
     M._menu("h", false, tcm._change_tailwind_classes, pms_dict, width_height_dict)
 end
 
--- min Width / min Height
+-------------------------------------------- Min Width / Min Height
 
 local min_width_dict = {
     { keymaps = { "/" }, text = "0" },
@@ -358,7 +362,7 @@ M.change_min_height = function()
     M._menu("min-h", false, tcm._change_tailwind_classes, min_height_dict)
 end
 
--- Max Width / Max Height
+-------------------------------------------- Max Width / Max Height
 
 local max_width_dict = {
     { keymaps = { "/" }, text = "0" },
@@ -401,7 +405,8 @@ M.change_max_height = function()
     M._menu("max-h", false, tcm._change_tailwind_classes, pms_dict, max_height_dict)
 end
 
--- Border Radius (Rounded)
+-------------------------------------------- Rounded (Border Radius)
+
 local rounded_dict = {
     { keymaps = { "r" }, text = "", property_and_axis = true },
     "",
