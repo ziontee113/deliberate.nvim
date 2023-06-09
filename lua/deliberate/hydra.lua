@@ -303,6 +303,8 @@ local classes_groups_dict = {
 
     ["po"] = { cgm.change_position },
     ["V"] = { cgm.change_visibility },
+
+    ["gf"] = { cgm.change_grid_flow },
 }
 
 for keymap, fn_and_args in pairs(classes_groups_dict) do

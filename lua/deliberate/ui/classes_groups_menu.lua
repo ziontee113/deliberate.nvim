@@ -349,4 +349,14 @@ local visibility_group = {
 }
 M.change_visibility = function() M._classes_group_changer_menu(visibility_group) end
 
+-- Grid Auto Flow
+local grid_flow_group = {
+    { keymaps = { "r" }, classes = { "grid-flow-row" } },
+    { keymaps = { "c" }, classes = { "grid-flow-col" } },
+    { keymaps = { "d" }, classes = { "grid-flow-dense" } },
+    { keymaps = { "R" }, classes = { "grid-flow-row-dense" } },
+    { keymaps = { "C" }, classes = { "grid-flow-col-dense" } },
+}
+M.change_grid_flow = function() M._classes_group_changer_menu(grid_flow_group) end
+
 return M
