@@ -56,7 +56,17 @@ local handle_flex = function(input)
     return string.format("%s_%s_%s%%", unpack(split))
 end
 
-local raw_input_group = { "grow", "shrink", "order", "aspect-ratio", "z", "grid-cols" }
+local raw_input_group = {
+    "grow",
+    "shrink",
+    "order",
+    "aspect-ratio",
+    "z",
+    "grid-cols",
+    "col-span",
+    "col-start",
+    "col-end",
+}
 
 local input_to_pms_value = function(input, property)
     if input == "" then input = "0" end
