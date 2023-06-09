@@ -341,4 +341,12 @@ local position_group = {
 }
 M.change_position = function() M._classes_group_changer_menu(position_group) end
 
+-- Visibility
+local visibility_group = {
+    { keymaps = { "v", "V" }, classes = { "visible" } },
+    { keymaps = { "i", "I" }, classes = { "invisible" } },
+    { keymaps = { "c", "C" }, classes = { "collapse" } },
+}
+M.change_visibility = function() M._classes_group_changer_menu(visibility_group) end
+
 return M

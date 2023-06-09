@@ -276,6 +276,7 @@ local classes_groups_dict = {
     ["oY"] = { cgm.change_overscroll_y },
 
     ["po"] = { cgm.change_position },
+    ["V"] = { cgm.change_visibility },
 }
 
 for keymap, fn_and_args in pairs(classes_groups_dict) do
