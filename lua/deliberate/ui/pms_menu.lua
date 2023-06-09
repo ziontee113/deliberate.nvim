@@ -9,23 +9,30 @@ local M = {}
 -------------------------------------------- Format Function
 
 local non_dashy_group = { "p", "m" }
-local in_non_dash_group = function(property) return vim.tbl_contains(non_dashy_group, property) end
+local in_non_dashy_group = function(property) return vim.tbl_contains(non_dashy_group, property) end
 
 local format_class = function(property, axis, current_item)
-    if current_item.text == "" and current_item.property_and_axis then
-        if axis == "" then
-            return property
+    if current_item.text == "" then
+        if current_item.property_and_axis then
+            if axis == "" then
+                return property
+            else
+                return string.format("%s-%s", property, axis)
+            end
+        elseif current_item.absolute then
+            return current_item.absolute
         else
-            return string.format("%s-%s", property, axis)
+            return ""
         end
     end
-    if current_item.text == "" and current_item.absolute then return current_item.absolute end
-    if current_item.text == "" then return "" end
+
     if not axis or axis == "" then return string.format("%s-%s", property, current_item.text) end
-    if in_non_dash_group(property) then
+
+    if in_non_dashy_group(property) then
         return string.format("%s%s-%s", property, axis, current_item.text)
+    else
+        return string.format("%s-%s-%s", property, axis, current_item.text)
     end
-    return string.format("%s-%s-%s", property, axis, current_item.text)
 end
 
 -------------------------------------------- Window Functions
@@ -64,7 +71,7 @@ local show_arbitrary_input = function(metadata, property, axis, fn)
         on_change = function(result)
             local value = transformer.input_to_pms_value(result, property)
 
-            if in_non_dash_group(property) then
+            if in_non_dashy_group(property) then
                 value = string.format("%s%s-[%s]", property, axis, value)
             else
                 if not axis or axis == "" then
