@@ -85,4 +85,14 @@ describe("input_to_pms_value()", function()
         local want2 = "2_2_0%"
         assert.equals(want2, transformer.input_to_pms_value(input2, "flex"))
     end)
+
+    it("given numbers input and P as last character, return input value with px unit", function()
+        local input = "20P"
+        local want = "20%"
+        assert.equals(want, transformer.input_to_pms_value(input))
+
+        local input2 = "20%"
+        local want2 = "20%"
+        assert.equals(want2, transformer.input_to_pms_value(input2))
+    end)
 end)

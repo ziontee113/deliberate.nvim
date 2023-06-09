@@ -76,6 +76,7 @@ M.input_to_pms_value = function(input, property)
         r = "rem", re = "rem", rem = "rem",
         x = "px",  px = "px",  z = "px",
         p = "pt",  pt = "pt",  t = "pt",
+        P = "%", ["%"] = "%"
     }
     return num .. unit_tbl[chars]
 end

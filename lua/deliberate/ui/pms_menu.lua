@@ -446,4 +446,15 @@ local flex_dict = {
 
 M.change_flex = function() M._menu("flex", false, tcm._change_tailwind_classes, flex_dict) end
 
+-------------------------------------------- Basis (Flex Basis)
+
+local basis_dict = {
+    "",
+    { keymaps = { "A" }, text = "auto" },
+    { keymaps = { "F" }, text = "full" },
+}
+M.change_basis = function()
+    M._menu("basis", false, tcm._change_tailwind_classes, pms_dict, basis_dict, percentage_dict)
+end
+
 return M

@@ -82,7 +82,7 @@ local singles = {
     "text",
     "ring", "ring-offset",
     "w", "h", "min-w", "min-h", "max-w", "max-h",
-    "flex",
+    "flex", "basis",
 }
 
 local general_pms_postfixes = { "%-[%d%.%a/]+$", "%-%[[%d%.]+[%a%%]+]$" }

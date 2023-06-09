@@ -181,6 +181,7 @@ local non_axis_map = {
     ["xw"] = pms_menu.change_max_width,
     ["xe"] = pms_menu.change_max_height,
     ["ff"] = pms_menu.change_flex,
+    ["fb"] = pms_menu.change_basis,
 }
 add_heads_from_tbl(non_axis_map)
 
