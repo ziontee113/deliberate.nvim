@@ -247,4 +247,11 @@ local clear_group = {
 }
 M.change_clear = function() M._classes_group_changer_menu(clear_group) end
 
+-- Isolate
+local isolate_group = {
+    { keymaps = { "i" }, classes = { "isolate" } },
+    { keymaps = { "a", "A" }, classes = { "isolation-auto" } },
+}
+M.change_isolate = function() M._classes_group_changer_menu(isolate_group) end
+
 return M

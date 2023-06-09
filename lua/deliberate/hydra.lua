@@ -263,6 +263,7 @@ local classes_groups_dict = {
     ["di"] = { cgm.change_display },
     ["fl"] = { cgm.change_float },
     ["cl"] = { cgm.change_clear },
+    ["I"] = { cgm.change_isolate },
 }
 
 for keymap, fn_and_args in pairs(classes_groups_dict) do
