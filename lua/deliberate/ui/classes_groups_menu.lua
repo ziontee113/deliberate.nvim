@@ -139,4 +139,43 @@ local container_group = {
 }
 M.change_container = function() M._classes_group_changer_menu(container_group) end
 
+-- Break Before / After / Inside
+
+local break_after_group = {
+    { keymaps = { "A" }, classes = { "break-after-auto" } },
+    { keymaps = { "a" }, classes = { "break-after-avoid" } },
+    { keymaps = { "*" }, classes = { "break-after-all" } },
+    "",
+    { keymaps = { "p" }, classes = { "break-after-page" } },
+    { keymaps = { "P" }, classes = { "break-after-avoid-page" } },
+    "",
+    { keymaps = { "l" }, classes = { "break-after-left" } },
+    { keymaps = { "r" }, classes = { "break-after-right" } },
+    { keymaps = { "c" }, classes = { "break-after-column" } },
+}
+M.change_break_after = function() M._classes_group_changer_menu(break_after_group) end
+
+local break_before_group = {
+    { keymaps = { "A" }, classes = { "break-before-auto" } },
+    { keymaps = { "a" }, classes = { "break-before-avoid" } },
+    { keymaps = { "*" }, classes = { "break-before-all" } },
+    "",
+    { keymaps = { "p" }, classes = { "break-before-page" } },
+    { keymaps = { "P" }, classes = { "break-before-avoid-page" } },
+    "",
+    { keymaps = { "l" }, classes = { "break-before-left" } },
+    { keymaps = { "r" }, classes = { "break-before-right" } },
+    { keymaps = { "c" }, classes = { "break-before-column" } },
+}
+M.change_break_before = function() M._classes_group_changer_menu(break_before_group) end
+
+local break_inside_group = {
+    { keymaps = { "A" }, classes = { "break-inside-auto" } },
+    { keymaps = { "a" }, classes = { "break-inside-avoid" } },
+    "",
+    { keymaps = { "P" }, classes = { "break-inside-avoid-page" } },
+    { keymaps = { "c" }, classes = { "break-inside-column" } },
+}
+M.change_break_inside = function() M._classes_group_changer_menu(break_inside_group) end
+
 return M

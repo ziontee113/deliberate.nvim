@@ -5,7 +5,7 @@ local selection = require("deliberate.lib.selection")
 local navigator = require("deliberate.api.navigator")
 local pms_menu = require("deliberate.ui.pms_menu")
 local colors_menu = require("deliberate.ui.colors_menu")
-local classes_groups_menu = require("deliberate.ui.classes_groups_menu")
+local cgm = require("deliberate.ui.classes_groups_menu")
 local uniform = require("deliberate.api.uniform")
 local utils = require("deliberate.lib.utils")
 
@@ -240,19 +240,23 @@ end
 -------------------------------------------- Replace Classes Groups
 
 local classes_groups_dict = {
-    ["fl"] = { classes_groups_menu.change_flex_properties },
-    ["fw"] = { classes_groups_menu.change_flex_wrap_properties },
-    ["a"] = { classes_groups_menu.change_flex_align_properties },
+    ["fl"] = { cgm.change_flex_properties },
+    ["fw"] = { cgm.change_flex_wrap_properties },
+    ["a"] = { cgm.change_flex_align_properties },
 
-    ["fS"] = { classes_groups_menu.change_font_style },
-    ["fW"] = { classes_groups_menu.change_font_weight },
-    ["<A-a>"] = { classes_groups_menu.change_text_align },
-    ["<A-d>"] = { classes_groups_menu.change_text_decoration },
+    ["fS"] = { cgm.change_font_style },
+    ["fW"] = { cgm.change_font_weight },
+    ["<A-a>"] = { cgm.change_text_align },
+    ["<A-d>"] = { cgm.change_text_decoration },
 
-    ["ds"] = { classes_groups_menu.change_divide_style },
-    ["bs"] = { classes_groups_menu.change_border_style },
+    ["ds"] = { cgm.change_divide_style },
+    ["bs"] = { cgm.change_border_style },
 
-    ["C"] = { classes_groups_menu.change_container },
+    ["bB"] = { cgm.change_break_before },
+    ["bA"] = { cgm.change_break_after },
+    ["bI"] = { cgm.change_break_inside },
+
+    ["C"] = { cgm.change_container },
 }
 
 for keymap, fn_and_args in pairs(classes_groups_dict) do
