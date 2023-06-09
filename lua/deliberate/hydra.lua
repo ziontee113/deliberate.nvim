@@ -266,6 +266,10 @@ local classes_groups_dict = {
     ["I"] = { cgm.change_isolate },
     ["of"] = { cgm.change_object_fit },
     ["op"] = { cgm.change_object_positon },
+
+    ["ov"] = { cgm.change_overflow },
+    ["ox"] = { cgm.change_overflow_x },
+    ["oy"] = { cgm.change_overflow_y },
 }
 
 for keymap, fn_and_args in pairs(classes_groups_dict) do

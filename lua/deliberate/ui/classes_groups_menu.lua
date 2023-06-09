@@ -279,4 +279,33 @@ local object_positon_group = {
 }
 M.change_object_positon = function() M._classes_group_changer_menu(object_positon_group) end
 
+-- Overflow
+
+local overflow_group = {
+    { keymaps = { "A", "a" }, classes = { "overflow-auto" } },
+    { keymaps = { "h", "H" }, classes = { "overflow-hidden" } },
+    { keymaps = { "c", "C" }, classes = { "overflow-clip" } },
+    { keymaps = { "v", "V" }, classes = { "overflow-visible" } },
+    { keymaps = { "s", "S" }, classes = { "overflow-scroll" } },
+}
+M.change_overflow = function() M._classes_group_changer_menu(overflow_group) end
+
+local overflow_x_group = {
+    { keymaps = { "a", "A" }, classes = { "overflow-x-auto" } },
+    { keymaps = { "h", "H" }, classes = { "overflow-x-hidden" } },
+    { keymaps = { "c", "C" }, classes = { "overflow-x-clip" } },
+    { keymaps = { "v", "V" }, classes = { "overflow-x-visible" } },
+    { keymaps = { "s", "S" }, classes = { "overflow-x-scroll" } },
+}
+M.change_overflow_x = function() M._classes_group_changer_menu(overflow_x_group) end
+
+local overflow_y_group = {
+    { keymaps = { "a", "A" }, classes = { "overflow-y-auto" } },
+    { keymaps = { "h", "B" }, classes = { "overflow-y-hidden" } },
+    { keymaps = { "c", "C" }, classes = { "overflow-y-clip" } },
+    { keymaps = { "v", "V" }, classes = { "overflow-y-visible" } },
+    { keymaps = { "s", "S" }, classes = { "overflow-y-scroll" } },
+}
+M.change_overflow_y = function() M._classes_group_changer_menu(overflow_y_group) end
+
 return M
