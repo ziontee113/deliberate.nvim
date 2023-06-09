@@ -6,32 +6,10 @@ local menu_repeater = require("deliberate.api.menu_repeater")
 
 local M = {}
 
--------------------------------------------- Format Functions
+-------------------------------------------- Format Function
 
-local get_3_separator_class = function(axis, property, current_item)
-    return string.format("%s-%s-%s", property, axis, current_item.text)
-end
-
-local dashy_group = {
-    "border",
-    "space",
-    "divide",
-    "opacity",
-    "border-opacity",
-    "divide-opacity",
-    "ring-opacity",
-    "text",
-    "ring",
-    "ring-offset",
-    "w",
-    "h",
-    "min-w",
-    "min-h",
-    "max-w",
-    "max-h",
-    "rounded",
-}
-local in_dashy_group = function(property) return vim.tbl_contains(dashy_group, property) end
+local non_dashy_group = { "p", "m" }
+local in_non_dash_group = function(property) return vim.tbl_contains(non_dashy_group, property) end
 
 local format_class = function(property, axis, current_item)
     if current_item.text == "" and current_item.property_and_axis then
@@ -44,8 +22,10 @@ local format_class = function(property, axis, current_item)
     if current_item.text == "" and current_item.absolute then return current_item.absolute end
     if current_item.text == "" then return "" end
     if not axis or axis == "" then return string.format("%s-%s", property, current_item.text) end
-    if in_dashy_group(property) then return get_3_separator_class(axis, property, current_item) end
-    return string.format("%s%s-%s", property, axis, current_item.text)
+    if in_non_dash_group(property) then
+        return string.format("%s%s-%s", property, axis, current_item.text)
+    end
+    return string.format("%s-%s-%s", property, axis, current_item.text)
 end
 
 -------------------------------------------- Window Functions
@@ -84,14 +64,14 @@ local show_arbitrary_input = function(metadata, property, axis, fn)
         on_change = function(result)
             local value = transformer.input_to_pms_value(result, property)
 
-            if in_dashy_group(property) then
+            if in_non_dash_group(property) then
+                value = string.format("%s%s-[%s]", property, axis, value)
+            else
                 if not axis or axis == "" then
                     value = string.format("%s-[%s]", property, value)
                 else
                     value = string.format("%s-%s-[%s]", property, axis, value)
                 end
-            else
-                value = string.format("%s%s-[%s]", property, axis, value)
             end
 
             fn({ property = property, axis = axis, value = value })
