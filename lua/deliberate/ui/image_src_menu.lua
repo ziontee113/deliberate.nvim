@@ -5,6 +5,15 @@ local M = {}
 
 -------------------------------------------- Local Functions
 
+local trim_pattern_from_strings = function(paths, pattern)
+    local results = {}
+    for _, path in ipairs(paths) do
+        local trimmed_path = string.gsub(path, pattern, "")
+        table.insert(results, trimmed_path)
+    end
+    return results
+end
+
 local find_image_paths = function(callback)
     local cmd = { "fd" }
     local extensions = { "jpg", "png", "svg" }
@@ -21,6 +30,9 @@ local find_image_paths = function(callback)
             for _, path in ipairs(data) do
                 if path ~= "" then table.insert(paths, path) end
             end
+
+            paths = trim_pattern_from_strings(paths, "^public")
+
             callback(paths)
         end,
     })
