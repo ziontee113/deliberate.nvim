@@ -487,9 +487,9 @@ local one_to_twelve_dict = {
     { keymaps = { "7" }, text = "7" },
     { keymaps = { "8" }, text = "8" },
     { keymaps = { "9" }, text = "9" },
-    { keymaps = { "u" }, text = "10" },
-    { keymaps = { "i" }, text = "11" },
-    { keymaps = { "o" }, text = "12" },
+    { keymaps = { "w" }, text = "10" },
+    { keymaps = { "e" }, text = "11" },
+    { keymaps = { "r" }, text = "12" },
 }
 
 local order_dict = {
@@ -516,21 +516,23 @@ end
 -------------------------------------------- Columns
 
 local columns_dict = {
+    "",
     { keymaps = { "A" }, text = "auto" },
     "",
     { keymaps = { "#" }, text = "3xs" },
     { keymaps = { "@" }, text = "2xs" },
     { keymaps = { "x" }, text = "xs" },
     { keymaps = { "s" }, text = "sm" },
-    { keymaps = { "m" }, text = "md" },
-    { keymaps = { "l" }, text = "lg" },
-    { keymaps = { "1" }, text = "xl" },
-    { keymaps = { "2" }, text = "2xl" },
-    { keymaps = { "3" }, text = "3xl" },
-    { keymaps = { "4" }, text = "4xl" },
-    { keymaps = { "5" }, text = "5xl" },
-    { keymaps = { "6" }, text = "6xl" },
-    { keymaps = { "7" }, text = "7xl" },
+    { keymaps = { "M" }, text = "md" },
+    { keymaps = { "L" }, text = "lg" },
+    "",
+    { keymaps = { "m" }, text = "xl" },
+    { keymaps = { "," }, text = "2xl" },
+    { keymaps = { "." }, text = "3xl" },
+    { keymaps = { "j" }, text = "4xl" },
+    { keymaps = { "k" }, text = "5xl" },
+    { keymaps = { "l" }, text = "6xl" },
+    { keymaps = { "u" }, text = "7xl" },
 }
 M.change_columns = function()
     M._menu("columns", false, tcm._change_tailwind_classes, one_to_twelve_dict, columns_dict)
