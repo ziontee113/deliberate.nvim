@@ -250,6 +250,8 @@ local classes_groups_dict = {
 
     ["ds"] = { classes_groups_menu.change_divide_style },
     ["bs"] = { classes_groups_menu.change_border_style },
+
+    ["C"] = { classes_groups_menu.change_container },
 }
 
 for keymap, fn_and_args in pairs(classes_groups_dict) do

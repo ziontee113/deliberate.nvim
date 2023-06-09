@@ -133,4 +133,10 @@ local border_style_group = {
 }
 M.change_border_style = function() M._classes_group_changer_menu(border_style_group) end
 
+-- Container
+local container_group = {
+    { keymaps = { "C", "c" }, classes = { "container" } },
+}
+M.change_container = function() M._classes_group_changer_menu(container_group) end
+
 return M
