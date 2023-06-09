@@ -66,7 +66,11 @@ local input_to_pms_value = function(input, property)
 
     if string.find(property, "flex") then return handle_flex(input) end
 
-    if string.find(property, "opacity") then return input .. "%" end
+    if string.find(property, "opacity") then
+        local value = tonumber(input) or 0
+        return value .. "%"
+    end
+
     if tonumber(input) then return input .. "px" end
 
     local _, idx = string.find(input, "%D")
@@ -83,7 +87,12 @@ local input_to_pms_value = function(input, property)
         p = "pt",  pt = "pt",  t = "pt",
         P = "%", ["%"] = "%"
     }
-    return num .. unit_tbl[chars]
+    local unit = unit_tbl[chars]
+
+    if not num then num = 0 end
+    if not unit then unit = "px" end
+
+    return num .. unit
 end
 
 M.input_to_pms_value = function(input, property)
