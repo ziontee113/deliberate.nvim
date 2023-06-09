@@ -264,4 +264,19 @@ local object_fit_group = {
 }
 M.change_object_fit = function() M._classes_group_changer_menu(object_fit_group) end
 
+-- Object Position
+local object_positon_group = {
+    { keymaps = { "T" }, classes = { "object-top" } },
+    { keymaps = { "B" }, classes = { "object-bottom" } },
+    { keymaps = { "c", "C" }, classes = { "object-center" } },
+    { keymaps = { "L", "h", "H" }, classes = { "object-left" } },
+    { keymaps = { "R" }, classes = { "object-right" } },
+    "",
+    { keymaps = { "lb" }, classes = { "object-left-bottom" } },
+    { keymaps = { "lt" }, classes = { "object-left-top" } },
+    { keymaps = { "rb" }, classes = { "object-right-bottom" } },
+    { keymaps = { "rt" }, classes = { "object-right-top" } },
+}
+M.change_object_positon = function() M._classes_group_changer_menu(object_positon_group) end
+
 return M

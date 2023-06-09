@@ -265,6 +265,7 @@ local classes_groups_dict = {
     ["cl"] = { cgm.change_clear },
     ["I"] = { cgm.change_isolate },
     ["of"] = { cgm.change_object_fit },
+    ["op"] = { cgm.change_object_positon },
 }
 
 for keymap, fn_and_args in pairs(classes_groups_dict) do
