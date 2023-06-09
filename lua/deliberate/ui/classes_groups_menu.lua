@@ -185,4 +185,11 @@ local box_decoration_group = {
 }
 M.change_box_decoration = function() M._classes_group_changer_menu(box_decoration_group) end
 
+-- Box Sizing
+local box_sizing_group = {
+    { keymaps = { "b" }, classes = { "box-border" } },
+    { keymaps = { "c" }, classes = { "box-content" } },
+}
+M.change_box_sizing = function() M._classes_group_changer_menu(box_sizing_group) end
+
 return M
