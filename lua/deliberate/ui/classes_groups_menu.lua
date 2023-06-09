@@ -254,4 +254,14 @@ local isolate_group = {
 }
 M.change_isolate = function() M._classes_group_changer_menu(isolate_group) end
 
+-- Object Fit
+local object_fit_group = {
+    { keymaps = { "C" }, classes = { "object-contain" } },
+    { keymaps = { "c" }, classes = { "object-cover" } },
+    { keymaps = { "f", "F" }, classes = { "object-fill" } },
+    { keymaps = { "n", "/" }, classes = { "object-none" } },
+    { keymaps = { "s", "S" }, classes = { "object-scale-down" } },
+}
+M.change_object_fit = function() M._classes_group_changer_menu(object_fit_group) end
+
 return M
