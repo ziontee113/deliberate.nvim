@@ -28,6 +28,9 @@ end
 local stop_insert_and_close_window = function(win)
     vim.cmd("stopinsert")
     vim.api.nvim_win_close(win, true)
+
+    -- NOTE: why the heck do I have to do this? `nvim_win_close` just move the cursor for no good reasons.
+    vim.defer_fn(function() vim.cmd("norm! ^") end, 50)
 end
 
 local set_close_keymaps = function(win, buf, keymaps_tbl)
