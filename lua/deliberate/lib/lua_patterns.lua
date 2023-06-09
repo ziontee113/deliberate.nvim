@@ -87,7 +87,8 @@ local singles = {
     "aspect-ratio", "columns",
     "top", "bottom", "left", "right",
     "start", "end", "z",
-    "grid-cols", "col-span", "col-start", "col-end"
+    "grid-cols", "col-span", "col-start", "col-end",
+    "grid-rows", "row-span", "row-start", "row-end",
 }
 
 local general_pms_postfixes = { "%-[%d%.%a/]+$", "%-%[[%-%d%.]+[%a%%]+]$" }
@@ -117,6 +118,7 @@ local property_specific_patterns = {
     ["col-span"] = { "^col%-span%-%[.+]$" },
     ["col-start"] = { "^col%-start%-%[.+]$" },
     ["col-end"] = { "^col%-end%-%[.+]$" },
+    ["grid-rows"] = { "^grid%-rows%-%[.+]$" },
 }
 
 -- Add properties with axies

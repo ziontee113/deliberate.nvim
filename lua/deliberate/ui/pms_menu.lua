@@ -621,7 +621,7 @@ M.change_z_index = function() M._menu("z", false, tcm._change, { z_index_D, nega
 
 -------------------------------------------- Grid Template Columns
 
-local grid_D = {
+local grid12_D = {
     { keymaps = { "j", "1" }, text = "1" },
     { keymaps = { "k", "2" }, text = "2" },
     { keymaps = { "l", "3" }, text = "3" },
@@ -635,19 +635,39 @@ local grid_D = {
     { keymaps = { "e", "s" }, text = "11" },
     { keymaps = { "r", "d" }, text = "12" },
 }
+local grid_none_D = { { keymaps = { "/", "n", "N" }, text = "none" } }
 
-local grid_cols_D = { { keymaps = { "/", "n", "N" }, text = "none" } }
-M.change_grid_cols = function() M._menu("grid-cols", false, tcm._change, { grid_D, grid_cols_D }) end
+M.change_grid_cols = function() M._menu("grid-cols", false, tcm._change, { grid12_D, grid_none_D }) end
 
--------------------------------------------- Grid Column / Start / End
+-------------------------------------------- Grid Column Start / End
 
 local grid_full_D = { { keymaps = { "f", "F" }, text = "full" } }
 local grid_auto_D = { { keymaps = { "a", "A" }, text = "auto" } }
 
 M.change_col_span = function()
-    M._menu("col-span", false, tcm._change, { grid_D, grid_full_D, grid_auto_D })
+    M._menu("col-span", false, tcm._change, { grid12_D, grid_full_D, grid_auto_D })
 end
-M.change_col_start = function() M._menu("col-start", false, tcm._change, { grid_D, grid_auto_D }) end
-M.change_col_end = function() M._menu("col-end", false, tcm._change, { grid_D, grid_auto_D }) end
+M.change_col_start = function() M._menu("col-start", false, tcm._change, { grid12_D, grid_auto_D }) end
+M.change_col_end = function() M._menu("col-end", false, tcm._change, { grid12_D, grid_auto_D }) end
+
+-------------------------------------------- Grid Template Rows
+
+local grid6_D = {
+    { keymaps = { "j", "1" }, text = "1" },
+    { keymaps = { "k", "2" }, text = "2" },
+    { keymaps = { "l", "3" }, text = "3" },
+    { keymaps = { "u", "4" }, text = "4" },
+    { keymaps = { "i", "5" }, text = "5" },
+    { keymaps = { "o", "6" }, text = "6" },
+}
+M.change_grid_rows = function() M._menu("grid-rows", false, tcm._change, { grid6_D, grid_none_D }) end
+
+-------------------------------------------- Grid Row Start / End
+
+M.change_row_span = function()
+    M._menu("row-span", false, tcm._change, { grid12_D, grid_full_D, grid_auto_D })
+end
+M.change_row_start = function() M._menu("row-start", false, tcm._change, { grid12_D, grid_auto_D }) end
+M.change_row_end = function() M._menu("row-end", false, tcm._change, { grid12_D, grid_auto_D }) end
 
 return M

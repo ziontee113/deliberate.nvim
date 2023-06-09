@@ -202,6 +202,8 @@ local non_axis_map = {
     ["cS"] = pms_menu.change_col_span,
     ["cs"] = pms_menu.change_col_start,
     ["ce"] = pms_menu.change_col_end,
+
+    ["gr"] = pms_menu.change_grid_rows,
 }
 add_heads_from_tbl(non_axis_map)
 

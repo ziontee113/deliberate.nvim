@@ -66,6 +66,10 @@ local raw_input_group = {
     "col-span",
     "col-start",
     "col-end",
+    "grid-rows",
+    "row-span",
+    "row-start",
+    "row-end",
 }
 
 local input_to_pms_value = function(input, property)
