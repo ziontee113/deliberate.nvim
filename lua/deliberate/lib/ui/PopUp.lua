@@ -74,12 +74,20 @@ function PopUp:_execute_callback(item_index)
 
     local callback = self.current_step.callback
     if callback then
-        local close_popup_early = callback(
-            self.results,
-            current_item,
-            { target_win = self.target_win, target_buf = self.target_buf }
-        )
-        if close_popup_early then self.step_index = #self.steps end
+        local callback_result = callback(self.results, current_item, {
+            target_win = self.target_win,
+            target_buf = self.target_buf,
+            current_step_items = self.current_step.items,
+        })
+        if callback_result == true then self.step_index = #self.steps end
+        if type(callback_result) == "table" then
+            if callback_result.updated_items then
+                self.steps[self.step_index].items = callback_result.updated_items
+            end
+            if callback_result.increment_step_index_by then
+                self.step_index = self.step_index + callback_result.increment_step_index_by
+            end
+        end
     end
 
     self:_advance()
@@ -195,7 +203,7 @@ function PopUp:_advance()
 
     self.current_step = self.steps[self.step_index]
 
-    if self.step_index == 1 then
+    if self.step_index == 1 and not self.buf then
         self.buf = vim.api.nvim_create_buf(false, true)
         vim.api.nvim_buf_set_option(self.buf, "filetype", self.filetype or "")
     end

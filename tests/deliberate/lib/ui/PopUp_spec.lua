@@ -103,6 +103,47 @@ describe("PopUp", function()
     end)
 end)
 
+describe("PopUp items can be manipulated using callback function", function()
+    it("works", function()
+        local popup = PopUp:new({
+            steps = {
+                {
+                    items = {
+                        { keymaps = { "l" }, text = "LE SSERAFIM" },
+                        { keymaps = { "u" }, text = "UNFORGIVEN" },
+                        { keymaps = { "-" }, text = "", negatize = true, hidden = true },
+                    },
+                    callback = function(_, current_item, metadata)
+                        if current_item.negatize == true then
+                            local updated_items = {}
+                            for _, item in ipairs(metadata.current_step_items) do
+                                item.text = "-" .. item.text
+                                table.insert(updated_items, item)
+                            end
+
+                            return {
+                                increment_step_index_by = -1,
+                                updated_items = updated_items,
+                            }
+                        end
+                    end,
+                },
+            },
+        })
+
+        popup:show()
+
+        utils.feed_keys("-")
+
+        local popup_lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+        local want = {
+            "l -LE SSERAFIM",
+            "u -UNFORGIVEN",
+        }
+        assert.same(want, popup_lines)
+    end)
+end)
+
 describe("PopUp combined with Input", function()
     it("returns correct callback result", function()
         local myvar
