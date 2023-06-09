@@ -70,4 +70,19 @@ describe("input_to_pms_value()", function()
         local want = "99vw"
         assert.equals(want, transformer.input_to_pms_value(input))
     end)
+
+    it("formats flex correctly, given complete input", function()
+        local input = "2 2 0"
+        local want = "2_2_0%"
+        assert.equals(want, transformer.input_to_pms_value(input, "flex"))
+    end)
+    it("formats flex correctly, given incomplete input", function()
+        local input = "2"
+        local want = "2_2_0%"
+        assert.equals(want, transformer.input_to_pms_value(input, "flex"))
+
+        local input2 = "2 2"
+        local want2 = "2_2_0%"
+        assert.equals(want2, transformer.input_to_pms_value(input2, "flex"))
+    end)
 end)

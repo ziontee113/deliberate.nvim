@@ -433,4 +433,15 @@ M.change_border_radius = function(o)
     M._menu("rounded", o.axis, tcm._change_tailwind_classes, rounded_dict)
 end
 
+-------------------------------------------- Flex
+
+local flex_dict = {
+    { keymaps = { "o", "1" }, text = "1" },
+    { keymaps = { "a" }, text = "auto" },
+    { keymaps = { "i" }, text = "initial" },
+    { keymaps = { "n", "/" }, text = "none" },
+}
+
+M.change_flex = function() M._menu("flex", false, tcm._change_tailwind_classes, flex_dict) end
+
 return M

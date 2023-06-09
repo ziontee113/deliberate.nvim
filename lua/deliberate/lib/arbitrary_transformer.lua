@@ -1,10 +1,12 @@
+local lua_patterns = require("deliberate.lib.lua_patterns")
 local utils = require("deliberate.lib.utils")
 local M = {}
 
 local input_matches_css_color = function(input)
-    local lua_patterns = require("deliberate.lib.lua_patterns")
     return vim.tbl_contains(lua_patterns.css_colors, input)
 end
+
+-------------------------------------------- Input to Color
 
 M.input_to_color = function(input)
     if input_matches_css_color(input) then return input end
@@ -42,10 +44,23 @@ M.input_to_color = function(input)
     return string.format("#%s", input)
 end
 
+-------------------------------------------- Input to PMS
+
+local handle_flex = function(input)
+    local split = vim.split(input, " ")
+    split = utils.remove_empty_strings(split)
+
+    if not split[2] then split[2] = split[1] end
+    if not split[3] then split[3] = "0" end
+
+    return string.format("%s_%s_%s%%", unpack(split))
+end
+
 M.input_to_pms_value = function(input, property)
     if input == "" then input = "0" end
     if not property then property = "" end
 
+    if string.find(property, "flex") then return handle_flex(input) end
     if string.find(property, "opacity") then return input .. "%" end
     if tonumber(input) then return input .. "px" end
 

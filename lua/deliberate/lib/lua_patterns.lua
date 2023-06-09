@@ -82,6 +82,7 @@ local singles = {
     "text",
     "ring", "ring-offset",
     "w", "h", "min-w", "min-h", "max-w", "max-h",
+    "flex",
 }
 
 local general_pms_postfixes = { "%-[%d%.%a]+$", "%-%[[%d%.]+[%a%%]+]$" }
@@ -101,6 +102,7 @@ local property_specific_patterns = {
         ["bl"] = { "^rounded%-bl$" },
         ["br"] = { "^rounded%-br$" },
     },
+    ["flex"] = { "%-%[[%_%d%%]+]$" },
 }
 
 -- Add properties with axies
@@ -132,6 +134,9 @@ for _, property in ipairs(singles) do
     local tbl = {}
     for _, postfix in ipairs(general_pms_postfixes) do
         local pattern = "^" .. string.gsub(property, vim.pesc("-"), vim.pesc("%-")) .. postfix
+        table.insert(tbl, pattern)
+    end
+    for _, pattern in ipairs(property_specific_patterns[property] or {}) do
         table.insert(tbl, pattern)
     end
     M[property] = tbl
