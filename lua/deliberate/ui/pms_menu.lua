@@ -471,4 +471,26 @@ M.change_basis = function()
     M._menu("basis", false, tcm._change_tailwind_classes, pms_dict, basis_dict, percentage_dict)
 end
 
+-------------------------------------------- Order
+
+local order_dict = {
+    { keymaps = { "1" }, text = "1" },
+    { keymaps = { "2" }, text = "2" },
+    { keymaps = { "3" }, text = "3" },
+    { keymaps = { "4" }, text = "4" },
+    { keymaps = { "5" }, text = "5" },
+    { keymaps = { "6" }, text = "6" },
+    { keymaps = { "7" }, text = "7" },
+    { keymaps = { "8" }, text = "8" },
+    { keymaps = { "9" }, text = "9" },
+    { keymaps = { "u" }, text = "10" },
+    { keymaps = { "i" }, text = "11" },
+    { keymaps = { "o" }, text = "12" },
+    "",
+    { keymaps = { "f" }, text = "first" },
+    { keymaps = { "l" }, text = "last" },
+    { keymaps = { "n" }, text = "none" },
+}
+M.change_order = function() M._menu("order", false, tcm._change_tailwind_classes, order_dict) end
+
 return M

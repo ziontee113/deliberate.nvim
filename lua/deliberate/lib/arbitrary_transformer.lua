@@ -56,13 +56,16 @@ local handle_flex = function(input)
     return string.format("%s_%s_%s%%", unpack(split))
 end
 
+local raw_input_group = { "grow", "shrink", "order" }
+
 M.input_to_pms_value = function(input, property)
     if input == "" then input = "0" end
     if not property then property = "" end
 
+    if vim.tbl_contains(raw_input_group, property) then return input end
+
     if string.find(property, "flex") then return handle_flex(input) end
-    if string.find(property, "grow") then return input end
-    if string.find(property, "shrink") then return input end
+
     if string.find(property, "opacity") then return input .. "%" end
     if tonumber(input) then return input .. "px" end
 
