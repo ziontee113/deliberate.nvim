@@ -61,6 +61,12 @@ describe("tag.add() on current catalyst node", function()
         </div>]]
         )
     end)
+
+    it("can add self closing tag", function()
+        initiate("22gg^", "<li>Contacts</li>")
+        html_tag.add({ tag = "img", destination = "next", self_closing = true })
+        h.catalyst_has("<img/>", { 23, 8 })
+    end)
 end)
 
 describe("tag.add() on multiple (all) selected nodes", function()

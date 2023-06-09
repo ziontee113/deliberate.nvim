@@ -16,14 +16,16 @@ local tag_map = {
     { keymaps = { "4" }, text = "h4" },
     { keymaps = { "5" }, text = "h5" },
     { keymaps = { "6" }, text = "h6" },
+    { keymaps = { "p" }, text = "p" },
     "",
     { keymaps = { "l" }, text = "li" },
     { keymaps = { "s" }, text = "span" },
     "",
     { keymaps = { "b" }, text = "button" },
+    { keymaps = { "i" }, text = "img", self_closing = true },
 }
 
-M._add_tag_with_count = function(tag, destination, count)
+M._add_tag_with_count = function(tag, destination, self_closing, count)
     vim.bo[catalyst.buf()].undolevels = vim.bo[catalyst.buf()].undolevels
     selection.archive_for_undo()
     require("deliberate.api.dot_repeater").register(M._add_tag_with_count, tag, destination, count)
@@ -35,6 +37,7 @@ M._add_tag_with_count = function(tag, destination, count)
             destination = destination,
             tag = tag,
             content = "",
+            self_closing = self_closing,
         })
     end
 end
@@ -49,8 +52,8 @@ M._add_tag_menu = function(destination)
         steps = {
             {
                 items = tag_map,
-                callback = function(_, current_item)
-                    M._add_tag_with_count(current_item.text, destination, count)
+                callback = function(_, item)
+                    M._add_tag_with_count(item.text, destination, item.self_closing, count)
                 end,
             },
         },

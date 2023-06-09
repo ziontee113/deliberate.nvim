@@ -32,6 +32,7 @@ end
 ---@field tag string
 ---@field destination "next" | "previous" | "inside"
 ---@field content string | nil
+---@field self_closing boolean | nil
 
 ---@param indents string
 ---@param index number
@@ -84,6 +85,18 @@ local function handle_destination_inside(index, replacement, indents)
 end
 
 ---@param o tag_add_Opts
+---@param indents string
+---@param content string
+---@return string
+local process_new_tag_content = function(o, indents, content)
+    if o.self_closing then
+        return string.format("%s<%s/>", indents, o.tag, content)
+    else
+        return string.format("%s<%s>%s</%s>", indents, o.tag, content, o.tag)
+    end
+end
+
+---@param o tag_add_Opts
 M.add = function(o)
     for i = 1, #selection.nodes() do
         local update_row, update_col
@@ -91,16 +104,16 @@ M.add = function(o)
         local content = o.content or "###"
         local indents = find_indents(catalyst.buf(), og_node)
 
-        local replacement = string.format("%s<%s>%s</%s>", indents, o.tag, content, o.tag)
+        local new_tag_content = process_new_tag_content(o, indents, content)
 
         if o.destination == "inside" then
             if aggregator.node_is_component(og_node) then
-                update_row, update_col = add_tag_after_node(o.destination, replacement, og_node)
+                update_row, update_col = add_tag_after_node(o.destination, new_tag_content, og_node)
             else
-                update_row, update_col = handle_destination_inside(i, replacement, indents)
+                update_row, update_col = handle_destination_inside(i, new_tag_content, indents)
             end
         else
-            update_row, update_col = add_tag_after_node(o.destination, replacement, og_node)
+            update_row, update_col = add_tag_after_node(o.destination, new_tag_content, og_node)
         end
 
         selection.refresh_tree()
