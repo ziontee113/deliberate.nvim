@@ -238,4 +238,13 @@ local float_group = {
 }
 M.change_float = function() M._classes_group_changer_menu(float_group) end
 
+-- Clear
+local clear_group = {
+    { keymaps = { "r" }, classes = { "clear-right" } },
+    { keymaps = { "l" }, classes = { "clear-left" } },
+    { keymaps = { "b", "2" }, classes = { "clear-both" } },
+    { keymaps = { "n" }, classes = { "clear-none" } },
+}
+M.change_clear = function() M._classes_group_changer_menu(clear_group) end
+
 return M

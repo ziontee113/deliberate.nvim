@@ -186,7 +186,7 @@ local non_axis_map = {
     ["fs"] = pms_menu.change_shrink,
     ["fo"] = pms_menu.change_order,
     ["A"] = pms_menu.change_aspect_ratio,
-    ["cl"] = pms_menu.change_columns,
+    ["co"] = pms_menu.change_columns,
 }
 add_heads_from_tbl(non_axis_map)
 
@@ -262,6 +262,7 @@ local classes_groups_dict = {
 
     ["di"] = { cgm.change_display },
     ["fl"] = { cgm.change_float },
+    ["cl"] = { cgm.change_clear },
 }
 
 for keymap, fn_and_args in pairs(classes_groups_dict) do
