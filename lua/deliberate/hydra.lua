@@ -185,7 +185,7 @@ local non_axis_map = {
     ["fg"] = pms_menu.change_grow,
     ["fs"] = pms_menu.change_shrink,
     ["fo"] = pms_menu.change_order,
-    ["A"] = pms_menu.change_aspect_ratio,
+    ["as"] = pms_menu.change_aspect_ratio,
     ["co"] = pms_menu.change_columns,
 
     ["at"] = pms_menu.change_top,
@@ -247,7 +247,7 @@ end
 local classes_groups_dict = {
     ["F"] = { cgm.change_flex_properties },
     ["fw"] = { cgm.change_flex_wrap_properties },
-    ["a"] = { cgm.change_flex_align_properties },
+    ["A"] = { cgm.change_flex_align_properties },
 
     ["fS"] = { cgm.change_font_style },
     ["fW"] = { cgm.change_font_weight },

@@ -528,6 +528,19 @@ local tlbr_dict = {
     { keymaps = "A", text = "auto" },
     { keymaps = "F", text = "full" },
 }
+local tlbr_percentage_dict = {
+    "",
+    { keymaps = { "l" }, text = "", absolute = "next-page" },
+
+    { page = 2, keymaps = { "q" }, text = "1/2" },
+    { page = 2, keymaps = { "w" }, text = "1/3" },
+    { page = 2, keymaps = { "e" }, text = "1/4" },
+    "",
+    { page = 2, keymaps = { "u" }, text = "2/3" },
+    { page = 2, keymaps = { "i" }, text = "2/4" },
+    "",
+    { page = 2, keymaps = { "s" }, text = "3/4" },
+}
 
 local tlbr_x = {
     lua_patterns.left,
@@ -539,16 +552,16 @@ local tlbr_y = {
 }
 
 M.change_top = function()
-    M._menu("top", false, tcm._change, { pms_dict, tlbr_dict, percentage_dict }, tlbr_y)
+    M._menu("top", false, tcm._change, { pms_dict, tlbr_dict, tlbr_percentage_dict }, tlbr_y)
 end
 M.change_bottom = function()
-    M._menu("bottom", false, tcm._change, { pms_dict, tlbr_dict, percentage_dict }, tlbr_y)
+    M._menu("bottom", false, tcm._change, { pms_dict, tlbr_dict, tlbr_percentage_dict }, tlbr_y)
 end
 M.change_left = function()
-    M._menu("left", false, tcm._change, { pms_dict, tlbr_dict, percentage_dict }, tlbr_x)
+    M._menu("left", false, tcm._change, { pms_dict, tlbr_dict, tlbr_percentage_dict }, tlbr_x)
 end
 M.change_right = function()
-    M._menu("right", false, tcm._change, { pms_dict, tlbr_dict, percentage_dict }, tlbr_x)
+    M._menu("right", false, tcm._change, { pms_dict, tlbr_dict, tlbr_percentage_dict }, tlbr_x)
 end
 
 return M
