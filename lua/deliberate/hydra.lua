@@ -256,6 +256,7 @@ local classes_groups_dict = {
     ["bA"] = { cgm.change_break_after },
     ["bI"] = { cgm.change_break_inside },
 
+    ["bD"] = { cgm.change_box_decoration },
     ["C"] = { cgm.change_container },
 }
 

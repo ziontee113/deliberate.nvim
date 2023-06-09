@@ -178,4 +178,11 @@ local break_inside_group = {
 }
 M.change_break_inside = function() M._classes_group_changer_menu(break_inside_group) end
 
+-- Box Decoration
+local box_decoration_group = {
+    { keymaps = { "c" }, classes = { "box-decoration-clone" } },
+    { keymaps = { "s" }, classes = { "box-decoration-slice" } },
+}
+M.change_box_decoration = function() M._classes_group_changer_menu(box_decoration_group) end
+
 return M
