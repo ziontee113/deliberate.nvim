@@ -84,6 +84,7 @@ local singles = {
     "w", "h", "min-w", "min-h", "max-w", "max-h",
     "flex", "basis", "grow", "shrink", "order",
     "aspect-ratio", "columns",
+    "top", "bottom", "left", "right"
 }
 
 local general_pms_postfixes = { "%-[%d%.%a/]+$", "%-%[[%d%.]+[%a%%]+]$" }

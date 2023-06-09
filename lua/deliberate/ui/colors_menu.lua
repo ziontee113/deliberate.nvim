@@ -112,7 +112,7 @@ end
 
 local txt_ft = "tailwind-text-color-picker"
 local bg_ft = "tailwind-bg-color-picker"
-local fn = tcm._change_tailwind_classes
+local fn = tcm._change
 
 M.text = function() M._menu(txt_ft, "text", tcm.change_text_color) end
 M.background = function() M._menu(bg_ft, "bg", tcm.change_background_color) end

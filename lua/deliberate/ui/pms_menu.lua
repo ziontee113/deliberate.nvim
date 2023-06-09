@@ -3,6 +3,7 @@ local Input = require("deliberate.lib.ui.Input")
 local tcm = require("deliberate.api.tailwind_class_modifier")
 local transformer = require("deliberate.lib.arbitrary_transformer")
 local menu_repeater = require("deliberate.api.menu_repeater")
+local lua_patterns = require("deliberate.lib.lua_patterns")
 
 local M = {}
 
@@ -42,10 +43,9 @@ local general_dict = {
     { keymaps = ",", text = "", hidden = true, arbitrary = true },
 }
 
-local prepare_popup_items = function(...)
+local prepare_popup_items = function(dictionaries)
     local tables = {}
     local last_page = 1
-    local dictionaries = { ... }
 
     table.insert(dictionaries, general_dict)
 
@@ -64,7 +64,7 @@ local prepare_popup_items = function(...)
     return tables
 end
 
-local show_arbitrary_input = function(metadata, property, axis, fn)
+local show_arbitrary_input = function(metadata, property, axis, fn, negatives)
     local input = Input:new({
         title = "Input Value",
         width = 15,
@@ -81,7 +81,12 @@ local show_arbitrary_input = function(metadata, property, axis, fn)
                 end
             end
 
-            fn({ property = property, axis = axis, value = value })
+            fn({
+                property = property,
+                axis = axis,
+                value = value,
+                negative_patterns = negatives,
+            })
         end,
     })
 
@@ -90,7 +95,7 @@ local show_arbitrary_input = function(metadata, property, axis, fn)
     return true
 end
 
-local pms_callback = function(property, axis, fn, current_item, metadata)
+local pms_callback = function(property, axis, fn, current_item, metadata, negatives)
     if current_item.absolute ~= "next-page" then
         if current_item.arbitrary == true then
             return show_arbitrary_input(metadata, property, axis, fn)
@@ -99,6 +104,7 @@ local pms_callback = function(property, axis, fn, current_item, metadata)
                 property = property,
                 axis = axis,
                 value = format_class(property, axis, current_item),
+                negative_patterns = negatives,
             })
         end
 
@@ -106,10 +112,10 @@ local pms_callback = function(property, axis, fn, current_item, metadata)
     end
 end
 
-M._menu = function(property, axis, fn, ...)
-    menu_repeater.register(M._menu, property, axis, fn, ...)
+M._menu = function(property, axis, fn, dictionaries, negatives)
+    menu_repeater.register(M._menu, property, axis, fn, dictionaries)
 
-    local item_tables = prepare_popup_items(...)
+    local item_tables = prepare_popup_items(dictionaries)
 
     local popup = PopUp:new({
         steps = {
@@ -119,7 +125,7 @@ M._menu = function(property, axis, fn, ...)
                     return format_class(property, axis, current_item)
                 end,
                 callback = function(_, current_item, metadata)
-                    return pms_callback(property, axis, fn, current_item, metadata)
+                    return pms_callback(property, axis, fn, current_item, metadata, negatives)
                 end,
             },
             {
@@ -128,7 +134,7 @@ M._menu = function(property, axis, fn, ...)
                     return format_class(property, axis, current_item)
                 end,
                 callback = function(_, current_item, metadata)
-                    return pms_callback(property, axis, fn, current_item, metadata)
+                    return pms_callback(property, axis, fn, current_item, metadata, negatives)
                 end,
             },
         },
@@ -181,13 +187,15 @@ local pms_dict = {
     { keymaps = "@", text = "2.5" },
     { keymaps = "#", text = "3.5" },
 }
-M.change_padding = function(o) M._menu("p", o.axis, tcm.change_padding, pms_dict) end
+M.change_padding = function(o) M._menu("p", o.axis, tcm.change_padding, { pms_dict }) end
 
 local margin_dict = { { keymaps = "A", text = "auto" } }
-M.change_margin = function(o) M._menu("m", o.axis, tcm.change_margin, pms_dict, margin_dict) end
+M.change_margin = function(o) M._menu("m", o.axis, tcm.change_margin, { pms_dict, margin_dict }) end
 
 local spacing_dict = { { keymaps = "R", text = "reverse" } }
-M.change_spacing = function(o) M._menu("space", o.axis, tcm.change_spacing, pms_dict, spacing_dict) end
+M.change_spacing = function(o)
+    M._menu("space", o.axis, tcm.change_spacing, { pms_dict, spacing_dict })
+end
 
 -------------------------------------------- Border Width
 
@@ -197,9 +205,7 @@ local border_width_dict = {
     { keymaps = { "l", "8" }, text = "8" },
     { keymaps = { "/" }, text = "0" },
 }
-M.change_border_width = function(o)
-    M._menu("border", o.axis, tcm._change_tailwind_classes, border_width_dict)
-end
+M.change_border_width = function(o) M._menu("border", o.axis, tcm._change, border_width_dict) end
 
 -------------------------------------------- Opacity
 
@@ -220,16 +226,10 @@ local opacity_dict = {
     { keymaps = { "O", "(" }, text = "95" },
     { keymaps = { ")", ";" }, text = "100" },
 }
-M.change_opacity = function() M._menu("opacity", false, tcm._change_tailwind_classes, opacity_dict) end
-M.change_border_opacity = function()
-    M._menu("border-opacity", false, tcm._change_tailwind_classes, opacity_dict)
-end
-M.change_divide_opacity = function()
-    M._menu("divide-opacity", false, tcm._change_tailwind_classes, opacity_dict)
-end
-M.change_ring_opacity = function()
-    M._menu("ring-opacity", false, tcm._change_tailwind_classes, opacity_dict)
-end
+M.change_opacity = function() M._menu("opacity", false, tcm._change, { opacity_dict }) end
+M.change_border_opacity = function() M._menu("border-opacity", false, tcm._change, { opacity_dict }) end
+M.change_divide_opacity = function() M._menu("divide-opacity", false, tcm._change, { opacity_dict }) end
+M.change_ring_opacity = function() M._menu("ring-opacity", false, tcm._change, { opacity_dict }) end
 
 -------------------------------------------- Font Size
 
@@ -248,7 +248,7 @@ local font_size_dict = {
     { keymaps = { "d", "8" }, text = "8xl" },
     { keymaps = { "f", "9" }, text = "9xl" },
 }
-M.change_font_size = function() M._menu("text", false, tcm._change_tailwind_classes, font_size_dict) end
+M.change_font_size = function() M._menu("text", false, tcm._change, { font_size_dict }) end
 
 -------------------------------------------- Divide
 
@@ -262,12 +262,12 @@ local divide_dict = {
 
 local divide_x_dict = { { keymaps = { "x" }, text = "", absolute = "divide-x" } }
 local change_divide_x = function()
-    M._menu("divide", "x", tcm._change_tailwind_classes, divide_x_dict, divide_dict)
+    M._menu("divide", "x", tcm._change, { divide_x_dict, divide_dict })
 end
 
 local divide_y_dict = { { keymaps = { "y" }, text = "", absolute = "divide-y" } }
 local change_divide_y = function()
-    M._menu("divide", "y", tcm._change_tailwind_classes, divide_y_dict, divide_dict)
+    M._menu("divide", "y", tcm._change, { divide_y_dict, divide_dict })
 end
 
 M.change_divide = function(o)
@@ -291,13 +291,9 @@ local ring_width_dict = {
     { keymaps = { "r" }, text = "", absolute = "ring" },
     { keymaps = { "i" }, text = "inset" },
 }
-M.change_ring_width = function()
-    M._menu("ring", false, tcm._change_tailwind_classes, ring_width_dict, ring_dict)
-end
+M.change_ring_width = function() M._menu("ring", false, tcm._change, { ring_width_dict, ring_dict }) end
 
-M.change_ring_offset = function()
-    M._menu("ring-offset", false, tcm._change_tailwind_classes, ring_dict)
-end
+M.change_ring_offset = function() M._menu("ring-offset", false, tcm._change, { ring_dict }) end
 
 -------------------------------------------- Width / Height
 
@@ -348,10 +344,10 @@ local width_height_dict = {
 }
 
 M.change_width = function()
-    M._menu("w", false, tcm._change_tailwind_classes, pms_dict, width_height_dict, percentage_dict)
+    M._menu("w", false, tcm._change, { pms_dict, width_height_dict, percentage_dict })
 end
 M.change_height = function()
-    M._menu("h", false, tcm._change_tailwind_classes, pms_dict, width_height_dict, percentage_dict)
+    M._menu("h", false, tcm._change, { pms_dict, width_height_dict, percentage_dict })
 end
 
 -------------------------------------------- Min Width / Min Height
@@ -362,18 +358,14 @@ local min_width_dict = {
     { keymaps = { "m" }, text = "min" },
     { keymaps = { "x" }, text = "max" },
 }
-M.change_min_width = function()
-    M._menu("min-w", false, tcm._change_tailwind_classes, min_width_dict)
-end
+M.change_min_width = function() M._menu("min-w", false, tcm._change, { min_width_dict }) end
 
 local min_height_dict = {
     { keymaps = { "/" }, text = "0" },
     { keymaps = { "f" }, text = "full" },
     { keymaps = { "s" }, text = "screen" },
 }
-M.change_min_height = function()
-    M._menu("min-h", false, tcm._change_tailwind_classes, min_height_dict)
-end
+M.change_min_height = function() M._menu("min-h", false, tcm._change, { min_height_dict }) end
 
 -------------------------------------------- Max Width / Max Height
 
@@ -406,17 +398,13 @@ local max_width_dict = {
     { keymaps = { "s1" }, text = "screen-xl" },
     { keymaps = { "s2" }, text = "screen-2xl" },
 }
-M.change_max_width = function()
-    M._menu("max-w", false, tcm._change_tailwind_classes, max_width_dict)
-end
+M.change_max_width = function() M._menu("max-w", false, tcm._change, { max_width_dict }) end
 
 local max_height_dict = {
     { keymaps = { "F" }, text = "full" },
     { keymaps = { "S" }, text = "screen" },
 }
-M.change_max_height = function()
-    M._menu("max-h", false, tcm._change_tailwind_classes, pms_dict, max_height_dict)
-end
+M.change_max_height = function() M._menu("max-h", false, tcm._change, { pms_dict, max_height_dict }) end
 
 -------------------------------------------- Rounded (Border Radius)
 
@@ -435,9 +423,7 @@ local rounded_dict = {
     { keymaps = { "n" }, text = "none" },
 }
 
-M.change_border_radius = function(o)
-    M._menu("rounded", o.axis, tcm._change_tailwind_classes, rounded_dict)
-end
+M.change_border_radius = function(o) M._menu("rounded", o.axis, tcm._change, { rounded_dict }) end
 
 -------------------------------------------- Flex
 
@@ -448,7 +434,7 @@ local flex_dict = {
     { keymaps = { "n", "/" }, text = "none" },
 }
 
-M.change_flex = function() M._menu("flex", false, tcm._change_tailwind_classes, flex_dict) end
+M.change_flex = function() M._menu("flex", false, tcm._change, { flex_dict }) end
 
 -------------------------------------------- Grow / Shrink (Flex Grow / Flex Shrink)
 
@@ -456,13 +442,13 @@ local grow_dict = {
     { keymaps = { "g" }, text = "", absolute = "grow" },
     { keymaps = { "/" }, text = "0" },
 }
-M.change_grow = function() M._menu("grow", false, tcm._change_tailwind_classes, grow_dict) end
+M.change_grow = function() M._menu("grow", false, tcm._change, { grow_dict }) end
 
 local shrink_dict = {
     { keymaps = { "g" }, text = "", absolute = "shrink" },
     { keymaps = { "/" }, text = "0" },
 }
-M.change_shrink = function() M._menu("shrink", false, tcm._change_tailwind_classes, shrink_dict) end
+M.change_shrink = function() M._menu("shrink", false, tcm._change, { shrink_dict }) end
 
 -------------------------------------------- Basis (Flex Basis)
 
@@ -472,7 +458,7 @@ local basis_dict = {
     { keymaps = { "F" }, text = "full" },
 }
 M.change_basis = function()
-    M._menu("basis", false, tcm._change_tailwind_classes, pms_dict, basis_dict, percentage_dict)
+    M._menu("basis", false, tcm._change, { pms_dict, basis_dict, percentage_dict })
 end
 
 -------------------------------------------- Order
@@ -498,9 +484,7 @@ local order_dict = {
     { keymaps = { "l" }, text = "last" },
     { keymaps = { "n" }, text = "none" },
 }
-M.change_order = function()
-    M._menu("order", false, tcm._change_tailwind_classes, one_to_twelve_dict, order_dict)
-end
+M.change_order = function() M._menu("order", false, tcm._change, { one_to_twelve_dict, order_dict }) end
 
 -------------------------------------------- Aspect Ratio
 
@@ -510,7 +494,7 @@ local aspect_ratio_dict = {
     { keymaps = { "v" }, text = "video" },
 }
 M.change_aspect_ratio = function()
-    M._menu("aspect-ratio", false, tcm._change_tailwind_classes, aspect_ratio_dict)
+    M._menu("aspect-ratio", false, tcm._change, { aspect_ratio_dict })
 end
 
 -------------------------------------------- Columns
@@ -535,7 +519,36 @@ local columns_dict = {
     { keymaps = { "u" }, text = "7xl" },
 }
 M.change_columns = function()
-    M._menu("columns", false, tcm._change_tailwind_classes, one_to_twelve_dict, columns_dict)
+    M._menu("columns", false, tcm._change, { one_to_twelve_dict, columns_dict })
+end
+
+-------------------------------------------- Top / Bottom / Left / Right
+
+local tlbr_dict = {
+    { keymaps = "A", text = "auto" },
+    { keymaps = "F", text = "full" },
+}
+
+local tlbr_x = {
+    lua_patterns.left,
+    lua_patterns.right,
+}
+local tlbr_y = {
+    lua_patterns.top,
+    lua_patterns.bottom,
+}
+
+M.change_top = function()
+    M._menu("top", false, tcm._change, { pms_dict, tlbr_dict, percentage_dict }, tlbr_y)
+end
+M.change_bottom = function()
+    M._menu("bottom", false, tcm._change, { pms_dict, tlbr_dict, percentage_dict }, tlbr_y)
+end
+M.change_left = function()
+    M._menu("left", false, tcm._change, { pms_dict, tlbr_dict, percentage_dict }, tlbr_x)
+end
+M.change_right = function()
+    M._menu("right", false, tcm._change, { pms_dict, tlbr_dict, percentage_dict }, tlbr_x)
 end
 
 return M

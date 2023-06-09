@@ -97,11 +97,11 @@ local find_patterns = function(o)
 end
 
 ---@param o change_tailwind_classes_Args
-M._change_tailwind_classes = function(o)
+M._change = function(o)
     if not catalyst.is_active() then return end
 
     selection.archive_empty_state_for_undo()
-    require("deliberate.api.dot_repeater").register(M._change_tailwind_classes, o)
+    require("deliberate.api.dot_repeater").register(M._change, o)
 
     o.negative_patterns = vim.tbl_flatten(o.negative_patterns or {})
 
@@ -141,25 +141,17 @@ M._change_tailwind_classes = function(o)
     end
 end
 
-M.change_padding = function(o)
-    M._change_tailwind_classes({ property = "p", axis = o.axis, value = o.value })
-end
-M.change_margin = function(o)
-    M._change_tailwind_classes({ property = "m", axis = o.axis, value = o.value })
-end
-M.change_spacing = function(o)
-    M._change_tailwind_classes({ property = "space", axis = o.axis, value = o.value })
-end
+M.change_padding = function(o) M._change({ property = "p", axis = o.axis, value = o.value }) end
+M.change_margin = function(o) M._change({ property = "m", axis = o.axis, value = o.value }) end
+M.change_spacing = function(o) M._change({ property = "space", axis = o.axis, value = o.value }) end
 
 M.change_classes_groups = function(o)
-    M._change_tailwind_classes({ classes_groups = o.classes_groups, value = o.value })
+    M._change({ classes_groups = o.classes_groups, value = o.value })
 end
 
-M.change_text_color = function(o)
-    M._change_tailwind_classes({ property = "text-color", value = o.value })
-end
+M.change_text_color = function(o) M._change({ property = "text-color", value = o.value }) end
 M.change_background_color = function(o)
-    M._change_tailwind_classes({ property = "background-color", value = o.value })
+    M._change({ property = "background-color", value = o.value })
 end
 
 return M

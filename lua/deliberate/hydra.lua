@@ -168,7 +168,7 @@ add_heads_from_tbl(keymap_to_color_menu_fn)
 -- Non Axis
 local non_axis_map = {
     ["O"] = pms_menu.change_opacity,
-    ["z"] = pms_menu.change_font_size,
+    ["fz"] = pms_menu.change_font_size,
     ["bo"] = pms_menu.change_border_opacity,
     ["do"] = pms_menu.change_divide_opacity,
     ["Rw"] = pms_menu.change_ring_width,
@@ -187,6 +187,11 @@ local non_axis_map = {
     ["fo"] = pms_menu.change_order,
     ["A"] = pms_menu.change_aspect_ratio,
     ["co"] = pms_menu.change_columns,
+
+    ["at"] = pms_menu.change_top,
+    ["ab"] = pms_menu.change_bottom,
+    ["al"] = pms_menu.change_left,
+    ["ar"] = pms_menu.change_right,
 }
 add_heads_from_tbl(non_axis_map)
 
