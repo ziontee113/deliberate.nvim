@@ -174,7 +174,9 @@ local non_axis_map = {
     ["fT"] = pms_menu.change_tracking,
     ["fL"] = pms_menu.change_leading,
     ["<space>dt"] = pms_menu.change_td_thickness,
+    ["<space>in"] = pms_menu.change_text_indent,
     ["<space>uo"] = pms_menu.change_underline_offset,
+    ["<space>al"] = pms_menu.change_vertical_align,
 
     ["<space>li"] = pms_menu.change_list_image,
 

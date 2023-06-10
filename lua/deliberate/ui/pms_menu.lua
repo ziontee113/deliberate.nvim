@@ -758,7 +758,7 @@ local td_thickness_D = {
 }
 M.change_td_thickness = function() M._menu("decoration", false, tcm._change, { td_thickness_D }) end
 
--------------------------------------------- Gap
+-------------------------------------------- Underline Offset
 
 local underline_offset_D = {
     { keymaps = { "/" }, text = "0" },
@@ -771,5 +771,23 @@ local underline_offset_D = {
 M.change_underline_offset = function()
     M._menu("underline-offset", false, tcm._change, { underline_offset_D })
 end
+
+-------------------------------------------- Text Indent
+
+M.change_text_indent = function() M._menu("indent", false, tcm._change, { pms_dict }) end
+
+-------------------------------------------- Vertical Align
+
+local vertical_align_D = {
+    { keymaps = { "l" }, text = "baseline" },
+    { keymaps = { "t" }, text = "top" },
+    { keymaps = { "m" }, text = "middle" },
+    { keymaps = { "b" }, text = "bottom" },
+    { keymaps = { "T" }, text = "text-top" },
+    { keymaps = { "B" }, text = "text-bottom" },
+    { keymaps = { "s" }, text = "sub" },
+    { keymaps = { "S" }, text = "super" },
+}
+M.change_vertical_align = function() M._menu("align", false, tcm._change, { vertical_align_D }) end
 
 return M
