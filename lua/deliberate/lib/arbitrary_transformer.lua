@@ -81,6 +81,7 @@ local input_to_pms_value = function(input, property)
     if vim.tbl_contains(raw_input_group, property) then return input end
 
     if string.find(property, "flex") then return handle_flex(input) end
+    if property == "font" then return string.format("'%s'", input) end
 
     if string.find(property, "opacity") then
         local value = tonumber(input) or 0

@@ -281,6 +281,15 @@ local font_size_dict = {
 }
 M.change_font_size = function() M._menu("text", false, tcm._change, { font_size_dict }) end
 
+-------------------------------------------- Font Family
+
+local font_family_dict = {
+    { keymaps = { "s" }, text = "sans" },
+    { keymaps = { "S" }, text = "serif" },
+    { keymaps = { "m" }, text = "mono" },
+}
+M.change_font_family = function() M._menu("font", false, tcm._change, { font_family_dict }) end
+
 -------------------------------------------- Divide
 
 local divide_dict = {

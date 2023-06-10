@@ -81,7 +81,7 @@ local dash_axies = {
 --stylua: ignore
 local singles = {
     "opacity", "border-opacity", "divide-opacity", "ring-opacity",
-    "text",
+    "text", "font",
     "ring", "ring-offset",
     "w", "h", "min-w", "min-h", "max-w", "max-h",
     "flex", "basis", "grow", "shrink", "order",
@@ -123,6 +123,7 @@ local property_specific_patterns = {
     ["grid-rows"] = { "^grid%-rows%-%[.+]$" },
     ["auto-rows"] = { "^auto%-rows%-%[.+]$" },
     ["auto-cols"] = { "^auto%-cols%-%[.+]$" },
+    ["font"] = { "^font%-%[.+]$" },
 }
 
 -- Add properties with axies
