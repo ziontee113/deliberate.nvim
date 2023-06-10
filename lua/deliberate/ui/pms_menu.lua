@@ -753,9 +753,23 @@ local td_thickness_D = {
     { keymaps = { "2" }, text = "2" },
     { keymaps = { "4" }, text = "4" },
     { keymaps = { "8" }, text = "8" },
-    { keymaps = { "a" }, text = "auto" },
+    { keymaps = { "a", "A" }, text = "auto" },
     { keymaps = { "f" }, text = "from-front" },
 }
 M.change_td_thickness = function() M._menu("decoration", false, tcm._change, { td_thickness_D }) end
+
+-------------------------------------------- Gap
+
+local underline_offset_D = {
+    { keymaps = { "/" }, text = "0" },
+    { keymaps = { "1" }, text = "1" },
+    { keymaps = { "2" }, text = "2" },
+    { keymaps = { "4" }, text = "4" },
+    { keymaps = { "8" }, text = "8" },
+    { keymaps = { "a", "A" }, text = "auto" },
+}
+M.change_underline_offset = function()
+    M._menu("underline-offset", false, tcm._change, { underline_offset_D })
+end
 
 return M
