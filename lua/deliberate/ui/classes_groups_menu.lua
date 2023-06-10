@@ -229,6 +229,13 @@ local text_transform_group = {
 }
 M.change_text_transform = function() M._classes_group_changer_menu(text_transform_group) end
 
+local text_overflow_group = {
+    { keymaps = { "t" }, classes = { "truncate" } },
+    { keymaps = { "e" }, classes = { "text-ellipsis" } },
+    { keymaps = { "c" }, classes = { "text-clip" } },
+}
+M.change_text_overflow = function() M._classes_group_changer_menu(text_overflow_group) end
+
 local font_variant_numeric_group = {
     { keymaps = { "i" }, classes = { "normal-nums" } },
     { keymaps = { "n" }, classes = { "ordinal" } },
