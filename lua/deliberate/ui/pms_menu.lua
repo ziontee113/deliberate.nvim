@@ -290,18 +290,6 @@ local font_family_dict = {
 }
 M.change_font_family = function() M._menu("font", false, tcm._change, { font_family_dict }) end
 
--------------------------------------------- Letter Spacing
-
-local tracking_D = {
-    { keymaps = { "T" }, text = "tighter" },
-    { keymaps = { "t" }, text = "tight" },
-    { keymaps = { "n", "/" }, text = "normal" },
-    { keymaps = { "w" }, text = "wide" },
-    { keymaps = { "W" }, text = "wider" },
-    { keymaps = { "S", "s" }, text = "widest" },
-}
-M.change_tracking = function() M._menu("tracking", false, tcm._change, { tracking_D, negative_D }) end
-
 -------------------------------------------- Line Clamp
 
 local one_to_6_D = {
@@ -316,6 +304,39 @@ local line_clamp_D = { { keymaps = { "n", "N", "/" }, text = "none" } }
 M.change_line_clamp = function()
     M._menu("line-clamp", false, tcm._change, { one_to_6_D, line_clamp_D })
 end
+
+-------------------------------------------- Letter Spacing
+
+local tracking_D = {
+    { keymaps = { "T" }, text = "tighter" },
+    { keymaps = { "t" }, text = "tight" },
+    { keymaps = { "n", "/" }, text = "normal" },
+    { keymaps = { "w" }, text = "wide" },
+    { keymaps = { "W" }, text = "wider" },
+    { keymaps = { "S", "s" }, text = "widest" },
+}
+M.change_tracking = function() M._menu("tracking", false, tcm._change, { tracking_D, negative_D }) end
+
+-------------------------------------------- Letter Spacing
+
+local leading_D = {
+    { keymaps = { "3" }, text = "3" },
+    { keymaps = { "4" }, text = "4" },
+    { keymaps = { "5" }, text = "5" },
+    { keymaps = { "6" }, text = "6" },
+    { keymaps = { "7" }, text = "7" },
+    { keymaps = { "8" }, text = "8" },
+    { keymaps = { "9" }, text = "9" },
+    { keymaps = { "1", ")" }, text = "10" },
+    "",
+    { keymaps = { "/" }, text = "none" },
+    { keymaps = { "t" }, text = "tight" },
+    { keymaps = { "s" }, text = "snug" },
+    { keymaps = { "n" }, text = "normal" },
+    { keymaps = { "r" }, text = "relaxed" },
+    { keymaps = { "l" }, text = "loose" },
+}
+M.change_leading = function() M._menu("leading", false, tcm._change, { leading_D }) end
 
 -------------------------------------------- Divide
 
