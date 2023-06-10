@@ -84,6 +84,7 @@ local input_to_pms_value = function(input, property)
         local value = tonumber(input) or 0
         return value .. "%"
     end
+    if string.find(property, "image") then return string.format("url(%s)", input) end
     if property == "line-clamp" then return tostring(tonumber(input) or 0) end
     if tonumber(input) then return input .. "px" end
 

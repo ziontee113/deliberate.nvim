@@ -173,6 +173,8 @@ local non_axis_map = {
     ["fT"] = pms_menu.change_tracking,
     ["fL"] = pms_menu.change_leading,
 
+    ["<space>li"] = pms_menu.change_list_image,
+
     ["O"] = pms_menu.change_opacity,
     ["bo"] = pms_menu.change_border_opacity,
     ["do"] = pms_menu.change_divide_opacity,

@@ -82,6 +82,7 @@ local dash_axies = {
 local singles = {
     "opacity", "border-opacity", "divide-opacity", "ring-opacity",
     "text", "font", "tracking", "leading", "line-clamp",
+    "list-image",
     "ring", "ring-offset",
     "w", "h", "min-w", "min-h", "max-w", "max-h",
     "flex", "basis", "grow", "shrink", "order",
@@ -125,6 +126,7 @@ local property_specific_patterns = {
     ["auto-cols"] = { "^auto%-cols%-%[.+]$" },
     ["font"] = { "^font%-%[.+]$" },
     ["line-clamp"] = { "^line%-clamp%-%[%d+]$" },
+    ["list-image"] = { "^list%-image%-%[.+]$" },
 }
 
 -- Add properties with axies

@@ -338,6 +338,13 @@ local leading_D = {
 }
 M.change_leading = function() M._menu("leading", false, tcm._change, { leading_D }) end
 
+-------------------------------------------- List Image
+
+local list_image_D = {
+    { keymaps = { "n", "/" }, text = "none" },
+}
+M.change_list_image = function() M._menu("list-image", false, tcm._change, { list_image_D }) end
+
 -------------------------------------------- Divide
 
 local divide_dict = {
