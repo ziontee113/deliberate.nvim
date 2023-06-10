@@ -327,6 +327,10 @@ local classes_groups_dict = {
     ["<space>jc"] = { cgm.change_justifity_content },
     ["<space>ji"] = { cgm.change_justifity_items },
     ["<space>js"] = { cgm.change_justifity_self },
+
+    ["<space>pc"] = { cgm.change_place_content },
+    ["<space>pi"] = { cgm.change_place_items },
+    ["<space>ps"] = { cgm.change_place_self },
 }
 
 for keymap, fn_and_args in pairs(classes_groups_dict) do
