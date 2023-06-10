@@ -227,9 +227,11 @@ M.change_font_variant_numeric = function() M._classes_group_changer_menu(font_va
 
 local text_align_group = {
     { keymaps = { "h" }, classes = { "text-left" } },
-    { keymaps = { "l" }, classes = { "text-right" } },
+    { keymaps = { "l", "r" }, classes = { "text-right" } },
     { keymaps = { "k" }, classes = { "text-center" } },
     { keymaps = { "j" }, classes = { "text-justify" } },
+    { keymaps = { "s" }, classes = { "text-start" } },
+    { keymaps = { "e" }, classes = { "text-end" } },
 }
 M.change_text_align = function() M._classes_group_changer_menu(text_align_group) end
 

@@ -32,8 +32,9 @@ local colors = {
     { text = "rose", keymaps = { "R" } },
     { text = "white", keymaps = { "w" }, single = true },
     { text = "black", keymaps = { "B" }, single = true },
-    { text = "transparent", keymaps = { "T" }, single = true },
+    { text = "inherit", keymaps = { "I" }, single = true },
     { text = "current", keymaps = { "C" }, single = true },
+    { text = "transparent", keymaps = { "T" }, single = true },
 
     { text = "", keymaps = { "," }, arbitrary = true, hidden = true },
 }
