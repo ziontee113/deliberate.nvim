@@ -372,6 +372,7 @@ local width_height_dict = {
     { keymaps = { "S" }, text = "screen" },
     { keymaps = { "m" }, text = "min" },
     { keymaps = { "M" }, text = "max" },
+    { keymaps = { "N" }, text = "fit" },
 }
 
 M.change_width = function()
