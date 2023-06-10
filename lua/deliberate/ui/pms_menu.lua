@@ -290,6 +290,18 @@ local font_family_dict = {
 }
 M.change_font_family = function() M._menu("font", false, tcm._change, { font_family_dict }) end
 
+-------------------------------------------- Letter Spacing
+
+local tracking_D = {
+    { keymaps = { "T" }, text = "tighter" },
+    { keymaps = { "t" }, text = "tight" },
+    { keymaps = { "n", "/" }, text = "normal" },
+    { keymaps = { "w" }, text = "wide" },
+    { keymaps = { "W" }, text = "wider" },
+    { keymaps = { "S", "s" }, text = "widest" },
+}
+M.change_tracking = function() M._menu("tracking", false, tcm._change, { tracking_D, negative_D }) end
+
 -------------------------------------------- Divide
 
 local divide_dict = {

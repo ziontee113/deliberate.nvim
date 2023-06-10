@@ -169,6 +169,7 @@ add_heads_from_tbl(keymap_to_color_menu_fn)
 local non_axis_map = {
     ["fz"] = pms_menu.change_font_size,
     ["ff"] = pms_menu.change_font_family,
+    ["ft"] = pms_menu.change_tracking,
 
     ["O"] = pms_menu.change_opacity,
     ["bo"] = pms_menu.change_border_opacity,
