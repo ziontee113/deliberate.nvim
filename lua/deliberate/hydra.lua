@@ -178,6 +178,8 @@ local non_axis_map = {
     ["<space>uo"] = pms_menu.change_underline_offset,
     ["<space>al"] = pms_menu.change_vertical_align,
 
+    ["<space>co"] = pms_menu.change_content,
+
     ["<space>li"] = pms_menu.change_list_image,
 
     ["O"] = pms_menu.change_opacity,

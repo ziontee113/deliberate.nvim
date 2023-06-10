@@ -790,4 +790,11 @@ local vertical_align_D = {
 }
 M.change_vertical_align = function() M._menu("align", false, tcm._change, { vertical_align_D }) end
 
+-------------------------------------------- Content
+
+local content_D = {
+    { keymaps = { "n", "/" }, text = "none" },
+}
+M.change_content = function() M._menu("content", false, tcm._change, { content_D }) end
+
 return M

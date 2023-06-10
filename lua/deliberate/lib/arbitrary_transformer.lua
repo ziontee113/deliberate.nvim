@@ -77,6 +77,11 @@ local raw_input_group = {
 local input_to_pms_value = function(input, property)
     if not property then property = "" end
 
+    if property == "content" then
+        if input == "" then input = "'single_quotes_matters'" end
+        input = string.gsub(input, "%s", "_")
+        return input
+    end
     if vim.tbl_contains(raw_input_group, property) then
         if input == "" then input = "0" end
         return input
