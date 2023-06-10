@@ -310,6 +310,7 @@ local classes_groups_dict = {
 
     ["<space>ws"] = { cgm.change_whitespace },
     ["<space>wb"] = { cgm.change_word_break },
+    ["<space>hy"] = { cgm.change_hyphens },
 
     ["fV"] = { cgm.change_font_variant_numeric },
 

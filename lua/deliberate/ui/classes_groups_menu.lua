@@ -254,6 +254,13 @@ local word_break_group = {
 }
 M.change_word_break = function() M._classes_group_changer_menu(word_break_group) end
 
+local hyphens_group = {
+    { keymaps = { "n", "/" }, classes = { "hyphens-none" } },
+    { keymaps = { "m" }, classes = { "hyphens-manual" } },
+    { keymaps = { "a" }, classes = { "hyphens-auto" } },
+}
+M.change_hyphens = function() M._classes_group_changer_menu(hyphens_group) end
+
 local font_variant_numeric_group = {
     { keymaps = { "i" }, classes = { "normal-nums" } },
     { keymaps = { "n" }, classes = { "ordinal" } },
