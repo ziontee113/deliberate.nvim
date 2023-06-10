@@ -81,7 +81,7 @@ local dash_axies = {
 --stylua: ignore
 local singles = {
     "opacity", "border-opacity", "divide-opacity", "ring-opacity",
-    "text", "font", "tracking",
+    "text", "font", "tracking", "line-clamp",
     "ring", "ring-offset",
     "w", "h", "min-w", "min-h", "max-w", "max-h",
     "flex", "basis", "grow", "shrink", "order",
@@ -124,6 +124,7 @@ local property_specific_patterns = {
     ["auto-rows"] = { "^auto%-rows%-%[.+]$" },
     ["auto-cols"] = { "^auto%-cols%-%[.+]$" },
     ["font"] = { "^font%-%[.+]$" },
+    ["line-clamp"] = { "^line%-clamp%-%[%d+]$" },
 }
 
 -- Add properties with axies

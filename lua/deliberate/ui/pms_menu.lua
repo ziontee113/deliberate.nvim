@@ -302,6 +302,21 @@ local tracking_D = {
 }
 M.change_tracking = function() M._menu("tracking", false, tcm._change, { tracking_D, negative_D }) end
 
+-------------------------------------------- Line Clamp
+
+local one_to_6_D = {
+    { keymaps = { "j", "1" }, text = "1" },
+    { keymaps = { "k", "2" }, text = "2" },
+    { keymaps = { "l", "3" }, text = "3" },
+    { keymaps = { "u", "4" }, text = "4" },
+    { keymaps = { "i", "5" }, text = "5" },
+    { keymaps = { "o", "6" }, text = "6" },
+}
+local line_clamp_D = { { keymaps = { "n", "N", "/" }, text = "none" } }
+M.change_line_clamp = function()
+    M._menu("line-clamp", false, tcm._change, { one_to_6_D, line_clamp_D })
+end
+
 -------------------------------------------- Divide
 
 local divide_dict = {
@@ -675,15 +690,9 @@ M.change_col_end = function() M._menu("col-end", false, tcm._change, { grid12_D,
 
 -------------------------------------------- Grid Template Rows
 
-local grid6_D = {
-    { keymaps = { "j", "1" }, text = "1" },
-    { keymaps = { "k", "2" }, text = "2" },
-    { keymaps = { "l", "3" }, text = "3" },
-    { keymaps = { "u", "4" }, text = "4" },
-    { keymaps = { "i", "5" }, text = "5" },
-    { keymaps = { "o", "6" }, text = "6" },
-}
-M.change_grid_rows = function() M._menu("grid-rows", false, tcm._change, { grid6_D, grid_none_D }) end
+M.change_grid_rows = function()
+    M._menu("grid-rows", false, tcm._change, { one_to_6_D, grid_none_D })
+end
 
 -------------------------------------------- Grid Row Start / End
 

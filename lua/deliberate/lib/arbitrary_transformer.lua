@@ -84,7 +84,7 @@ local input_to_pms_value = function(input, property)
         local value = tonumber(input) or 0
         return value .. "%"
     end
-
+    if property == "line-clamp" then return tostring(tonumber(input) or 0) end
     if tonumber(input) then return input .. "px" end
 
     local num, chars = 0, "px"
