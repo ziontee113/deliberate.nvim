@@ -364,6 +364,7 @@ local classes_groups_dict = {
 
     ["<space>ba"] = { cgm.change_background_attachment },
     ["<space>bc"] = { cgm.change_background_clip },
+    ["<space>bo"] = { cgm.change_background_origin },
 }
 
 for keymap, fn_and_args in pairs(classes_groups_dict) do

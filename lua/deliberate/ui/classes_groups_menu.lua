@@ -563,4 +563,12 @@ local background_clip_group = {
 }
 M.change_background_clip = function() M._classes_group_changer_menu(background_clip_group) end
 
+-- Background Origin
+local background_origin_group = {
+    { keymaps = { "b" }, classes = { "bg-origin-border" } },
+    { keymaps = { "p" }, classes = { "bg-origin-padding" } },
+    { keymaps = { "c" }, classes = { "bg-origin-content" } },
+}
+M.change_background_origin = function() M._classes_group_changer_menu(background_origin_group) end
+
 return M
