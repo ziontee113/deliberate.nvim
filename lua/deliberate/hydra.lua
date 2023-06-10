@@ -361,6 +361,9 @@ local classes_groups_dict = {
     ["<space>pc"] = { cgm.change_place_content },
     ["<space>pi"] = { cgm.change_place_items },
     ["<space>ps"] = { cgm.change_place_self },
+
+    ["<space>ba"] = { cgm.change_background_attachment },
+    ["<space>bc"] = { cgm.change_background_clip },
 }
 
 for keymap, fn_and_args in pairs(classes_groups_dict) do

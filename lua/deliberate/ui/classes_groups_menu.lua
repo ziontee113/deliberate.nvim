@@ -544,4 +544,23 @@ local grid_flow_group = {
 }
 M.change_grid_flow = function() M._classes_group_changer_menu(grid_flow_group) end
 
+-- Background Attachment
+local background_attachments_group = {
+    { keymaps = { "f" }, classes = { "bg-fixed" } },
+    { keymaps = { "l" }, classes = { "bg-local" } },
+    { keymaps = { "s" }, classes = { "bg-scroll" } },
+}
+M.change_background_attachment = function()
+    M._classes_group_changer_menu(background_attachments_group)
+end
+
+-- Background Clip
+local background_clip_group = {
+    { keymaps = { "b" }, classes = { "bg-clip-border" } },
+    { keymaps = { "p" }, classes = { "bg-clip-padding" } },
+    { keymaps = { "c" }, classes = { "bg-clip-content" } },
+    { keymaps = { "t" }, classes = { "bg-clip-text" } },
+}
+M.change_background_clip = function() M._classes_group_changer_menu(background_clip_group) end
+
 return M
