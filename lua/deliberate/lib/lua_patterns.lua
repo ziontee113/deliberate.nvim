@@ -81,7 +81,7 @@ local dash_axies = {
 --stylua: ignore
 local singles = {
     "opacity", "border-opacity", "divide-opacity", "ring-opacity",
-    "text", "font", "tracking", "leading", "line-clamp",
+    "text", "font", "tracking", "leading", "line-clamp", "decoration",
     "list-image",
     "ring", "ring-offset",
     "w", "h", "min-w", "min-h", "max-w", "max-h",

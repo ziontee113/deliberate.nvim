@@ -745,4 +745,17 @@ M.change_auto_cols = function() M._menu("auto-cols", false, tcm._change, { auto_
 
 M.change_gap = function(o) M._menu("gap", o.axis, tcm._change, { pms_dict }) end
 
+-------------------------------------------- Text Decoration Thickness
+
+local td_thickness_D = {
+    { keymaps = { "/" }, text = "0" },
+    { keymaps = { "1" }, text = "1" },
+    { keymaps = { "2" }, text = "2" },
+    { keymaps = { "4" }, text = "4" },
+    { keymaps = { "8" }, text = "8" },
+    { keymaps = { "a" }, text = "auto" },
+    { keymaps = { "f" }, text = "from-front" },
+}
+M.change_td_thickness = function() M._menu("decoration", false, tcm._change, { td_thickness_D }) end
+
 return M

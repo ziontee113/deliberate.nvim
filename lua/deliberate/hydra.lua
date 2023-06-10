@@ -173,6 +173,7 @@ local non_axis_map = {
     ["fc"] = pms_menu.change_line_clamp,
     ["fT"] = pms_menu.change_tracking,
     ["fL"] = pms_menu.change_leading,
+    ["<space>dt"] = pms_menu.change_td_thickness,
 
     ["<space>li"] = pms_menu.change_list_image,
 
