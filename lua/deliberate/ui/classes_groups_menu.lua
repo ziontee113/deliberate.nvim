@@ -179,6 +179,12 @@ M.change_flex_align_properties = function() M._classes_group_changer_menu(flex_a
 
 -- Typography
 
+local font_smoothing_group = {
+    { keymaps = { "a" }, classes = { "antialiased" } },
+    { keymaps = { "s" }, classes = { "subpixel-antialiased" } },
+}
+M.change_font_smoothing = function() M._classes_group_changer_menu(font_smoothing_group) end
+
 local font_weight_group = {
     { keymaps = { "t", "1" }, classes = { "font-thin" } },
     { keymaps = { "e", "2" }, classes = { "font-extralight" } },

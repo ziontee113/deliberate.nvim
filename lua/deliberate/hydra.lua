@@ -288,6 +288,7 @@ local classes_groups_dict = {
     ["fw"] = { cgm.change_flex_wrap_properties },
     ["Al"] = { cgm.change_flex_align_properties },
 
+    ["AA"] = { cgm.change_font_smoothing },
     ["fS"] = { cgm.change_font_style },
     ["fW"] = { cgm.change_font_weight },
     ["<A-a>"] = { cgm.change_text_align },
