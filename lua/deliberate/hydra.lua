@@ -174,12 +174,14 @@ local non_axis_map = {
     ["Rw"] = pms_menu.change_ring_width,
     ["Ro"] = pms_menu.change_ring_offset,
     ["RO"] = pms_menu.change_ring_opacity,
-    ["w"] = pms_menu.change_width,
-    ["e"] = pms_menu.change_height,
-    ["mw"] = pms_menu.change_min_width,
-    ["me"] = pms_menu.change_min_height,
-    ["xw"] = pms_menu.change_max_width,
-    ["xe"] = pms_menu.change_max_height,
+
+    ["W"] = pms_menu.change_width,
+    ["E"] = pms_menu.change_height,
+    ["mW"] = pms_menu.change_min_width,
+    ["mE"] = pms_menu.change_min_height,
+    ["xW"] = pms_menu.change_max_width,
+    ["xE"] = pms_menu.change_max_height,
+
     ["ff"] = pms_menu.change_flex,
     ["fb"] = pms_menu.change_basis,
     ["fg"] = pms_menu.change_grow,
@@ -215,8 +217,8 @@ add_heads_from_tbl(non_axis_map)
 
 -- With Axis
 local axis_map = {
-    p = { { "", "x", "y", "t", "b", "l", "r" }, pms_menu.change_padding },
-    m = { { "", "x", "y", "t", "b", "l", "r" }, pms_menu.change_margin },
+    p = { { "", "x", "y", "t", "b", "l", "r", "e", "s" }, pms_menu.change_padding },
+    m = { { "", "x", "y", "t", "b", "l", "r", "e", "s" }, pms_menu.change_margin },
     s = { { "x", "y" }, pms_menu.change_spacing },
     d = { { "x", "y" }, pms_menu.change_divide },
     b = { { "", "t", "b", "l", "r" }, pms_menu.change_border_width },

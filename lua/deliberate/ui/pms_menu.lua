@@ -215,8 +215,13 @@ local pms_dict = {
 }
 M.change_padding = function(o) M._menu("p", o.axis, tcm.change_padding, { pms_dict }) end
 
-local margin_dict = { { keymaps = "A", text = "auto" } }
-M.change_margin = function(o) M._menu("m", o.axis, tcm.change_margin, { pms_dict, margin_dict }) end
+local negative_D = {
+    { keymaps = { "-", "N" }, text = "", negatize = true, hidden = true },
+}
+local margin_dict = { { keymaps = "A", text = "auto", ironclad = true } }
+M.change_margin = function(o)
+    M._menu("m", o.axis, tcm.change_margin, { pms_dict, margin_dict, negative_D })
+end
 
 local spacing_dict = { { keymaps = "R", text = "reverse" } }
 M.change_spacing = function(o)
@@ -549,10 +554,6 @@ M.change_columns = function()
 end
 
 -------------------------------------------- Top / Bottom / Left / Right
-
-local negative_D = {
-    { keymaps = { "-", "N" }, text = "", negatize = true, hidden = true },
-}
 
 local tlbr_D = {
     { keymaps = "A", text = "auto", ironclad = true },
