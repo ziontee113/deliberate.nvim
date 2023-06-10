@@ -77,7 +77,10 @@ local raw_input_group = {
 local input_to_pms_value = function(input, property)
     if not property then property = "" end
 
-    if vim.tbl_contains(raw_input_group, property) then return input end
+    if vim.tbl_contains(raw_input_group, property) then
+        if input == "" then input = "0" end
+        return input
+    end
     if string.find(property, "flex") then return handle_flex(input) end
     if property == "font" then return string.format("'%s'", input) end
     if string.find(property, "opacity") then
