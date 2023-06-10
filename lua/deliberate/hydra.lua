@@ -307,7 +307,9 @@ local classes_groups_dict = {
     ["<space>tf"] = { cgm.change_text_transform },
     ["<space>to"] = { cgm.change_text_overflow },
     ["<space>ds"] = { cgm.change_decoration_style },
+
     ["<space>ws"] = { cgm.change_whitespace },
+    ["<space>wb"] = { cgm.change_word_break },
 
     ["fV"] = { cgm.change_font_variant_numeric },
 

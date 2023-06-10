@@ -246,6 +246,14 @@ local whitespace_group = {
 }
 M.change_whitespace = function() M._classes_group_changer_menu(whitespace_group) end
 
+local word_break_group = {
+    { keymaps = { "n" }, classes = { "break-normal" } },
+    { keymaps = { "w" }, classes = { "break-words" } },
+    { keymaps = { "a" }, classes = { "break-all" } },
+    { keymaps = { "k" }, classes = { "break-keep" } },
+}
+M.change_word_break = function() M._classes_group_changer_menu(word_break_group) end
+
 local font_variant_numeric_group = {
     { keymaps = { "i" }, classes = { "normal-nums" } },
     { keymaps = { "n" }, classes = { "ordinal" } },
