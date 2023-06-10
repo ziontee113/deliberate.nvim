@@ -206,6 +206,15 @@ local text_decoration_group = {
 }
 M.change_text_decoration = function() M._classes_group_changer_menu(text_decoration_group) end
 
+local decoration_style_group = {
+    { keymaps = { "s" }, classes = { "decoration-solid" } },
+    { keymaps = { "2" }, classes = { "decoration-double" } },
+    { keymaps = { "." }, classes = { "decoration-dotted" } },
+    { keymaps = { "d" }, classes = { "decoration-dashed" } },
+    { keymaps = { "w" }, classes = { "decoration-wavy" } },
+}
+M.change_decoration_style = function() M._classes_group_changer_menu(decoration_style_group) end
+
 local font_style_group = {
     { keymaps = { "i" }, classes = { "italic" } },
     { keymaps = { "n" }, classes = { "not-italic" } },

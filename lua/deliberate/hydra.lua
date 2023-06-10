@@ -299,6 +299,7 @@ local classes_groups_dict = {
     ["fW"] = { cgm.change_font_weight },
     ["<A-a>"] = { cgm.change_text_align },
     ["<A-d>"] = { cgm.change_text_decoration },
+    ["<space>ds"] = { cgm.change_decoration_style },
     ["fV"] = { cgm.change_font_variant_numeric },
     ["<space>lp"] = { cgm.change_list_style_position },
     ["<space>lt"] = { cgm.change_list_style_type },
