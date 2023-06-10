@@ -236,6 +236,16 @@ local text_overflow_group = {
 }
 M.change_text_overflow = function() M._classes_group_changer_menu(text_overflow_group) end
 
+local whitespace_group = {
+    { keymaps = { "n" }, classes = { "whitespace-normal" } },
+    { keymaps = { "/" }, classes = { "whitespace-nowrap" } },
+    { keymaps = { "p" }, classes = { "whitespace-pre" } },
+    { keymaps = { "L" }, classes = { "whitespace-pre-line" } },
+    { keymaps = { "W" }, classes = { "whitespace-pre-wrap" } },
+    { keymaps = { "b" }, classes = { "whitespace-break-spaces" } },
+}
+M.change_whitespace = function() M._classes_group_changer_menu(whitespace_group) end
+
 local font_variant_numeric_group = {
     { keymaps = { "i" }, classes = { "normal-nums" } },
     { keymaps = { "n" }, classes = { "ordinal" } },
