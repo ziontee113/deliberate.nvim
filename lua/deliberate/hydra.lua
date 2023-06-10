@@ -185,7 +185,7 @@ local non_axis_map = {
     ["fg"] = pms_menu.change_grow,
     ["fs"] = pms_menu.change_shrink,
     ["fo"] = pms_menu.change_order,
-    ["as"] = pms_menu.change_aspect_ratio,
+    ["AR"] = pms_menu.change_aspect_ratio,
     ["co"] = pms_menu.change_columns,
 
     ["at"] = pms_menu.change_top,
@@ -319,6 +319,14 @@ local classes_groups_dict = {
     ["V"] = { cgm.change_visibility },
 
     ["gf"] = { cgm.change_grid_flow },
+
+    ["ac"] = { cgm.change_align_content },
+    ["as"] = { cgm.change_align_self },
+    ["ai"] = { cgm.change_align_items },
+
+    ["<space>jc"] = { cgm.change_justifity_content },
+    ["<space>ji"] = { cgm.change_justifity_items },
+    ["<space>js"] = { cgm.change_justifity_self },
 }
 
 for keymap, fn_and_args in pairs(classes_groups_dict) do

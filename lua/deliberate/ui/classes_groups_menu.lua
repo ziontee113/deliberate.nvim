@@ -66,7 +66,67 @@ local flex_wrap_group = {
 }
 M.change_flex_wrap_properties = function() M._classes_group_changer_menu(flex_wrap_group) end
 
-local flex_align_group = {
+local justify_content_group = {
+    { keymaps = { "n" }, classes = { "justify-normal" } },
+    { keymaps = { "s" }, classes = { "justify-start" } },
+    { keymaps = { "c" }, classes = { "justify-center" } },
+    { keymaps = { "e" }, classes = { "justify-end" } },
+    { keymaps = { "b" }, classes = { "justify-between" } },
+    { keymaps = { "a" }, classes = { "justify-around" } },
+    { keymaps = { "e" }, classes = { "justify-evenly" } },
+    { keymaps = { "S" }, classes = { "justify-stretch" } },
+}
+M.change_justifity_content = function() M._classes_group_changer_menu(justify_content_group) end
+
+local justify_items_group = {
+    { keymaps = { "s" }, classes = { "justify-items-start" } },
+    { keymaps = { "c" }, classes = { "justify-items-center" } },
+    { keymaps = { "e" }, classes = { "justify-items-end" } },
+    { keymaps = { "S" }, classes = { "justify-stretch" } },
+}
+M.change_justifity_items = function() M._classes_group_changer_menu(justify_items_group) end
+
+local justify_self_group = {
+    { keymaps = { "a" }, classes = { "justify-self-auto" } },
+    { keymaps = { "s" }, classes = { "justify-self-start" } },
+    { keymaps = { "c" }, classes = { "justify-self-center" } },
+    { keymaps = { "e" }, classes = { "justify-self-end" } },
+    { keymaps = { "S" }, classes = { "justify-self-stretch" } },
+}
+M.change_justifity_self = function() M._classes_group_changer_menu(justify_self_group) end
+
+local align_content_group = {
+    { keymaps = { "n" }, classes = { "content-normal" } },
+    { keymaps = { "s" }, classes = { "content-start" } },
+    { keymaps = { "c" }, classes = { "content-center" } },
+    { keymaps = { "e" }, classes = { "content-end" } },
+    { keymaps = { "b" }, classes = { "content-between" } },
+    { keymaps = { "a" }, classes = { "content-around" } },
+    { keymaps = { "e" }, classes = { "content-evenly" } },
+    { keymaps = { "B" }, classes = { "content-baseline" } },
+    { keymaps = { "S" }, classes = { "content-stretch" } },
+}
+M.change_align_content = function() M._classes_group_changer_menu(align_content_group) end
+
+local align_items_group = {
+    { keymaps = { "s" }, classes = { "items-start" } },
+    { keymaps = { "c" }, classes = { "items-center" } },
+    { keymaps = { "e" }, classes = { "items-end" } },
+    { keymaps = { "S" }, classes = { "items-stretch" } },
+}
+M.change_align_items = function() M._classes_group_changer_menu(align_items_group) end
+
+local align_self_group = {
+    { keymaps = { "a" }, classes = { "self-auto" } },
+    { keymaps = { "s" }, classes = { "self-start" } },
+    { keymaps = { "c" }, classes = { "self-center" } },
+    { keymaps = { "e" }, classes = { "self-end" } },
+    { keymaps = { "B" }, classes = { "self-baseline" } },
+    { keymaps = { "S" }, classes = { "self-stretch" } },
+}
+M.change_align_self = function() M._classes_group_changer_menu(align_self_group) end
+
+local flex_align_group = { -- Custom (non-standard)
     { keymaps = { "i" }, classes = { "items-center" } },
     { keymaps = { "j" }, classes = { "justify-center" } },
     { keymaps = { "b" }, classes = { "justify-between" } },
