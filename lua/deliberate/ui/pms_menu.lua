@@ -797,4 +797,20 @@ local content_D = {
 }
 M.change_content = function() M._menu("content", false, tcm._change, { content_D }) end
 
+-------------------------------------------- Background Position
+
+local bg_positon_D = {
+    { keymaps = { "t" }, text = "top" },
+    { keymaps = { "b" }, text = "bottom" },
+    { keymaps = { "c" }, text = "center" },
+    { keymaps = { "l" }, text = "left" },
+    { keymaps = { "r" }, text = "right" },
+    "",
+    { keymaps = { "u" }, text = "left-top" },
+    { keymaps = { "i" }, text = "left-bottom" },
+    { keymaps = { "o" }, text = "right-top" },
+    { keymaps = { "p" }, text = "right-bottom" },
+}
+M.change_bg_position = function() M._menu("bg", false, tcm._change, { bg_positon_D }) end
+
 return M
