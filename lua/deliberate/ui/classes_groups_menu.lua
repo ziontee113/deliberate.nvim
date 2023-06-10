@@ -221,6 +221,14 @@ local font_style_group = {
 }
 M.change_font_style = function() M._classes_group_changer_menu(font_style_group) end
 
+local text_transform_group = {
+    { keymaps = { "u", "U" }, classes = { "uppercase" } },
+    { keymaps = { "l", "L" }, classes = { "lowercase" } },
+    { keymaps = { "c", "C" }, classes = { "capitalize" } },
+    { keymaps = { "n", "N" }, classes = { "normal-case" } },
+}
+M.change_text_transform = function() M._classes_group_changer_menu(text_transform_group) end
+
 local font_variant_numeric_group = {
     { keymaps = { "i" }, classes = { "normal-nums" } },
     { keymaps = { "n" }, classes = { "ordinal" } },
