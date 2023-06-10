@@ -100,4 +100,19 @@ describe("input_to_pms_value()", function()
         local want2 = "20%"
         assert.equals(want2, transformer.input_to_pms_value(input2))
     end)
+
+    it("given input as a dot `.`, return .5", function()
+        local input = "."
+        assert.equals("0.5rem", transformer.input_to_pms_value(input))
+
+        local input2 = ".e"
+        assert.equals("0.5em", transformer.input_to_pms_value(input2))
+    end)
+
+    it("supports float values", function()
+        local input = "0.1"
+        assert.equals("0.1px", transformer.input_to_pms_value(input))
+        local input2 = "0.2e"
+        assert.equals("0.2em", transformer.input_to_pms_value(input2))
+    end)
 end)

@@ -75,14 +75,11 @@ local raw_input_group = {
 }
 
 local input_to_pms_value = function(input, property)
-    if input == "" then input = "0" end
     if not property then property = "" end
 
     if vim.tbl_contains(raw_input_group, property) then return input end
-
     if string.find(property, "flex") then return handle_flex(input) end
     if property == "font" then return string.format("'%s'", input) end
-
     if string.find(property, "opacity") then
         local value = tonumber(input) or 0
         return value .. "%"
@@ -90,9 +87,21 @@ local input_to_pms_value = function(input, property)
 
     if tonumber(input) then return input .. "px" end
 
-    local _, idx = string.find(input, "%D")
-    local num = tonumber(string.sub(input, 1, idx - 1))
-    local chars = string.sub(input, idx)
+    local num, chars = 0, "px"
+    local _, idx = string.find(input, "[^%d%.]+")
+    if idx then
+        num = tonumber(string.sub(input, 1, idx - 1)) or 0.5
+        chars = string.sub(input, idx)
+    else
+        if input == "." then
+            return "0.5rem"
+        else
+            local match = string.match(input, "[^%.]")
+            print(vim.inspect(match))
+        end
+    end
+
+    print(chars)
 
     --stylua: ignore
     local unit_tbl = {
@@ -105,9 +114,6 @@ local input_to_pms_value = function(input, property)
         P = "%", ["%"] = "%"
     }
     local unit = unit_tbl[chars]
-
-    if not num then num = 0 end
-    if not unit then unit = "px" end
 
     return num .. unit
 end
