@@ -218,14 +218,14 @@ M.change_padding = function(o) M._menu("p", o.axis, tcm.change_padding, { pms_di
 local negative_D = {
     { keymaps = { "-", "N" }, text = "", negatize = true, hidden = true },
 }
-local margin_dict = { { keymaps = "A", text = "auto", ironclad = true } }
+local margin_D = { { keymaps = "A", text = "auto", ironclad = true } }
 M.change_margin = function(o)
-    M._menu("m", o.axis, tcm.change_margin, { pms_dict, margin_dict, negative_D })
+    M._menu("m", o.axis, tcm.change_margin, { pms_dict, margin_D, negative_D })
 end
 
-local spacing_dict = { { keymaps = "R", text = "reverse" } }
+local spacing_D = { { keymaps = "R", text = "reverse", ironclad = true } }
 M.change_spacing = function(o)
-    M._menu("space", o.axis, tcm.change_spacing, { pms_dict, spacing_dict })
+    M._menu("space", o.axis, tcm.change_spacing, { pms_dict, spacing_D, negative_D })
 end
 
 -------------------------------------------- Border Width
