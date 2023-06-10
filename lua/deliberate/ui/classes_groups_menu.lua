@@ -571,4 +571,15 @@ local background_origin_group = {
 }
 M.change_background_origin = function() M._classes_group_changer_menu(background_origin_group) end
 
+-- Background Repeat
+local background_repeat_group = {
+    { keymaps = { "r" }, classes = { "bg-repeat" } },
+    { keymaps = { "n", "/" }, classes = { "bg-no-repeat" } },
+    { keymaps = { "x" }, classes = { "bg-repeat-x" } },
+    { keymaps = { "y" }, classes = { "bg-repeat-y" } },
+    { keymaps = { "R" }, classes = { "bg-repeat-round" } },
+    { keymaps = { "s", "S" }, classes = { "bg-repeat-square" } },
+}
+M.change_background_repeat = function() M._classes_group_changer_menu(background_repeat_group) end
+
 return M
