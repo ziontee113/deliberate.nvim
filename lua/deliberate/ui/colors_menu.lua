@@ -67,7 +67,7 @@ local show_arbitrary_input = function(metadata, prefix, fn, property)
 end
 
 M._menu = function(filetype, prefix, fn, property)
-    menu_repeater.register(M._menu, filetype, prefix, fn)
+    menu_repeater.register(M._menu, filetype, prefix, fn, property)
 
     local popup = PopUp:new({
         filetype = filetype,
@@ -124,5 +124,6 @@ M.ring_offset = function() M._menu(bg_ft, "ring-offset", fn, "ring-offset-color"
 M.from = function() M._menu(bg_ft, "from", fn, "from-color") end
 M.via = function() M._menu(bg_ft, "via", fn, "via-color") end
 M.to = function() M._menu(bg_ft, "to", fn, "to-color") end
+M.decoration = function() M._menu(bg_ft, "decoration", fn, "text-decoration-color") end
 
 return M

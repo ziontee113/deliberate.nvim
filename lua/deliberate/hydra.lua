@@ -160,6 +160,7 @@ local keymap_to_color_menu_fn = {
     ["zf"] = colors_menu.from,
     ["zv"] = colors_menu.via,
     ["zt"] = colors_menu.to,
+    ["<space>dc"] = colors_menu.decoration,
 }
 add_heads_from_tbl(keymap_to_color_menu_fn)
 

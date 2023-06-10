@@ -93,6 +93,7 @@ local find_patterns = function(o)
         table.insert(patterns, negative_pattern)
     end
 
+    if not patterns then error("failed to `find_patterns` for property: " .. o.property) end
     return patterns
 end
 
