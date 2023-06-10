@@ -212,6 +212,19 @@ local font_style_group = {
 }
 M.change_font_style = function() M._classes_group_changer_menu(font_style_group) end
 
+local font_variant_numeric_group = {
+    { keymaps = { "i" }, classes = { "normal-nums" } },
+    { keymaps = { "n" }, classes = { "ordinal" } },
+    { keymaps = { "n" }, classes = { "slashed-zero" } },
+    { keymaps = { "n" }, classes = { "lining-nums" } },
+    { keymaps = { "n" }, classes = { "oldstyle-nums" } },
+    { keymaps = { "n" }, classes = { "porpotional-nums" } },
+    { keymaps = { "n" }, classes = { "tabular-nums" } },
+    { keymaps = { "n" }, classes = { "diagonal-fragtions" } },
+    { keymaps = { "n" }, classes = { "stacked-fractions" } },
+}
+M.change_font_variant_numeric = function() M._classes_group_changer_menu(font_variant_numeric_group) end
+
 local text_align_group = {
     { keymaps = { "h" }, classes = { "text-left" } },
     { keymaps = { "l" }, classes = { "text-right" } },
