@@ -299,6 +299,8 @@ local classes_groups_dict = {
     ["<A-a>"] = { cgm.change_text_align },
     ["<A-d>"] = { cgm.change_text_decoration },
     ["fV"] = { cgm.change_font_variant_numeric },
+    ["<space>lp"] = { cgm.change_list_style_position },
+    ["<space>lt"] = { cgm.change_list_style_type },
 
     ["ds"] = { cgm.change_divide_style },
     ["bs"] = { cgm.change_border_style },

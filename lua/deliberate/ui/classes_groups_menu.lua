@@ -233,6 +233,19 @@ local text_align_group = {
 }
 M.change_text_align = function() M._classes_group_changer_menu(text_align_group) end
 
+local list_style_position_group = {
+    { keymaps = { "o" }, classes = { "list-inside" } },
+    { keymaps = { "i" }, classes = { "list-outisde" } },
+}
+M.change_list_style_position = function() M._classes_group_changer_menu(list_style_position_group) end
+
+local list_style_type_group = {
+    { keymaps = { "/" }, classes = { "list-none" } },
+    { keymaps = { "d" }, classes = { "list-disc" } },
+    { keymaps = { "n" }, classes = { "list-normal" } },
+}
+M.change_list_style_type = function() M._classes_group_changer_menu(list_style_type_group) end
+
 -- Divide
 
 local divide_style_group = {
