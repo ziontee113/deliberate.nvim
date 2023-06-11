@@ -972,4 +972,21 @@ M.change_backdrop_sepia = function()
     M._menu("backdrop_sepia", false, tcm._change, { backdrop_sepia_D })
 end
 
+------------------------------------------------------------------------------
+--------------------------- Transition & Animation ---------------------------
+------------------------------------------------------------------------------
+
+-------------------------------------------- Transition Property
+
+local transition_D = {
+    { keymaps = { "/" }, text = "none" },
+    { keymaps = { "a" }, text = "all" },
+    { keymaps = { "t" }, text = "", absolute = "transition" },
+    { keymaps = { "c" }, text = "colors" },
+    { keymaps = { "o" }, text = "opacity" },
+    { keymaps = { "s" }, text = "shadow" },
+    { keymaps = { "T" }, text = "transform" },
+}
+M.change_transition = function() M._menu("transition", false, tcm._change, { transition_D }) end
+
 return M

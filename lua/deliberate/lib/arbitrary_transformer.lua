@@ -87,6 +87,7 @@ local raw_input_group = {
     "sepia",
     "backdrop-sepia",
     "backdrop-hue-rotate",
+    "transition",
 }
 
 local input_to_pms_value = function(input, property)

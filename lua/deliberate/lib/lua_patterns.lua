@@ -98,6 +98,7 @@ local singles = {
     "brightness", "backdrop-brightness", "grayscale", "backdrop-grayscale",
     "hue-rotate", "backdrop-hue-rotate", "saturate", "backdrop-saturate",
     "invert", "backdrop-invert", "sepia", "backdrop-sepia",
+    "transition",
 }
 
 local general_pms_postfixes = { "%-[%d%.%a/]+$", "%-%[[%-%d%.]+[%a%%]+]$" }
@@ -152,6 +153,7 @@ local property_specific_patterns = {
     ["backdrop-saturate"] = { "^backdrop%-saturate%-%[.+]$" },
     ["sepia"] = { "^sepia%-%[.+]$" },
     ["backdrop-sepia"] = { "^backdrop%-sepia%-%[.+]$" },
+    ["transition"] = { "^transition%-%[.+]$" },
 }
 
 -- Add properties with axies
