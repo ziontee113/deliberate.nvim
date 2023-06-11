@@ -689,4 +689,11 @@ local table_layout_group = {
 }
 M.change_table_layout = function() M._classes_group_changer_menu(table_layout_group) end
 
+-- Caption Side
+local caption_side_group = {
+    { keymaps = { "t", "T" }, classes = { "caption-top" } },
+    { keymaps = { "b", "B" }, classes = { "caption-bottom" } },
+}
+M.change_caption_side = function() M._classes_group_changer_menu(caption_side_group) end
+
 return M

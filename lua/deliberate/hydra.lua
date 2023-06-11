@@ -399,6 +399,7 @@ local classes_groups_dict = {
 
     ["Tc"] = { cgm.change_border_collapse },
     ["Tl"] = { cgm.change_table_layout },
+    ["TC"] = { cgm.change_caption_side },
 }
 
 for keymap, fn_and_args in pairs(classes_groups_dict) do
