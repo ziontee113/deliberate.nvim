@@ -798,9 +798,20 @@ M.change_snap_align = function() M._classes_group_changer_menu(snap_align_group)
 
 -- Scroll Snap Stop
 local snap_stop_group = {
-    { keymaps = { "n" }, classes = { "normal" } },
-    { keymaps = { "a" }, classes = { "always" } },
+    { keymaps = { "n" }, classes = { "snap-normal" } },
+    { keymaps = { "a" }, classes = { "snap-always" } },
 }
 M.change_snap_stop = function() M._classes_group_changer_menu(snap_stop_group) end
+
+-- Scrol Snap type
+local snap_type_group = {
+    { keymaps = { "x" }, classes = { "snap-x" } },
+    { keymaps = { "y" }, classes = { "snap-y" } },
+    { keymaps = { "n", "/" }, classes = { "snap-none" } },
+    { keymaps = { "b", "2" }, classes = { "snap-both" } },
+    { keymaps = { "m" }, classes = { "snap-mandatory" } },
+    { keymaps = { "p" }, classes = { "snap-proximity" } },
+}
+M.change_snap_type = function() M._classes_group_changer_menu(snap_type_group) end
 
 return M
