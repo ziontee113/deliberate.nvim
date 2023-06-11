@@ -928,6 +928,14 @@ local invert_D = {
 }
 M.change_invert = function() M._menu("invert", false, tcm._change, { invert_D }) end
 
+local backdrop_invert_D = {
+    { keymaps = { "n", "/" }, text = "0" },
+    { keymaps = { "b", "B", "i", "I" }, text = "", absolute = "backdrop-invert" },
+}
+M.change_backrop_invert = function()
+    M._menu("backdrop-invert", false, tcm._change, { backdrop_invert_D })
+end
+
 -------------------------------------------- Saturate
 
 local saturate_D = {

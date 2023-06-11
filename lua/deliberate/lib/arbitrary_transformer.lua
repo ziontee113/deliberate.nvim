@@ -82,6 +82,7 @@ local raw_input_group = {
     "backdrop-grayscale",
     "hue-rotate",
     "invert",
+    "backdrop-invert",
     "saturate",
     "sepia",
     "backdrop-hue-rotate",
