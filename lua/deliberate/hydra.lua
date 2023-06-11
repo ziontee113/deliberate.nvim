@@ -238,7 +238,7 @@ local non_axis_map = {
     ["<space>Hr"] = pms_menu.change_hue_rotate,
     ["<space>Iv"] = pms_menu.change_invert,
     ["<space>Sa"] = pms_menu.change_saturate,
-    ["<space>Se"] = pms_menu.change_sepia,
+    ["<space>Pi"] = pms_menu.change_sepia,
     ["<space>Bd"] = pms_menu.change_backdrop_blur,
     ["<space>Bb"] = pms_menu.change_backdrop_brightness,
     ["<space>Bc"] = pms_menu.change_backdrop_contrast,
@@ -246,6 +246,8 @@ local non_axis_map = {
     ["<space>Bh"] = pms_menu.change_backdrop_hue_rotate,
     ["<space>Bi"] = pms_menu.change_backrop_invert,
     ["<space>Bo"] = pms_menu.change_backdrop_opacity,
+    ["<space>Bs"] = pms_menu.change_backdrop_saturate,
+    ["<space>Bp"] = pms_menu.change_backdrop_sepia,
 }
 add_heads_from_tbl(non_axis_map)
 

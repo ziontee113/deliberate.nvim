@@ -949,6 +949,9 @@ local saturate_D = {
     { keymaps = { "l" }, text = "200" },
 }
 M.change_saturate = function() M._menu("saturate", false, tcm._change, { saturate_D }) end
+M.change_backdrop_saturate = function()
+    M._menu("backrop-saturate", false, tcm._change, { saturate_D })
+end
 
 -------------------------------------------- Sepia
 
@@ -957,4 +960,13 @@ local sepia_D = {
     { keymaps = { "s", "S" }, text = "", absolute = "sepia" },
 }
 M.change_sepia = function() M._menu("sepia", false, tcm._change, { sepia_D }) end
+
+local backdrop_sepia_D = {
+    { keymaps = { "n", "/" }, text = "0" },
+    { keymaps = { "s", "S" }, text = "", absolute = "backdrop-sepia" },
+}
+M.change_backdrop_sepia = function()
+    M._menu("backdrop_sepia", false, tcm._change, { backdrop_sepia_D })
+end
+
 return M

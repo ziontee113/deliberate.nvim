@@ -95,8 +95,8 @@ local singles = {
     "auto-rows", "auto-cols",
     "shadow", "blur", "backdrop-blur", "contrast", "backdrop-contrast", "drop-shadow",
     "brightness", "backdrop-brightness", "grayscale", "backdrop-grayscale",
-    "hue-rotate", "backdrop-hue-rotate", "saturate",
-    "invert", "backdrop-invert", "sepia",
+    "hue-rotate", "backdrop-hue-rotate", "saturate", "backdrop-saturate",
+    "invert", "backdrop-invert", "sepia", "backdrop-sepia",
 }
 
 local general_pms_postfixes = { "%-[%d%.%a/]+$", "%-%[[%-%d%.]+[%a%%]+]$" }
@@ -148,7 +148,9 @@ local property_specific_patterns = {
     ["invert"] = { "^invert%-%[.+]$" },
     ["backdrop-invert"] = { "^backdrop%-invert%-%[.+]$" },
     ["saturate"] = { "^saturate%-%[.+]$" },
+    ["backdrop-saturate"] = { "^backdrop%-saturate%-%[.+]$" },
     ["sepia"] = { "^sepia%-%[.+]$" },
+    ["backdrop-sepia"] = { "^backdrop%-sepia%-%[.+]$" },
 }
 
 -- Add properties with axies
