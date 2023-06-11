@@ -903,4 +903,15 @@ local invert_D = {
 }
 M.change_invert = function() M._menu("invert", false, tcm._change, { invert_D }) end
 
+-------------------------------------------- Saturate
+
+local saturate_D = {
+    { keymaps = { "n", "/" }, text = "0" },
+    { keymaps = { "5" }, text = "50" },
+    { keymaps = { "1" }, text = "100" },
+    { keymaps = { "h" }, text = "150" },
+    { keymaps = { "l" }, text = "200" },
+}
+M.change_saturate = function() M._menu("saturate", false, tcm._change, { saturate_D }) end
+
 return M
