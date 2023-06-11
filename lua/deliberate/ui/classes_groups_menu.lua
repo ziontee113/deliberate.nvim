@@ -829,4 +829,13 @@ local touch_action_group = {
 }
 M.change_touch_action = function() M._classes_group_changer_menu(touch_action_group) end
 
+-- User Select
+local user_select_group = {
+    { keymaps = { "a" }, classes = { "auto" } },
+    { keymaps = { "t" }, classes = { "text" } },
+    { keymaps = { "A" }, classes = { "all" } },
+    { keymaps = { "n", "/" }, classes = { "none" } },
+}
+M.change_user_select = function() M._classes_group_changer_menu(user_select_group) end
+
 return M

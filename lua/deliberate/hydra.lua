@@ -432,6 +432,7 @@ local classes_groups_dict = {
     ["sn"] = { cgm.change_snap_align },
     ["st"] = { cgm.change_snap_stop },
     ["TA"] = { cgm.change_touch_action },
+    ["<space>us"] = { cgm.change_user_select },
 }
 
 for keymap, fn_and_args in pairs(classes_groups_dict) do
