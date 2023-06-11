@@ -1076,4 +1076,14 @@ M.change_origin = function() M._menu("origin", false, tcm._change, { origin_D })
 M.change_scroll_margin = function(o) M._menu("scroll-m", o.axis, tcm._change, { pms_D, negative_D }) end
 M.change_scroll_padding = function(o) M._menu("scroll-p", o.axis, tcm._change, { pms_D }) end
 
+-------------------------------------------- Will Change
+
+local will_change_D = {
+    { keymaps = { "a" }, text = "auto" },
+    { keymaps = { "s" }, text = "scroll" },
+    { keymaps = { "c" }, text = "contents" },
+    { keymaps = { "t" }, text = "transform" },
+}
+M.change_will_change = function() M._menu("will-change", false, tcm._change, { will_change_D }) end
+
 return M
