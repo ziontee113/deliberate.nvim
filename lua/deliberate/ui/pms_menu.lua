@@ -261,6 +261,9 @@ M.change_opacity = function() M._menu("opacity", false, tcm._change, { opacity_d
 M.change_border_opacity = function() M._menu("border-opacity", false, tcm._change, { opacity_dict }) end
 M.change_divide_opacity = function() M._menu("divide-opacity", false, tcm._change, { opacity_dict }) end
 M.change_ring_opacity = function() M._menu("ring-opacity", false, tcm._change, { opacity_dict }) end
+M.change_backdrop_opacity = function()
+    M._menu("backdrop-opacity", false, tcm._change, { opacity_dict })
+end
 
 -------------------------------------------- Font Size
 

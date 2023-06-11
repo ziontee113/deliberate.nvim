@@ -245,6 +245,7 @@ local non_axis_map = {
     ["<space>Bg"] = pms_menu.change_backdrop_grayscale,
     ["<space>Bh"] = pms_menu.change_backdrop_hue_rotate,
     ["<space>Bi"] = pms_menu.change_backrop_invert,
+    ["<space>Bo"] = pms_menu.change_backdrop_opacity,
 }
 add_heads_from_tbl(non_axis_map)
 
