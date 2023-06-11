@@ -796,4 +796,11 @@ local snap_align_group = {
 }
 M.change_snap_align = function() M._classes_group_changer_menu(snap_align_group) end
 
+-- Scroll Snap Stop
+local snap_stop_group = {
+    { keymaps = { "n" }, classes = { "normal" } },
+    { keymaps = { "a" }, classes = { "always" } },
+}
+M.change_snap_stop = function() M._classes_group_changer_menu(snap_stop_group) end
+
 return M

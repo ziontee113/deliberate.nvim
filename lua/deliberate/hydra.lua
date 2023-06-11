@@ -430,6 +430,7 @@ local classes_groups_dict = {
     ["RS"] = { cgm.change_resize },
     ["sc"] = { cgm.change_scroll_behavior },
     ["sn"] = { cgm.change_snap_align },
+    ["st"] = { cgm.change_snap_stop },
 }
 
 for keymap, fn_and_args in pairs(classes_groups_dict) do
