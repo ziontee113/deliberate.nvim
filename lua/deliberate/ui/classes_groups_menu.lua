@@ -721,4 +721,47 @@ local appearance_group = {
 }
 M.change_appearance = function() M._classes_group_changer_menu(appearance_group) end
 
+-- Cursor
+local cursor_group = {
+    { keymaps = { "A" }, classes = { "cursor-auto" } },
+    { keymaps = { "d" }, classes = { "cursor-default" } },
+    { keymaps = { "p" }, classes = { "cursor-pointer" } },
+    { keymaps = { "w" }, classes = { "cursor-wait" } },
+    { keymaps = { "t" }, classes = { "cursor-text" } },
+    { keymaps = { "m" }, classes = { "cursor-move" } },
+    { keymaps = { "h" }, classes = { "cursor-help" } },
+    { keymaps = { "N" }, classes = { "cursor-not-allowed" } },
+    { keymaps = { "/" }, classes = { "cursor-none" } },
+    "",
+    { keymaps = { "cm" }, classes = { "cursor-context-menu" } },
+    { keymaps = { "p" }, classes = { "cursor-progress" } },
+    { keymaps = { "ce" }, classes = { "cursor-cell" } },
+    { keymaps = { "ch" }, classes = { "cursor-crosshair" } },
+    { keymaps = { "v" }, classes = { "cursor-vertial-text" } },
+    { keymaps = { "al" }, classes = { "cursor-alias" } },
+    { keymaps = { "cp" }, classes = { "cursor-copy" } },
+    { keymaps = { "nd" }, classes = { "cursor-no-drop" } },
+    { keymaps = { "g" }, classes = { "cursor-grab" } },
+    { keymaps = { "G" }, classes = { "cursor-grabbing" } },
+    "",
+    { keymaps = { "as" }, classes = { "cursor-all-scroll" } },
+    { keymaps = { "cr" }, classes = { "cursor-col-resize" } },
+    { keymaps = { "rr" }, classes = { "cursor-row-resize" } },
+    { keymaps = { "nr" }, classes = { "cursor-n-resize" } },
+    { keymaps = { "er" }, classes = { "cursor-e-resize" } },
+    { keymaps = { "sr" }, classes = { "cursor-s-resize" } },
+    { keymaps = { "wr" }, classes = { "cursor-w-resize" } },
+    { keymaps = { "ne" }, classes = { "cursor-ne-resize" } },
+    { keymaps = { "nw" }, classes = { "cursor-nw-resize" } },
+    { keymaps = { "se" }, classes = { "cursor-se-resize" } },
+    { keymaps = { "sw" }, classes = { "cursor-sw-resize" } },
+    { keymaps = { "ew" }, classes = { "cursor-ew-resize" } },
+    { keymaps = { "ns" }, classes = { "cursor-ns-resize" } },
+    { keymaps = { "NE" }, classes = { "cursor-nesw-resize" } },
+    { keymaps = { "NW" }, classes = { "cursor-nwse-resize" } },
+    { keymaps = { "i" }, classes = { "cursor-zoom-in" } },
+    { keymaps = { "o" }, classes = { "cursor-zoom-out" } },
+}
+M.change_cursor = function() M._classes_group_changer_menu(cursor_group) end
+
 return M
