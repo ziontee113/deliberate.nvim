@@ -705,4 +705,14 @@ local transition_timing_group = {
 }
 M.change_transition_timing = function() M._classes_group_changer_menu(transition_timing_group) end
 
+-- Animation
+local animation_group = {
+    { keymaps = { "n", "/" }, classes = { "none" } },
+    { keymaps = { "s" }, classes = { "spin" } },
+    { keymaps = { "p" }, classes = { "ping" } },
+    { keymaps = { "P" }, classes = { "pulse" } },
+    { keymaps = { "b" }, classes = { "bounce" } },
+}
+M.change_animation = function() M._classes_group_changer_menu(animation_group) end
+
 return M
