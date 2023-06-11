@@ -124,7 +124,7 @@ local input_to_pms_value = function(input, property)
         p = "pt",  pt = "pt",  t = "pt",
         P = "%", ["%"] = "%"
     }
-    local unit = unit_tbl[chars]
+    local unit = unit_tbl[chars] or "px"
 
     return num .. unit
 end

@@ -811,4 +811,23 @@ local box_shadow_D = {
 }
 M.change_box_shadow = function() M._menu("shadow", false, tcm._change, { box_shadow_D }) end
 
+---------------------------------------------------------------------------
+--------------------------------- Filters ---------------------------------
+---------------------------------------------------------------------------
+
+-------------------------------------------- Blur
+
+local blur_D = {
+    { keymaps = { "b" }, text = "", absolute = "blur" },
+    { keymaps = { "s" }, text = "sm" },
+    { keymaps = { "m" }, text = "md" },
+    { keymaps = { "l" }, text = "lg" },
+    { keymaps = { "x", "1" }, text = "xl" },
+    { keymaps = { "2" }, text = "2xl" },
+    { keymaps = { "3" }, text = "3xl" },
+    { keymaps = { "i" }, text = "inner" },
+    { keymaps = { "n", "/" }, text = "none" },
+}
+M.change_blur = function() M._menu("blur", false, tcm._change, { blur_D }) end
+
 return M
