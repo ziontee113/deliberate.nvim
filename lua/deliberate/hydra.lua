@@ -373,6 +373,7 @@ local classes_groups_dict = {
     ["<space>bp"] = { cgm.change_backround_position },
     ["<space>bs"] = { cgm.change_background_size },
     ["<space>bi"] = { cgm.change_background_image },
+    ["<space>mb"] = { cgm.change_mix_blend_mode },
 }
 
 for keymap, fn_and_args in pairs(classes_groups_dict) do
