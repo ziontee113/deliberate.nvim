@@ -605,4 +605,20 @@ local background_size_group = {
 }
 M.change_background_size = function() M._classes_group_changer_menu(background_size_group) end
 
+-- Background Image
+local background_image_group = {
+    { keymaps = { "n", "/" }, classes = { "bg-none" } },
+    "",
+    { keymaps = { "t" }, classes = { "bg-gradient-to-t" } },
+    { keymaps = { "l" }, classes = { "bg-gradient-to-l" } },
+    { keymaps = { "b" }, classes = { "bg-gradient-to-b" } },
+    { keymaps = { "r" }, classes = { "bg-gradient-to-r" } },
+    "",
+    { keymaps = { "u" }, classes = { "bg-gradient-to-tl" } },
+    { keymaps = { "p" }, classes = { "bg-gradient-to-tr" } },
+    { keymaps = { "i" }, classes = { "bg-gradient-to-bl" } },
+    { keymaps = { "o" }, classes = { "bg-gradient-to-br" } },
+}
+M.change_background_image = function() M._classes_group_changer_menu(background_image_group) end
+
 return M
