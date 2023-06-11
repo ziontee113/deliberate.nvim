@@ -151,7 +151,7 @@ end
 -------------------------------------------- Colors Menus
 
 local keymap_to_color_menu_fn = {
-    ["t"] = colors_menu.text,
+    ["T"] = colors_menu.text,
     ["B"] = colors_menu.background,
     ["bc"] = colors_menu.border,
     ["dc"] = colors_menu.divide,
@@ -249,7 +249,8 @@ local non_axis_map = {
     ["<space>Bs"] = pms_menu.change_backdrop_saturate,
     ["<space>Bp"] = pms_menu.change_backdrop_sepia,
 
-    ["<space>T"] = pms_menu.change_transition,
+    ["tr"] = pms_menu.change_transition,
+    ["td"] = pms_menu.change_duration,
 }
 add_heads_from_tbl(non_axis_map)
 
@@ -295,7 +296,7 @@ local find_axis_keymap = function(property, key_axis)
         end
     end
 
-    if property == "border-spacing" then property = "Ts" end
+    if property == "border-spacing" then property = "ts" end
 
     if property == "b" and key_axis == "" then return "bd" end
     if key_axis == "" then return string.upper(property) end
@@ -399,9 +400,9 @@ local classes_groups_dict = {
     ["<space>mb"] = { cgm.change_mix_blend_mode },
     ["<space>bb"] = { cgm.change_bg_blend_mode },
 
-    ["Tc"] = { cgm.change_border_collapse },
-    ["Tl"] = { cgm.change_table_layout },
-    ["TC"] = { cgm.change_caption_side },
+    ["tc"] = { cgm.change_border_collapse },
+    ["tl"] = { cgm.change_table_layout },
+    ["tC"] = { cgm.change_caption_side },
 }
 
 for keymap, fn_and_args in pairs(classes_groups_dict) do

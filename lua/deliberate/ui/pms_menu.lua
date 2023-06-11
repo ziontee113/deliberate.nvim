@@ -979,7 +979,7 @@ end
 -------------------------------------------- Transition Property
 
 local transition_D = {
-    { keymaps = { "/" }, text = "none" },
+    { keymaps = { "n", "/" }, text = "none" },
     { keymaps = { "a" }, text = "all" },
     { keymaps = { "t" }, text = "", absolute = "transition" },
     { keymaps = { "c" }, text = "colors" },
@@ -988,5 +988,20 @@ local transition_D = {
     { keymaps = { "T" }, text = "transform" },
 }
 M.change_transition = function() M._menu("transition", false, tcm._change, { transition_D }) end
+
+-------------------------------------------- Transition Duration
+
+local duration_D = {
+    { keymaps = { "z", "/" }, text = "0" },
+    { keymaps = { "r" }, text = "75" },
+    { keymaps = { "1" }, text = "100" },
+    { keymaps = { "!" }, text = "150" },
+    { keymaps = { "2" }, text = "200" },
+    { keymaps = { "3" }, text = "300" },
+    { keymaps = { "5" }, text = "500" },
+    { keymaps = { "7" }, text = "700" },
+    { keymaps = { "s" }, text = "1000" },
+}
+M.change_duration = function() M._menu("duration", false, tcm._change, { duration_D }) end
 
 return M
