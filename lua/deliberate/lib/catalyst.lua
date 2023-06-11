@@ -88,6 +88,19 @@ local find_closest_html_node_to_cursor = function(win, buf)
     return find_closest_node_to_cursor(win, html_nodes)
 end
 
+local find_node_point = function(win, node)
+    local cursor_line = unpack(vim.api.nvim_win_get_cursor(win))
+    cursor_line = cursor_line - 1
+    local start_row, _, end_row, _ = node:range()
+
+    if start_row == end_row then return "start" end
+    if math.abs(cursor_line - start_row) < math.abs(cursor_line - end_row) then
+        return "start"
+    else
+        return "end"
+    end
+end
+
 ---@class navigator_initiate_Args
 ---@field win number
 ---@field buf number
@@ -104,7 +117,8 @@ M.initiate = function(o)
 
     local node, node_point
     if parent then
-        node, node_point = parent, "start"
+        node = parent
+        node_point = find_node_point(o.win, parent)
     else
         node, node_point = find_closest_html_node_to_cursor(o.win, o.buf)
     end
