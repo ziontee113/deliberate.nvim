@@ -403,6 +403,7 @@ local classes_groups_dict = {
     ["tc"] = { cgm.change_border_collapse },
     ["tl"] = { cgm.change_table_layout },
     ["tC"] = { cgm.change_caption_side },
+    ["tt"] = { cgm.change_transition_timing },
 }
 
 for keymap, fn_and_args in pairs(classes_groups_dict) do

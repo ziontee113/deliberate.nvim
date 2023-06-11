@@ -671,9 +671,7 @@ local bg_blend_mode_group = {
 }
 M.change_bg_blend_mode = function() M._classes_group_changer_menu(bg_blend_mode_group) end
 
---------------------------------------------------------------------------
 --------------------------------- Tables ---------------------------------
---------------------------------------------------------------------------
 
 -- Border Collapse
 local border_collapse_group = {
@@ -695,5 +693,16 @@ local caption_side_group = {
     { keymaps = { "b", "B" }, classes = { "caption-bottom" } },
 }
 M.change_caption_side = function() M._classes_group_changer_menu(caption_side_group) end
+
+--------------------------------- Transitions ---------------------------------
+
+-- Transition timing Function
+local transition_timing_group = {
+    { keymaps = { "l" }, classes = { "ease-linear" } },
+    { keymaps = { "i" }, classes = { "ease-in" } },
+    { keymaps = { "o" }, classes = { "ease-out" } },
+    { keymaps = { "2", "a" }, classes = { "ease-in-out" } },
+}
+M.change_transition_timing = function() M._classes_group_changer_menu(transition_timing_group) end
 
 return M
