@@ -874,4 +874,12 @@ local drop_shadow_D = {
 }
 M.change_drop_shadow = function() M._menu("drop-shadow", false, tcm._change, { drop_shadow_D }) end
 
+-------------------------------------------- Grayscale
+
+local grayscale_D = {
+    { keymaps = { "n", "/" }, text = "0" },
+    { keymaps = { "g", "G" }, text = "", absolute = "grayscale" },
+}
+M.change_grayscale = function() M._menu("grayscale", false, tcm._change, { grayscale_D }) end
+
 return M

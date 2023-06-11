@@ -234,6 +234,7 @@ local non_axis_map = {
     ["<space>Br"] = pms_menu.change_brightness,
     ["<space>Co"] = pms_menu.change_contrast,
     ["<space>Dr"] = pms_menu.change_drop_shadow,
+    ["<space>Gr"] = pms_menu.change_grayscale,
 }
 add_heads_from_tbl(non_axis_map)
 
