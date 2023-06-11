@@ -100,7 +100,7 @@ local singles = {
     "brightness", "backdrop-brightness", "grayscale", "backdrop-grayscale",
     "hue-rotate", "backdrop-hue-rotate", "saturate", "backdrop-saturate",
     "invert", "backdrop-invert", "sepia", "backdrop-sepia",
-    "transition", "duration", "delay", "rotate", "skew",
+    "transition", "duration", "delay", "rotate", "skew", "origin",
 }
 
 local general_pms_postfixes = { "%-[%d%.%a/]+$", "%-%[[%-%d%.]+[%a%%]+]$" }
@@ -165,6 +165,13 @@ local property_specific_patterns = {
     ["delay"] = { "^delay%-%[.+]$" },
     ["rotate"] = { "^rotate%-%[.+]$" },
     ["skew"] = { "^skew%-%[.+]$" },
+    ["origin"] = {
+        "^origin%-%[.+]$",
+        "^origin%-top%-left",
+        "^origin%-top%-right",
+        "^origin%-bottom%-left",
+        "^origin%-bottom%-right",
+    },
 }
 
 -- Add properties with axies

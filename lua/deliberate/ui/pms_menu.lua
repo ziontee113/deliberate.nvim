@@ -1055,4 +1055,20 @@ local skew_D = {
 }
 M.change_skew = function() M._menu("skew", false, tcm._change, { skew_D }) end
 
+-------------------------------------------- Origin
+
+local origin_D = {
+    { keymaps = { "t" }, text = "top" },
+    { keymaps = { "b" }, text = "bottom" },
+    { keymaps = { "c" }, text = "center" },
+    { keymaps = { "l" }, text = "left" },
+    { keymaps = { "r" }, text = "right" },
+    "",
+    { keymaps = { "u" }, text = "top-left" },
+    { keymaps = { "p" }, text = "top-right" },
+    { keymaps = { "i" }, text = "bottom-left" },
+    { keymaps = { "o" }, text = "bottom-right" },
+}
+M.change_origin = function() M._menu("origin", false, tcm._change, { origin_D }) end
+
 return M

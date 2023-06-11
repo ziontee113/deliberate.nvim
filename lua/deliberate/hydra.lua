@@ -239,6 +239,7 @@ local non_axis_map = {
 
     ["Rt"] = pms_menu.change_rotate,
     ["Sk"] = pms_menu.change_skew,
+    ["or"] = pms_menu.change_origin,
 }
 add_heads_from_tbl(non_axis_map)
 

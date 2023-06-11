@@ -89,6 +89,7 @@ local raw_input_group = {
     "duration",
     "delay",
     "scale",
+    "origin",
 }
 
 local input_to_pms_value = function(input, property)
