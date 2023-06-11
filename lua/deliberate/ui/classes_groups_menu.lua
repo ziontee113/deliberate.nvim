@@ -583,7 +583,6 @@ local background_repeat_group = {
 M.change_background_repeat = function() M._classes_group_changer_menu(background_repeat_group) end
 
 -- Background Position
-
 local backround_position_group = {
     { keymaps = { "t" }, classes = { "bg-top" } },
     { keymaps = { "b" }, classes = { "bg-bottom" } },
@@ -597,5 +596,13 @@ local backround_position_group = {
     { keymaps = { "p" }, classes = { "bg-right-bottom" } },
 }
 M.change_backround_position = function() M._classes_group_changer_menu(backround_position_group) end
+
+-- Background Size
+local background_size_group = {
+    { keymaps = { "a" }, classes = { "bg-auto" } },
+    { keymaps = { "c" }, classes = { "bg-cover" } },
+    { keymaps = { "C" }, classes = { "bg-contain" } },
+}
+M.change_background_size = function() M._classes_group_changer_menu(background_size_group) end
 
 return M

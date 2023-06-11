@@ -93,7 +93,6 @@ local singles = {
     "grid-cols", "col-span", "col-start", "col-end",
     "grid-rows", "row-span", "row-start", "row-end",
     "auto-rows", "auto-cols",
-    "bg",
 }
 
 local general_pms_postfixes = { "%-[%d%.%a/]+$", "%-%[[%-%d%.]+[%a%%]+]$" }
@@ -130,7 +129,6 @@ local property_specific_patterns = {
     ["line-clamp"] = { "^line%-clamp%-%[%d+]$" },
     ["list-image"] = { "^list%-image%-%[.+]$" },
     ["content"] = { "^content%-%[.+]$" },
-    ["bg"] = { "^bg%-%[.+]$" },
 }
 
 -- Add properties with axies
