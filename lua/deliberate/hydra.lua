@@ -398,6 +398,7 @@ local classes_groups_dict = {
     ["<space>bb"] = { cgm.change_bg_blend_mode },
 
     ["Tc"] = { cgm.change_border_collapse },
+    ["Tl"] = { cgm.change_table_layout },
 }
 
 for keymap, fn_and_args in pairs(classes_groups_dict) do

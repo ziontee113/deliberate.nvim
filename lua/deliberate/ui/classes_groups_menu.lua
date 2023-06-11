@@ -682,4 +682,11 @@ local border_collapse_group = {
 }
 M.change_border_collapse = function() M._classes_group_changer_menu(border_collapse_group) end
 
+-- Table Layout
+local table_layout_group = {
+    { keymaps = { "a", "A" }, classes = { "table-auto" } },
+    { keymaps = { "f", "F" }, classes = { "table-fixed" } },
+}
+M.change_table_layout = function() M._classes_group_changer_menu(table_layout_group) end
+
 return M
