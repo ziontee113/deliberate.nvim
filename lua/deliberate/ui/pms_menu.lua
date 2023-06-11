@@ -800,8 +800,8 @@ M.change_content = function() M._menu("content", false, tcm._change, { content_D
 -------------------------------------------- Box Shaddow
 
 local box_shadow_D = {
-    { keymaps = { "b" }, text = "", absolute = "box-shadow" },
     { keymaps = { "s" }, text = "sm" },
+    { keymaps = { "b" }, text = "", absolute = "box-shadow" },
     { keymaps = { "m" }, text = "md" },
     { keymaps = { "l" }, text = "lg" },
     { keymaps = { "x", "1" }, text = "xl" },
@@ -860,4 +860,18 @@ local contrast_D = {
 }
 
 M.change_contrast = function() M._menu("contrast", false, tcm._change, { contrast_D }) end
+
+-------------------------------------------- Drop Shadow
+
+local drop_shadow_D = {
+    { keymaps = { "s" }, text = "sm" },
+    { keymaps = { "d" }, text = "", absolute = "drop-shadow" },
+    { keymaps = { "m" }, text = "md" },
+    { keymaps = { "l" }, text = "lg" },
+    { keymaps = { "x", "1" }, text = "xl" },
+    { keymaps = { "2" }, text = "2xl" },
+    { keymaps = { "n", "/" }, text = "none" },
+}
+M.change_drop_shadow = function() M._menu("drop-shadow", false, tcm._change, { drop_shadow_D }) end
+
 return M
