@@ -93,7 +93,8 @@ local singles = {
     "grid-cols", "col-span", "col-start", "col-end",
     "grid-rows", "row-span", "row-start", "row-end",
     "auto-rows", "auto-cols",
-    "shadow", "blur", "backdrop-blur", "brightness", "contrast", "drop-shadow",
+    "shadow", "blur", "backdrop-blur", "contrast", "drop-shadow",
+    "brightness", "backdrop-brightness",
     "grayscale", "hue-rotate", "invert", "saturate", "invert", "sepia",
 }
 
@@ -135,6 +136,7 @@ local property_specific_patterns = {
     ["blur"] = { "^blur%-%[.+]$", "^blur$" },
     ["backdrop-blur"] = { "^backdrop%-blur%-%[.+]$", "^backdrop%-blur$" },
     ["brightness"] = { "^brightness%-%[.+]$" },
+    ["backdrop-brightness"] = { "^backdrop%-brightness%-%[.+]$" },
     ["contrast"] = { "^contrast%-%[.+]$" },
     ["drop-shadow"] = { "^drop%-shadow%-%[.+]$", "^drop%-shadow$" },
     ["grayscale"] = { "^grayscale%-%[.+]$" },

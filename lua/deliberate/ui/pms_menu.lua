@@ -852,6 +852,10 @@ local brightness_D = {
 }
 M.change_brightness = function() M._menu("brightness", false, tcm._change, { brightness_D }) end
 
+M.change_backdrop_brightness = function()
+    M._menu("backdrop-brightness", false, tcm._change, { brightness_D })
+end
+
 -------------------------------------------- Contrast
 
 local contrast_D = {
