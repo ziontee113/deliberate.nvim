@@ -147,7 +147,8 @@ local keymap_to_color_menu_fn = {
     ["<space>dc"] = colors_menu.decoration,
     ["<space>BC"] = colors_menu.shadow,
     ["AC"] = colors_menu.accent,
-    ["cr"] = colors_menu.caret,
+    ["cc"] = colors_menu.caret,
+    ["fc"] = colors_menu.fill,
 }
 add_heads_from_tbl(keymap_to_color_menu_fn)
 
@@ -157,7 +158,7 @@ add_heads_from_tbl(keymap_to_color_menu_fn)
 local non_axis_map = {
     ["fz"] = pms_menu.change_font_size,
     ["ff"] = pms_menu.change_font_family,
-    ["fc"] = pms_menu.change_line_clamp,
+    ["fC"] = pms_menu.change_line_clamp,
     ["fT"] = pms_menu.change_tracking,
     ["fL"] = pms_menu.change_leading,
     ["<space>dt"] = pms_menu.change_td_thickness,
