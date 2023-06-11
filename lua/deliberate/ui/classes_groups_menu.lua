@@ -838,4 +838,11 @@ local user_select_group = {
 }
 M.change_user_select = function() M._classes_group_changer_menu(user_select_group) end
 
+-- Screen Readers
+local screen_readers_group = {
+    { keymaps = { "s" }, classes = { "sr-only" } },
+    { keymaps = { "n", "/" }, classes = { "not-sr-only" } },
+}
+M.change_screen_readers = function() M._classes_group_changer_menu(screen_readers_group) end
+
 return M
