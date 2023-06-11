@@ -74,6 +74,7 @@ local raw_input_group = {
     "auto-cols",
     "bg",
     "box-shadow",
+    "brightness",
 }
 
 local input_to_pms_value = function(input, property)

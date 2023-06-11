@@ -93,7 +93,7 @@ local singles = {
     "grid-cols", "col-span", "col-start", "col-end",
     "grid-rows", "row-span", "row-start", "row-end",
     "auto-rows", "auto-cols",
-    "shadow", "blur",
+    "shadow", "blur", "brightness",
 }
 
 local general_pms_postfixes = { "%-[%d%.%a/]+$", "%-%[[%-%d%.]+[%a%%]+]$" }
@@ -132,6 +132,7 @@ local property_specific_patterns = {
     ["content"] = { "^content%-%[.+]$" },
     ["shadow"] = { "^shadow%-%[.+]$", "^shadow$" },
     ["blur"] = { "^blur%-%[.+]$", "^blur$" },
+    ["brightness"] = { "^brightness%-%[.+]$" },
 }
 
 -- Add properties with axies

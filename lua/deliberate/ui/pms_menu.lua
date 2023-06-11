@@ -830,4 +830,21 @@ local blur_D = {
 }
 M.change_blur = function() M._menu("blur", false, tcm._change, { blur_D }) end
 
+-------------------------------------------- Brightness
+
+local brightness_D = {
+    { keymaps = { "/" }, text = "0" },
+    { keymaps = { "j" }, text = "50" },
+    { keymaps = { "k" }, text = "75" },
+    { keymaps = { "h" }, text = "90" },
+    { keymaps = { "l" }, text = "95" },
+    { keymaps = { "1" }, text = "100" },
+    { keymaps = { "a" }, text = "105" },
+    { keymaps = { "s" }, text = "110" },
+    { keymaps = { "d" }, text = "125" },
+    { keymaps = { "f" }, text = "150" },
+    { keymaps = { "2" }, text = "200" },
+}
+M.change_brightness = function() M._menu("brightness", false, tcm._change, { brightness_D }) end
+
 return M
