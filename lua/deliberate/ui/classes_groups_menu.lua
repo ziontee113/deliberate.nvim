@@ -814,4 +814,19 @@ local snap_type_group = {
 }
 M.change_snap_type = function() M._classes_group_changer_menu(snap_type_group) end
 
+-- Touch Action
+local touch_action_group = {
+    { keymaps = { "a" }, classes = { "touch-auto" } },
+    { keymaps = { "n" }, classes = { "touch-none" } },
+    { keymaps = { "x" }, classes = { "touch-pan-x" } },
+    { keymaps = { "y" }, classes = { "touch-pan-y" } },
+    { keymaps = { "l" }, classes = { "touch-pan-left" } },
+    { keymaps = { "r" }, classes = { "touch-pan-right" } },
+    { keymaps = { "u" }, classes = { "touch-pan-up" } },
+    { keymaps = { "d" }, classes = { "touch-pan-down" } },
+    { keymaps = { "z" }, classes = { "touch-pinch-zoom" } },
+    { keymaps = { "m" }, classes = { "touch-manipulation" } },
+}
+M.change_touch_action = function() M._classes_group_changer_menu(touch_action_group) end
+
 return M
