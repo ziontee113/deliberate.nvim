@@ -582,4 +582,20 @@ local background_repeat_group = {
 }
 M.change_background_repeat = function() M._classes_group_changer_menu(background_repeat_group) end
 
+-- Background Position
+
+local backround_position_group = {
+    { keymaps = { "t" }, classes = { "bg-top" } },
+    { keymaps = { "b" }, classes = { "bg-bottom" } },
+    { keymaps = { "c" }, classes = { "bg-center" } },
+    { keymaps = { "l" }, classes = { "bg-left" } },
+    { keymaps = { "r" }, classes = { "bg-right" } },
+    "",
+    { keymaps = { "u" }, classes = { "bg-left-top" } },
+    { keymaps = { "i" }, classes = { "bg-left-bottom" } },
+    { keymaps = { "o" }, classes = { "bg-right-top" } },
+    { keymaps = { "p" }, classes = { "bg-right-bottom" } },
+}
+M.change_backround_position = function() M._classes_group_changer_menu(backround_position_group) end
+
 return M
