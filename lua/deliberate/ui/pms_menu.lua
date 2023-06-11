@@ -847,4 +847,17 @@ local brightness_D = {
 }
 M.change_brightness = function() M._menu("brightness", false, tcm._change, { brightness_D }) end
 
+-------------------------------------------- Contrast
+
+local contrast_D = {
+    { keymaps = { "/" }, text = "0" },
+    { keymaps = { "j" }, text = "50" },
+    { keymaps = { "k" }, text = "75" },
+    { keymaps = { "1" }, text = "100" },
+    { keymaps = { "d" }, text = "125" },
+    { keymaps = { "f" }, text = "150" },
+    { keymaps = { "2" }, text = "200" },
+}
+
+M.change_contrast = function() M._menu("contrast", false, tcm._change, { contrast_D }) end
 return M
