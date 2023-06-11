@@ -906,15 +906,19 @@ end
 -------------------------------------------- Hue Rotate
 
 local hue_rotate_D = {
-    { keymaps = { "n" }, text = "0" },
-    { keymaps = { "n" }, text = "15" },
-    { keymaps = { "n" }, text = "20" },
-    { keymaps = { "n" }, text = "30" },
-    { keymaps = { "n" }, text = "60" },
-    { keymaps = { "n" }, text = "90" },
-    { keymaps = { "n" }, text = "100" },
+    { keymaps = { "n", "/" }, text = "0" },
+    { keymaps = { "1" }, text = "15" },
+    { keymaps = { "2" }, text = "20" },
+    { keymaps = { "3" }, text = "30" },
+    { keymaps = { "6" }, text = "60" },
+    { keymaps = { "9" }, text = "90" },
+    { keymaps = { "f" }, text = "100" },
 }
 M.change_hue_rotate = function() M._menu("hue-rotate", false, tcm._change, { hue_rotate_D }) end
+
+M.change_backdrop_hue_rotate = function()
+    M._menu("backdrop-hue-rotate", false, tcm._change, { hue_rotate_D })
+end
 
 -------------------------------------------- Invert
 
