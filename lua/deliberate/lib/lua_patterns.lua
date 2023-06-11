@@ -94,8 +94,8 @@ local singles = {
     "grid-rows", "row-span", "row-start", "row-end",
     "auto-rows", "auto-cols",
     "shadow", "blur", "backdrop-blur", "contrast", "backdrop-contrast", "drop-shadow",
-    "brightness", "backdrop-brightness",
-    "grayscale", "hue-rotate", "invert", "saturate", "invert", "sepia",
+    "brightness", "backdrop-brightness", "grayscale", "backdrop-grayscale",
+    "hue-rotate", "invert", "saturate", "invert", "sepia",
 }
 
 local general_pms_postfixes = { "%-[%d%.%a/]+$", "%-%[[%-%d%.]+[%a%%]+]$" }
@@ -141,6 +141,7 @@ local property_specific_patterns = {
     ["backdrop-contrast"] = { "^backdrop%-contrast%-%[.+]$" },
     ["drop-shadow"] = { "^drop%-shadow%-%[.+]$", "^drop%-shadow$" },
     ["grayscale"] = { "^grayscale%-%[.+]$" },
+    ["backdrop-grayscale"] = { "^backdrop%-grayscale%-%[.+]$" },
     ["hue-rotate"] = { "^hue%-rotate%-%[.+]$" },
     ["invert"] = { "^invert%-%[.+]$" },
     ["saturate"] = { "^saturate%-%[.+]$" },

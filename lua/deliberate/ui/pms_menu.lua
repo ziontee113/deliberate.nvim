@@ -895,6 +895,14 @@ local grayscale_D = {
 }
 M.change_grayscale = function() M._menu("grayscale", false, tcm._change, { grayscale_D }) end
 
+local backdrop_grayscale_D = {
+    { keymaps = { "n", "/" }, text = "0" },
+    { keymaps = { "b", "B", "g", "G" }, text = "", absolute = "backdrop-grayscale" },
+}
+M.change_backdrop_grayscale = function()
+    M._menu("backdrop-grayscale", false, tcm._change, { backdrop_grayscale_D })
+end
+
 -------------------------------------------- Hue Rotate
 
 local hue_rotate_D = {
