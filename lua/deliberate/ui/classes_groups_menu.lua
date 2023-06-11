@@ -764,4 +764,11 @@ local cursor_group = {
 }
 M.change_cursor = function() M._classes_group_changer_menu(cursor_group) end
 
+-- Pointer Events
+local poiiter_events_group = {
+    { keymaps = { "n", "N", "/" }, classes = { "pointer-events-none" } },
+    { keymaps = { "a", "A" }, classes = { "pointer-events-auto" } },
+}
+M.change_poiiter_events = function() M._classes_group_changer_menu(poiiter_events_group) end
+
 return M
