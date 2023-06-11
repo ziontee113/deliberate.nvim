@@ -882,4 +882,17 @@ local grayscale_D = {
 }
 M.change_grayscale = function() M._menu("grayscale", false, tcm._change, { grayscale_D }) end
 
+-------------------------------------------- Hue Rotate
+
+local hue_rotate_D = {
+    { keymaps = { "n" }, text = "0" },
+    { keymaps = { "n" }, text = "15" },
+    { keymaps = { "n" }, text = "20" },
+    { keymaps = { "n" }, text = "30" },
+    { keymaps = { "n" }, text = "60" },
+    { keymaps = { "n" }, text = "90" },
+    { keymaps = { "n" }, text = "100" },
+}
+M.change_hue_rotate = function() M._menu("hue-rotate", false, tcm._change, { hue_rotate_D }) end
+
 return M

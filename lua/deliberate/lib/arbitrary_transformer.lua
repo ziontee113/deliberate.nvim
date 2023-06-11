@@ -77,6 +77,7 @@ local raw_input_group = {
     "brightness",
     "contrast",
     "grayscale",
+    "hue-rotate",
 }
 
 local input_to_pms_value = function(input, property)
