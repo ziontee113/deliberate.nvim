@@ -771,4 +771,13 @@ local poiiter_events_group = {
 }
 M.change_poiiter_events = function() M._classes_group_changer_menu(poiiter_events_group) end
 
+-- Resize
+local resize_group = {
+    { keymaps = { "r" }, classes = { "resize" } },
+    { keymaps = { "x" }, classes = { "resize-x" } },
+    { keymaps = { "y" }, classes = { "resize-y" } },
+    { keymaps = { "n", "N", "/" }, classes = { "resize-none" } },
+}
+M.change_resize = function() M._classes_group_changer_menu(resize_group) end
+
 return M

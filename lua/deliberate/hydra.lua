@@ -408,6 +408,7 @@ local classes_groups_dict = {
     ["An"] = { cgm.change_animation },
     ["ap"] = { cgm.change_appearance },
     ["cu"] = { cgm.change_cursor },
+    ["RS"] = { cgm.change_resize },
 }
 
 for keymap, fn_and_args in pairs(classes_groups_dict) do
