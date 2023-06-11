@@ -149,6 +149,7 @@ local keymap_to_color_menu_fn = {
     ["AC"] = colors_menu.accent,
     ["cc"] = colors_menu.caret,
     ["fc"] = colors_menu.fill,
+    ["sc"] = colors_menu.stroke,
 }
 add_heads_from_tbl(keymap_to_color_menu_fn)
 
@@ -431,7 +432,7 @@ local classes_groups_dict = {
     ["ap"] = { cgm.change_appearance },
     ["cu"] = { cgm.change_cursor },
     ["RS"] = { cgm.change_resize },
-    ["sc"] = { cgm.change_scroll_behavior },
+    ["sb"] = { cgm.change_scroll_behavior },
     ["sn"] = { cgm.change_snap_align },
     ["st"] = { cgm.change_snap_stop },
     ["TA"] = { cgm.change_touch_action },

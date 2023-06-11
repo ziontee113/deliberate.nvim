@@ -258,6 +258,7 @@ local color_key_properties_map = {
     ["accent-color"] = "accent",
     ["caret-color"] = "caret",
     ["fill-color"] = "fill",
+    ["stroke-color"] = "stroke",
 }
 
 for key, property in pairs(color_key_properties_map) do
