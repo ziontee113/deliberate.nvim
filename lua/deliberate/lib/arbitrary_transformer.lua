@@ -89,6 +89,7 @@ local raw_input_group = {
     "backdrop-hue-rotate",
     "transition",
     "duration",
+    "delay",
 }
 
 local input_to_pms_value = function(input, property)

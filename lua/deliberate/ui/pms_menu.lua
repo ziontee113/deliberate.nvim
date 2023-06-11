@@ -989,7 +989,7 @@ local transition_D = {
 }
 M.change_transition = function() M._menu("transition", false, tcm._change, { transition_D }) end
 
--------------------------------------------- Transition Duration
+-------------------------------------------- Transition Duration / Delay
 
 local duration_D = {
     { keymaps = { "z", "/" }, text = "0" },
@@ -1003,5 +1003,7 @@ local duration_D = {
     { keymaps = { "s" }, text = "1000" },
 }
 M.change_duration = function() M._menu("duration", false, tcm._change, { duration_D }) end
+
+M.change_delay = function() M._menu("delay", false, tcm._change, { duration_D }) end
 
 return M

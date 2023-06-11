@@ -251,6 +251,7 @@ local non_axis_map = {
 
     ["tr"] = pms_menu.change_transition,
     ["td"] = pms_menu.change_duration,
+    ["tD"] = pms_menu.change_delay,
 }
 add_heads_from_tbl(non_axis_map)
 
