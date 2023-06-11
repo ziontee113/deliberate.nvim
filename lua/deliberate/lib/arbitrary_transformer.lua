@@ -80,6 +80,7 @@ local raw_input_group = {
     "hue-rotate",
     "invert",
     "saturate",
+    "sepia",
 }
 
 local input_to_pms_value = function(input, property)

@@ -94,7 +94,7 @@ local singles = {
     "grid-rows", "row-span", "row-start", "row-end",
     "auto-rows", "auto-cols",
     "shadow", "blur", "brightness", "contrast", "drop-shadow",
-    "grayscale", "hue-rotate", "invert", "saturate",
+    "grayscale", "hue-rotate", "invert", "saturate", "invert", "sepia",
 }
 
 local general_pms_postfixes = { "%-[%d%.%a/]+$", "%-%[[%-%d%.]+[%a%%]+]$" }
@@ -140,6 +140,7 @@ local property_specific_patterns = {
     ["hue-rotate"] = { "^hue%-rotate%-%[.+]$" },
     ["invert"] = { "^invert%-%[.+]$" },
     ["saturate"] = { "^saturate%-%[.+]$" },
+    ["sepia"] = { "^sepia%-%[.+]$" },
 }
 
 -- Add properties with axies

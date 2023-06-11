@@ -238,6 +238,7 @@ local non_axis_map = {
     ["<space>Hr"] = pms_menu.change_hue_rotate,
     ["<space>Iv"] = pms_menu.change_invert,
     ["<space>Sa"] = pms_menu.change_saturate,
+    ["<space>Se"] = pms_menu.change_sepia,
 }
 add_heads_from_tbl(non_axis_map)
 

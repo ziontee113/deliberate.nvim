@@ -914,4 +914,11 @@ local saturate_D = {
 }
 M.change_saturate = function() M._menu("saturate", false, tcm._change, { saturate_D }) end
 
+-------------------------------------------- Sepia
+
+local sepia_D = {
+    { keymaps = { "n", "/" }, text = "0" },
+    { keymaps = { "s", "S" }, text = "", absolute = "sepia" },
+}
+M.change_sepia = function() M._menu("sepia", false, tcm._change, { sepia_D }) end
 return M
