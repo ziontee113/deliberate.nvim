@@ -1043,4 +1043,16 @@ M.change_translate = function(o)
     M._menu("translate", o.axis, tcm._change, { pms_D, percentage_D, full_D })
 end
 
+-------------------------------------------- Skew
+
+local skew_D = {
+    { keymaps = { "n", "/" }, text = "0" },
+    { keymaps = { "1" }, text = "1" },
+    { keymaps = { "2" }, text = "2" },
+    { keymaps = { "3" }, text = "3" },
+    { keymaps = { "6" }, text = "6" },
+    { keymaps = { "t" }, text = "12" },
+}
+M.change_skew = function() M._menu("skew", false, tcm._change, { skew_D }) end
+
 return M

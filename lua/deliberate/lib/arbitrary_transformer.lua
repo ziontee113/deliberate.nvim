@@ -112,7 +112,7 @@ local input_to_pms_value = function(input, property)
     if string.find(property, "image") then return string.format("url(%s)", input) end
     if property == "line-clamp" then return tostring(tonumber(input) or 0) end
 
-    if string.find(property, "rotate") then return input .. "deg" end
+    if string.find(property, "rotate") or property == "skew" then return input .. "deg" end
     if tonumber(input) then return input .. "px" end
 
     local num, chars = 0, "px"
