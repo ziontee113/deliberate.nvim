@@ -205,6 +205,7 @@ local color_key_properties_map = {
     ["via-color"] = "via",
     ["to-color"] = "to",
     ["text-decoration-color"] = "decoration",
+    ["shadow-color"] = "shadow",
 }
 
 for key, property in pairs(color_key_properties_map) do

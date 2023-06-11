@@ -125,5 +125,6 @@ M.from = function() M._menu(bg_ft, "from", fn, "from-color") end
 M.via = function() M._menu(bg_ft, "via", fn, "via-color") end
 M.to = function() M._menu(bg_ft, "to", fn, "to-color") end
 M.decoration = function() M._menu(bg_ft, "decoration", fn, "text-decoration-color") end
+M.shadow = function() M._menu(bg_ft, "shadow", fn, "shadow-color") end
 
 return M

@@ -161,6 +161,7 @@ local keymap_to_color_menu_fn = {
     ["zv"] = colors_menu.via,
     ["zt"] = colors_menu.to,
     ["<space>dc"] = colors_menu.decoration,
+    ["<space>BC"] = colors_menu.shadow,
 }
 add_heads_from_tbl(keymap_to_color_menu_fn)
 
@@ -228,7 +229,7 @@ local non_axis_map = {
     ["Ac"] = pms_menu.change_auto_cols,
 
     ["<space>bp"] = pms_menu.change_bg_position,
-    ["<space>B"] = pms_menu.change_box_shadow,
+    ["<space>BS"] = pms_menu.change_box_shadow,
 }
 add_heads_from_tbl(non_axis_map)
 
