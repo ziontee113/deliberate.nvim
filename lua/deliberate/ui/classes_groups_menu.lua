@@ -780,4 +780,11 @@ local resize_group = {
 }
 M.change_resize = function() M._classes_group_changer_menu(resize_group) end
 
+-- Scrol Behavior
+local scroll_behavior_group = {
+    { keymaps = { "a", "A" }, classes = { "scroll-auto" } },
+    { keymaps = { "s", "S" }, classes = { "scroll-smooth" } },
+}
+M.change_scroll_behavior = function() M._classes_group_changer_menu(scroll_behavior_group) end
+
 return M
