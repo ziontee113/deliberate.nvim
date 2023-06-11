@@ -129,5 +129,6 @@ M.to = function() M._menu(bg_ft, "to", fn, "to-color") end
 M.decoration = function() M._menu(bg_ft, "decoration", fn, "text-decoration-color") end
 M.shadow = function() M._menu(bg_ft, "shadow", fn, "shadow-color") end
 M.accent = function() M._menu(bg_ft, "accent", fn, "accent-color") end
+M.caret = function() M._menu(bg_ft, "caret", fn, "caret-color") end
 
 return M
