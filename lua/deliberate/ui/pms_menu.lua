@@ -1010,6 +1010,8 @@ M.change_delay = function() M._menu("delay", false, tcm._change, { duration_D })
 --------------------------- Transforms ---------------------------
 ------------------------------------------------------------------
 
+-------------------------------------------- Scale
+
 local scale_D = {
     { keymaps = { "z", "/" }, text = "0" },
     { keymaps = { "5" }, text = "50" },
@@ -1023,5 +1025,20 @@ local scale_D = {
     { keymaps = { "o" }, text = "150" },
 }
 M.change_scale = function(o) M._menu("scale", o.axis, tcm._change, { scale_D }) end
+
+-------------------------------------------- Rotate
+
+local rotate_D = {
+    { keymaps = { "z", "/" }, text = "0" },
+    { keymaps = { "1" }, text = "1" },
+    { keymaps = { "2" }, text = "2" },
+    { keymaps = { "3" }, text = "3" },
+    { keymaps = { "6" }, text = "6" },
+    { keymaps = { "!" }, text = "12" },
+    { keymaps = { "4" }, text = "45" },
+    { keymaps = { "9" }, text = "90" },
+    { keymaps = { "8" }, text = "180" },
+}
+M.change_rotate = function() M._menu("rotate", false, tcm._change, { rotate_D }) end
 
 return M

@@ -80,13 +80,11 @@ local raw_input_group = {
     "backdrop-contrast",
     "grayscale",
     "backdrop-grayscale",
-    "hue-rotate",
     "invert",
     "backdrop-invert",
     "saturate",
     "sepia",
     "backdrop-sepia",
-    "backdrop-hue-rotate",
     "transition",
     "duration",
     "delay",
@@ -113,6 +111,8 @@ local input_to_pms_value = function(input, property)
     end
     if string.find(property, "image") then return string.format("url(%s)", input) end
     if property == "line-clamp" then return tostring(tonumber(input) or 0) end
+
+    if string.find(property, "rotate") then return input .. "deg" end
     if tonumber(input) then return input .. "px" end
 
     local num, chars = 0, "px"
@@ -128,8 +128,6 @@ local input_to_pms_value = function(input, property)
             print(vim.inspect(match))
         end
     end
-
-    print(chars)
 
     --stylua: ignore
     local unit_tbl = {

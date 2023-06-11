@@ -98,22 +98,6 @@ local heads = {
     },
 
     {
-        "dc",
-        function() colors_menu.divide() end,
-        { nowait = true },
-    },
-    {
-        "Rc",
-        function() colors_menu.ring() end,
-        { nowait = true },
-    },
-    {
-        "RC",
-        function() colors_menu.ring_offset() end,
-        { nowait = true },
-    },
-
-    {
         "`",
         function() require("deliberate.ui.pseudo_classes_input").show() end,
         { nowait = true },
@@ -252,6 +236,8 @@ local non_axis_map = {
     ["tr"] = pms_menu.change_transition,
     ["td"] = pms_menu.change_duration,
     ["tD"] = pms_menu.change_delay,
+
+    ["Rt"] = pms_menu.change_rotate,
 }
 add_heads_from_tbl(non_axis_map)
 
