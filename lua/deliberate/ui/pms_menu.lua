@@ -895,4 +895,12 @@ local hue_rotate_D = {
 }
 M.change_hue_rotate = function() M._menu("hue-rotate", false, tcm._change, { hue_rotate_D }) end
 
+-------------------------------------------- Invert
+
+local invert_D = {
+    { keymaps = { "n", "/" }, text = "0" },
+    { keymaps = { "i", "I" }, text = "", absolute = "invert" },
+}
+M.change_invert = function() M._menu("invert", false, tcm._change, { invert_D }) end
+
 return M
