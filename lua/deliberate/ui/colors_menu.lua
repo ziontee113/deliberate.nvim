@@ -30,8 +30,10 @@ local colors = {
     { text = "fuchsia", keymaps = { "f" } },
     { text = "pink", keymaps = { "P" } },
     { text = "rose", keymaps = { "R" } },
+    "",
     { text = "white", keymaps = { "w" }, single = true },
     { text = "black", keymaps = { "B" }, single = true },
+    "",
     { text = "inherit", keymaps = { "I" }, single = true },
     { text = "current", keymaps = { "C" }, single = true },
     { text = "transparent", keymaps = { "T" }, single = true },
@@ -126,5 +128,6 @@ M.via = function() M._menu(bg_ft, "via", fn, "via-color") end
 M.to = function() M._menu(bg_ft, "to", fn, "to-color") end
 M.decoration = function() M._menu(bg_ft, "decoration", fn, "text-decoration-color") end
 M.shadow = function() M._menu(bg_ft, "shadow", fn, "shadow-color") end
+M.accent = function() M._menu(bg_ft, "accent", fn, "accent-color") end
 
 return M

@@ -229,6 +229,7 @@ local color_postfixes = {
     "%-white",
     "%-transparent",
     "%-current",
+    "%-inherit",
     "%-%[rgb%([%d%s,]+%)]",
     "%-%[rgba%([%d%s,%.%%]+%)]",
     "%-%[hsl%([%d%s%%,]+%)]",
@@ -248,6 +249,7 @@ local color_key_properties_map = {
     ["to-color"] = "to",
     ["text-decoration-color"] = "decoration",
     ["shadow-color"] = "shadow",
+    ["accent-color"] = "accent",
 }
 
 for key, property in pairs(color_key_properties_map) do

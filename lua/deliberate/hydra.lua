@@ -146,6 +146,7 @@ local keymap_to_color_menu_fn = {
     ["zt"] = colors_menu.to,
     ["<space>dc"] = colors_menu.decoration,
     ["<space>BC"] = colors_menu.shadow,
+    ["AC"] = colors_menu.accent,
 }
 add_heads_from_tbl(keymap_to_color_menu_fn)
 
