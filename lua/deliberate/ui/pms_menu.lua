@@ -171,7 +171,7 @@ end
 
 -------------------------------------------- Padding / Margin / Spacing
 
-local pms_dict = {
+local pms_D = {
     { keymaps = "1", text = "1", hidden = true },
     { keymaps = "2", text = "2", hidden = true },
     { keymaps = "3", text = "3", hidden = true },
@@ -213,22 +213,22 @@ local pms_dict = {
     { keymaps = "@", text = "2.5" },
     { keymaps = "#", text = "3.5" },
 }
-M.change_padding = function(o) M._menu("p", o.axis, tcm.change_padding, { pms_dict }) end
+M.change_padding = function(o) M._menu("p", o.axis, tcm.change_padding, { pms_D }) end
 
 local negative_D = {
     { keymaps = { "-", "N" }, text = "", negatize = true, hidden = true },
 }
 local margin_D = { { keymaps = "A", text = "auto", ironclad = true } }
 M.change_margin = function(o)
-    M._menu("m", o.axis, tcm.change_margin, { pms_dict, margin_D, negative_D })
+    M._menu("m", o.axis, tcm.change_margin, { pms_D, margin_D, negative_D })
 end
 
 local spacing_D = { { keymaps = "R", text = "reverse", ironclad = true } }
 M.change_spacing = function(o)
-    M._menu("space", o.axis, tcm.change_spacing, { pms_dict, spacing_D, negative_D })
+    M._menu("space", o.axis, tcm.change_spacing, { pms_D, spacing_D, negative_D })
 end
 M.change_border_spacing = function(o)
-    M._menu("border-spacing", o.axis, tcm._change, { pms_dict, negative_D })
+    M._menu("border-spacing", o.axis, tcm._change, { pms_D, negative_D })
 end
 
 -------------------------------------------- Border Width
@@ -398,7 +398,7 @@ M.change_ring_offset = function() M._menu("ring-offset", false, tcm._change, { r
 
 -------------------------------------------- Width / Height
 
-local percentage_dict = {
+local percentage_D = {
     "",
     { keymaps = { "l" }, text = "", absolute = "next-page", ironclad = true },
 
@@ -446,10 +446,10 @@ local width_height_dict = {
 }
 
 M.change_width = function()
-    M._menu("w", false, tcm._change, { pms_dict, width_height_dict, percentage_dict })
+    M._menu("w", false, tcm._change, { pms_D, width_height_dict, percentage_D })
 end
 M.change_height = function()
-    M._menu("h", false, tcm._change, { pms_dict, width_height_dict, percentage_dict })
+    M._menu("h", false, tcm._change, { pms_D, width_height_dict, percentage_D })
 end
 
 -------------------------------------------- Min Width / Min Height
@@ -506,7 +506,7 @@ local max_height_dict = {
     { keymaps = { "F" }, text = "full" },
     { keymaps = { "S" }, text = "screen" },
 }
-M.change_max_height = function() M._menu("max-h", false, tcm._change, { pms_dict, max_height_dict }) end
+M.change_max_height = function() M._menu("max-h", false, tcm._change, { pms_D, max_height_dict }) end
 
 -------------------------------------------- Rounded (Border Radius)
 
@@ -560,7 +560,7 @@ local basis_dict = {
     { keymaps = { "F" }, text = "full" },
 }
 M.change_basis = function()
-    M._menu("basis", false, tcm._change, { pms_dict, basis_dict, percentage_dict })
+    M._menu("basis", false, tcm._change, { pms_D, basis_dict, percentage_D })
 end
 
 -------------------------------------------- Order
@@ -654,28 +654,28 @@ local tlbr_y = {
 }
 
 M.change_top = function()
-    M._menu("top", false, tcm._change, { pms_dict, tlbr_D, tlbr_P_D, negative_D }, tlbr_y)
+    M._menu("top", false, tcm._change, { pms_D, tlbr_D, tlbr_P_D, negative_D }, tlbr_y)
 end
 M.change_bottom = function()
-    M._menu("bottom", false, tcm._change, { pms_dict, tlbr_D, tlbr_P_D, negative_D }, tlbr_y)
+    M._menu("bottom", false, tcm._change, { pms_D, tlbr_D, tlbr_P_D, negative_D }, tlbr_y)
 end
 M.change_left = function()
-    M._menu("left", false, tcm._change, { pms_dict, tlbr_D, tlbr_P_D, negative_D }, tlbr_x)
+    M._menu("left", false, tcm._change, { pms_D, tlbr_D, tlbr_P_D, negative_D }, tlbr_x)
 end
 M.change_right = function()
-    M._menu("right", false, tcm._change, { pms_dict, tlbr_D, tlbr_P_D, negative_D }, tlbr_x)
+    M._menu("right", false, tcm._change, { pms_D, tlbr_D, tlbr_P_D, negative_D }, tlbr_x)
 end
 
 -------------------------------------------- Inset / Start / End
 
 M.change_inset = function(o)
-    M._menu("inset", o.axis, tcm._change, { pms_dict, tlbr_D, tlbr_P_D, negative_D })
+    M._menu("inset", o.axis, tcm._change, { pms_D, tlbr_D, tlbr_P_D, negative_D })
 end
 M.change_inset_start = function()
-    M._menu("start", false, tcm._change, { pms_dict, tlbr_D, tlbr_P_D, negative_D })
+    M._menu("start", false, tcm._change, { pms_D, tlbr_D, tlbr_P_D, negative_D })
 end
 M.change_inset_end = function()
-    M._menu("end", false, tcm._change, { pms_dict, tlbr_D, tlbr_P_D, negative_D })
+    M._menu("end", false, tcm._change, { pms_D, tlbr_D, tlbr_P_D, negative_D })
 end
 
 -------------------------------------------- Z-Index
@@ -713,14 +713,12 @@ M.change_grid_cols = function() M._menu("grid-cols", false, tcm._change, { grid1
 
 -------------------------------------------- Grid Column Start / End
 
-local grid_full_D = { { keymaps = { "f", "F" }, text = "full" } }
-local grid_auto_D = { { keymaps = { "a", "A" }, text = "auto" } }
+local full_D = { { keymaps = { "f", "F" }, text = "full" } }
+local auto_D = { { keymaps = { "a", "A" }, text = "auto" } }
 
-M.change_col_span = function()
-    M._menu("col-span", false, tcm._change, { grid12_D, grid_full_D, grid_auto_D })
-end
-M.change_col_start = function() M._menu("col-start", false, tcm._change, { grid12_D, grid_auto_D }) end
-M.change_col_end = function() M._menu("col-end", false, tcm._change, { grid12_D, grid_auto_D }) end
+M.change_col_span = function() M._menu("col-span", false, tcm._change, { grid12_D, full_D, auto_D }) end
+M.change_col_start = function() M._menu("col-start", false, tcm._change, { grid12_D, auto_D }) end
+M.change_col_end = function() M._menu("col-end", false, tcm._change, { grid12_D, auto_D }) end
 
 -------------------------------------------- Grid Template Rows
 
@@ -730,11 +728,9 @@ end
 
 -------------------------------------------- Grid Row Start / End
 
-M.change_row_span = function()
-    M._menu("row-span", false, tcm._change, { grid12_D, grid_full_D, grid_auto_D })
-end
-M.change_row_start = function() M._menu("row-start", false, tcm._change, { grid12_D, grid_auto_D }) end
-M.change_row_end = function() M._menu("row-end", false, tcm._change, { grid12_D, grid_auto_D }) end
+M.change_row_span = function() M._menu("row-span", false, tcm._change, { grid12_D, full_D, auto_D }) end
+M.change_row_start = function() M._menu("row-start", false, tcm._change, { grid12_D, auto_D }) end
+M.change_row_end = function() M._menu("row-end", false, tcm._change, { grid12_D, auto_D }) end
 
 -------------------------------------------- Grid Auto Rows / Columns
 
@@ -749,7 +745,7 @@ M.change_auto_cols = function() M._menu("auto-cols", false, tcm._change, { auto_
 
 -------------------------------------------- Gap
 
-M.change_gap = function(o) M._menu("gap", o.axis, tcm._change, { pms_dict }) end
+M.change_gap = function(o) M._menu("gap", o.axis, tcm._change, { pms_D }) end
 
 -------------------------------------------- Text Decoration Thickness
 
@@ -780,7 +776,7 @@ end
 
 -------------------------------------------- Text Indent
 
-M.change_text_indent = function() M._menu("indent", false, tcm._change, { pms_dict }) end
+M.change_text_indent = function() M._menu("indent", false, tcm._change, { pms_D }) end
 
 -------------------------------------------- Vertical Align
 
@@ -1040,5 +1036,11 @@ local rotate_D = {
     { keymaps = { "8" }, text = "180" },
 }
 M.change_rotate = function() M._menu("rotate", false, tcm._change, { rotate_D }) end
+
+-------------------------------------------- Translate
+
+M.change_translate = function(o)
+    M._menu("translate", o.axis, tcm._change, { pms_D, percentage_D, full_D })
+end
 
 return M

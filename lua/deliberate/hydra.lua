@@ -135,7 +135,7 @@ end
 -------------------------------------------- Colors Menus
 
 local keymap_to_color_menu_fn = {
-    ["T"] = colors_menu.text,
+    ["t"] = colors_menu.text,
     ["B"] = colors_menu.background,
     ["bc"] = colors_menu.border,
     ["dc"] = colors_menu.divide,
@@ -233,9 +233,9 @@ local non_axis_map = {
     ["<space>Bs"] = pms_menu.change_backdrop_saturate,
     ["<space>Bp"] = pms_menu.change_backdrop_sepia,
 
-    ["tr"] = pms_menu.change_transition,
-    ["td"] = pms_menu.change_duration,
-    ["tD"] = pms_menu.change_delay,
+    ["Tr"] = pms_menu.change_transition,
+    ["Td"] = pms_menu.change_duration,
+    ["TD"] = pms_menu.change_delay,
 
     ["Rt"] = pms_menu.change_rotate,
 }
@@ -266,6 +266,7 @@ local axis_map = {
     ["gap"] = { { "", "x", "y" }, pms_menu.change_gap },
     ["border-spacing"] = { { "x", "y" }, pms_menu.change_border_spacing },
     ["scale"] = { { "", "x", "y" }, pms_menu.change_scale },
+    ["translate"] = { { "x", "y" }, pms_menu.change_translate },
 }
 
 local find_axis_keymap = function(property, key_axis)
@@ -283,7 +284,6 @@ local find_axis_keymap = function(property, key_axis)
             property = "g"
         end
     end
-
     if property == "scale" then
         if key_axis == "" then
             return "Sc"
@@ -292,7 +292,8 @@ local find_axis_keymap = function(property, key_axis)
         end
     end
 
-    if property == "border-spacing" then property = "ts" end
+    if property == "translate" then property = "T" end
+    if property == "border-spacing" then property = "Ts" end
 
     if property == "b" and key_axis == "" then return "bd" end
     if key_axis == "" then return string.upper(property) end
@@ -396,10 +397,10 @@ local classes_groups_dict = {
     ["<space>mb"] = { cgm.change_mix_blend_mode },
     ["<space>bb"] = { cgm.change_bg_blend_mode },
 
-    ["tc"] = { cgm.change_border_collapse },
-    ["tl"] = { cgm.change_table_layout },
-    ["tC"] = { cgm.change_caption_side },
-    ["tt"] = { cgm.change_transition_timing },
+    ["Tc"] = { cgm.change_border_collapse },
+    ["Tl"] = { cgm.change_table_layout },
+    ["TC"] = { cgm.change_caption_side },
+    ["Tt"] = { cgm.change_transition_timing },
     ["An"] = { cgm.change_animation },
 }
 

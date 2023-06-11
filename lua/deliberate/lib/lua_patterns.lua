@@ -79,6 +79,7 @@ local dash_axies = {
     ["inset"] = { "", "x", "y" },
     ["gap"] = { "", "x", "y" },
     ["scale"] = { "", "x", "y" },
+    ["translate"] = { "x", "y" },
 }
 --stylua: ignore
 local singles = {
