@@ -1074,5 +1074,6 @@ M.change_origin = function() M._menu("origin", false, tcm._change, { origin_D })
 -------------------------------------------- Scroll Margin
 
 M.change_scroll_margin = function(o) M._menu("scroll-m", o.axis, tcm._change, { pms_D, negative_D }) end
+M.change_scroll_padding = function(o) M._menu("scroll-p", o.axis, tcm._change, { pms_D }) end
 
 return M

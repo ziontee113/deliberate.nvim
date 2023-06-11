@@ -69,7 +69,8 @@ local M = {
 local no_dash_axies = {
     ["p"] = { "", "x", "y", "t", "b", "l", "r", "e", "s" },
     ["m"] = { "", "x", "y", "t", "b", "l", "r", "e", "s" },
-    ["scroll-m"] = { "", "x", "y", "t", "b", "l", "r" },
+    ["scroll-m"] = { "", "x", "y", "t", "b", "l", "r", "e", "s" },
+    ["scroll-p"] = { "", "x", "y", "t", "b", "l", "r", "e", "s" },
 }
 local dash_axies = {
     ["space"] = { "x", "y" },

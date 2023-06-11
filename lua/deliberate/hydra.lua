@@ -271,7 +271,11 @@ local axis_map = {
     ["border-spacing"] = { { "x", "y" }, pms_menu.change_border_spacing },
     ["scale"] = { { "", "x", "y" }, pms_menu.change_scale },
     ["translate"] = { { "x", "y" }, pms_menu.change_translate },
-    ["scroll-m"] = { { "", "x", "y", "t", "b", "l", "r" }, pms_menu.change_scroll_margin },
+    ["scroll-m"] = { { "", "x", "y", "t", "b", "l", "r", "e", "s" }, pms_menu.change_scroll_margin },
+    ["scroll-p"] = {
+        { "", "x", "y", "t", "b", "l", "r", "e", "s" },
+        pms_menu.change_scroll_padding,
+    },
 }
 
 local find_axis_keymap = function(property, key_axis)
@@ -301,6 +305,13 @@ local find_axis_keymap = function(property, key_axis)
             return "sM"
         else
             property = "sm"
+        end
+    end
+    if property == "scroll-p" then
+        if key_axis == "" then
+            return "sP"
+        else
+            property = "sp"
         end
     end
 
