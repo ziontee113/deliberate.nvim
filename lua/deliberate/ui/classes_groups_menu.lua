@@ -671,4 +671,15 @@ local bg_blend_mode_group = {
 }
 M.change_bg_blend_mode = function() M._classes_group_changer_menu(bg_blend_mode_group) end
 
+--------------------------------------------------------------------------
+--------------------------------- Tables ---------------------------------
+--------------------------------------------------------------------------
+
+-- Border Collapse
+local border_collapse_group = {
+    { keymaps = { "c", "C" }, classes = { "border-collapse" } },
+    { keymaps = { "s", "S" }, classes = { "border-separate" } },
+}
+M.change_border_collapse = function() M._classes_group_changer_menu(border_collapse_group) end
+
 return M

@@ -72,6 +72,7 @@ local no_dash_axies = {
 }
 local dash_axies = {
     ["space"] = { "x", "y" },
+    ["border-spacing"] = { "x", "y" },
     ["divide"] = { "x", "y" },
     ["border"] = { "", "t", "b", "l", "r" },
     ["rounded"] = { "", "t", "b", "l", "r", "tl", "tr", "bl", "br" },
@@ -178,6 +179,7 @@ end
 add_axis_patterns(no_dash_axies, function(property, axis) return property .. axis end)
 add_axis_patterns(dash_axies, function(property, axis)
     if axis == "" then return property end
+    property = string.gsub(property, "%-", "%%%-")
     return property .. "%-" .. axis
 end)
 M["rounded"][""][1] = "^rounded%-[%d?%a?][^tblr]+$"

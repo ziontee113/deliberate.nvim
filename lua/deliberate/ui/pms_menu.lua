@@ -227,6 +227,9 @@ local spacing_D = { { keymaps = "R", text = "reverse", ironclad = true } }
 M.change_spacing = function(o)
     M._menu("space", o.axis, tcm.change_spacing, { pms_dict, spacing_D, negative_D })
 end
+M.change_border_spacing = function(o)
+    M._menu("border-spacing", o.axis, tcm._change, { pms_dict, negative_D })
+end
 
 -------------------------------------------- Border Width
 

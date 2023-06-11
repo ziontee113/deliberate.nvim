@@ -37,7 +37,7 @@ local heads = {
     },
 
     {
-        "T",
+        "C",
         function() require("deliberate.ui.content_replacer_menu").replace("contents.txt") end,
         { nowait = true },
     },
@@ -274,6 +274,7 @@ local axis_map = {
     },
     ["inset"] = { { "", "x", "y" }, pms_menu.change_inset },
     ["gap"] = { { "", "x", "y" }, pms_menu.change_gap },
+    ["border-spacing"] = { { "x", "y" }, pms_menu.change_border_spacing },
 }
 
 local find_axis_keymap = function(property, key_axis)
@@ -291,6 +292,8 @@ local find_axis_keymap = function(property, key_axis)
             property = "g"
         end
     end
+
+    if property == "border-spacing" then property = "Ts" end
 
     if property == "b" and key_axis == "" then return "bd" end
     if key_axis == "" then return string.upper(property) end
@@ -350,7 +353,7 @@ local classes_groups_dict = {
 
     ["bD"] = { cgm.change_box_decoration },
     ["bS"] = { cgm.change_box_sizing },
-    ["C"] = { cgm.change_container },
+    ["<space>c"] = { cgm.change_container },
 
     ["di"] = { cgm.change_display },
     ["fl"] = { cgm.change_float },
@@ -393,6 +396,8 @@ local classes_groups_dict = {
     ["<space>bi"] = { cgm.change_background_image },
     ["<space>mb"] = { cgm.change_mix_blend_mode },
     ["<space>bb"] = { cgm.change_bg_blend_mode },
+
+    ["Tc"] = { cgm.change_border_collapse },
 }
 
 for keymap, fn_and_args in pairs(classes_groups_dict) do
