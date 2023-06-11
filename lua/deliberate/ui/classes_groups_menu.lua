@@ -646,4 +646,29 @@ local mix_blend_mode_group = {
 }
 M.change_mix_blend_mode = function() M._classes_group_changer_menu(mix_blend_mode_group) end
 
+-- Background Blend Mode
+local bg_blend_mode_group = {
+    { keymaps = { "n" }, classes = { "bg-blend-normal" } },
+    { keymaps = { "m" }, classes = { "bg-blend-multiply" } },
+    { keymaps = { "s" }, classes = { "bg-blend-screen" } },
+    { keymaps = { "o" }, classes = { "bg-blend-overlay" } },
+    { keymaps = { "d" }, classes = { "bg-blend-darken" } },
+    { keymaps = { "l" }, classes = { "bg-blend-lighten" } },
+    "",
+    { keymaps = { "D" }, classes = { "bg-blend-color-dodge" } },
+    { keymaps = { "B" }, classes = { "bg-blend-color-burn" } },
+    { keymaps = { "hl" }, classes = { "bg-blend-hard-light" } },
+    { keymaps = { "sl" }, classes = { "bg-blend-soft-light" } },
+    "",
+    { keymaps = { "D" }, classes = { "bg-blend-difference" } },
+    { keymaps = { "E" }, classes = { "bg-blend-exclusion" } },
+    "",
+    { keymaps = { "hu", "he" }, classes = { "bg-blend-hue" } },
+    { keymaps = { "S" }, classes = { "bg-blend-saturation" } },
+    { keymaps = { "c" }, classes = { "bg-blend-color" } },
+    { keymaps = { "u" }, classes = { "bg-blend-luminosity" } },
+    { keymaps = { "p" }, classes = { "bg-blend-plus-lighter" } },
+}
+M.change_bg_blend_mode = function() M._classes_group_changer_menu(bg_blend_mode_group) end
+
 return M
