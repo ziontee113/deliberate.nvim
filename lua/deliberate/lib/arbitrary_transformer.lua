@@ -77,6 +77,7 @@ local raw_input_group = {
     "brightness",
     "backdrop-brightness",
     "contrast",
+    "backdrop-contrast",
     "grayscale",
     "hue-rotate",
     "invert",

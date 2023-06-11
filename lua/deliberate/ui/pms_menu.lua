@@ -870,6 +870,10 @@ local contrast_D = {
 
 M.change_contrast = function() M._menu("contrast", false, tcm._change, { contrast_D }) end
 
+M.change_backdrop_contrast = function()
+    M._menu("backdrop-contrast", false, tcm._change, { contrast_D })
+end
+
 -------------------------------------------- Drop Shadow
 
 local drop_shadow_D = {
