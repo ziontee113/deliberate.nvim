@@ -69,6 +69,7 @@ local M = {
 local no_dash_axies = {
     ["p"] = { "", "x", "y", "t", "b", "l", "r", "e", "s" },
     ["m"] = { "", "x", "y", "t", "b", "l", "r", "e", "s" },
+    ["scroll-m"] = { "", "x", "y", "t", "b", "l", "r" },
 }
 local dash_axies = {
     ["space"] = { "x", "y" },
@@ -196,7 +197,10 @@ local add_axis_patterns = function(collection, prefix_format_fn)
         M[property] = tbl
     end
 end
-add_axis_patterns(no_dash_axies, function(property, axis) return property .. axis end)
+add_axis_patterns(no_dash_axies, function(property, axis)
+    property = string.gsub(property, "%-", "%%%-")
+    return property .. axis
+end)
 add_axis_patterns(dash_axies, function(property, axis)
     if axis == "" then return property end
     property = string.gsub(property, "%-", "%%%-")

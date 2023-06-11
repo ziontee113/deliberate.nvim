@@ -9,7 +9,7 @@ local M = {}
 
 -------------------------------------------- Format Function
 
-local non_dashy_group = { "p", "m" }
+local non_dashy_group = { "p", "m", "scroll-m", "scroll-p" }
 local in_non_dashy_group = function(property) return vim.tbl_contains(non_dashy_group, property) end
 
 local format_class = function(property, axis, current_item)
@@ -1070,5 +1070,9 @@ local origin_D = {
     { keymaps = { "o" }, text = "bottom-right" },
 }
 M.change_origin = function() M._menu("origin", false, tcm._change, { origin_D }) end
+
+-------------------------------------------- Scroll Margin
+
+M.change_scroll_margin = function(o) M._menu("scroll-m", o.axis, tcm._change, { pms_D, negative_D }) end
 
 return M
