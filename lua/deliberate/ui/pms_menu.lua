@@ -1086,4 +1086,13 @@ local will_change_D = {
 }
 M.change_will_change = function() M._menu("will-change", false, tcm._change, { will_change_D }) end
 
+-------------------------------------------- Stroke Width
+
+local stroke_width_D = {
+    { keymaps = { "/" }, text = "0" },
+    { keymaps = { "1" }, text = "1" },
+    { keymaps = { "2" }, text = "2" },
+}
+M.change_stroke_width = function() M._menu("stroke", false, tcm._change, { stroke_width_D }) end
+
 return M

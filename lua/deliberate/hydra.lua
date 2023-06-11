@@ -246,6 +246,7 @@ local non_axis_map = {
     ["or"] = pms_menu.change_origin,
 
     ["<space>wc"] = pms_menu.change_will_change,
+    ["sw"] = pms_menu.change_stroke_width,
 }
 add_heads_from_tbl(non_axis_map)
 
