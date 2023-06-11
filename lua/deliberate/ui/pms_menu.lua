@@ -797,4 +797,18 @@ local content_D = {
 }
 M.change_content = function() M._menu("content", false, tcm._change, { content_D }) end
 
+-------------------------------------------- Box Shaddow
+
+local box_shadow_D = {
+    { keymaps = { "b" }, text = "", absolute = "box-shadow" },
+    { keymaps = { "s" }, text = "sm" },
+    { keymaps = { "m" }, text = "md" },
+    { keymaps = { "l" }, text = "lg" },
+    { keymaps = { "x", "1" }, text = "xl" },
+    { keymaps = { "2" }, text = "2xl" },
+    { keymaps = { "i" }, text = "inner" },
+    { keymaps = { "n", "/" }, text = "none" },
+}
+M.change_box_shadow = function() M._menu("shadow", false, tcm._change, { box_shadow_D }) end
+
 return M
