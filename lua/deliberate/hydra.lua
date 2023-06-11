@@ -429,6 +429,7 @@ local classes_groups_dict = {
     ["cu"] = { cgm.change_cursor },
     ["RS"] = { cgm.change_resize },
     ["sc"] = { cgm.change_scroll_behavior },
+    ["sn"] = { cgm.change_snap_align },
 }
 
 for keymap, fn_and_args in pairs(classes_groups_dict) do

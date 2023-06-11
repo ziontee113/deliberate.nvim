@@ -787,4 +787,13 @@ local scroll_behavior_group = {
 }
 M.change_scroll_behavior = function() M._classes_group_changer_menu(scroll_behavior_group) end
 
+-- Scroll Snap Align
+local snap_align_group = {
+    { keymaps = { "s" }, classes = { "snap-start" } },
+    { keymaps = { "e" }, classes = { "snap-end" } },
+    { keymaps = { "c" }, classes = { "snap-center" } },
+    { keymaps = { "a", "n", "/" }, classes = { "snap-align-none" } },
+}
+M.change_snap_align = function() M._classes_group_changer_menu(snap_align_group) end
+
 return M
