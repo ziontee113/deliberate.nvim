@@ -715,4 +715,10 @@ local animation_group = {
 }
 M.change_animation = function() M._classes_group_changer_menu(animation_group) end
 
+-- Apprearance
+local appearance_group = {
+    { keymaps = { "n", "/" }, classes = { "appearance-none" } },
+}
+M.change_appearance = function() M._classes_group_changer_menu(appearance_group) end
+
 return M

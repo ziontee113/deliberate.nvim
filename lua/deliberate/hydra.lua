@@ -405,6 +405,7 @@ local classes_groups_dict = {
     ["TC"] = { cgm.change_caption_side },
     ["Tt"] = { cgm.change_transition_timing },
     ["An"] = { cgm.change_animation },
+    ["ap"] = { cgm.change_appearance },
 }
 
 for keymap, fn_and_args in pairs(classes_groups_dict) do
