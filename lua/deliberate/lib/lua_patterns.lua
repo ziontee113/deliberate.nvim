@@ -78,6 +78,7 @@ local dash_axies = {
     ["rounded"] = { "", "t", "b", "l", "r", "tl", "tr", "bl", "br" },
     ["inset"] = { "", "x", "y" },
     ["gap"] = { "", "x", "y" },
+    ["scale"] = { "", "x", "y" },
 }
 --stylua: ignore
 local singles = {
@@ -103,6 +104,11 @@ local singles = {
 
 local general_pms_postfixes = { "%-[%d%.%a/]+$", "%-%[[%-%d%.]+[%a%%]+]$" }
 local property_specific_patterns = {
+    ["scale"] = {
+        [""] = { "^scale%-%[.+]$" },
+        ["x"] = { "^scale%-x%-%[.+]$" },
+        ["y"] = { "^scale%-y%-%[.+]$" },
+    },
     ["divide"] = {
         ["x"] = { "^divide%-x$" },
         ["y"] = { "^divide%-y$" },

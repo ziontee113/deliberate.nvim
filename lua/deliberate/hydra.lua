@@ -279,6 +279,7 @@ local axis_map = {
     ["inset"] = { { "", "x", "y" }, pms_menu.change_inset },
     ["gap"] = { { "", "x", "y" }, pms_menu.change_gap },
     ["border-spacing"] = { { "x", "y" }, pms_menu.change_border_spacing },
+    ["scale"] = { { "", "x", "y" }, pms_menu.change_scale },
 }
 
 local find_axis_keymap = function(property, key_axis)
@@ -294,6 +295,14 @@ local find_axis_keymap = function(property, key_axis)
             return "G"
         else
             property = "g"
+        end
+    end
+
+    if property == "scale" then
+        if key_axis == "" then
+            return "Sc"
+        else
+            property = "S"
         end
     end
 

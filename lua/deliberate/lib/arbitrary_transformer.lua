@@ -90,6 +90,7 @@ local raw_input_group = {
     "transition",
     "duration",
     "delay",
+    "scale",
 }
 
 local input_to_pms_value = function(input, property)
