@@ -4,15 +4,7 @@ local api = vim.api
 local catalyst = require("deliberate.lib.catalyst")
 local selection = require("deliberate.lib.selection")
 local aggregator = require("deliberate.lib.tree-sitter.language_aggregator")
-
----@param buf number
----@param node TSNode
----@return string
-local find_indents = function(buf, node)
-    local start_row = node:range()
-    local first_line = api.nvim_buf_get_lines(buf, start_row, start_row + 1, false)[1]
-    return string.match(first_line, "^%s+") or ""
-end
+local utils = require("deliberate.lib.utils")
 
 ---@param destination "next" | "previous" | "inside"
 ---@param replacement string
@@ -102,7 +94,7 @@ M.add = function(o)
         local update_row, update_col
         local og_node = selection.nodes()[i]
         local content = o.content or "###"
-        local indents = find_indents(catalyst.buf(), og_node)
+        local indents = utils.find_indents(catalyst.buf(), og_node)
 
         local new_tag_content = process_new_tag_content(o, indents, content)
 

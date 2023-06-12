@@ -299,8 +299,9 @@ end
 ---@return number
 M.buf = function() return current_catalyst_info.buf end
 
-M.sorted_nodes = function()
+M.sorted_items = function()
     local sorted_nodes = {}
+    local sorted_items = {}
     local sorted_rows = {}
     for _, item in ipairs(selection) do
         local start_row = item.node:range()
@@ -309,8 +310,14 @@ M.sorted_nodes = function()
             if start_row > row then insert_index = i + 1 end
         end
         table.insert(sorted_nodes, insert_index, item.node)
+        table.insert(sorted_items, insert_index, item)
         table.insert(sorted_rows, insert_index, start_row)
     end
+    return sorted_items, sorted_nodes
+end
+
+M.sorted_nodes = function()
+    local _, sorted_nodes = M.sorted_items()
     return sorted_nodes
 end
 

@@ -21,6 +21,50 @@ M.pseudo_split = function(single_class)
     return pseudo_prefix, style
 end
 
+-------------------------------------------- String Table Related
+
+---@param buf number
+---@param node TSNode
+---@return string
+M.find_indents = function(buf, node)
+    local start_row = node:range()
+    local first_line = vim.api.nvim_buf_get_lines(buf, start_row, start_row + 1, false)[1]
+    return string.match(first_line, "^%s+") or ""
+end
+
+---@param lines string[]
+---@param target_start_col integer
+---@return string[]
+M.reindent = function(lines, target_start_col, destination)
+    local shortest_indent_amount = #string.match(lines[1], "^%s+") or 0
+    for _, line in ipairs(lines) do
+        local this_line_indent = string.match(line, "^%s+")
+        if #this_line_indent < shortest_indent_amount then
+            shortest_indent_amount = #this_line_indent
+        end
+    end
+
+    if destination == "inside" then
+        shortest_indent_amount = shortest_indent_amount - vim.bo.tabstop
+    end
+
+    if shortest_indent_amount ~= target_start_col then
+        local deficit = shortest_indent_amount - target_start_col
+        if shortest_indent_amount > target_start_col then
+            for i, _ in ipairs(lines) do
+                lines[i] = string.sub(lines[i], deficit + 1)
+            end
+        else
+            local spaces = string.rep(" ", math.abs(deficit))
+            for i, _ in ipairs(lines) do
+                lines[i] = spaces .. lines[i]
+            end
+        end
+    end
+
+    return lines
+end
+
 -------------------------------------------- Vim Utils
 
 M.get_count = function()

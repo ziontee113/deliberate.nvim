@@ -84,6 +84,12 @@ local heads = {
     },
 
     {
+        "<A-w>",
+        function() require("deliberate.api.wrap").call({ tag = "div" }) end,
+        { nowait = true },
+    },
+
+    {
         "v",
         function() visual_collector.toggle() end,
         { nowait = true },

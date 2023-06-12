@@ -4,9 +4,23 @@ local catalyst = require("deliberate.lib.catalyst")
 local selection = require("deliberate.lib.selection")
 local yank = require("deliberate.api.yank")
 
-M.call = function()
-    vim.bo[catalyst.buf()].undolevels = vim.bo[catalyst.buf()].undolevels
-    selection.archive_for_undo()
+---@class delete_Args
+---@field archive_state boolean
+
+---@type delete_Args
+local default_delete_opts = {
+    archive_state = true,
+}
+
+---@param opts delete_Args
+M.call = function(opts)
+    opts = vim.tbl_deep_extend("force", default_delete_opts, opts or {})
+
+    if opts.archive_state then
+        vim.bo[catalyst.buf()].undolevels = vim.bo[catalyst.buf()].undolevels
+        selection.archive_for_undo()
+    end
+
     yank.call({ keep_selection = true })
 
     local sorted_nodes = selection.sorted_nodes()

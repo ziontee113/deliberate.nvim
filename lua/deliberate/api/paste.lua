@@ -2,39 +2,7 @@ local catalyst = require("deliberate.lib.catalyst")
 local selection = require("deliberate.lib.selection")
 local yank = require("deliberate.api.yank")
 local aggregator = require("deliberate.lib.tree-sitter.language_aggregator")
-
----@param lines string[]
----@param target_start_col integer
----@return string[]
-local reindent = function(lines, target_start_col, destination)
-    local shortest_indent_amount = #string.match(lines[1], "^%s+") or 0
-    for _, line in ipairs(lines) do
-        local this_line_indent = string.match(line, "^%s+")
-        if #this_line_indent < shortest_indent_amount then
-            shortest_indent_amount = #this_line_indent
-        end
-    end
-
-    if destination == "inside" then
-        shortest_indent_amount = shortest_indent_amount - vim.bo.tabstop
-    end
-
-    if shortest_indent_amount ~= target_start_col then
-        local deficit = shortest_indent_amount - target_start_col
-        if shortest_indent_amount > target_start_col then
-            for i, _ in ipairs(lines) do
-                lines[i] = string.sub(lines[i], deficit + 1)
-            end
-        else
-            local spaces = string.rep(" ", math.abs(deficit))
-            for i, _ in ipairs(lines) do
-                lines[i] = spaces .. lines[i]
-            end
-        end
-    end
-
-    return lines
-end
+local utils = require("deliberate.lib.utils")
 
 local join_contents = function()
     local joined_contents = {}
@@ -44,12 +12,6 @@ local join_contents = function()
         end
     end
     return joined_contents
-end
-
-local find_indents = function(buf, node)
-    local start_row = node:range()
-    local first_line = vim.api.nvim_buf_get_lines(buf, start_row, start_row + 1, false)[1]
-    return string.match(first_line, "^%s+") or ""
 end
 
 local spread_the_tag = function(i)
@@ -63,7 +25,7 @@ local spread_the_tag = function(i)
         b_col,
         b_row,
         b_col,
-        { "", find_indents(catalyst.buf(), selection.nodes()[i]) }
+        { "", utils.find_indents(catalyst.buf(), selection.nodes()[i]) }
     )
 
     local tag_node = aggregator.get_tag_identifier_node(selection.nodes()[i])
@@ -146,7 +108,7 @@ M.call = function(opts)
         local start_row, start_col, end_row, _ = selection.nodes()[i]:range()
 
         local lines = opts.join and join_contents() or yank.contents()[i]
-        if opts.reindent then lines = reindent(lines, start_col, destination_for_reindent) end
+        if opts.reindent then lines = utils.reindent(lines, start_col, destination_for_reindent) end
 
         local target_row = find_target_row(opts, start_row, end_row)
         vim.api.nvim_buf_set_lines(selection.buf(), target_row, target_row, false, lines)
