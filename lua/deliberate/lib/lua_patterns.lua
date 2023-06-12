@@ -86,7 +86,7 @@ local dash_axies = {
 --stylua: ignore
 local singles = {
     "opacity", "border-opacity", "divide-opacity", "ring-opacity", "backdrop-opacity",
-    "text", "font", "tracking", "leading", "line-clamp",
+    "font", "tracking", "leading", "line-clamp",
     "decoration", "underline-offset", "indent", "align", "content",
     "list-image",
     "ring", "ring-offset",
@@ -227,6 +227,18 @@ for _, property in ipairs(singles) do
     end
     M[property] = tbl
 end
+
+-------------------------------------------- Manual
+
+M["text"] = {
+    "^text-xs$",
+    "^text-sm$",
+    "^text-base$",
+    "^text-lg$",
+    "^text-xl$",
+    "^text%-%d+xl$",
+    "^text%-%[[%-%d%.]+[%a%%]+]$"
+}
 
 -------------------------------------------- Colors
 
