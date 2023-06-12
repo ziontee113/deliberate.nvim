@@ -37,14 +37,28 @@ describe("get_tag_identifier_node()", function()
 end)
 
 describe("get_className_property_string_node()", function()
-    before_each(function() h.set_buffer_content_as_multiple_react_components() end)
     after_each(function() vim.api.nvim_buf_delete(0, { force = true }) end)
 
     it("works", function()
+        h.set_buffer_content_as_multiple_react_components()
+
         local _, grouped_captures = tsx.get_all_html_nodes_in_buffer(0)
         local className_string_node =
             tsx.get_className_property_string_node(0, grouped_captures["jsx_element"][2])
         h.node_has_text(className_string_node, [["h-screen w-screen bg-zinc-900"]])
+    end)
+
+    it("returns nil if couldn't find target node", function()
+        vim.bo.ft = "typescriptreact"
+        h.set_buf_content([[<div>
+    <h1 className="text-rose-600 text-8xl m-auto">Hello</h1>
+    <h3>Hello World</h3>
+</div>]])
+
+        local _, grouped_captures = tsx.get_all_html_nodes_in_buffer(0)
+        local className_string_node =
+            tsx.get_className_property_string_node(0, grouped_captures["jsx_element"][1])
+        assert.equals(nil, className_string_node)
     end)
 end)
 

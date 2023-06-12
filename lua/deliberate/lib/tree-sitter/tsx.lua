@@ -4,6 +4,10 @@ local M = {}
 
 -------------------------------------------- Local Functions
 
+---@param buf number
+---@param node TSNode
+---@param property string
+---@return TSNode | nil
 local get_property_string_node = function(buf, node, property)
     local _, grouped_captures = lib_ts.capture_nodes_with_queries({
         buf = buf,
@@ -23,7 +27,12 @@ local get_property_string_node = function(buf, node, property)
         capture_groups = { "string" },
     })
 
-    return grouped_captures["string"][1]
+    local target_node = grouped_captures["string"][1]
+    if target_node then
+        local html_parent = M.get_html_node(target_node)
+        if html_parent ~= node then return nil end
+    end
+    return target_node
 end
 
 -------------------------------------------- Public Functions
