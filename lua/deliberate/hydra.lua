@@ -62,6 +62,26 @@ local heads = {
         function() require("deliberate.api.paste").call({ destination = "previous" }) end,
         { nowait = true },
     },
+    {
+        "pi",
+        function()
+            require("deliberate.api.paste").call({
+                destination = "inside",
+                paste_inside_destination = "after-all-children",
+            })
+        end,
+        { nowait = true },
+    },
+    {
+        "pI",
+        function()
+            require("deliberate.api.paste").call({
+                destination = "inside",
+                paste_inside_destination = "before-all-children",
+            })
+        end,
+        { nowait = true },
+    },
 
     {
         "v",
