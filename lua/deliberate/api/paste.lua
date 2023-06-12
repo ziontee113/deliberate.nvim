@@ -77,6 +77,26 @@ local spread_the_tag = function(i)
     selection.update_item(i, update_row, update_col)
 end
 
+local find_target_row = function(opts, start_row, end_row)
+    local target_row, row_offset
+    if opts.destination == "previous" then
+        target_row, row_offset = start_row, 0
+    elseif opts.destination == "next" then
+        target_row, row_offset = end_row, 1
+    elseif
+        opts.destination == "inside"
+        and opts.paste_inside_destination == "after-all-children"
+    then
+        target_row, row_offset = start_row, 1
+    elseif
+        opts.destination == "inside"
+        and opts.paste_inside_destination == "before-all-children"
+    then
+        target_row, row_offset = start_row, 0
+    end
+    return target_row + row_offset
+end
+
 ---@class paste_Args
 ---@field destination "previous" | "next" | "inside"
 ---@field paste_inside_destination "after-all-children" | "before-all-children"
@@ -102,10 +122,7 @@ M.call = function(opts)
     require("deliberate.api.dot_repeater").register(M.call, opts)
 
     for i = 1, #selection.nodes() do
-        local lines = opts.join and join_contents() or yank.contents()[i]
-        local mutable_destination = opts.destination
-
-        local target_row, row_offset
+        local destination_for_reindent = opts.destination
 
         if opts.destination == "inside" then
             local html_children = aggregator.get_html_children(selection.nodes()[i])
@@ -116,38 +133,22 @@ M.call = function(opts)
                     local child_start_row, child_start_col = html_children[#html_children]:range()
                     selection.refresh_tree()
                     selection.update_item(i, child_start_row, child_start_col)
-                    mutable_destination = "next"
+                    destination_for_reindent = "next"
                 else
                     local child_start_row, child_start_col = html_children[1]:range()
                     selection.refresh_tree()
                     selection.update_item(i, child_start_row, child_start_col)
-                    mutable_destination = "previous"
+                    destination_for_reindent = "previous"
                 end
             end
         end
 
         local start_row, start_col, end_row, _ = selection.nodes()[i]:range()
 
-        if opts.reindent then lines = reindent(lines, start_col, mutable_destination) end
+        local lines = opts.join and join_contents() or yank.contents()[i]
+        if opts.reindent then lines = reindent(lines, start_col, destination_for_reindent) end
 
-        if opts.destination == "previous" then
-            target_row, row_offset = start_row, 0
-        elseif opts.destination == "next" then
-            target_row, row_offset = end_row, 1
-        elseif
-            opts.destination == "inside"
-            and opts.paste_inside_destination == "after-all-children"
-        then
-            target_row, row_offset = start_row, 1
-        elseif
-            opts.destination == "inside"
-            and opts.paste_inside_destination == "before-all-children"
-        then
-            target_row, row_offset = start_row, 0
-        end
-
-        target_row = target_row + row_offset
-
+        local target_row = find_target_row(opts, start_row, end_row)
         vim.api.nvim_buf_set_lines(selection.buf(), target_row, target_row, false, lines)
 
         selection.refresh_tree()

@@ -116,22 +116,19 @@ describe("paste()", function()
         end
     )
 
-    it(
-        "destination = inside, consecutive multi selection, paste destination has html children",
-        function()
-            h.initiate("22gg^", "<li>Contacts</li>")
-            movA({ "next", true }, 1, "<li>Contacts</li>")
-            movA({ "next", true }, 2, { "<li>Contacts</li>", "<li>FAQ</li>" })
+    it("destination = inside, paste destination has html children", function()
+        h.initiate("22gg^", "<li>Contacts</li>")
+        movA({ "next", true }, 1, "<li>Contacts</li>")
+        movA({ "next", true }, 2, { "<li>Contacts</li>", "<li>FAQ</li>" })
 
-            yank.call()
-            h.selection_is(1, "<OtherComponent />") -- selection gets cleared if `yank.call()` with no args
+        yank.call()
+        h.selection_is(1, "<OtherComponent />") -- selection gets cleared if `yank.call()` with no args
 
-            navigator.move({destination = "parent"})
-
-            paste.call({ destination = "inside", paste_inside_destination = "after-all-children" })
-            h.node_has_text(
-                selection.nodes()[1]:parent(),
-                [[<div className="h-screen w-screen bg-zinc-900">
+        navigator.move({ destination = "parent" })
+        paste.call({ destination = "inside", paste_inside_destination = "after-all-children" })
+        h.node_has_text(
+            selection.nodes()[1]:parent(),
+            [[<div className="h-screen w-screen bg-zinc-900">
         <li>Home</li>
         <li>
           A new study found that coffee drinkers have a lower risk of liver
@@ -143,26 +140,22 @@ describe("paste()", function()
         <li>Contacts</li>
         <li>FAQ</li>
       </div>]]
-            )
-        end
-    )
+        )
+    end)
 
-    it(
-        "destination = inside, paste before all target's children",
-        function()
-            h.initiate("22gg^", "<li>Contacts</li>")
-            movA({ "next", true }, 1, "<li>Contacts</li>")
-            movA({ "next", true }, 2, { "<li>Contacts</li>", "<li>FAQ</li>" })
+    it("destination = inside, paste before all target's children", function()
+        h.initiate("22gg^", "<li>Contacts</li>")
+        movA({ "next", true }, 1, "<li>Contacts</li>")
+        movA({ "next", true }, 2, { "<li>Contacts</li>", "<li>FAQ</li>" })
 
-            yank.call()
-            h.selection_is(1, "<OtherComponent />") -- selection gets cleared if `yank.call()` with no args
+        yank.call()
+        h.selection_is(1, "<OtherComponent />") -- selection gets cleared if `yank.call()` with no args
 
-            navigator.move({destination = "parent"})
-
-            paste.call({ destination = "inside", paste_inside_destination = "before-all-children" })
-            h.node_has_text(
-                selection.nodes()[1]:parent(),
-                [[<div className="h-screen w-screen bg-zinc-900">
+        navigator.move({ destination = "parent" })
+        paste.call({ destination = "inside", paste_inside_destination = "before-all-children" })
+        h.node_has_text(
+            selection.nodes()[1]:parent(),
+            [[<div className="h-screen w-screen bg-zinc-900">
         <li>Contacts</li>
         <li>FAQ</li>
         <li>Home</li>
@@ -174,7 +167,6 @@ describe("paste()", function()
         <li>FAQ</li>
         <OtherComponent />
       </div>]]
-            )
-        end
-    )
+        )
+    end)
 end)
