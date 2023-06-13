@@ -149,7 +149,8 @@ local heads = {
 
 local nop_list = { "d", "D", "x", "r", "R", "v", "V", "c", "C" }
 for _, keymap in ipairs(nop_list) do
-    vim.keymap.set("n", keymap, "<Nop>", {})
+    local hydra_mapping = { keymap, "<Nop>", { nowait = true } }
+    table.insert(heads, hydra_mapping)
 end
 
 -------------------------------------------- Local Helpers
