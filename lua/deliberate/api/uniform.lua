@@ -89,6 +89,7 @@ M.move = function(o)
         handle_previous_or_next(o.destination)
     end
 
+    require("deliberate.api.visual_collector").stop()
     require("deliberate.lib.indicator").highlight_selection()
 end
 
