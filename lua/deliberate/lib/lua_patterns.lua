@@ -231,11 +231,11 @@ end
 -------------------------------------------- Manual
 
 M["text"] = {
-    "^text-xs$",
-    "^text-sm$",
-    "^text-base$",
-    "^text-lg$",
-    "^text-xl$",
+    "^text%-xs$",
+    "^text%-sm$",
+    "^text%-base$",
+    "^text%-lg$",
+    "^text%-xl$",
     "^text%-%d+xl$",
     "^text%-%[[%-%d%.]+[%a%%]+]$",
 }
