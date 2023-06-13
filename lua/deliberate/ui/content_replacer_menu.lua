@@ -63,7 +63,8 @@ local valid_hints = {
     "Q", "W", "E", "R", "T",
     "A", "S", "D", "F", "G",
     "Z", "X", "C", "V", "Y",
-    "U", "I", "O", "P", "H", "L",
+    "U", "I", "O", "P",
+    "H", "J", "K", "L",
     "N", "M", "<", ">", "?",
 }
 
@@ -93,10 +94,13 @@ local get_second_step_items = function(content_groups, results)
         end
     end
 
-    for _, text in ipairs(selected_group) do
-        local keymap = find_valid_hint(text, valid_hints, occupied_keymaps)
-        table.insert(occupied_keymaps, keymap)
-        table.insert(items, { text = text, keymaps = { keymap } })
+    for i, text in ipairs(selected_group) do
+        if text == "" and i ~= #selected_group then table.insert(items, "") end
+        if text ~= "" then
+            local keymap = find_valid_hint(text, valid_hints, occupied_keymaps)
+            table.insert(occupied_keymaps, keymap)
+            table.insert(items, { text = text, keymaps = { keymap } })
+        end
     end
 
     return items
