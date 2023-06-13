@@ -101,7 +101,7 @@ end
 M._change = function(o)
     if not catalyst.is_active() then return end
 
-    selection.archive_empty_state_for_undo()
+    selection.archive_for_undo()
     require("deliberate.api.dot_repeater").register(M._change, o)
 
     o.negative_patterns = vim.tbl_flatten(o.negative_patterns or {})

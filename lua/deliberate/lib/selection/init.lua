@@ -218,9 +218,6 @@ end
 M.archive_for_undo = function()
     require("deliberate.lib.selection.extmark_archive").push_to_undo_stack(selection, ns)
 end
-M.archive_empty_state_for_undo = function()
-    require("deliberate.lib.selection.extmark_archive").push_to_undo_stack({})
-end
 
 M.archive_for_redo = function()
     require("deliberate.lib.selection.extmark_archive").push_to_redo_stack(selection, ns)
