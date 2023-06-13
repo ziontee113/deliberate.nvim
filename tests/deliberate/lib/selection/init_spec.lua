@@ -43,6 +43,49 @@ describe("typescriptreact selection.nodes()", function()
     h.clean_up()
 end)
 
+describe("typescriptreact selection.select_all_html_siblings()", function()
+    before_each(function() h.set_buffer_content_as_multiple_react_components() end)
+    after_each(function() h.clean_up() end)
+
+    it("works", function()
+        initiate("36gg^", "<li>Log In</li>")
+        selection.select_all_html_siblings()
+        h.selection_is(2, {
+            "<li>Log In</li>",
+            "<li>Sign Up</li>",
+        })
+    end)
+
+    it("does not add dupliate items", function()
+        initiate("36gg^", "<li>Log In</li>")
+        mova({ "next", true }, 1, "<li>Log In</li>")
+        mova({ "next", true }, 2, { "<li>Log In</li>", "<li>Sign Up</li>" })
+        selection.select_all_html_siblings()
+        h.selection_is(2, {
+            "<li>Log In</li>",
+            "<li>Sign Up</li>",
+        })
+    end)
+
+    it("works on multiple selections in different parents", function()
+        initiate("22gg^", "<li>Contacts</li>")
+        mova({ "next", true }, 1, "<li>Contacts</li>")
+        h.loop(6, navigator.move, { { destination = "next" } })
+        mova({ "next", true }, 2, { "<li>Contacts</li>", "<li>Log In</li>" })
+
+        selection.select_all_html_siblings()
+        h.selection_is(7, {
+            "<li>Contacts</li>",
+            "<li>Log In</li>",
+            "<li>Home</li>",
+            h.long_li_tag,
+            "<li>FAQ</li>",
+            "<OtherComponent />",
+            "<li>Sign Up</li>",
+        })
+    end)
+end)
+
 describe("svelte selection.nodes()", function()
     h.set_buffer_content_as_svelte_file()
 

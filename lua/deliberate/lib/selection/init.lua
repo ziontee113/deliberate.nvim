@@ -213,6 +213,49 @@ M.clear = function(keep_indicators)
     end
 end
 
+M.select_all_html_siblings = function()
+    local selected_nodes = {}
+
+    for _, item in ipairs(selection) do
+        if not vim.tbl_contains(selected_nodes, item.node) then
+            table.insert(selected_nodes, item.node)
+        end
+    end
+
+    local new_nodes_to_select = {}
+    for _, item in ipairs(selection) do
+        local parent = aggregator.get_html_node(item.node:parent())
+        if parent then
+            local children = aggregator.get_html_children(parent)
+            for _, child in ipairs(children) do
+                if not vim.tbl_contains(selected_nodes, child) then
+                    table.insert(new_nodes_to_select, child)
+                end
+            end
+        end
+    end
+
+    local new_items_to_add = {}
+    local buf, win = selection[1].buf, selection[1].win
+    for _, new_node in ipairs(new_nodes_to_select) do
+        local new_extmark_id = set_extmark_for_node(buf, new_node)
+        local new_item = {
+            buf = buf,
+            win = win,
+            extmark_id = new_extmark_id,
+            node = new_node,
+        }
+        table.insert(new_items_to_add, new_item)
+    end
+
+    for _, item in ipairs(new_items_to_add) do
+        table.insert(selection, item)
+    end
+
+    select_move_active = true
+    indicator.highlight_selection()
+end
+
 ----------------- Undo State Management
 
 M.archive_for_undo = function()

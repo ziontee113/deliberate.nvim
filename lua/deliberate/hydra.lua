@@ -94,6 +94,12 @@ local heads = {
         function() visual_collector.toggle() end,
         { nowait = true },
     },
+    {
+        "V",
+        function() selection.select_all_html_siblings() end,
+        { nowait = true },
+    },
+
 
     {
         ".",
@@ -147,7 +153,7 @@ local heads = {
 
 -------------------------------------------- <Nop>
 
-local nop_list = { "d", "D", "x", "r", "R", "V", "c" }
+local nop_list = { "d", "D", "x", "r", "R", "c" }
 for _, keymap in ipairs(nop_list) do
     local hydra_mapping = { keymap, "<Nop>", { nowait = true } }
     table.insert(heads, hydra_mapping)
@@ -433,7 +439,7 @@ local classes_groups_dict = {
     ["oY"] = { cgm.change_overscroll_y },
 
     ["po"] = { cgm.change_position },
-    ["V"] = { cgm.change_visibility },
+    ["<space>v"] = { cgm.change_visibility },
 
     ["gf"] = { cgm.change_grid_flow },
 
