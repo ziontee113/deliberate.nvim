@@ -145,6 +145,13 @@ local heads = {
     { "<Nul>", nil, { exit = true } },
 }
 
+-------------------------------------------- <Nop>
+
+local nop_list = { "d", "D", "x", "r", "R", "v", "V", "c", "C" }
+for _, keymap in ipairs(nop_list) do
+    vim.keymap.set("n", keymap, "<Nop>", {})
+end
+
 -------------------------------------------- Local Helpers
 
 local add_heads_from_tbl = function(tbl)

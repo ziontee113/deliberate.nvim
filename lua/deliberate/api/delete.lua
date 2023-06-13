@@ -12,7 +12,7 @@ local default_delete_opts = {
     archive_state = true,
 }
 
----@param opts delete_Args
+---@param opts delete_Args | nil
 M.call = function(opts)
     require("deliberate.api.dot_repeater").register(M.call, opts)
 
