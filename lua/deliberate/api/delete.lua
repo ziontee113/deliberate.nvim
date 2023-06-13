@@ -14,6 +14,8 @@ local default_delete_opts = {
 
 ---@param opts delete_Args
 M.call = function(opts)
+    require("deliberate.api.dot_repeater").register(M.call, opts)
+
     opts = vim.tbl_deep_extend("force", default_delete_opts, opts or {})
 
     if opts.archive_state then
