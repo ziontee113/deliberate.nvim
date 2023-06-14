@@ -252,8 +252,6 @@ M.select_all_html_siblings = function()
         table.insert(selection, item)
     end
 
-    selection = M.sorted_items()
-
     select_move_active = true
     indicator.highlight_selection()
 end
@@ -346,12 +344,13 @@ M.sorted_items = function()
     local sorted_nodes = {}
     local sorted_items = {}
     local sorted_rows = {}
-    for _, item in ipairs(selection) do
+    for og_index, item in ipairs(selection) do
         local start_row = item.node:range()
         local insert_index = 1
         for i, row in ipairs(sorted_rows) do
             if start_row > row then insert_index = i + 1 end
         end
+        item.original_index = og_index
         table.insert(sorted_nodes, insert_index, item.node)
         table.insert(sorted_items, insert_index, item)
         table.insert(sorted_rows, insert_index, start_row)

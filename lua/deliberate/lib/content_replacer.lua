@@ -3,15 +3,22 @@ local selection = require("deliberate.lib.selection")
 
 local M = {}
 
-M.replace = function(content)
+M.replace = function(content, disable_auto_sort)
     local buf = selection.current_catalyst_info().buf
 
     vim.bo[buf].undolevels = vim.bo[buf].undolevels
     selection.archive_for_undo()
-    require("deliberate.api.dot_repeater").register(M.replace, content)
+    require("deliberate.api.dot_repeater").register(M.replace, content, disable_auto_sort)
 
-    for i = 1, #selection.nodes() do
-        local node = selection.nodes()[i]
+    for i = 1, #selection.items() do
+        local node, original_index
+        if not disable_auto_sort then
+            node = selection.sorted_items()[i].node
+            original_index = selection.sorted_items()[i].original_index
+        else
+            node = selection.items()[i].node
+            original_index = i
+        end
 
         if aggregator.node_is_component(node) then goto continue end
 
@@ -33,7 +40,8 @@ M.replace = function(content)
         )
 
         selection.refresh_tree()
-        selection.update_item(i, target_row, target_col)
+
+        selection.update_item(original_index, target_row, target_col)
 
         ::continue::
     end

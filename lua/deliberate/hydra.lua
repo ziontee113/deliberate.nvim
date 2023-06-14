@@ -64,6 +64,11 @@ local manual_heads = {
         function() require("deliberate.ui.content_replacer_menu").replace_with_group("contents.txt") end,
         { nowait = true },
     },
+    {
+        "<C-S-c>",
+        function() require("deliberate.ui.content_replacer_menu").replace_with_group("contents.txt", true) end,
+        { nowait = true },
+    },
 
 
     {

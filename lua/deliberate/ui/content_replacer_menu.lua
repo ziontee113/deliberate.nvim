@@ -130,7 +130,9 @@ M._show_content_replacer_menu = function(file_path)
             {
                 items = get_second_step_items,
                 arguments = { content_groups },
-                callback = function(_, current_item) replacer.replace(current_item.text) end,
+                callback = function(_, current_item)
+                    replacer.replace(current_item.text)
+                end,
             },
         },
     })
@@ -142,13 +144,14 @@ M.replace = function(file_path) M._show_content_replacer_menu(file_path) end
 
 -------------------------------------------- Group Replace
 
-M._show_content_group_replacer_menu = function(file_path)
+M._show_content_group_replacer_menu = function(file_path, disable_auto_sort)
     menu_repeater.register(M._show_content_group_replacer_menu, file_path)
 
+    local title = disable_auto_sort and "User Order" or "Auto Sorted"
     local content_groups = get_content_groups_from_file(file_path)
 
     local popup = PopUp:new({
-        title = "Group Replace",
+        title = title,
         steps = {
             {
                 items = get_first_step_items,
@@ -159,7 +162,10 @@ M._show_content_group_replacer_menu = function(file_path)
                     else
                         for _, group in ipairs(content_groups) do
                             if group.name == current_item.text then
-                                replacer.replace(utils.remove_empty_strings(group))
+                                replacer.replace(
+                                    utils.remove_empty_strings(group),
+                                    disable_auto_sort
+                                )
                                 break
                             end
                         end
@@ -172,6 +178,8 @@ M._show_content_group_replacer_menu = function(file_path)
     popup:show()
 end
 
-M.replace_with_group = function(file_path) M._show_content_group_replacer_menu(file_path) end
+M.replace_with_group = function(file_path, disable_auto_sort)
+    M._show_content_group_replacer_menu(file_path, disable_auto_sort)
+end
 
 return M
