@@ -31,6 +31,10 @@ M.pop_undo_stack = function()
     return latest
 end
 
+M.undo_stack_is_empty = function()
+    return #undo_stack == 0
+end
+
 -------------------------------------------- Redo
 
 ---@param selection CatalystInfo[]
@@ -47,6 +51,11 @@ end
 
 M.redo_stack = function() return redo_stack end
 
---------------------------------------------
+-------------------------------------------- Clear
+
+M.clear_all = function()
+    undo_stack = {}
+    redo_stack = {}
+end
 
 return M

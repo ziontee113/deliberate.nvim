@@ -11,6 +11,11 @@ end
 M.undo = function(testing)
     selection.archive_for_redo()
 
+    if require("deliberate.lib.selection.extmark_archive").undo_stack_is_empty() then
+        exit_hyra(testing, true)
+        return
+    end
+
     vim.cmd("undo")
     local should_exit = selection.undo()
 

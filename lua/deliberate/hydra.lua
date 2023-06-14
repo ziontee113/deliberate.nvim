@@ -9,14 +9,14 @@ local cgm = require("deliberate.ui.classes_groups_menu")
 local uniform = require("deliberate.api.uniform")
 local utils = require("deliberate.lib.utils")
 
--- local augroup = vim.api.nvim_create_augroup("Deliberate Hydra Exit", { clear = true })
--- local autocmd_id
+local augroup = vim.api.nvim_create_augroup("Deliberate Hydra Exit", { clear = true })
+local autocmd_id
 
 local exit_hydra = function()
     vim.api.nvim_input("<Nul>")
     visual_collector.stop()
     selection.clear(true)
-    -- pcall(vim.api.nvim_del_autocmd, autocmd_id)
+    pcall(vim.api.nvim_del_autocmd, autocmd_id)
 end
 
 local heads = {}
@@ -50,9 +50,7 @@ local manual_heads = {
 
     {
         ";",
-        function()
-            require("deliberate.ui.attribute_changer_menu").show()
-        end,
+        function() require("deliberate.ui.attribute_changer_menu").show() end,
         { nowait = true },
     },
 
@@ -558,16 +556,22 @@ Hydra({
         color = "pink",
         invoke_on_body = true,
         on_enter = function()
+            require("deliberate.lib.selection.extmark_archive").clear_all()
+
             catalyst.initiate({
                 win = vim.api.nvim_get_current_win(),
                 buf = vim.api.nvim_get_current_buf(),
             })
 
-            -- autocmd_id = vim.api.nvim_create_autocmd({ "BufWritePost" }, {
-            --     buffer = vim.api.nvim_get_current_buf(),
-            --     group = augroup,
-            --     callback = function() exit_hydra() end,
-            -- })
+            autocmd_id = vim.api.nvim_create_autocmd({ "InsertLeave" }, {
+                buffer = catalyst.buf(),
+                group = augroup,
+                callback = function()
+                    vim.cmd("norm! ^")
+                    vim.api.nvim_input("<Nul>")
+                    vim.api.nvim_input("<Esc>")
+                end,
+            })
         end,
         on_exit = function() selection.clear() end,
     },

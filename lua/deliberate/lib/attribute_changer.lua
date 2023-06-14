@@ -35,7 +35,6 @@ end
 
 ---@param o Attribute_Changer_Opts
 M.change = function(o)
-    vim.bo[catalyst.buf()].undolevels = vim.bo[catalyst.buf()].undolevels
     selection.archive_for_undo()
     require("deliberate.api.dot_repeater").register(M.change, o)
 
