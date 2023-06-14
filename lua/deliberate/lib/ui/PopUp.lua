@@ -275,8 +275,11 @@ function PopUp:hide()
     pcall(vim.api.nvim_win_close, self.win, true)
     pcall(vim.api.nvim_buf_del, self.buf)
 
-    -- NOTE: why the heck do I have to do this? `nvim_win_close` just move the cursor for no good reasons.
-    vim.defer_fn(function() vim.cmd("norm! ^") end, 50)
+    if self.defer_fn then
+        vim.defer_fn(function() self.defer_fn(self.results) end, 50)
+    else
+        vim.defer_fn(function() vim.cmd("norm! ^") end, 50)
+    end
 end
 
 return PopUp

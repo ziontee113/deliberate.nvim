@@ -21,6 +21,14 @@ local function find_or_create_attribute_value_node(buf, node, attribute, content
     selection.refresh_tree()
 end
 
+M.jump_to_attribute_value_node = function(attribute)
+    local attribute_value_node =
+        aggregator.get_attribute_value(catalyst.buf(), catalyst.node(), attribute)
+    if not attribute_value_node then return end
+    local _, _, end_row, end_col = attribute_value_node:range()
+    vim.api.nvim_win_set_cursor(catalyst.win(), { end_row + 1, end_col - 1 })
+end
+
 ---@class Attribute_Changer_Opts
 ---@field attribute string
 ---@field content string
@@ -31,24 +39,18 @@ M.change = function(o)
     selection.archive_for_undo()
     require("deliberate.api.dot_repeater").register(M.change, o)
 
-    for i = 1, #selection.nodes() do
-        local attribute_value_node = find_or_create_attribute_value_node(
-            catalyst.buf(),
-            selection.nodes()[i],
-            o.attribute,
-            o.content
-        )
+    local attribute_value_node =
+        find_or_create_attribute_value_node(catalyst.buf(), catalyst.node(), o.attribute, o.content)
 
-        if not attribute_value_node then return end
+    if not attribute_value_node then return end
 
-        lib_ts.replace_node_text({
-            node = attribute_value_node,
-            buf = catalyst.buf(),
-            replacement = { o.content },
-        })
+    lib_ts.replace_node_text({
+        node = attribute_value_node,
+        buf = catalyst.buf(),
+        replacement = { o.content },
+    })
 
-        selection.refresh_tree()
-    end
+    selection.refresh_tree()
 end
 
 return M

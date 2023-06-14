@@ -8,9 +8,10 @@ local augroup = vim.api.nvim_create_augroup("Deliberate Input", { clear = true }
 function Input:_execute_callback()
     vim.cmd("stopinsert")
 
+    self.result = vim.api.nvim_buf_get_lines(0, 0, -1, false)[1]
+
     if self.callback then
-        local result = vim.api.nvim_buf_get_lines(0, 0, -1, false)[1]
-        self.callback(result)
+        self.callback(self.result)
     end
 
     self:hide()
@@ -92,8 +93,11 @@ function Input:hide()
     vim.api.nvim_win_hide(self.win)
     pcall(vim.api.nvim_buf_del, self.buf)
 
-    -- NOTE: why the heck do I have to do this? `nvim_win_close` just move the cursor for no good reasons.
-    vim.defer_fn(function() vim.cmd("norm! ^") end, 50)
+    if self.defer_fn then
+        vim.defer_fn(function() self.defer_fn(self.result) end, 100)
+    else
+        vim.defer_fn(function() vim.cmd("norm! ^") end, 50)
+    end
 end
 
 function Input:new(opts)

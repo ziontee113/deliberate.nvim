@@ -49,6 +49,14 @@ local manual_heads = {
     },
 
     {
+        ";",
+        function()
+            require("deliberate.ui.attribute_changer_menu").show()
+        end,
+        { nowait = true },
+    },
+
+    {
         "C",
         function() require("deliberate.ui.content_replacer_menu").replace("contents.txt") end,
         { nowait = true },
