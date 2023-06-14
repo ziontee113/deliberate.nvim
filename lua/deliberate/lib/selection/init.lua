@@ -252,6 +252,8 @@ M.select_all_html_siblings = function()
         table.insert(selection, item)
     end
 
+    selection = M.sorted_items()
+
     select_move_active = true
     indicator.highlight_selection()
 end
