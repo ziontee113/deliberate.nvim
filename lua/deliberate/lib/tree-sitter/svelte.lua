@@ -163,6 +163,7 @@ M.get_attribute_value = function(buf, node, attribute)
         if html_parent ~= node then return nil end
     end
 
+    if not target_node then return end
     return target_node:next_named_sibling()
 end
 
