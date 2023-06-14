@@ -8,6 +8,7 @@ local colors_menu = require("deliberate.ui.colors_menu")
 local cgm = require("deliberate.ui.classes_groups_menu")
 local uniform = require("deliberate.api.uniform")
 local utils = require("deliberate.lib.utils")
+local attribute_changer = require("deliberate.lib.attribute_changer")
 
 local augroup = vim.api.nvim_create_augroup("Deliberate Hydra Exit", { clear = true })
 local autocmd_id
@@ -61,15 +62,18 @@ local manual_heads = {
     },
     {
         "<C-c>",
-        function() require("deliberate.ui.content_replacer_menu").replace_with_group("contents.txt") end,
+        function()
+            require("deliberate.ui.content_replacer_menu").replace_with_group("contents.txt")
+        end,
         { nowait = true },
     },
     {
         "<C-S-c>",
-        function() require("deliberate.ui.content_replacer_menu").replace_with_group("contents.txt", true) end,
+        function()
+            require("deliberate.ui.content_replacer_menu").replace_with_group("contents.txt", true)
+        end,
         { nowait = true },
     },
-
 
     {
         "sr",
@@ -579,9 +583,12 @@ Hydra({
                 buffer = catalyst.buf(),
                 group = augroup,
                 callback = function()
-                    vim.cmd("norm! ^")
-                    vim.api.nvim_input("<Nul>")
-                    vim.api.nvim_input("<Esc>")
+                    if attribute_changer.has_been_requested_recently() then
+                        attribute_changer.finish_request()
+                        vim.cmd("norm! ^")
+                        vim.api.nvim_input("<Nul>")
+                        vim.api.nvim_input("<Esc>")
+                    end
                 end,
             })
         end,
