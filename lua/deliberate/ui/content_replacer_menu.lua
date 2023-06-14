@@ -80,6 +80,8 @@ local get_first_step_items = function(content_groups)
         table.insert(items, { text = text, keymaps = { keymap } })
     end
 
+    table.insert(items, { text = "", clear = true, keymaps = { "0" }, hidden = true })
+
     return items
 end
 
@@ -118,6 +120,12 @@ M._show_content_replacer_menu = function(file_path)
             {
                 items = get_first_step_items,
                 arguments = { content_groups },
+                callback = function(_, current_item)
+                    if current_item.clear == true then
+                        replacer.replace("")
+                        return true
+                    end
+                end,
             },
             {
                 items = get_second_step_items,
@@ -146,10 +154,14 @@ M._show_content_group_replacer_menu = function(file_path)
                 items = get_first_step_items,
                 arguments = { content_groups },
                 callback = function(_, current_item)
-                    for _, group in ipairs(content_groups) do
-                        if group.name == current_item.text then
-                            replacer.replace(utils.remove_empty_strings(group))
-                            break
+                    if current_item.clear == true then
+                        replacer.replace(utils.remove_empty_strings({}))
+                    else
+                        for _, group in ipairs(content_groups) do
+                            if group.name == current_item.text then
+                                replacer.replace(utils.remove_empty_strings(group))
+                                break
+                            end
                         end
                     end
                 end,
