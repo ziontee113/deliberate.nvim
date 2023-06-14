@@ -10,8 +10,8 @@ M.replace = function(content)
     selection.archive_for_undo()
     require("deliberate.api.dot_repeater").register(M.replace, content)
 
-    for i = 1, #selection.sorted_nodes() do
-        local node = selection.sorted_nodes()[i]
+    for i = 1, #selection.nodes() do
+        local node = selection.nodes()[i]
 
         if aggregator.node_is_component(node) then goto continue end
 
