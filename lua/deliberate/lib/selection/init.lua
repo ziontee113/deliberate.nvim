@@ -298,6 +298,7 @@ local restore_state = function(extmark_locations)
     require("deliberate.lib.catalyst").set_node_point("start")
     require("deliberate.lib.catalyst").move_to(false, true)
 
+    select_move_active = true
     indicator.highlight_selection()
 end
 

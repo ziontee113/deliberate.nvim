@@ -1,13 +1,6 @@
 local M = {}
 
----@class ExtmarkPosition
----@field row number
----@field col number
-
----@type ExtmarkPosition[][]
 local undo_stack = {}
-
----@type ExtmarkPosition[][]
 local redo_stack = {}
 
 --------------------------------------------

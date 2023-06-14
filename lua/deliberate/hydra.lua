@@ -19,7 +19,19 @@ local exit_hydra = function()
     -- pcall(vim.api.nvim_del_autocmd, autocmd_id)
 end
 
-local heads = {
+local heads = {}
+
+-------------------------------------------- <Nop>
+
+local nop_list = { "d", "D", "x", "r", "R", "c" }
+for _, keymap in ipairs(nop_list) do
+    local hydra_mapping = { keymap, "<Nop>", { nowait = true } }
+    table.insert(heads, hydra_mapping)
+end
+
+-------------------------------------------- Manual Heads
+
+local manual_heads = {
     {
         "l",
         function() require("deliberate.ui.tag_menu").add_tag_next() end,
@@ -100,7 +112,6 @@ local heads = {
         { nowait = true },
     },
 
-
     {
         ".",
         function() require("deliberate.api.dot_repeater").call() end,
@@ -151,12 +162,8 @@ local heads = {
     { "<Nul>", nil, { exit = true } },
 }
 
--------------------------------------------- <Nop>
-
-local nop_list = { "d", "D", "x", "r", "R", "c" }
-for _, keymap in ipairs(nop_list) do
-    local hydra_mapping = { keymap, "<Nop>", { nowait = true } }
-    table.insert(heads, hydra_mapping)
+for _, m_head in ipairs(manual_heads) do
+    table.insert(heads, m_head)
 end
 
 -------------------------------------------- Local Helpers
