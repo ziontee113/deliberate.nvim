@@ -21,13 +21,15 @@ M.replace = function(content)
         local _, _, start_row, start_col = opening:range()
         local end_row, end_col = closing:range()
 
+        local html_content = content
+        if type(content) == "table" then html_content = content[i] or "" end
         vim.api.nvim_buf_set_text(
             buf,
             start_row,
             start_col,
             end_row,
             end_col,
-            vim.split(content, "\n")
+            vim.split(html_content, "\n")
         )
 
         selection.refresh_tree()

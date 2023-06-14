@@ -60,6 +60,13 @@ local manual_heads = {
         { nowait = true },
     },
     {
+        "<C-c>",
+        function() require("deliberate.ui.content_replacer_menu").replace_with_group("contents.txt") end,
+        { nowait = true },
+    },
+
+
+    {
         "sr",
         function() require("deliberate.ui.image_src_menu").change_image_src() end,
         { nowait = true },
