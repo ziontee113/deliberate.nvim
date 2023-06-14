@@ -146,4 +146,33 @@ M.get_src_property_string_node = function(buf, node)
     return get_property_string_node(buf, node, "src")
 end
 
+-------------------------------------------- Get Attribute Value Node
+
+M.get_attribute_value = function(buf, node, attribute)
+    local _, grouped_captures = lib_ts.capture_nodes_with_queries({
+        buf = buf,
+        root = node,
+        parser_name = "tsx",
+        queries = {
+            string.format(
+                [[ ;query
+(jsx_attribute
+  (property_identifier) @prop_ident (#eq? @prop_ident "%s")
+)
+]],
+                attribute
+            ),
+        },
+        capture_groups = { "prop_ident" },
+    })
+
+    local target_node = grouped_captures["prop_ident"][1]
+    if target_node then
+        local html_parent = M.get_html_node(target_node)
+        if html_parent ~= node then return nil end
+    end
+
+    return target_node:next_named_sibling()
+end
+
 return M

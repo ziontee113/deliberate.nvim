@@ -213,3 +213,22 @@ describe("get_src_property_string_node", function()
         h.node_has_text(src_string_node, '"public/image.jpg"')
     end)
 end)
+
+describe("get_attribute_value()", function()
+    before_each(function() h.set_buffer_content_as_svelte_file() end)
+    after_each(function() vim.api.nvim_buf_delete(0, { force = true }) end)
+
+    it("works", function()
+        vim.cmd("norm! 17gg^")
+        local html_node = svelte.get_html_node(ts_utils.get_node_at_cursor())
+        h.node_has_text(html_node, '<img src={welcome_fallback} alt="Welcome" />')
+
+        local attribute = "src"
+        local want = "{welcome_fallback}"
+
+        local result_node = svelte.get_attribute_value(0, html_node, attribute)
+        local result_text = vim.treesitter.get_node_text(result_node, 0)
+
+        assert.equals(want, result_text)
+    end)
+end)

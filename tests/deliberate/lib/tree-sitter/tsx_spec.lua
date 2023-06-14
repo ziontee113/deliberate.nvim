@@ -209,3 +209,27 @@ describe("get_src_property_string_node", function()
         h.node_has_text(src_string_node, '"public/image.jpg"')
     end)
 end)
+
+describe("get_attribute_value()", function()
+    before_each(function() h.set_buffer_content_as_multiple_react_components() end)
+    after_each(function() vim.api.nvim_buf_delete(0, { force = true }) end)
+
+    it("works", function()
+        vim.cmd("norm! 76gg^")
+        local html_node = tsx.get_html_node(ts_utils.get_node_at_cursor())
+        h.node_first_line(html_node, "<Image", 0)
+
+        local attribute = "className"
+        local want = [[{cn(
+            'duration-700 ease-in-out group-hover:opacity-75',
+            isLoading
+              ? 'scale-110 blur-2xl grayscale'
+              : 'scale-100 blur-0 grayscale-0'
+          )}]]
+
+        local result_node = tsx.get_attribute_value(0, html_node, attribute)
+        local result_text = vim.treesitter.get_node_text(result_node, 0)
+
+        assert.equals(want, result_text)
+    end)
+end)
