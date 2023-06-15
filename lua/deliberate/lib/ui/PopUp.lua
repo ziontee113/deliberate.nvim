@@ -46,6 +46,15 @@ local function find_line_content(item, format_fn, results)
     return line_content
 end
 
+local find_visible_item_index_from_linenr = function(items, linenr)
+    local visible_items = {}
+    for i, item in ipairs(items) do
+        if not item.hidden then table.insert(visible_items, { true_index = i, item = item }) end
+    end
+
+    return visible_items[linenr].true_index
+end
+
 -------------------------------------------- PopUp
 
 local PopUp = {
@@ -132,7 +141,8 @@ function PopUp:_set_confirm_keymaps()
     for _, mapping in ipairs(self.keymaps.confirm) do
         vim.keymap.set("n", mapping, function()
             local cursor_line = unpack(vim.api.nvim_win_get_cursor(0))
-            self:_execute_callback(cursor_line)
+            local index = find_visible_item_index_from_linenr(self.current_step.items, cursor_line)
+            self:_execute_callback(index)
         end, { buffer = self.buf, nowait = true })
     end
 end
