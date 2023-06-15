@@ -11,7 +11,7 @@ local patterns_matches_inputs = function(patterns, inputs)
                 break
             end
         end
-        assert.equals(true, result)
+        assert.equals(true, result, string.format("failed at: %s", input))
     end
 end
 
@@ -34,5 +34,12 @@ describe("divide pattern", function()
     it("matches x axis correctly", function()
         local inputs = { "divide-x-2", "divide-x-0" }
         patterns_matches_inputs(lua_patterns.divide["x"], inputs)
+    end)
+end)
+
+describe("rounded pattern", function()
+    it("matches omni axis correctly", function()
+        local inputs = { "rounded-[22px]", "rounded", "rounded-xl" }
+        patterns_matches_inputs(lua_patterns.rounded[""], inputs)
     end)
 end)

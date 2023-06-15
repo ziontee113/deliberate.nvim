@@ -209,7 +209,19 @@ add_axis_patterns(dash_axies, function(property, axis)
     property = string.gsub(property, "%-", "%%%-")
     return property .. "%-" .. axis
 end)
-M["rounded"][""][1] = "^rounded%-[%d?%a?][^tblr]+$"
+
+-- Had to do this manually for now
+M["rounded"][""] = {
+    "^rounded$",
+    "^rounded%-sm$",
+    "^rounded%-md$",
+    "^rounded%-lg$",
+    "^rounded%-xl$",
+    "^rounded%-%d+xl$",
+    "^rounded%-full$",
+    "^rounded%-none$",
+    "^rounded%-%[[%-%d%.]+[%a%%]+]$",
+}
 
 -- Add properties with no Axies
 for _, property in ipairs(singles) do
