@@ -1,6 +1,8 @@
 local M = {}
 
 local dictionary = {
+    ["g"] = "group-",
+
     ["A"] = "after",
     ["B"] = "before",
 
@@ -66,7 +68,11 @@ M.translate_alias_string = function(input)
         local pseudo_class = dictionary[alias]
 
         if pseudo_class then
-            result = result .. pseudo_class .. ":"
+            if string.find(pseudo_class, "%-") then
+                result = result .. pseudo_class
+            else
+                result = result .. pseudo_class .. ":"
+            end
             pending_index = i + 1
         end
 

@@ -508,6 +508,8 @@ local classes_groups_dict = {
     ["TA"] = { cgm.change_touch_action },
     ["<space>us"] = { cgm.change_user_select },
     ["<space>sr"] = { cgm.change_screen_readers },
+
+    ["<space>g"] = { cgm.change_group },
 }
 
 for keymap, fn_and_args in pairs(classes_groups_dict) do

@@ -845,4 +845,10 @@ local screen_readers_group = {
 }
 M.change_screen_readers = function() M._classes_group_changer_menu(screen_readers_group) end
 
+-- Group 
+local group_group = {
+    { keymaps = { "g" }, classes = { "group" } },
+}
+M.change_group = function() M._classes_group_changer_menu(group_group) end
+
 return M
