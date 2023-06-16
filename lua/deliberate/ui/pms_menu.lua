@@ -401,7 +401,6 @@ M.change_ring_offset = function() M._menu("ring-offset", false, tcm._change, { r
 local percentage_D = {
     "",
     { keymaps = { "l" }, text = "", absolute = "next-page", ironclad = true },
-
     { page = 2, keymaps = { "q" }, text = "1/2", ironclad = true },
     { page = 2, keymaps = { "w" }, text = "1/3", ironclad = true },
     { page = 2, keymaps = { "e" }, text = "1/4", ironclad = true },
@@ -633,7 +632,6 @@ local tlbr_D = {
 local tlbr_P_D = {
     "",
     { keymaps = { "l" }, text = "", absolute = "next-page", ironclad = true },
-
     { page = 2, keymaps = { "q" }, text = "1/2", ironclad = true },
     { page = 2, keymaps = { "w" }, text = "1/3", ironclad = true },
     { page = 2, keymaps = { "e" }, text = "1/4", ironclad = true },

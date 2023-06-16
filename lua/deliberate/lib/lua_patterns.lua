@@ -20,7 +20,6 @@ local M = {
         "italic",
         "not-italic",
     },
-
     ----------------------------------
 
     --stylua: ignore
@@ -57,7 +56,6 @@ local M = {
         "thistle", "tomato", "turquoise", "violet", "wheat", "white",
         "whitesmoke", "yellow", "yellowgreen",
     },
-
     ----------------------------------
 
     pseudo_splitter = "^(.-:)([^:]+)$",

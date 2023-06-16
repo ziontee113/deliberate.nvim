@@ -2,19 +2,15 @@ local M = {}
 
 local dictionary = {
     ["g"] = "group-",
-
     ["A"] = "after",
     ["B"] = "before",
-
     ["h"] = "hover",
     ["fo"] = "focus",
     ["ac"] = "active",
     ["v"] = "visited",
     ["t"] = "target",
-
     ["fw"] = "focus-within",
     ["fv"] = "focus-within",
-
     ["em"] = "empty",
     ["ds"] = "disabled",
     ["en"] = "enabled",
@@ -29,7 +25,6 @@ local dictionary = {
     ["ps"] = "placeholder-shown",
     ["af"] = "autofill",
     ["ro"] = "read-only",
-
     ["F"] = "first",
     ["L"] = "last",
     ["on"] = "only",
@@ -38,7 +33,6 @@ local dictionary = {
     ["ft"] = "first-of-type",
     ["lo"] = "last-of-type",
     ["oo"] = "only-of-type",
-
     ["fl"] = "first-letter",
     ["fL"] = "first-line",
     ["mr"] = "marker",
@@ -46,13 +40,11 @@ local dictionary = {
     ["fi"] = "file",
     ["bd"] = "backdrop",
     ["ph"] = "placeholder",
-
     ["s"] = "sm",
     ["m"] = "md",
     ["l"] = "lg",
     ["x"] = "xl",
     ["2"] = "2xl",
-
     ["D"] = "dark",
     ["P"] = "portrait",
     ["ns"] = "landscape",

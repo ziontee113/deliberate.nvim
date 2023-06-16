@@ -133,13 +133,23 @@ local input_to_pms_value = function(input, property)
 
     --stylua: ignore
     local unit_tbl = {
-        w = "vw",  vw = "vw",
-        h = "vh",  vh = "vh",
-        e = "em",  em = "em",
-        r = "rem", re = "rem", rem = "rem",
-        x = "px",  px = "px",  z = "px",
-        p = "pt",  pt = "pt",  t = "pt",
-        P = "%", ["%"] = "%"
+        w = "vw",
+        vw = "vw",
+        h = "vh",
+        vh = "vh",
+        e = "em",
+        em = "em",
+        r = "rem",
+        re = "rem",
+        rem = "rem",
+        x = "px",
+        px = "px",
+        z = "px",
+        p = "pt",
+        pt = "pt",
+        t = "pt",
+        P = "%",
+        ["%"] = "%"
     }
     local unit = unit_tbl[chars] or "px"
 

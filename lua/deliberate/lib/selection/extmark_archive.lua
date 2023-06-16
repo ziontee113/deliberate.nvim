@@ -31,9 +31,7 @@ M.pop_undo_stack = function()
     return latest
 end
 
-M.undo_stack_is_empty = function()
-    return #undo_stack == 0
-end
+M.undo_stack_is_empty = function() return #undo_stack == 0 end
 
 -------------------------------------------- Redo
 

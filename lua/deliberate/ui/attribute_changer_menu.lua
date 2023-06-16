@@ -18,7 +18,7 @@ local show_arbitrary_input = function(metadata)
     local input = Input:new({
         title = "Attribute",
         width = 15,
-        callback = function(result) attr_changer.change({ attribute = result, content = '{}' }) end,
+        callback = function(result) attr_changer.change({ attribute = result, content = "{}" }) end,
         defer_fn = function(result)
             attr_changer.jump_to_attribute_value_node(result)
             vim.cmd("startinsert")
@@ -40,7 +40,7 @@ M.show = function()
                     if current_item.arbitrary == true then
                         show_arbitrary_input(metadata)
                     else
-                        attr_changer.change({ attribute = current_item.text, content = '{}' })
+                        attr_changer.change({ attribute = current_item.text, content = "{}" })
                     end
                 end,
             },

@@ -130,9 +130,7 @@ M._show_content_replacer_menu = function(file_path)
             {
                 items = get_second_step_items,
                 arguments = { content_groups },
-                callback = function(_, current_item)
-                    replacer.replace(current_item.text)
-                end,
+                callback = function(_, current_item) replacer.replace(current_item.text) end,
             },
         },
     })

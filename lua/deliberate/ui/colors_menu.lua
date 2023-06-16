@@ -37,7 +37,6 @@ local colors = {
     { text = "inherit", keymaps = { "I" }, single = true },
     { text = "current", keymaps = { "C" }, single = true },
     { text = "transparent", keymaps = { "T" }, single = true },
-
     { text = "", keymaps = { "," }, arbitrary = true, hidden = true },
 }
 

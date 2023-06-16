@@ -14,7 +14,9 @@ describe("attr_changer.change()", function()
     end)
 
     it("works", function()
-        h.initiate("76gg^", [[<Image
+        h.initiate(
+            "76gg^",
+            [[<Image
           alt=""
           src={image.imageSrc}
           fill
@@ -26,7 +28,8 @@ describe("attr_changer.change()", function()
               : 'scale-100 blur-0 grayscale-0'
           )}
           onLoadingComplete={() => setLoading(false)}
-        />]])
+        />]]
+        )
 
         attr_changer.change({ attribute = "className", content = '"p-4"' })
 

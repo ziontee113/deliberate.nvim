@@ -15,12 +15,10 @@ describe("wrap.call()", function()
         movA({ "next", true }, 2, { "<li>Contacts</li>", "<li>FAQ</li>" })
 
         wrap.call({ tag = "div" })
-        h.catalyst_has(
-            [[<div>
+        h.catalyst_has([[<div>
           <li>Contacts</li>
           <li>FAQ</li>
-        </div>]]
-        )
+        </div>]])
         h.node_has_text(
             selection.nodes()[1]:parent(),
             [[<div className="h-screen w-screen bg-zinc-900">

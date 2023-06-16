@@ -54,7 +54,7 @@ describe("get_className_property_string_node()", function()
     it("returns nil if couldn't find target node", function()
         local all_nodes = svelte.get_all_html_nodes_in_buffer(0)
         local node = all_nodes[5]
-        h.node_first_line(node, '<h1>')
+        h.node_first_line(node, "<h1>")
 
         local className_string_node = svelte.get_className_property_string_node(0, node)
         assert.equals(nil, className_string_node)

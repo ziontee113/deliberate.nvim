@@ -234,25 +234,20 @@ local non_axis_map = {
     ["<space>in"] = pms_menu.change_text_indent,
     ["<space>uo"] = pms_menu.change_underline_offset,
     ["<space>al"] = pms_menu.change_vertical_align,
-
     ["<space>co"] = pms_menu.change_content,
-
     ["<space>li"] = pms_menu.change_list_image,
-
     ["O"] = pms_menu.change_opacity,
     ["bo"] = pms_menu.change_border_opacity,
     ["do"] = pms_menu.change_divide_opacity,
     ["Rw"] = pms_menu.change_ring_width,
     ["Ro"] = pms_menu.change_ring_offset,
     ["RO"] = pms_menu.change_ring_opacity,
-
     ["W"] = pms_menu.change_width,
     ["E"] = pms_menu.change_height,
     ["mW"] = pms_menu.change_min_width,
     ["mE"] = pms_menu.change_min_height,
     ["xW"] = pms_menu.change_max_width,
     ["xE"] = pms_menu.change_max_height,
-
     ["fx"] = pms_menu.change_flex,
     ["fb"] = pms_menu.change_basis,
     ["fg"] = pms_menu.change_grow,
@@ -260,30 +255,23 @@ local non_axis_map = {
     ["fo"] = pms_menu.change_order,
     ["AR"] = pms_menu.change_aspect_ratio,
     ["co"] = pms_menu.change_columns,
-
     ["at"] = pms_menu.change_top,
     ["ab"] = pms_menu.change_bottom,
     ["al"] = pms_menu.change_left,
     ["ar"] = pms_menu.change_right,
-
     ["Is"] = pms_menu.change_inset_start,
     ["Ie"] = pms_menu.change_inset_end,
-
     ["zi"] = pms_menu.change_z_index,
-
     ["gc"] = pms_menu.change_grid_cols,
     ["cS"] = pms_menu.change_col_span,
     ["cs"] = pms_menu.change_col_start,
     ["ce"] = pms_menu.change_col_end,
-
     ["gr"] = pms_menu.change_grid_rows,
     ["rS"] = pms_menu.change_row_span,
     ["rs"] = pms_menu.change_row_start,
     ["re"] = pms_menu.change_row_end,
-
     ["Ar"] = pms_menu.change_auto_rows,
     ["Ac"] = pms_menu.change_auto_cols,
-
     ["<space>bp"] = pms_menu.change_bg_position,
     ["<space>BS"] = pms_menu.change_box_shadow,
     ["<space>Bl"] = pms_menu.change_blur,
@@ -304,15 +292,12 @@ local non_axis_map = {
     ["<space>Bo"] = pms_menu.change_backdrop_opacity,
     ["<space>Bs"] = pms_menu.change_backdrop_saturate,
     ["<space>Bp"] = pms_menu.change_backdrop_sepia,
-
     ["Tr"] = pms_menu.change_transition,
     ["Td"] = pms_menu.change_duration,
     ["TD"] = pms_menu.change_delay,
-
     ["Rt"] = pms_menu.change_rotate,
     ["Sk"] = pms_menu.change_skew,
     ["or"] = pms_menu.change_origin,
-
     ["<space>wc"] = pms_menu.change_will_change,
     ["sw"] = pms_menu.change_stroke_width,
 }
@@ -420,69 +405,52 @@ local classes_groups_dict = {
     ["F"] = { cgm.change_flex_properties },
     ["fw"] = { cgm.change_flex_wrap_properties },
     ["Al"] = { cgm.change_flex_align_properties },
-
     ["AA"] = { cgm.change_font_smoothing },
     ["fS"] = { cgm.change_font_style },
     ["fW"] = { cgm.change_font_weight },
-
     ["<space>ta"] = { cgm.change_text_align },
     ["<space>td"] = { cgm.change_text_decoration },
     ["<space>tf"] = { cgm.change_text_transform },
     ["<space>to"] = { cgm.change_text_overflow },
     ["<space>ds"] = { cgm.change_decoration_style },
-
     ["<space>ws"] = { cgm.change_whitespace },
     ["<space>wb"] = { cgm.change_word_break },
     ["<space>hy"] = { cgm.change_hyphens },
-
     ["fV"] = { cgm.change_font_variant_numeric },
-
     ["<space>lp"] = { cgm.change_list_style_position },
     ["<space>lt"] = { cgm.change_list_style_type },
-
     ["ds"] = { cgm.change_divide_style },
     ["bs"] = { cgm.change_border_style },
-
     ["bB"] = { cgm.change_break_before },
     ["bA"] = { cgm.change_break_after },
     ["bI"] = { cgm.change_break_inside },
-
     ["bD"] = { cgm.change_box_decoration },
     ["bS"] = { cgm.change_box_sizing },
     ["<space>c"] = { cgm.change_container },
-
     ["di"] = { cgm.change_display },
     ["fl"] = { cgm.change_float },
     ["cl"] = { cgm.change_clear },
     ["IS"] = { cgm.change_isolate },
     ["of"] = { cgm.change_object_fit },
     ["op"] = { cgm.change_object_positon },
-
     ["ov"] = { cgm.change_overflow },
     ["ox"] = { cgm.change_overflow_x },
     ["oy"] = { cgm.change_overflow_y },
-
     ["oV"] = { cgm.change_overscroll },
     ["oX"] = { cgm.change_overscroll_x },
     ["oY"] = { cgm.change_overscroll_y },
-
     ["po"] = { cgm.change_position },
     ["<space>v"] = { cgm.change_visibility },
-
     ["gf"] = { cgm.change_grid_flow },
-
     ["ac"] = { cgm.change_align_content },
     ["as"] = { cgm.change_align_self },
     ["ai"] = { cgm.change_align_items },
-
     ["<space>jc"] = { cgm.change_justifity_content },
     ["<space>ji"] = { cgm.change_justifity_items },
     ["<space>js"] = { cgm.change_justifity_self },
-
     ["<space>pc"] = { cgm.change_place_content },
     ["<space>pi"] = { cgm.change_place_items },
     ["<space>ps"] = { cgm.change_place_self },
-
     ["<space>ba"] = { cgm.change_background_attachment },
     ["<space>bc"] = { cgm.change_background_clip },
     ["<space>bo"] = { cgm.change_background_origin },
@@ -492,7 +460,6 @@ local classes_groups_dict = {
     ["<space>bi"] = { cgm.change_background_image },
     ["<space>mb"] = { cgm.change_mix_blend_mode },
     ["<space>bb"] = { cgm.change_bg_blend_mode },
-
     ["Tc"] = { cgm.change_border_collapse },
     ["Tl"] = { cgm.change_table_layout },
     ["TC"] = { cgm.change_caption_side },
@@ -507,7 +474,6 @@ local classes_groups_dict = {
     ["TA"] = { cgm.change_touch_action },
     ["<space>us"] = { cgm.change_user_select },
     ["<space>sr"] = { cgm.change_screen_readers },
-
     ["<space>g"] = { cgm.change_group },
 }
 

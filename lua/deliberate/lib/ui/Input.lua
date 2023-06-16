@@ -10,9 +10,7 @@ function Input:_execute_callback()
 
     self.result = vim.api.nvim_buf_get_lines(0, 0, -1, false)[1]
 
-    if self.callback then
-        self.callback(self.result)
-    end
+    if self.callback then self.callback(self.result) end
 
     self:hide()
 
