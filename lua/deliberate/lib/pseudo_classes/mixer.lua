@@ -60,7 +60,7 @@ M.translate_alias_string = function(input)
         local pseudo_class = dictionary[alias]
 
         if pseudo_class then
-            if string.find(pseudo_class, "%-") then
+            if string.find(pseudo_class, "group%-") then
                 result = result .. pseudo_class
             else
                 result = result .. pseudo_class .. ":"
