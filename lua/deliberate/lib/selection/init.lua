@@ -145,6 +145,11 @@ end
 ---@param buf number
 ---@param node TSNode
 M.update_current_catalyst_info = function(win, buf, node)
+    if not node then
+        require("deliberate.hydra").exit_hydra()
+        return
+    end
+
     local extmark_id = set_extmark_for_node(buf, node)
 
     current_catalyst_info = {
@@ -211,6 +216,13 @@ M.clear = function(keep_indicators)
     if not keep_indicators and current_catalyst_info then
         indicator.clear(current_catalyst_info.buf)
     end
+end
+
+M.wipe = function()
+    if not current_catalyst_info then return end
+    indicator.clear(current_catalyst_info.buf)
+    selection = {}
+    current_catalyst_info, previous_catalyst_info = nil, nil
 end
 
 M.select_all_html_siblings = function()

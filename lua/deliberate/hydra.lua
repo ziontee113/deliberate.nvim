@@ -16,7 +16,6 @@ local autocmd_id
 local exit_hydra = function()
     vim.api.nvim_input("<Nul>")
     visual_collector.stop()
-    selection.clear(true)
     pcall(vim.api.nvim_del_autocmd, autocmd_id)
 end
 
@@ -594,7 +593,7 @@ Hydra({
                 end,
             })
         end,
-        on_exit = function() selection.clear() end,
+        on_exit = function() selection.wipe() end,
     },
     mode = "n",
     body = "<Plug>DeliberateHydraEsc",
