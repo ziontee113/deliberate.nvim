@@ -85,36 +85,6 @@ local manual_heads = {
         function() require("deliberate.api.yank").call() end,
         { nowait = true },
     },
-    {
-        "pa",
-        function() require("deliberate.api.paste").call({ destination = "next" }) end,
-        { nowait = true },
-    },
-    {
-        "pA",
-        function() require("deliberate.api.paste").call({ destination = "previous" }) end,
-        { nowait = true },
-    },
-    {
-        "pi",
-        function()
-            require("deliberate.api.paste").call({
-                destination = "inside",
-                paste_inside_destination = "after-all-children",
-            })
-        end,
-        { nowait = true },
-    },
-    {
-        "pI",
-        function()
-            require("deliberate.api.paste").call({
-                destination = "inside",
-                paste_inside_destination = "before-all-children",
-            })
-        end,
-        { nowait = true },
-    },
 
     {
         "<A-w>",
@@ -525,6 +495,26 @@ for keymap, args in pairs(uniform_navigation) do
     local hydra_mapping = {
         keymap,
         function() utils.execute_with_count(uniform.move, args) end,
+        { nowait = true },
+    }
+    table.insert(heads, hydra_mapping)
+end
+
+-------------------------------------------- Paste
+
+local paste_map = {
+    ["pa"] = { destination = "next" },
+    ["pA"] = { destination = "previous" },
+    ["pi"] = { destination = "inside", paste_inside_destination = "after-all-children" },
+    ["pI"] = { destination = "inside", paste_inside_destination = "before-all-children" },
+}
+
+local paste_fn = require("deliberate.api.paste").call
+
+for keymap, args in pairs(paste_map) do
+    local hydra_mapping = {
+        keymap,
+        function() utils.execute_with_count(paste_fn, args) end,
         { nowait = true },
     }
     table.insert(heads, hydra_mapping)
