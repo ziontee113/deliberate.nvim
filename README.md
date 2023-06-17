@@ -6,11 +6,15 @@
 
 This plugin is still in development and not yet stable. I apologize for any inconvenience caused.
 <br/>
+<br/>
 Additionally, documentation is currently unavailable. I appreciate your patience as I work on improving stability and providing comprehensive documentation.
+<br/>
 <br/>
 Your feedback is valuable for the development of the project. Thank you for your support.
 
 ## Usage:
+
+![deliberate-intro](https://github.com/ziontee113/deliberate.nvim/assets/102876811/17b8001a-5a4a-469f-8a90-f2b42e74f006)
 
 You can watch the full demo of the plugin here: [Alternative way to manipulate HTML + Tailwind CSS in Neovim. Handy or impractical?](https://youtu.be/eWRoxJatH8A)
 
