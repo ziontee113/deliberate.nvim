@@ -512,11 +512,25 @@ local paste_map = {
 local paste_fn = require("deliberate.api.paste").call
 
 for keymap, args in pairs(paste_map) do
-    local hydra_mapping = {
-        keymap,
-        function() utils.execute_with_count(paste_fn, args) end,
-        { nowait = true },
-    }
+    local hydra_mapping
+
+    if args.destination == "inside" then
+        hydra_mapping = {
+            keymap,
+            function()
+                paste_fn(args)
+                utils.reset_count()
+            end,
+            { nowait = true },
+        }
+    else
+        hydra_mapping = {
+            keymap,
+            function() utils.execute_with_count(paste_fn, args) end,
+            { nowait = true },
+        }
+    end
+
     table.insert(heads, hydra_mapping)
 end
 
