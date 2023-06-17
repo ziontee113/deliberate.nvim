@@ -5,7 +5,9 @@
 ## 📣 Important Notice: ⚠️
 
 This plugin is still in development and not yet stable. I apologize for any inconvenience caused.
+<br/>
 Additionally, documentation is currently unavailable. I appreciate your patience as I work on improving stability and providing comprehensive documentation.
+<br/>
 Your feedback is valuable for the development of the project. Thank you for your support.
 
 ## Installation: 💾
