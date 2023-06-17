@@ -734,7 +734,7 @@ local cursor_group = {
     { keymaps = { "/" }, classes = { "cursor-none" } },
     "",
     { keymaps = { "cm" }, classes = { "cursor-context-menu" } },
-    { keymaps = { "p" }, classes = { "cursor-progress" } },
+    { keymaps = { "P" }, classes = { "cursor-progress" } },
     { keymaps = { "ce" }, classes = { "cursor-cell" } },
     { keymaps = { "ch" }, classes = { "cursor-crosshair" } },
     { keymaps = { "v" }, classes = { "cursor-vertial-text" } },
