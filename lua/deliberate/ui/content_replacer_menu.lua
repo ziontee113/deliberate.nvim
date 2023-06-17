@@ -1,4 +1,5 @@
 local PopUp = require("deliberate.lib.ui.PopUp")
+local Input = require("deliberate.lib.ui.Input")
 local replacer = require("deliberate.lib.content_replacer")
 local menu_repeater = require("deliberate.api.menu_repeater")
 local utils = require("deliberate.lib.utils")
@@ -81,6 +82,7 @@ local get_first_step_items = function(content_groups)
     end
 
     table.insert(items, { text = "", clear = true, keymaps = { "0" }, hidden = true })
+    table.insert(items, { text = "", keymaps = { "," }, hidden = true, arbitrary = true })
 
     return items
 end
@@ -109,6 +111,17 @@ local get_second_step_items = function(content_groups, results)
     return items
 end
 
+local show_arbitrary_input = function(metadata)
+    local input = Input:new({
+        title = " Content: ",
+        width = 20,
+        on_change = function(result) replacer.replace(result, false, true) end,
+    })
+
+    local row, col = unpack(vim.api.nvim_win_get_position(0))
+    input:show(metadata, row, col)
+end
+
 M._show_content_replacer_menu = function(file_path)
     menu_repeater.register(M._show_content_replacer_menu, file_path)
 
@@ -120,7 +133,13 @@ M._show_content_replacer_menu = function(file_path)
             {
                 items = get_first_step_items,
                 arguments = { content_groups },
-                callback = function(_, current_item)
+                callback = function(_, current_item, metadata)
+                    if current_item.arbitrary == true then
+                        require("deliberate.lib.selection").archive_for_undo()
+                        show_arbitrary_input(metadata)
+                        return true
+                    end
+
                     if current_item.clear == true then
                         replacer.replace("")
                         return true

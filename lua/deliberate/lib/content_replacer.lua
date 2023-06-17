@@ -3,12 +3,11 @@ local selection = require("deliberate.lib.selection")
 
 local M = {}
 
-M.replace = function(content, disable_auto_sort)
+M.replace = function(content, disable_auto_sort, disable_undo_archive)
     local buf = selection.current_catalyst_info().buf
 
-    vim.bo[buf].undolevels = vim.bo[buf].undolevels
-    selection.archive_for_undo()
     require("deliberate.api.dot_repeater").register(M.replace, content, disable_auto_sort)
+    if not disable_undo_archive then selection.archive_for_undo() end
 
     for i = 1, #selection.items() do
         local node, original_index
