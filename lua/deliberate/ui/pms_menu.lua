@@ -92,6 +92,7 @@ local show_arbitrary_input = function(metadata, property, axis, fn, negatives)
                 axis = axis,
                 value = value,
                 negative_patterns = negatives,
+                disable_undo_archive = true,
             })
         end,
     })
@@ -123,6 +124,7 @@ local pms_callback = function(property, axis, fn, current_item, metadata, negati
                 updated_items = negatize_items(metadata),
             }
         elseif current_item.arbitrary == true then
+            require("deliberate.lib.selection").archive_for_undo()
             show_arbitrary_input(metadata, property, axis, fn)
             return true
         else

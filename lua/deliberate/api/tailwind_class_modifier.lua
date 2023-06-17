@@ -75,6 +75,7 @@ end
 ---@field axis "" | "x" | "y" | "l" | "r" | "t" | "b"
 ---@field classes_groups string[]
 ---@field negative_patterns string[]
+---@field disable_undo_archive boolean | nil
 ---@field value string
 
 ---@param o change_tailwind_classes_Args
@@ -101,7 +102,7 @@ end
 M._change = function(o)
     if not catalyst.is_active() then return end
 
-    selection.archive_for_undo()
+    if not o.disable_undo_archive then selection.archive_for_undo() end
     require("deliberate.api.dot_repeater").register(M._change, o)
 
     o.negative_patterns = vim.tbl_flatten(o.negative_patterns or {})
