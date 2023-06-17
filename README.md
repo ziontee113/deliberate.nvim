@@ -10,6 +10,10 @@ Additionally, documentation is currently unavailable. I appreciate your patience
 <br/>
 Your feedback is valuable for the development of the project. Thank you for your support.
 
+## Usage:
+
+You can watch the full demo of the plugin here: [Alternative way to manipulate HTML + Tailwind CSS in Neovim. Handy or impractical?](https://youtu.be/eWRoxJatH8A)
+
 ## Installation: 💾
 
 For Lazy:
