@@ -58,7 +58,7 @@ M.put_cursor_at_node = function(o)
     if o.destination == "start" then
         vim.api.nvim_win_set_cursor(o.win, { start_row + 1, start_col })
     elseif o.destination == "end" then
-        vim.api.nvim_win_set_cursor(o.win, { end_row + 1, end_col + 1 })
+        vim.api.nvim_win_set_cursor(o.win, { end_row + 1, end_col - 1 })
     end
 end
 
