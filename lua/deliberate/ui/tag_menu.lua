@@ -28,7 +28,13 @@ local tag_map = {
 M._add_tag_with_count = function(tag, destination, self_closing, count)
     vim.bo[catalyst.buf()].undolevels = vim.bo[catalyst.buf()].undolevels
     selection.archive_for_undo()
-    require("deliberate.api.dot_repeater").register(M._add_tag_with_count, tag, destination, count)
+    require("deliberate.api.dot_repeater").register(
+        M._add_tag_with_count,
+        tag,
+        destination,
+        self_closing,
+        count
+    )
 
     for i = 1, count do
         if destination == "inside" and i > 1 then destination = "next" end
@@ -53,7 +59,7 @@ M._add_tag_menu = function(destination)
             {
                 items = tag_map,
                 callback = function(_, item)
-                    M._add_tag_with_count(item.text, destination, item.self_closing, count)
+                    M._add_tag_with_count(item.text, destination, item.self_closing or false, count)
                 end,
             },
         },
