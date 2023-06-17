@@ -1,6 +1,6 @@
 # Deliberate.nvim
 
-### Deliberate.nvim is a sub-mode for Neovim to manipulate HTML syntax & Tailwind CSS Classes.
+### Deliberate.nvim adds a sub-mode for Neovim to manipulate HTML syntax & Tailwind CSS Classes.
 
 ## 📣 Important Notice: ⚠️
 
@@ -50,4 +50,18 @@ return {
         require("deliberate.hydra")
     end,
 }
+```
+
+## For Nvim Colorizer
+
+```lua
+    -- in your nvim-colorizer config:
+    config = {
+        filetypes = {
+            --- ...
+            ["tailwind-text-color-picker"] = { mode = "foreground", tailwind = true },
+            ["tailwind-bg-color-picker"] = { mode = "background", tailwind = true },
+        },
+        -- ...
+    },
 ```
