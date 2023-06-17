@@ -182,7 +182,7 @@ describe("change_text_color() & change_background_color()", function()
         tc("text-[#000]", '<li className="text-[#000] bg-black">Contacts</li>')
         bc("bg-[rgb(0,12,24)]", '<li className="text-[#000] bg-[rgb(0,12,24)]">Contacts</li>')
         tc("", '<li className="bg-[rgb(0,12,24)]">Contacts</li>')
-        bc("", '<li className="">Contacts</li>')
+        bc("", '<li>Contacts</li>')
     end)
 
     it("adds text-color to all selected elements correctly", function()

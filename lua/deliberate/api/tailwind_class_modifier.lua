@@ -133,11 +133,24 @@ M._change = function(o)
             replacement = process_new_class_names(class_names, find_patterns(o), pseudoed_value)
         end
 
-        lib_ts.replace_node_text({
-            node = className_string_node,
-            buf = catalyst.buf(),
-            replacement = replacement,
-        })
+        if replacement == [[""]] then
+            local className_property_node = className_string_node:parent()
+            local start_row, start_col, end_row, end_col = className_property_node:range()
+            vim.api.nvim_buf_set_text(
+                catalyst.buf(),
+                start_row,
+                start_col - 1,
+                end_row,
+                end_col,
+                { "" }
+            )
+        else
+            lib_ts.replace_node_text({
+                node = className_string_node,
+                buf = catalyst.buf(),
+                replacement = replacement,
+            })
+        end
 
         selection.refresh_tree()
     end
