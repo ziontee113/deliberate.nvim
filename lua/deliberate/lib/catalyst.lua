@@ -101,6 +101,8 @@ local find_node_point = function(win, node)
     end
 end
 
+local augroup = vim.api.nvim_create_augroup("Deliberate Catalyst", { clear = true })
+
 ---@class navigator_initiate_Args
 ---@field win number
 ---@field buf number
@@ -134,6 +136,14 @@ M.initiate = function(o)
 
     selection.update_current_catalyst_info(_catalyst.win, _catalyst.buf, node)
     selection.update()
+
+    vim.api.nvim_create_autocmd({ "BufLeave" }, {
+        buffer = o.buf,
+        group = augroup,
+        callback = function()
+            require("deliberate.hydra").exit_hydra()
+        end,
+    })
 end
 
 return M
