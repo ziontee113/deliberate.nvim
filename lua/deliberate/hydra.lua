@@ -137,7 +137,6 @@ local manual_heads = {
         { nowait = true },
     },
 
-    { "<C-p>", function() exit_hydra() end, { nowait = true } },
     { ",", function() vim.api.nvim_input("C,") end, { nowait = true } },
 
     {
@@ -153,6 +152,7 @@ local manual_heads = {
     },
 
     -- workaround to programmatically exit Hydra
+    -- HACK: using <Nul> messes up Telescope if user set `initial_mode` to `insert`
     { "<Nul>", nil, { exit = true } },
 }
 
@@ -553,6 +553,7 @@ Hydra({
                 buf = vim.api.nvim_get_current_buf(),
             })
 
+            -- using <Nul> messes up Telescope if user set `initial_mode` to `insert`
             autocmd_id = vim.api.nvim_create_autocmd({ "InsertLeave" }, {
                 buffer = catalyst.buf(),
                 group = augroup,
