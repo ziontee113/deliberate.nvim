@@ -137,6 +137,9 @@ local manual_heads = {
         { nowait = true },
     },
 
+    { "<C-p>", function() exit_hydra() end, { nowait = true } },
+    { ",", function() vim.api.nvim_input("C,") end, { nowait = true } },
+
     {
         "<Plug>DeliberateHydraEsc",
         function()
