@@ -149,25 +149,25 @@ end
 -------------------------------------------- Get Attribute Value Node
 
 M.get_attribute_value = function(buf, node, attribute)
+    local root = node
+    if node:type() ~= "jsx_self_closing_element" then
+        root = lib_ts.get_children_with_types({
+            node = node,
+            desired_types = { "jsx_opening_element" },
+        })[1]
+    end
+
     local _, grouped_captures = lib_ts.capture_nodes_with_queries({
         buf = buf,
-        root = node,
+        root = root,
         parser_name = "tsx",
         queries = {
             string.format(
                 [[ ;query
-(jsx_opening_element
-  (jsx_attribute
-    (property_identifier) @prop_ident (#eq? @prop_ident "%s")
-  )
-)
-(jsx_self_closing_element
-  (jsx_attribute
-    (property_identifier) @prop_ident (#eq? @prop_ident "%s")
-  )
-)
+    (jsx_attribute
+      (property_identifier) @prop_ident (#eq? @prop_ident "%s")
+    )
 ]],
-                attribute,
                 attribute
             ),
         },

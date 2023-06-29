@@ -140,25 +140,25 @@ end
 -------------------------------------------- Get Attribute Value Node
 
 M.get_attribute_value = function(buf, node, attribute)
+    local root = node
+    if node:type() ~= "self_closing_tag" then
+        root = lib_ts.get_children_with_types({
+            node = node,
+            desired_types = { "start_tag" },
+        })[1]
+    end
+
     local _, grouped_captures = lib_ts.capture_nodes_with_queries({
         buf = buf,
-        root = node,
+        root = root,
         parser_name = "svelte",
         queries = {
             string.format(
                 [[ ;query
-(start_tag
   (attribute
     (attribute_name) @attr_name (#eq? @attr_name "%s")
   )
-)
-(self_closing_tag
-  (attribute
-    (attribute_name) @attr_name (#eq? @attr_name "%s")
-  )
-)
 ]],
-                attribute,
                 attribute
             ),
         },
@@ -166,11 +166,6 @@ M.get_attribute_value = function(buf, node, attribute)
     })
 
     local target_node = grouped_captures["attr_name"][1]
-    if target_node then
-        local html_parent = M.get_html_node(target_node)
-        if html_parent ~= node then return nil end
-    end
-
     if not target_node then return end
     return target_node:next_named_sibling()
 end
