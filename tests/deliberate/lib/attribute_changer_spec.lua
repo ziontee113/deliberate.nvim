@@ -7,13 +7,13 @@ describe("attr_changer.change()", function()
     before_each(function() h.set_buffer_content_as_multiple_react_components() end)
     after_each(function() h.clean_up() end)
 
-    it("works", function()
+    it("adds attribute correctly", function()
         h.initiate("22gg^", "<li>Contacts</li>")
         attr_changer.change({ attribute = "onClick", content = "{}" })
         h.catalyst_has("<li onClick={}>Contacts</li>")
     end)
 
-    it("works", function()
+    it("replaces attribute correctly", function()
         h.initiate(
             "76gg^",
             [[<Image

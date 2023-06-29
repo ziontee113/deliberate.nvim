@@ -147,10 +147,18 @@ M.get_attribute_value = function(buf, node, attribute)
         queries = {
             string.format(
                 [[ ;query
-(attribute
-  (attribute_name) @attr_name (#eq? @attr_name "%s")
+(start_tag
+  (attribute
+    (attribute_name) @attr_name (#eq? @attr_name "%s")
+  )
+)
+(self_closing_tag
+  (attribute
+    (attribute_name) @attr_name (#eq? @attr_name "%s")
+  )
 )
 ]],
+                attribute,
                 attribute
             ),
         },

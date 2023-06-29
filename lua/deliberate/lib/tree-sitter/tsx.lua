@@ -156,10 +156,18 @@ M.get_attribute_value = function(buf, node, attribute)
         queries = {
             string.format(
                 [[ ;query
-(jsx_attribute
-  (property_identifier) @prop_ident (#eq? @prop_ident "%s")
+(jsx_opening_element
+  (jsx_attribute
+    (property_identifier) @prop_ident (#eq? @prop_ident "%s")
+  )
+)
+(jsx_self_closing_element
+  (jsx_attribute
+    (property_identifier) @prop_ident (#eq? @prop_ident "%s")
+  )
 )
 ]],
+                attribute,
                 attribute
             ),
         },
@@ -167,11 +175,6 @@ M.get_attribute_value = function(buf, node, attribute)
     })
 
     local target_node = grouped_captures["prop_ident"][1]
-    if target_node then
-        local html_parent = M.get_html_node(target_node)
-        if html_parent ~= node then return nil end
-    end
-
     if not target_node then return end
     return target_node:next_named_sibling()
 end
