@@ -5,11 +5,6 @@ local lib_ts = require("deliberate.lib.tree-sitter")
 
 local M = {}
 
-local has_been_requested_recently = false
-
-M.has_been_requested_recently = function() return has_been_requested_recently end
-M.finish_request = function() has_been_requested_recently = false end
-
 ---@param buf number
 ---@param node TSNode
 local function find_or_create_attribute_value_node(buf, node, attribute, content)
@@ -42,8 +37,6 @@ end
 M.change = function(o)
     selection.archive_for_undo()
     require("deliberate.api.dot_repeater").register(M.change, o)
-
-    has_been_requested_recently = true
 
     local attribute_value_node =
         find_or_create_attribute_value_node(catalyst.buf(), catalyst.node(), o.attribute, o.content)

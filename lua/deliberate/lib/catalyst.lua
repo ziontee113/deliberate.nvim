@@ -140,9 +140,7 @@ M.initiate = function(o)
     vim.api.nvim_create_autocmd({ "BufLeave" }, {
         buffer = o.buf,
         group = augroup,
-        callback = function()
-            require("deliberate.hydra").exit_hydra()
-        end,
+        callback = function() require("deliberate.hydra").exit_hydra() end,
     })
 end
 

@@ -10,13 +10,9 @@ local uniform = require("deliberate.api.uniform")
 local utils = require("deliberate.lib.utils")
 local attribute_changer = require("deliberate.lib.attribute_changer")
 
-local augroup = vim.api.nvim_create_augroup("Deliberate Hydra Exit", { clear = true })
-local autocmd_id
-
 local exit_hydra = function()
     vim.api.nvim_input("<Nul>")
     visual_collector.stop()
-    pcall(vim.api.nvim_del_autocmd, autocmd_id)
 end
 
 local heads = {}
@@ -547,24 +543,9 @@ Hydra({
         invoke_on_body = true,
         on_enter = function()
             require("deliberate.lib.selection.extmark_archive").clear_all()
-
             catalyst.initiate({
                 win = vim.api.nvim_get_current_win(),
                 buf = vim.api.nvim_get_current_buf(),
-            })
-
-            -- using <Nul> messes up Telescope if user set `initial_mode` to `insert`
-            autocmd_id = vim.api.nvim_create_autocmd({ "InsertLeave" }, {
-                buffer = catalyst.buf(),
-                group = augroup,
-                callback = function()
-                    if attribute_changer.has_been_requested_recently() then
-                        attribute_changer.finish_request()
-                        vim.cmd("norm! ^")
-                        vim.api.nvim_input("<Nul>")
-                        vim.api.nvim_input("<Esc>")
-                    end
-                end,
             })
         end,
         on_exit = function() selection.wipe() end,
