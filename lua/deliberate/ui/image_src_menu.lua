@@ -1,6 +1,6 @@
 local PopUp = require("deliberate.lib.ui.PopUp")
-local src_changer = require("deliberate.lib.image_src_changer")
 local menu_repeater = require("deliberate.api.menu_repeater")
+local attribute_changer = require("deliberate.lib.attribute_changer")
 local M = {}
 
 -------------------------------------------- Local Functions
@@ -50,7 +50,12 @@ M._image_src_changer_menu = function(paths)
         steps = {
             {
                 items = items,
-                callback = function(_, current_item) src_changer.replace(current_item.text) end,
+                callback = function(_, current_item)
+                    attribute_changer.change({
+                        attribute = "src",
+                        content = string.format('"%s"', current_item.text),
+                    })
+                end,
             },
         },
     })

@@ -36,7 +36,6 @@ end
 ---@param o Attribute_Changer_Opts
 M.change = function(o)
     selection.archive_for_undo()
-    require("deliberate.api.dot_repeater").register(M.change, o)
 
     local attribute_value_node =
         find_or_create_attribute_value_node(catalyst.buf(), catalyst.node(), o.attribute, o.content)
