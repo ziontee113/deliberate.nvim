@@ -8,7 +8,6 @@ local colors_menu = require("deliberate.ui.colors_menu")
 local cgm = require("deliberate.ui.classes_groups_menu")
 local uniform = require("deliberate.api.uniform")
 local utils = require("deliberate.lib.utils")
-local attribute_changer = require("deliberate.lib.attribute_changer")
 
 local exit_hydra = function()
     vim.api.nvim_input("<Nul>")
@@ -543,6 +542,7 @@ Hydra({
         invoke_on_body = true,
         on_enter = function()
             require("deliberate.lib.selection.extmark_archive").clear_all()
+
             catalyst.initiate({
                 win = vim.api.nvim_get_current_win(),
                 buf = vim.api.nvim_get_current_buf(),
