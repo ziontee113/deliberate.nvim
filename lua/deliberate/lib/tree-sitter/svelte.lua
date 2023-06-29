@@ -140,13 +140,10 @@ end
 -------------------------------------------- Get Attribute Value Node
 
 M.get_attribute_value = function(buf, node, attribute)
-    local root = node
-    if node:type() ~= "self_closing_tag" then
-        root = lib_ts.get_children_with_types({
-            node = node,
-            desired_types = { "start_tag" },
-        })[1]
-    end
+    local root = lib_ts.get_children_with_types({
+        node = node,
+        desired_types = { "start_tag", "self_closing_tag" },
+    })[1]
 
     local _, grouped_captures = lib_ts.capture_nodes_with_queries({
         buf = buf,
