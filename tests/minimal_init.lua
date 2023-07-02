@@ -6,6 +6,7 @@ require("plenary.busted")
 
 vim.opt.rtp:append("~/.local/share/nvim/lazy/nvim-treesitter")
 require("nvim-treesitter")
+require("nvim-treesitter.query_predicates")
 
 vim.opt.rtp:append("~/.local/share/nvim/lazy/hydra.nvim")
 require("hydra")

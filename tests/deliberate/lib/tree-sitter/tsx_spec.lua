@@ -17,6 +17,32 @@ describe("get_all_html_nodes_in_buffer()", function()
     end)
 end)
 
+describe("get_html_descendants()", function()
+    before_each(function() h.set_buffer_content_as_multiple_react_components() end)
+    after_each(function() vim.api.nvim_buf_delete(0, { force = true }) end)
+
+    it("works", function()
+        vim.cmd("norm! 61gg^")
+        local node_at_cursor = ts_utils.get_node_at_cursor()
+        local root = node_at_cursor:parent()
+        h.node_has_text(
+            root,
+            [[<div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+        {images.map((image) => (
+          <BlurImage key={image.id} image={image}></BlurImage>
+        ))}
+      </div>]]
+        )
+
+        local targets, _ = tsx.get_html_descendants(0, root)
+        for _, target in ipairs(targets) do
+            local text = vim.treesitter.get_node_text(target, 0)
+            print(text)
+        end
+        assert.equals(#targets, 1)
+    end)
+end)
+
 describe("get_tag_identifier_node()", function()
     before_each(function() h.set_buffer_content_as_multiple_react_components() end)
     after_each(function() vim.api.nvim_buf_delete(0, { force = true }) end)
