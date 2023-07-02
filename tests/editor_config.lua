@@ -18,3 +18,5 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
         vim.o.shiftwidth = 4
     end,
 })
+
+require("nvim-treesitter.query_predicates")
