@@ -50,6 +50,8 @@ M.get_all_html_nodes_in_buffer = function(buf)
     return all_html_nodes, grouped_captures
 end
 
+M.get_html_descendants = function() return {}, {} end -- HACK: to be done later
+
 ---@param node TSNode
 ---@return TSNode
 M.get_tag_identifier_node = function(node)

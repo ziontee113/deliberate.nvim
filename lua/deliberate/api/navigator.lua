@@ -113,15 +113,15 @@ local function change_catalyst_node_to_previous_closest_html_element()
     end
 end
 
----@param html_children TSNode[]
-local change_catalyst_to_its_first_child = function(html_children)
-    catalyst.set_node(html_children[1])
+---@param tbl TSNode[]
+local change_catalyst_to_first_node_in_tbl = function(tbl)
+    catalyst.set_node(tbl[1])
     catalyst.set_node_point("start")
 end
 
----@param html_children TSNode[]
-local function change_catalyst_to_its_last_child(html_children)
-    local last_child = html_children[#html_children]
+---@param tbl TSNode[]
+local function change_catalyst_to_last_node_in_tbl(tbl)
+    local last_child = tbl[#tbl]
     local node_point = "end"
     local start_row, _, end_row, _ = last_child:range()
 
@@ -145,11 +145,20 @@ M.move = function(o)
             #html_children > 0
             and lib_ts.cursor_is_at_start_of_node(catalyst.win(), catalyst.node())
         then
-            change_catalyst_to_its_first_child(html_children)
+            change_catalyst_to_first_node_in_tbl(html_children)
         else
-            if not change_catalyst_node_to_its_sibling(o) then
-                if not change_catalyst_node_to_its_parent(o) then
-                    change_catalyst_node_to_next_closest_html_element()
+            local descendants = aggregator.get_html_descendants(catalyst.buf(), catalyst.node())
+            if
+                #descendants > 0
+                and descendants[1] ~= catalyst.node()
+                and lib_ts.cursor_is_at_start_of_node(catalyst.win(), catalyst.node())
+            then
+                change_catalyst_to_first_node_in_tbl(descendants)
+            else
+                if not change_catalyst_node_to_its_sibling(o) then
+                    if not change_catalyst_node_to_its_parent(o) then
+                        change_catalyst_node_to_next_closest_html_element()
+                    end
                 end
             end
         end
@@ -157,11 +166,20 @@ M.move = function(o)
         if
             #html_children > 0 and lib_ts.cursor_is_at_end_of_node(catalyst.win(), catalyst.node())
         then
-            change_catalyst_to_its_last_child(html_children)
+            change_catalyst_to_last_node_in_tbl(html_children)
         else
-            if not change_catalyst_node_to_its_sibling(o) then
-                if not change_catalyst_node_to_its_parent(o) then
-                    change_catalyst_node_to_previous_closest_html_element()
+            local descendants = aggregator.get_html_descendants(catalyst.buf(), catalyst.node())
+            if
+                #descendants > 0
+                and descendants[1] ~= catalyst.node()
+                and lib_ts.cursor_is_at_end_of_node(catalyst.win(), catalyst.node())
+            then
+                change_catalyst_to_last_node_in_tbl(descendants)
+            else
+                if not change_catalyst_node_to_its_sibling(o) then
+                    if not change_catalyst_node_to_its_parent(o) then
+                        change_catalyst_node_to_previous_closest_html_element()
+                    end
                 end
             end
         end

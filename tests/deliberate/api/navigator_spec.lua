@@ -75,6 +75,20 @@ describe("typescriptreact navigator.move()", function()
         move("parent", "<>", { 15, 4 }, first_line)
         move("parent", "<>", { 15, 4 }, first_line) -- stands still since no more html parent from here
     end)
+
+    it("direction = next / previous, children inside jsx_expression", function()
+        local div_content =
+            [[<div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+        {images.map((image) => (
+          <BlurImage key={image.id} image={image}></BlurImage>
+        ))}
+      </div>]]
+        initiate("61gg^", div_content)
+        move("next", "<BlurImage key={image.id} image={image}></BlurImage>", { 63, 10 })
+        move("next", div_content, { 65, 11 })
+        move("previous", "<BlurImage key={image.id} image={image}></BlurImage>", { 63, 10 })
+        move("previous", div_content, { 61, 6 })
+    end)
 end)
 
 -- Trying out `navigator.move()` interaction with vim count.
