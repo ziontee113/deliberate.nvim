@@ -134,6 +134,30 @@ local function change_catalyst_to_last_node_in_tbl(tbl)
     catalyst.set_node_point(node_point)
 end
 
+local change_catalyst_to_its_last_descendant = function()
+    local descendants = aggregator.get_html_descendants(catalyst.buf(), catalyst.node())
+    if
+        #descendants > 0
+        and descendants[1] ~= catalyst.node()
+        and lib_ts.cursor_is_at_end_of_node(catalyst.win(), catalyst.node())
+    then
+        change_catalyst_to_last_node_in_tbl(descendants)
+        return true
+    end
+end
+
+local change_catalyst_to_its_first_descendant = function()
+    local descendants = aggregator.get_html_descendants(catalyst.buf(), catalyst.node())
+    if
+        #descendants > 0
+        and descendants[1] ~= catalyst.node()
+        and lib_ts.cursor_is_at_start_of_node(catalyst.win(), catalyst.node())
+    then
+        change_catalyst_to_first_node_in_tbl(descendants)
+        return true
+    end
+end
+
 ---@param o navigator_move_Args
 M.move = function(o)
     if not catalyst.is_active() then return end
@@ -147,14 +171,7 @@ M.move = function(o)
         then
             change_catalyst_to_first_node_in_tbl(html_children)
         else
-            local descendants = aggregator.get_html_descendants(catalyst.buf(), catalyst.node())
-            if
-                #descendants > 0
-                and descendants[1] ~= catalyst.node()
-                and lib_ts.cursor_is_at_start_of_node(catalyst.win(), catalyst.node())
-            then
-                change_catalyst_to_first_node_in_tbl(descendants)
-            else
+            if not change_catalyst_to_its_first_descendant() then
                 if not change_catalyst_node_to_its_sibling(o) then
                     if not change_catalyst_node_to_its_parent(o) then
                         change_catalyst_node_to_next_closest_html_element()
@@ -168,14 +185,7 @@ M.move = function(o)
         then
             change_catalyst_to_last_node_in_tbl(html_children)
         else
-            local descendants = aggregator.get_html_descendants(catalyst.buf(), catalyst.node())
-            if
-                #descendants > 0
-                and descendants[1] ~= catalyst.node()
-                and lib_ts.cursor_is_at_end_of_node(catalyst.win(), catalyst.node())
-            then
-                change_catalyst_to_last_node_in_tbl(descendants)
-            else
+            if not change_catalyst_to_its_last_descendant() then
                 if not change_catalyst_node_to_its_sibling(o) then
                     if not change_catalyst_node_to_its_parent(o) then
                         change_catalyst_node_to_previous_closest_html_element()
