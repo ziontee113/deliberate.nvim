@@ -135,6 +135,31 @@ local manual_heads = {
     { ",", function() vim.api.nvim_input("C,") end, { nowait = true } },
 
     {
+        "\\",
+        function()
+            exit_hydra()
+            vim.api.nvim_input("cit{")
+        end,
+        { nowait = true },
+    },
+    {
+        "{",
+        function()
+            exit_hydra()
+            vim.api.nvim_input("O{<CR>")
+        end,
+        { nowait = true },
+    },
+    {
+        "}",
+        function()
+            exit_hydra()
+            vim.api.nvim_input("o{<CR>")
+        end,
+        { nowait = true },
+    },
+
+    {
         "<Plug>DeliberateHydraEsc",
         function()
             if not selection.select_move_is_active() and not visual_collector.is_active() then
