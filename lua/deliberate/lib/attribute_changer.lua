@@ -21,12 +21,13 @@ local function find_or_create_attribute_value_node(buf, node, attribute, content
     selection.refresh_tree()
 end
 
-M.jump_to_attribute_value_node = function(attribute)
+M.jump_to_attribute_value_node = function(attribute, col_offset)
+    col_offset = col_offset or 0
     local attribute_value_node =
         aggregator.get_attribute_value(catalyst.buf(), catalyst.node(), attribute)
     if not attribute_value_node then return end
     local _, _, end_row, end_col = attribute_value_node:range()
-    vim.api.nvim_win_set_cursor(catalyst.win(), { end_row + 1, end_col - 1 })
+    vim.api.nvim_win_set_cursor(catalyst.win(), { end_row + 1, end_col - 1 + col_offset })
 end
 
 ---@class Attribute_Changer_Opts
