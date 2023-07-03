@@ -31,16 +31,15 @@ end
 
 -------------------------------------------- Catalyst
 
----@param catalyst_info CatalystInfo
-M.highlight_catalyst = function(catalyst_info, hl_group)
-    if not catalyst_info then return end
+M.highlight_catalyst = function(hl_group)
+    local catalyst = require("deliberate.lib.catalyst")
     hl_group = hl_group or "DiffText"
 
-    local start_row, start_col, end_row, end_col = catalyst_info.node:range()
-    clear_catalyst_namespace(catalyst_info.buf)
+    local start_row, start_col, end_row, end_col = catalyst.node():range()
+    clear_catalyst_namespace(catalyst.buf())
 
     vim.highlight.range(
-        catalyst_info.buf,
+        catalyst.buf(),
         catalyst_ns,
         hl_group,
         { start_row, start_col },
@@ -48,7 +47,7 @@ M.highlight_catalyst = function(catalyst_info, hl_group)
     )
 
     vim.highlight.range(
-        catalyst_info.buf,
+        catalyst.buf(),
         catalyst_ns,
         hl_group,
         { end_row, end_col - 1 },
@@ -85,6 +84,7 @@ M.highlight_selection = function()
         })
     end
 
+    M.highlight_catalyst()
     M.highlight_pseudo_classes()
 end
 
