@@ -12,6 +12,7 @@ local show_input_window = function(buf, width, height, title, winhl)
         border = "single",
         title = title or "",
         title_pos = "center",
+        noautocmd = true,
     })
 
     vim.api.nvim_win_set_option(win, "winhl", winhl or "Normal:Normal,FloatBorder:@function")

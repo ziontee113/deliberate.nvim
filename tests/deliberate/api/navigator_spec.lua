@@ -89,6 +89,8 @@ describe("typescriptreact navigator.move()", function()
         move("previous", "<BlurImage key={image.id} image={image}></BlurImage>", { 63, 10 })
         move("previous", div_content, { 61, 6 })
     end)
+
+    -- TODO: add test case for jsx_expression elements
 end)
 
 -- Trying out `navigator.move()` interaction with vim count.

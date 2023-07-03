@@ -132,6 +132,15 @@ local manual_heads = {
         { nowait = true },
     },
 
+    {
+        "~",
+        function()
+            vim.api.nvim_input("`")
+            vim.schedule(function() vim.api.nvim_input("`") end)
+        end,
+        { nowait = true },
+    },
+
     { ",", function() vim.api.nvim_input("C,") end, { nowait = true } },
 
     {
