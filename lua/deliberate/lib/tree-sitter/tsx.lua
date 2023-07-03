@@ -53,6 +53,18 @@ M.get_all_html_nodes_in_buffer = function(buf)
     return all_html_nodes, grouped_captures
 end
 
+M.get_all_html_closing_elements = function(buf)
+    local html_closing_nodes, grouped_captures = lib_ts.capture_nodes_with_queries({
+        buf = buf,
+        parser_name = "tsx",
+        queries = {
+            "(jsx_closing_element) @jsx_closing_element",
+        },
+        capture_groups = { "jsx_closing_element" },
+    })
+    return html_closing_nodes, grouped_captures
+end
+
 M.get_html_descendants = function(buf, root)
     local all_html_nodes, grouped_captures = lib_ts.capture_nodes_with_queries({
         buf = buf,

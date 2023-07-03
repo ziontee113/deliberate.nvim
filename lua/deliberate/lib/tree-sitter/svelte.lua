@@ -50,6 +50,18 @@ M.get_all_html_nodes_in_buffer = function(buf)
     return all_html_nodes, grouped_captures
 end
 
+M.get_all_html_closing_elements = function(buf)
+    local html_closing_nodes, grouped_captures = lib_ts.capture_nodes_with_queries({
+        buf = buf,
+        parser_name = "svelte",
+        queries = {
+            "(end_tag) @end_tag",
+        },
+        capture_groups = { "end_tag" },
+    })
+    return html_closing_nodes, grouped_captures
+end
+
 M.get_html_descendants = function() return {}, {} end -- HACK: to be done later
 
 ---@param node TSNode

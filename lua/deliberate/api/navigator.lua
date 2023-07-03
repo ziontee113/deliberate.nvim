@@ -8,36 +8,6 @@ local M = {}
 ---@field destination "next-sibling" | "previous-sibling" | "next" | "previous" | "parent"
 ---@field select_move boolean
 
----@param nodes TSNode[]
----@param row number
----@return TSNode
-local function find_closest_next_node_to_row(nodes, row)
-    local closest_distance, closest_node = math.huge, nil
-    for _, node in ipairs(nodes) do
-        local start_row = node:range()
-        if start_row > row and math.abs(start_row - row) < closest_distance then
-            closest_node = node
-            closest_distance = math.abs(start_row - row)
-        end
-    end
-    return closest_node
-end
-
----@param nodes TSNode[]
----@param row number
----@return TSNode
-local function find_closest_previous_node_to_row(nodes, row)
-    local closest_distance, closest_node = math.huge, nil
-    for _, node in ipairs(nodes) do
-        local _, _, end_row, _ = node:range()
-        if end_row < row and math.abs(end_row - row) < closest_distance then
-            closest_node = node
-            closest_distance = math.abs(end_row - row)
-        end
-    end
-    return closest_node
-end
-
 ---@param o navigator_move_Args
 ---@return "start" | "end"
 local function find_cursor_node_point_for_sibling(o)
@@ -91,107 +61,212 @@ local function change_catalyst_node_to_its_parent(o)
     return parent_node
 end
 
-local function change_catalyst_node_to_next_closest_html_element()
-    local html_nodes = aggregator.get_all_html_nodes_in_buffer(catalyst.buf())
-    local _, _, end_row, _ = catalyst.node():range()
-    local closest_next_node = find_closest_next_node_to_row(html_nodes, end_row)
+-------------------------------------------- Forbidden West
 
-    if closest_next_node then
-        catalyst.set_node(closest_next_node)
-        catalyst.set_node_point("start")
-    end
-end
-
-local function change_catalyst_node_to_previous_closest_html_element()
-    local html_nodes = aggregator.get_all_html_nodes_in_buffer(catalyst.buf())
-    local start_row = catalyst.node():range()
-    local closest_previous_node = find_closest_previous_node_to_row(html_nodes, start_row)
-
-    if closest_previous_node then
-        catalyst.set_node(closest_previous_node)
-        catalyst.set_node_point("end")
-    end
-end
-
----@param tbl TSNode[]
-local change_catalyst_to_first_node_in_tbl = function(tbl)
-    catalyst.set_node(tbl[1])
-    catalyst.set_node_point("start")
-end
-
----@param tbl TSNode[]
-local function change_catalyst_to_last_node_in_tbl(tbl)
-    local last_child = tbl[#tbl]
-    local node_point = "end"
-    local start_row, _, end_row, _ = last_child:range()
-
-    if start_row == end_row then node_point = "start" end
-
-    local last_child_children = aggregator.get_html_children(last_child)
-    if #last_child_children > 0 then node_point = "end" end
-
-    catalyst.set_node(last_child)
-    catalyst.set_node_point(node_point)
-end
-
-local change_catalyst_to_its_last_descendant = function()
-    local descendants = aggregator.get_html_descendants(catalyst.buf(), catalyst.node())
+local get_first_child_candidate = function()
+    local html_children = aggregator.get_html_children(catalyst.node())
     if
-        #descendants > 0
-        and descendants[1] ~= catalyst.node()
-        and lib_ts.cursor_is_at_end_of_node(catalyst.win(), catalyst.node())
+        #html_children > 0 and lib_ts.cursor_is_at_start_of_node(catalyst.win(), catalyst.node())
     then
-        change_catalyst_to_last_node_in_tbl(descendants)
-        return true
+        return { html_children[1], "start" }
     end
 end
 
-local change_catalyst_to_its_first_descendant = function()
+local get_first_descendant_candidate = function()
     local descendants = aggregator.get_html_descendants(catalyst.buf(), catalyst.node())
     if
         #descendants > 0
         and descendants[1] ~= catalyst.node()
         and lib_ts.cursor_is_at_start_of_node(catalyst.win(), catalyst.node())
     then
-        change_catalyst_to_first_node_in_tbl(descendants)
-        return true
+        return { descendants[1], "start" }
     end
 end
+
+local get_next_sibling_candidate = function()
+    local next_siblings = aggregator.get_html_siblings(catalyst.node(), "next")
+    if next_siblings and next_siblings[1] then return { next_siblings[1], "start" } end
+end
+
+local get_parent_end_candidate = function()
+    local parent_node = aggregator.get_html_node(catalyst.node():parent())
+    if parent_node then return { parent_node, "end" } end
+end
+
+local get_absolute_next_element = function()
+    local html_nodes = aggregator.get_all_html_nodes_in_buffer(catalyst.buf())
+    local _, _, catalyst_end_row, _ = catalyst.node():range()
+    local target
+    for _, node in ipairs(html_nodes) do
+        local start_row, _, _, _ = node:range()
+        if start_row > catalyst_end_row then
+            target = node
+            break
+        end
+    end
+    if target then return { target, "start" } end
+end
+
+local get_absolute_next_closing_tag = function()
+    local closing_nodes = aggregator.get_all_html_closing_elements(catalyst.buf())
+    local _, _, catalyst_end_row, _ = catalyst.node():range()
+    local target
+    for _, node in ipairs(closing_nodes) do
+        local start_row, _, _, _ = node:range()
+        if start_row > catalyst_end_row then
+            target = node
+            break
+        end
+    end
+    if target then return { target, "start" } end
+end
+
+-------------------------------------------- Forbidden East
+
+local get_last_child_candidate = function()
+    local html_children = aggregator.get_html_children(catalyst.node())
+    if #html_children > 0 and lib_ts.cursor_is_at_end_of_node(catalyst.win(), catalyst.node()) then
+        return { html_children[#html_children], "end" }
+    end
+end
+
+local get_last_descendant_candidate = function()
+    local descendants = aggregator.get_html_descendants(catalyst.buf(), catalyst.node())
+    if
+        #descendants > 0
+        and descendants[#descendants] ~= catalyst.node()
+        and lib_ts.cursor_is_at_end_of_node(catalyst.win(), catalyst.node())
+    then
+        return { descendants[#descendants], "end" }
+    end
+end
+
+local get_prev_sibling_candidate = function()
+    local prev_siblings = aggregator.get_html_siblings(catalyst.node(), "previous")
+    if prev_siblings and prev_siblings[1] then return { prev_siblings[1], "end" } end
+end
+
+local get_parent_start_candidate = function()
+    local parent_node = aggregator.get_html_node(catalyst.node():parent())
+    if parent_node then return { parent_node, "start" } end
+end
+
+local get_absolute_prev_element = function()
+    local html_nodes = aggregator.get_all_html_nodes_in_buffer(catalyst.buf())
+    local catalyst_start_row, _, _, _ = catalyst.node():range()
+    local target
+    for _, node in ipairs(html_nodes) do
+        local _, _, end_row, _ = node:range()
+        if end_row < catalyst_start_row then
+            target = node
+        else
+            break
+        end
+    end
+    if target then return { target, "end" } end
+end
+
+local get_absolute_prev_closing_tag = function()
+    local closing_nodes = aggregator.get_all_html_closing_elements(catalyst.buf())
+    local catalyst_start_row, _, _, _ = catalyst.node():range()
+    local target
+    for _, node in ipairs(closing_nodes) do
+        local _, _, end_row, _ = node:range()
+        if end_row < catalyst_start_row then
+            target = node
+        else
+            break
+        end
+    end
+
+    if target then return { target, "end" } end
+end
+
+--------------------------------------------
 
 ---@param o navigator_move_Args
 M.move = function(o)
     if not catalyst.is_active() then return end
 
-    local html_children = aggregator.get_html_children(catalyst.node())
-
     if o.destination == "next" then
-        if
-            #html_children > 0
-            and lib_ts.cursor_is_at_start_of_node(catalyst.win(), catalyst.node())
-        then
-            change_catalyst_to_first_node_in_tbl(html_children)
-        else
-            if not change_catalyst_to_its_first_descendant() then
-                if not change_catalyst_node_to_its_sibling(o) then
-                    if not change_catalyst_node_to_its_parent(o) then
-                        change_catalyst_node_to_next_closest_html_element()
+        local candidates = {
+            get_first_child_candidate(),
+            get_first_descendant_candidate(),
+            get_next_sibling_candidate(),
+            get_parent_end_candidate(),
+            get_absolute_next_element(),
+            get_absolute_next_closing_tag(),
+        }
+
+        if #candidates > 0 then
+            local closest_line = math.huge
+            local chosen_target, chosen_node_point
+
+            for _, candidate in pairs(candidates) do
+                local target_node, target_node_point = unpack(candidate)
+
+                local start_row, _, end_row, _ = target_node:range()
+                if target_node_point == "start" then
+                    if start_row < closest_line then
+                        closest_line = start_row
+                        chosen_target = target_node
+                        chosen_node_point = target_node_point
+                    end
+                elseif target_node_point == "end" then
+                    if end_row < closest_line then
+                        closest_line = end_row
+                        chosen_target = target_node
+                        chosen_node_point = target_node_point
                     end
                 end
+            end
+
+            if chosen_target then
+                catalyst.set_node(chosen_target)
+                catalyst.set_node_point(chosen_node_point)
             end
         end
     elseif o.destination == "previous" then
-        if
-            #html_children > 0 and lib_ts.cursor_is_at_end_of_node(catalyst.win(), catalyst.node())
-        then
-            change_catalyst_to_last_node_in_tbl(html_children)
-        else
-            if not change_catalyst_to_its_last_descendant() then
-                if not change_catalyst_node_to_its_sibling(o) then
-                    if not change_catalyst_node_to_its_parent(o) then
-                        change_catalyst_node_to_previous_closest_html_element()
-                    end
+        local candidates = {
+            get_last_child_candidate(),
+            get_last_descendant_candidate(),
+            get_prev_sibling_candidate(),
+            get_parent_start_candidate(),
+            get_absolute_prev_element(),
+            get_absolute_prev_closing_tag(),
+        }
+
+        local closest_line = -1
+        local chosen_target, chosen_node_point
+
+        for i, candidate in pairs(candidates) do
+            local target_node, target_node_point = unpack(candidate)
+
+            if i == 6 then target_node = target_node:parent() end
+            if i < 6 then
+                local start_row, _, end_row, _ = target_node:range()
+                if start_row == end_row then target_node_point = "start" end
+            end
+
+            local start_row, _, end_row, _ = target_node:range()
+            if target_node_point == "start" then
+                if start_row > closest_line then
+                    closest_line = start_row
+                    chosen_target = target_node
+                    chosen_node_point = target_node_point
+                end
+            elseif target_node_point == "end" then
+                if end_row > closest_line then
+                    closest_line = end_row
+                    chosen_target = target_node
+                    chosen_node_point = target_node_point
                 end
             end
+        end
+
+        if chosen_target then
+            catalyst.set_node(chosen_target)
+            catalyst.set_node_point(chosen_node_point)
         end
     end
 

@@ -38,6 +38,7 @@ local invoke = function(method_name, ...)
     return module[method_name](...)
 end
 
+M.get_all_html_closing_elements = function(...) return invoke("get_all_html_closing_elements", ...) end
 M.get_html_descendants = function(...) return invoke("get_html_descendants", ...) end
 M.get_all_html_nodes_in_buffer = function(...) return invoke("get_all_html_nodes_in_buffer", ...) end
 M.get_tag_identifier_node = function(...) return invoke("get_tag_identifier_node", ...) end
