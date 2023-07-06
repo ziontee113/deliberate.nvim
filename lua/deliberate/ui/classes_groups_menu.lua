@@ -831,10 +831,10 @@ M.change_touch_action = function() M._classes_group_changer_menu(touch_action_gr
 
 -- User Select
 local user_select_group = {
-    { keymaps = { "a" }, classes = { "auto" } },
-    { keymaps = { "t" }, classes = { "text" } },
-    { keymaps = { "A" }, classes = { "all" } },
-    { keymaps = { "n", "/" }, classes = { "none" } },
+    { keymaps = { "a" }, classes = { "select-auto" } },
+    { keymaps = { "t" }, classes = { "select-text" } },
+    { keymaps = { "A" }, classes = { "select-all" } },
+    { keymaps = { "n", "/" }, classes = { "select-none" } },
 }
 M.change_user_select = function() M._classes_group_changer_menu(user_select_group) end
 

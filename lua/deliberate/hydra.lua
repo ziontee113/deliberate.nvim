@@ -18,7 +18,7 @@ local heads = {}
 
 -------------------------------------------- <Nop>
 
-local nop_list = { "d", "D", "x", "r", "R", "c" }
+local nop_list = { "d", "D", "x", "r", "R", "c", "u", "U" }
 for _, keymap in ipairs(nop_list) do
     local hydra_mapping = { keymap, function() end, { nowait = true } }
     table.insert(heads, hydra_mapping)
