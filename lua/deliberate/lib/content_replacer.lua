@@ -19,7 +19,7 @@ M.replace = function(content, disable_auto_sort, disable_undo_archive)
             original_index = i
         end
 
-        if aggregator.node_is_component(node) then goto continue end
+        if aggregator.node_is_self_closing(node) then goto continue end
 
         local target_row, target_col = node:range()
 

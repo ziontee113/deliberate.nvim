@@ -99,7 +99,7 @@ M.add = function(o)
         local new_tag_content = process_new_tag_content(o, indents, content)
 
         if o.destination == "inside" then
-            if aggregator.node_is_component(og_node) then
+            if aggregator.node_is_self_closing(og_node) then
                 update_row, update_col = add_tag_after_node(o.destination, new_tag_content, og_node)
             else
                 update_row, update_col = handle_destination_inside(i, new_tag_content, indents)
