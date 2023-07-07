@@ -9,7 +9,9 @@ local M = {}
 -------------------------------------------- Locals
 
 local get_content_groups_from_file = function(file_path)
-    local file_lines = vim.fn.readfile(file_path)
+    local ok, file_lines = pcall(vim.fn.readfile, file_path)
+    if not ok then return { { name = "Hello", "World" } } end
+
     local groups = {}
 
     for _, line in ipairs(file_lines) do
