@@ -219,11 +219,22 @@ end
 ---@field node TSNode
 ---@field replacement string | table
 ---@field buf number
+---@field start_row_offset number | nil
+---@field start_col_offset number | nil
+---@field end_row_offset number | nil
+---@field end_col_offset number | nil
 
 M.replace_node_text = function(o)
     if type(o.replacement) == "string" then o.replacement = { o.replacement } end
     local start_row, start_col, end_row, end_col = o.node:range()
-    vim.api.nvim_buf_set_text(o.buf, start_row, start_col, end_row, end_col, o.replacement)
+    vim.api.nvim_buf_set_text(
+        o.buf,
+        start_row + (o.start_row_offset or 0),
+        start_col + (o.start_col_offset or 0),
+        end_row + (o.end_row_offset or 0),
+        end_col + (o.end_col_offset or 0),
+        o.replacement
+    )
 end
 
 -------------------------------------------- Shared Functions between languages
