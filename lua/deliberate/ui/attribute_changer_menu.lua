@@ -14,6 +14,15 @@ local items = {
     { keymaps = { "a" }, text = "alt" },
     { keymaps = { "s" }, text = "src" },
     { keymaps = { "c" }, text = "onClick", exit_hydra = true },
+    "",
+    { keymaps = { "i" }, text = "initial", content = "{{  }}", col_offset = -2, exit_hydra = true },
+    {
+        keymaps = { "A" },
+        text = "animate",
+        content = "{{  }}",
+        col_offset = -2,
+        exit_hydra = true,
+    },
 
     { keymaps = "0", text = "", hidden = true },
     { keymaps = ",", text = "", hidden = true, arbitrary = true },
@@ -38,7 +47,7 @@ end
 local defer_fn = function(current_item, dot_repeat)
     local attribute = dot_repeat and latest_arbitrary_input_value or current_item.text
     if current_item.text ~= "" or dot_repeat then
-        attr_changer.jump_to_attribute_value_node(attribute, col_offset)
+        attr_changer.jump_to_attribute_value_node(attribute, current_item.col_offset or col_offset)
         vim.cmd("startinsert")
     end
 end
@@ -49,12 +58,19 @@ local handle_result = function(current_item, metadata, dot_repeat)
     vim.schedule(function()
         if current_item.arbitrary == true then
             if dot_repeat then
-                attr_changer.change({ attribute = latest_arbitrary_input_value, content = content })
+                attr_changer.change({
+                    attribute = latest_arbitrary_input_value,
+                    content = current_item.content or content,
+                })
             else
                 show_arbitrary_input(metadata)
             end
         else
-            attr_changer.change({ attribute = current_item.text, content = content })
+            attr_changer.change({
+                attribute = current_item.text,
+                content = current_item.content or content,
+                col_offset = current_item.col_offset or col_offset,
+            })
         end
 
         defer_fn(current_item, dot_repeat)

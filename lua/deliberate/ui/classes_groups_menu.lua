@@ -172,7 +172,7 @@ local flex_align_group = {
     { keymaps = { "i" }, classes = { "items-center" } },
     { keymaps = { "j" }, classes = { "justify-center" } },
     { keymaps = { "b" }, classes = { "justify-between" } },
-    { keymaps = { "c" }, classes = { "items-center", "justify-center" } },
+    { keymaps = { "C" }, classes = { "items-center", "justify-center" } },
     { keymaps = { "cb" }, classes = { "content-between" } },
 }
 M.change_flex_align_properties = function() M._classes_group_changer_menu(flex_align_group) end
