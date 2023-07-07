@@ -11,14 +11,16 @@ local content = "{  }"
 local col_offset = -1
 
 local items = {
-    { keymaps = { "a" }, text = "alt" },
     { keymaps = { "s" }, text = "src" },
+    { keymaps = { "A" }, text = "alt" },
+    "",
     { keymaps = { "c" }, text = "onClick", exit_hydra = true },
+    "",
     { keymaps = { "C" }, text = "className", exit_hydra = true },
     "",
     { keymaps = { "i" }, text = "initial", content = "{{  }}", col_offset = -2, exit_hydra = true },
     {
-        keymaps = { "A" },
+        keymaps = { "a" },
         text = "animate",
         content = "{{  }}",
         col_offset = -2,

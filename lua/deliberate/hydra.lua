@@ -79,6 +79,11 @@ local manual_heads = {
         function() require("deliberate.ui.tag_name_changer_menu")._change_tag_menu() end,
         { nowait = true },
     },
+    {
+        "@",
+        function() require("deliberate.api.tag_name_changer").toggle_motion() end,
+        { nowait = true },
+    },
 
     {
         "sr",
