@@ -48,6 +48,11 @@ local manual_heads = {
         function() require("deliberate.ui.attribute_changer_menu").show() end,
         { nowait = true },
     },
+    {
+        "<A-;>",
+        function() require("deliberate.ui.attribute_changer_menu").remove() end,
+        { nowait = true },
+    },
 
     {
         "C",

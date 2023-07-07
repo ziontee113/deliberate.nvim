@@ -53,6 +53,7 @@ end
 
 M.remove = function(attribute)
     selection.archive_for_undo()
+    require("deliberate.api.dot_repeater").register(M.remove, attribute)
 
     for i = 1, #selection.nodes() do
         local node = selection.nodes()[i]

@@ -14,6 +14,7 @@ local items = {
     { keymaps = { "a" }, text = "alt" },
     { keymaps = { "s" }, text = "src" },
     { keymaps = { "c" }, text = "onClick", exit_hydra = true },
+    { keymaps = { "C" }, text = "className", exit_hydra = true },
     "",
     { keymaps = { "i" }, text = "initial", content = "{{  }}", col_offset = -2, exit_hydra = true },
     {
@@ -80,6 +81,7 @@ M.show = function()
     menu_repeater.register(M.show)
 
     local popup = PopUp:new({
+        title = "Change Attribute",
         steps = {
             {
                 items = items,
@@ -92,6 +94,37 @@ M.show = function()
         defer_fn = function(results) defer_fn(results[1]) end,
     })
 
+    popup:show()
+end
+
+-- Remove
+
+local show_remove_arbitrary_input = function(metadata)
+    local input = Input:new({
+        title = "Remove Attribute",
+        width = 15,
+        callback = function(result) attr_changer.remove(result) end,
+    })
+    local row, col = unpack(vim.api.nvim_win_get_position(0))
+    input:show(metadata, row, col)
+end
+M.remove = function()
+    menu_repeater.register(M.remove)
+    local popup = PopUp:new({
+        title = "Remove Attribute",
+        steps = {
+            {
+                items = items,
+                callback = function(_, current_item, metadata)
+                    if current_item.arbitrary then
+                        show_remove_arbitrary_input(metadata)
+                    else
+                        attr_changer.remove(current_item.text)
+                    end
+                end,
+            },
+        },
+    })
     popup:show()
 end
 
