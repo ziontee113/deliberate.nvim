@@ -24,7 +24,6 @@ local items = {
         exit_hydra = true,
     },
 
-    { keymaps = "0", text = "", hidden = true },
     { keymaps = ",", text = "", hidden = true, arbitrary = true },
 }
 
@@ -35,13 +34,13 @@ local show_arbitrary_input = function(metadata)
         callback = function(result) attr_changer.change({ attribute = result, content = content }) end,
         defer_fn = function(result)
             latest_arbitrary_input_value = result
-            attr_changer.jump_to_attribute_value_node(result)
+            attr_changer.jump_to_attribute_value_node(result, col_offset)
             vim.cmd("startinsert")
         end,
     })
 
     local row, col = unpack(vim.api.nvim_win_get_position(0))
-    input:show(metadata, row, col)
+    input:show(metadata, row, col, true)
 end
 
 local defer_fn = function(current_item, dot_repeat)

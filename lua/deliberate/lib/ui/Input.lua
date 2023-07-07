@@ -54,7 +54,7 @@ end
 
 -- Public
 
-function Input:show(metadata, row, col)
+function Input:show(metadata, row, col, dont_start_insert)
     metadata = metadata or {}
 
     vim.api.nvim_buf_set_lines(self.buf, 0, -1, false, {})
@@ -63,7 +63,7 @@ function Input:show(metadata, row, col)
     self.target_buf = vim.api.nvim_get_current_buf()
 
     self.win = vim.api.nvim_open_win(self.buf, true, {
-        relative = "editor",
+        relative = "cursor",
         row = row or 1,
         col = col or 1,
         width = self.width or 20,
@@ -84,7 +84,7 @@ function Input:show(metadata, row, col)
     self:_set_hide_keymaps()
     self:_create_on_change_autocmd()
 
-    vim.cmd("startinsert")
+    if not dont_start_insert then vim.cmd("startinsert") end
 end
 
 function Input:hide()
