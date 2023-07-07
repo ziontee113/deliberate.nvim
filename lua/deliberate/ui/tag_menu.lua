@@ -1,4 +1,5 @@
 local PopUp = require("deliberate.lib.ui.PopUp")
+local Input = require("deliberate.lib.ui.Input")
 local catalyst = require("deliberate.lib.catalyst")
 local selection = require("deliberate.lib.selection")
 local html_tag = require("deliberate.api.html_tag")
@@ -23,6 +24,11 @@ local tag_map = {
     "",
     { keymaps = { "b" }, text = "button" },
     { keymaps = { "i" }, text = "img", self_closing = true },
+
+    { keymaps = ",", text = "", hidden = true, self_closing = true, arbitrary = true },
+    { keymaps = ".", text = "", hidden = true, self_closing = false, arbitrary = true },
+    { keymaps = "<", text = "", hidden = true, self_closing = true, arbitrary = true },
+    { keymaps = ">", text = "", hidden = true, self_closing = false, arbitrary = true },
 }
 
 M._add_tag_with_count = function(tag, destination, self_closing, count)
@@ -48,6 +54,18 @@ M._add_tag_with_count = function(tag, destination, self_closing, count)
     end
 end
 
+local show_remove_arbitrary_input = function(metadata, destination, count, self_closing)
+    local input = Input:new({
+        title = string.format("Add tag: %s", destination),
+        width = 15,
+        callback = function(result)
+            M._add_tag_with_count(result, destination, self_closing or false, count)
+        end,
+    })
+    local row, col = unpack(vim.api.nvim_win_get_position(0))
+    input:show(metadata, row, col)
+end
+
 M._add_tag_menu = function(destination)
     menu_repeater.register(M._add_tag_menu, destination)
 
@@ -58,8 +76,17 @@ M._add_tag_menu = function(destination)
         steps = {
             {
                 items = tag_map,
-                callback = function(_, item)
-                    M._add_tag_with_count(item.text, destination, item.self_closing or false, count)
+                callback = function(_, item, metadata)
+                    if item.arbitrary then
+                        show_remove_arbitrary_input(metadata, destination, count, item.self_closing)
+                    else
+                        M._add_tag_with_count(
+                            item.text,
+                            destination,
+                            item.self_closing or false,
+                            count
+                        )
+                    end
                 end,
             },
         },

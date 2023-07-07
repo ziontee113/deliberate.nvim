@@ -110,6 +110,7 @@ local show_remove_arbitrary_input = function(metadata)
     local row, col = unpack(vim.api.nvim_win_get_position(0))
     input:show(metadata, row, col)
 end
+
 M.remove = function()
     menu_repeater.register(M.remove)
     local popup = PopUp:new({
