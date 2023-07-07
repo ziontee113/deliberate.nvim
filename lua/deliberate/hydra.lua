@@ -70,6 +70,12 @@ local manual_heads = {
     },
 
     {
+        "!",
+        function() require("deliberate.ui.tag_name_changer_menu")._change_tag_menu() end,
+        { nowait = true },
+    },
+
+    {
         "sr",
         function() require("deliberate.ui.image_src_menu").change_image_src() end,
         { nowait = true },

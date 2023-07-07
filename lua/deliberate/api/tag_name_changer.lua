@@ -8,6 +8,10 @@ local lib_ts = require("deliberate.lib.tree-sitter")
 M.change_to = function(target_name)
     if vim.bo[(catalyst.buf())].ft ~= "typescriptreact" then return end
 
+    vim.bo[catalyst.buf()].undolevels = vim.bo[catalyst.buf()].undolevels
+    selection.archive_for_undo()
+    require("deliberate.api.dot_repeater").register(M.change_to, target_name)
+
     for i = 1, #selection.nodes() do
         local node = selection.nodes()[i]
         local opening_tag_identifier = aggregator.get_tag_identifier_node(node)
