@@ -23,12 +23,14 @@ M.change_to = function(target_name)
                 replacement = target_name,
             })
         else
-            local _, closing_tag = aggregator.get_opening_and_closing_tags(node)
             lib_ts.replace_node_text({
                 node = opening_tag_identifier,
                 buf = catalyst.buf(),
                 replacement = target_name,
             })
+            selection.refresh_tree()
+
+            local _, closing_tag = aggregator.get_opening_and_closing_tags(selection.nodes()[i])
             lib_ts.replace_node_text({
                 node = closing_tag,
                 buf = catalyst.buf(),
@@ -74,12 +76,14 @@ M.toggle_motion = function()
                 replacement = target_name,
             })
         else
-            local _, closing_tag = aggregator.get_opening_and_closing_tags(node)
             lib_ts.replace_node_text({
                 node = opening_tag_identifier,
                 buf = catalyst.buf(),
                 replacement = target_name,
             })
+            selection.refresh_tree()
+
+            local _, closing_tag = aggregator.get_opening_and_closing_tags(selection.nodes()[i])
             lib_ts.replace_node_text({
                 node = closing_tag,
                 buf = catalyst.buf(),
