@@ -20,6 +20,7 @@ local sanitize_items_keymaps = function(steps)
 end
 
 local function align_keymap(keymap, longest_keymap_hint_length)
+    if not keymap then return end
     if #keymap < longest_keymap_hint_length then
         keymap = string.rep(" ", longest_keymap_hint_length - #keymap) .. keymap
     end

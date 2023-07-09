@@ -26,6 +26,14 @@ local items = {
         col_offset = -2,
         exit_hydra = true,
     },
+    { keymaps = { "e" }, text = "exit", content = "{{  }}", col_offset = -2, exit_hydra = true },
+    {
+        keymaps = { "t" },
+        text = "transition",
+        content = "{{  }}",
+        col_offset = -2,
+        exit_hydra = true,
+    },
 
     { keymaps = ",", text = "", hidden = true, arbitrary = true },
 }
