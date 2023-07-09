@@ -102,6 +102,11 @@ local manual_heads = {
         function() require("deliberate.api.wrap").call({ tag = "div" }) end,
         { nowait = true },
     },
+    {
+        "<A-S-w>",
+        function() require("deliberate.api.wrap").call({ tag = "" }) end,
+        { nowait = true },
+    },
 
     {
         "v",

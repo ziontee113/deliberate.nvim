@@ -9,7 +9,7 @@ describe("wrap.call()", function()
     before_each(function() h.set_buffer_content_as_multiple_react_components() end)
     after_each(function() h.clean_up() end)
 
-    it("works", function()
+    it("works for <div> tag", function()
         h.initiate("22gg^", "<li>Contacts</li>")
         movA({ "next", true }, 1, "<li>Contacts</li>")
         movA({ "next", true }, 2, { "<li>Contacts</li>", "<li>FAQ</li>" })
@@ -34,5 +34,16 @@ describe("wrap.call()", function()
         <OtherComponent />
       </div>]]
         )
+    end)
+
+    it("works for React Fragment", function()
+        h.initiate("22gg^", "<li>Contacts</li>")
+        movA({ "next", true }, 1, "<li>Contacts</li>")
+        movA({ "next", true }, 2, { "<li>Contacts</li>", "<li>FAQ</li>" })
+        wrap.call({ tag = "" })
+        h.catalyst_has([[<>
+          <li>Contacts</li>
+          <li>FAQ</li>
+        </>]])
     end)
 end)
