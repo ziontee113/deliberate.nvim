@@ -101,7 +101,7 @@ local singles = {
     "hue-rotate", "backdrop-hue-rotate", "saturate", "backdrop-saturate",
     "invert", "backdrop-invert", "sepia", "backdrop-sepia",
     "transition", "duration", "delay", "rotate", "skew", "origin",
-    "will-change", "stroke", "outline",
+    "will-change", "stroke", "outline", "outline-offset",
 }
 
 local general_pms_postfixes = { "%-[%d%.%a/]+$", "%-%[[%-%d%.]+[%a%%]+]$" }

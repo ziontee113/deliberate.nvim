@@ -325,6 +325,7 @@ local non_axis_map = {
     ["<space>wc"] = pms_menu.change_will_change,
     ["sw"] = pms_menu.change_stroke_width,
     ["ow"] = pms_menu.change_outline_width,
+    ["oo"] = pms_menu.change_outline_offset,
 }
 add_heads_from_tbl(non_axis_map)
 

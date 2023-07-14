@@ -391,6 +391,9 @@ local outline_width_dict = {
     { keymaps = { "8" }, text = "8" },
 }
 M.change_outline_width = function() M._menu("outline", false, tcm._change, { outline_width_dict }) end
+M.change_outline_offset = function()
+    M._menu("outline-offset", false, tcm._change, { outline_width_dict })
+end
 
 -------------------------------------------- Ring
 
