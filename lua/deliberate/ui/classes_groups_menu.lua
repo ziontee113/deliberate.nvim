@@ -309,6 +309,14 @@ local divide_style_group = {
 M.change_divide_style = function() M._classes_group_changer_menu(divide_style_group) end
 
 -- Outline
+local outline_style_group = {
+    { keymaps = { "o" }, classes = { "outline" } },
+    { keymaps = { "d" }, classes = { "outline-dashed" } },
+    { keymaps = { "." }, classes = { "outline-dotted" } },
+    { keymaps = { "2", "D" }, classes = { "outline-double" } },
+    { keymaps = { "n", "/" }, classes = { "outline-none" } },
+}
+M.change_outline_style = function() M._classes_group_changer_menu(outline_style_group) end
 
 -- Border
 

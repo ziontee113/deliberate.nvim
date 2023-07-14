@@ -501,6 +501,7 @@ local classes_groups_dict = {
     ["<space>us"] = { cgm.change_user_select },
     ["<space>sr"] = { cgm.change_screen_readers },
     ["<space>g"] = { cgm.change_group },
+    ["os"] = { cgm.change_outline_style },
 }
 
 for keymap, fn_and_args in pairs(classes_groups_dict) do
