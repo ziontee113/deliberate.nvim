@@ -241,6 +241,7 @@ local keymap_to_color_menu_fn = {
     ["cc"] = colors_menu.caret,
     ["fc"] = colors_menu.fill,
     ["sc"] = colors_menu.stroke,
+    ["oc"] = colors_menu.outline,
 }
 add_heads_from_tbl(keymap_to_color_menu_fn)
 
@@ -323,6 +324,7 @@ local non_axis_map = {
     ["or"] = pms_menu.change_origin,
     ["<space>wc"] = pms_menu.change_will_change,
     ["sw"] = pms_menu.change_stroke_width,
+    ["ow"] = pms_menu.change_outline_width,
 }
 add_heads_from_tbl(non_axis_map)
 
@@ -490,6 +492,7 @@ local classes_groups_dict = {
     ["An"] = { cgm.change_animation },
     ["ap"] = { cgm.change_appearance },
     ["cu"] = { cgm.change_cursor },
+    ["<space>pe"] = { cgm.change_pointer_events },
     ["RS"] = { cgm.change_resize },
     ["sb"] = { cgm.change_scroll_behavior },
     ["sn"] = { cgm.change_snap_align },

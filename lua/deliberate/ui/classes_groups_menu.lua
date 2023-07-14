@@ -308,6 +308,8 @@ local divide_style_group = {
 }
 M.change_divide_style = function() M._classes_group_changer_menu(divide_style_group) end
 
+-- Outline
+
 -- Border
 
 local border_style_group = {
@@ -769,7 +771,7 @@ local poiiter_events_group = {
     { keymaps = { "n", "N", "/" }, classes = { "pointer-events-none" } },
     { keymaps = { "a", "A" }, classes = { "pointer-events-auto" } },
 }
-M.change_poiiter_events = function() M._classes_group_changer_menu(poiiter_events_group) end
+M.change_pointer_events = function() M._classes_group_changer_menu(poiiter_events_group) end
 
 -- Resize
 local resize_group = {

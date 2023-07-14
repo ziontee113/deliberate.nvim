@@ -381,6 +381,17 @@ M.change_divide = function(o)
     end
 end
 
+-------------------------------------------- Outline
+
+local outline_width_dict = {
+    { keymaps = { "/" }, text = "0" },
+    { keymaps = { "1" }, text = "1" },
+    { keymaps = { "2" }, text = "2" },
+    { keymaps = { "4" }, text = "4" },
+    { keymaps = { "8" }, text = "8" },
+}
+M.change_outline_width = function() M._menu("outline", false, tcm._change, { outline_width_dict }) end
+
 -------------------------------------------- Ring
 
 local ring_dict = {

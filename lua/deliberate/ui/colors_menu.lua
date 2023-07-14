@@ -131,5 +131,6 @@ M.accent = function() M._menu(bg_ft, "accent", fn, "accent-color") end
 M.caret = function() M._menu(bg_ft, "caret", fn, "caret-color") end
 M.fill = function() M._menu(bg_ft, "fill", fn, "fill-color") end
 M.stroke = function() M._menu(bg_ft, "stroke", fn, "stroke-color") end
+M.outline = function() M._menu(bg_ft, "outline", fn, "outline-color") end
 
 return M

@@ -101,7 +101,7 @@ local singles = {
     "hue-rotate", "backdrop-hue-rotate", "saturate", "backdrop-saturate",
     "invert", "backdrop-invert", "sepia", "backdrop-sepia",
     "transition", "duration", "delay", "rotate", "skew", "origin",
-    "will-change", "stroke",
+    "will-change", "stroke", "outline",
 }
 
 local general_pms_postfixes = { "%-[%d%.%a/]+$", "%-%[[%-%d%.]+[%a%%]+]$" }
@@ -282,6 +282,7 @@ local color_key_properties_map = {
     ["caret-color"] = "caret",
     ["fill-color"] = "fill",
     ["stroke-color"] = "stroke",
+    ["outline-color"] = "outline",
 }
 
 for key, property in pairs(color_key_properties_map) do
