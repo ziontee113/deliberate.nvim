@@ -658,13 +658,14 @@ local tlbr_P_D = {
     { page = 2, keymaps = { "s" }, text = "3/4", ironclad = true },
 }
 
+-- not removing these axies due to use case: `absolute top-0 left-0 right-0 bottom-0 m-auto`
 local tlbr_x = {
-    lua_patterns.left,
-    lua_patterns.right,
+    -- lua_patterns.left,
+    -- lua_patterns.right,
 }
 local tlbr_y = {
-    lua_patterns.top,
-    lua_patterns.bottom,
+    -- lua_patterns.top,
+    -- lua_patterns.bottom,
 }
 
 M.change_top = function()

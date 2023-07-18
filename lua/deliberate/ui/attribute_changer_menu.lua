@@ -14,6 +14,7 @@ local items = {
     { keymaps = { "s" }, text = "src" },
     { keymaps = { "A" }, text = "alt" },
     "",
+    { keymaps = { "k" }, text = "key" },
     { keymaps = { "c" }, text = "onClick", exit_hydra = true },
     "",
     { keymaps = { "C" }, text = "className", exit_hydra = true },
