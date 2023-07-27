@@ -11,27 +11,29 @@ local content = "{  }"
 local col_offset = -1
 
 local items = {
-    { keymaps = { "s" }, text = "src" },
+    { keymaps = { "s" }, text = "src", exit_hydra = true },
     { keymaps = { "A" }, text = "alt" },
     "",
-    { keymaps = { "k" }, text = "key" },
-    { keymaps = { "c" }, text = "onClick" },
+    { keymaps = { "k" }, text = "key", exit_hydra = true },
+    { keymaps = { "c" }, text = "onClick", exit_hydra = true },
     "",
-    { keymaps = { "C" }, text = "className" },
+    { keymaps = { "C" }, text = "className", exit_hydra = true },
     "",
-    { keymaps = { "i" }, text = "initial", content = "{{  }}", col_offset = -2 },
+    { keymaps = { "i" }, text = "initial", content = "{{  }}", col_offset = -2, exit_hydra = true },
     {
         keymaps = { "a" },
         text = "animate",
         content = "{{  }}",
         col_offset = -2,
+        exit_hydra = true,
     },
-    { keymaps = { "e" }, text = "exit", content = "{{  }}", col_offset = -2 },
+    { keymaps = { "e" }, text = "exit", content = "{{  }}", col_offset = -2, exit_hydra = true },
     {
         keymaps = { "t" },
         text = "transition",
         content = "{{  }}",
         col_offset = -2,
+        exit_hydra = true,
     },
 
     { keymaps = ",", text = "", hidden = true, arbitrary = true },
@@ -62,7 +64,7 @@ local defer_fn = function(current_item, dot_repeat)
 end
 
 local handle_result = function(current_item, metadata, dot_repeat)
-    require("deliberate.hydra").exit_hydra()
+    if current_item.exit_hydra then require("deliberate.hydra").exit_hydra() end
 
     vim.schedule(function()
         if current_item.arbitrary == true then

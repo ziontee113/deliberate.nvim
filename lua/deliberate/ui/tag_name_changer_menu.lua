@@ -16,12 +16,16 @@ local items = {
     { keymaps = { "5" }, text = "h5" },
     { keymaps = { "6" }, text = "h6" },
     { keymaps = { "p" }, text = "p" },
+    { keymaps = { "a" }, text = "a" },
+    { keymaps = { "S" }, text = "section" },
     "",
     { keymaps = { "l" }, text = "li" },
     { keymaps = { "s" }, text = "span" },
     "",
     { keymaps = { "b" }, text = "button" },
     { keymaps = { "i" }, text = "img" },
+    "",
+    { keymaps = { "A" }, text = "AnimatePresence" },
 
     { keymaps = ",", text = "", hidden = true, arbitrary = true },
 }
