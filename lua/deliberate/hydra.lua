@@ -84,6 +84,11 @@ local manual_heads = {
         function() require("deliberate.api.tag_name_changer").toggle_motion() end,
         { nowait = true },
     },
+    {
+        "#",
+        function() require("deliberate.api.className_to_clsx").execute() end,
+        { nowait = true },
+    },
 
     {
         "sr",
