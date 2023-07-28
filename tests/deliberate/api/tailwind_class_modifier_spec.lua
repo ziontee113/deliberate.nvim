@@ -243,7 +243,7 @@ describe("clsx support", function()
 
         -- apply clsx
         cp({ "", "p-4" }, '<li className="p-4">Home</li>')
-        clsx.execute()
+        clsx.add()
         h.catalyst_last('<li className={clsx("p-4")}>Home</li>')
 
         -- alter classNames inside clsx block

@@ -38,6 +38,8 @@ end
 
 -- TODO:
 M.get_clsx_string_node = function() return nil end
+-- TODO:
+M.get_clsx_expression = function() return nil end
 
 ---@param buf number
 ---@return TSNode[], TSNode[]

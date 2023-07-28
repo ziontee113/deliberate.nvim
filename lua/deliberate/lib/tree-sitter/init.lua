@@ -8,6 +8,8 @@ local M = {}
 ---@field prev_named_sibling function
 ---@field iter_children function
 ---@field named_descendant_for_range function
+---@field named_child_count function
+---@field named_child function
 
 ---@class find_closest_parent_with_types_Opts
 ---@field node TSNode

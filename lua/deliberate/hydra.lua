@@ -86,7 +86,7 @@ local manual_heads = {
     },
     {
         "#",
-        function() require("deliberate.api.className_to_clsx").execute() end,
+        function() require("deliberate.api.className_to_clsx").toggle_clsx() end,
         { nowait = true },
     },
 

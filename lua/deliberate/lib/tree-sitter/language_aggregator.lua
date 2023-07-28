@@ -46,6 +46,7 @@ M.get_className_property_string_node = function(...)
     return invoke("get_className_property_string_node", ...)
 end
 M.get_clsx_string_node = function(...) return invoke("get_clsx_string_node", ...) end
+M.get_clsx_expression = function(...) return invoke("get_clsx_expression", ...) end
 M.extract_class_names = function(...) return invoke("extract_class_names", ...) end
 M.get_updated_root = function(...) return invoke("get_updated_root", ...) end
 M.get_html_node = function(...) return invoke("get_html_node", ...) end
