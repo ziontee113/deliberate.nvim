@@ -37,6 +37,30 @@ end
 
 -------------------------------------------- Public Functions
 
+M.get_clsx_string_node = function(buf, node)
+    local _, grouped_captures = lib_ts.capture_nodes_with_queries({
+        buf = buf,
+        root = node,
+        parser_name = "tsx",
+        queries = {
+            [[ ;query
+(jsx_attribute
+  (property_identifier) @prop_ident (#eq? @prop_ident "className")
+  (jsx_expression ((call_expression ((identifier) @ident (#eq? ident "clsx"))
+                                    ((arguments ((string) @target)) @args)))))
+]],
+        },
+        capture_groups = { "target" },
+    })
+
+    local target_node = grouped_captures["target"][1]
+    if target_node then
+        local html_parent = M.get_html_node(target_node)
+        if html_parent ~= node then return nil end
+    end
+    return target_node
+end
+
 ---@param buf number
 ---@return TSNode[], table
 M.get_all_html_nodes_in_buffer = function(buf)
@@ -104,8 +128,8 @@ end
 ---@param buf number
 ---@param node TSNode
 ---@return string[], TSNode|nil
-M.extract_class_names = function(buf, node)
-    local className_string_node = M.get_className_property_string_node(buf, node)
+M.extract_class_names = function(buf, node, className_string_node)
+    className_string_node = className_string_node or M.get_className_property_string_node(buf, node)
     local attribute_string_text = vim.treesitter.get_node_text(className_string_node, buf)
     local string_content = attribute_string_text:match('"([^"]+)"') or ""
 

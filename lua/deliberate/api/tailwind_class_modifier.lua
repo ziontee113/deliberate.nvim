@@ -113,10 +113,14 @@ M._change = function(o)
         -- If we use `ipairs`, after we change buffer content (like using `nvim_buf_set_text()`),
         -- the `node` we get from `ipairs` doesn't get updated, which leads to false computation.
 
-        set_empty_className_property_if_needed(catalyst.buf(), selection.nodes()[i])
+        local clsx_string_node =
+            aggregator.get_clsx_string_node(selection.items()[i].buf, selection.nodes()[i])
+        if not clsx_string_node then
+            set_empty_className_property_if_needed(catalyst.buf(), selection.nodes()[i])
+        end
 
         local class_names, className_string_node =
-            aggregator.extract_class_names(catalyst.buf(), selection.nodes()[i])
+            aggregator.extract_class_names(catalyst.buf(), selection.nodes()[i], clsx_string_node)
 
         local replacement
         if o.classes_groups then

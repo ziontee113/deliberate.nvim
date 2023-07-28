@@ -36,6 +36,9 @@ end
 
 -------------------------------------------- Public Functions
 
+-- TODO:
+M.get_clsx_string_node = function() return nil end
+
 ---@param buf number
 ---@return TSNode[], TSNode[]
 M.get_all_html_nodes_in_buffer = function(buf)

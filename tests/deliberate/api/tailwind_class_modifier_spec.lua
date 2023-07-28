@@ -1,5 +1,6 @@
 require("tests.editor_config")
 
+local clsx = require("deliberate.api.className_to_clsx")
 local pseudo = require("deliberate.lib.pseudo_classes.manager")
 local tcm = require("deliberate.api.tailwind_class_modifier")
 local h = require("deliberate.helpers")
@@ -182,7 +183,7 @@ describe("change_text_color() & change_background_color()", function()
         tc("text-[#000]", '<li className="text-[#000] bg-black">Contacts</li>')
         bc("bg-[rgb(0,12,24)]", '<li className="text-[#000] bg-[rgb(0,12,24)]">Contacts</li>')
         tc("", '<li className="bg-[rgb(0,12,24)]">Contacts</li>')
-        bc("", '<li>Contacts</li>')
+        bc("", "<li>Contacts</li>")
     end)
 
     it("adds text-color to all selected elements correctly", function()
@@ -228,6 +229,25 @@ describe("change Classes Groups with pseudo_classes", function()
         pseudo.update("hover:")
         tcm.change_classes_groups({ classes_groups = { "flex", "flex row" }, value = "" })
         h.catalyst_has('<li className="flex row">Home</li>')
+    end)
+end)
+
+-- clsx
+
+describe("clsx support", function()
+    before_each(function() h.set_buffer_content_as_multiple_react_components() end)
+    after_each(function() h.clean_up() end)
+
+    it("works on current catalyst", function()
+        initiate("17gg^", "<li>Home</li>")
+
+        -- apply clsx
+        cp({ "", "p-4" }, '<li className="p-4">Home</li>')
+        clsx.execute()
+        h.catalyst_last('<li className={clsx("p-4")}>Home</li>')
+
+        -- alter classNames inside clsx block
+        cp({ "", "p-8" }, '<li className={clsx("p-8")}>Home</li>')
     end)
 end)
 
