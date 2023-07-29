@@ -113,7 +113,12 @@ local find_hints = function(colors_object)
         -- try to find valid hint
         local first_char = string.sub(key, 1, 1)
         local first_2_chars = string.sub(key, 1, 1)
-        local tries = { string.lower(first_char), string.upper(first_char), string.lower(first_2_chars), string.upper }
+        local tries = {
+            string.lower(first_char),
+            string.upper(first_char),
+            string.lower(first_2_chars),
+            string.upper,
+        }
 
         for _, try in ipairs(tries) do
             if not filter_substr(existing_hints, try) then
@@ -136,7 +141,9 @@ M.load_custom_tailwind_colors = function()
     custom_config_colors = {}
 
     local tailwind = reader.get_json_data_from_tailwind_config()
+    if not tailwind then return end
     local colors_object = tailwind.theme.extend.colors
+    if not colors_object then return end
     local hints = find_hints(colors_object)
 
     for key, value in pairs(colors_object) do
