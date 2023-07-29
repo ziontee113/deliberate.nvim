@@ -85,40 +85,46 @@ local aliases = {
     primary = { "<C-p>" },
 }
 
+local filter_substr = function(tbl, substr)
+    for _, item in ipairs(tbl) do
+        if string.find(item, substr, 1) then return true end
+    end
+end
+
 local find_hints = function(colors_object)
     local hints = {}
     local existing_hints = {}
 
     for _, item in ipairs(base_colors) do
-        for _, keymap in ipairs(item.keymaps) do
-            table.insert(existing_hints, keymap)
+        if type(item) == "table" then
+            for _, keymap in ipairs(item.keymaps) do
+                table.insert(existing_hints, keymap)
+            end
         end
     end
 
     for key, _ in pairs(colors_object) do
-        -- has alias 
+        -- has alias
         if aliases[key] then
-            hints[key] = { aliases[key] }
+            hints[key] = aliases[key]
             goto continue
         end
 
-        -- 1st char 
+        -- try to find valid hint
         local first_char = string.sub(key, 1, 1)
+        local first_2_chars = string.sub(key, 1, 1)
+        local tries = { string.lower(first_char), string.upper(first_char), string.lower(first_2_chars), string.upper }
 
-        local first_lowercase = string.lower(first_char)
-        if not vim.tbl_contains(existing_hints, first_lowercase) then
-            hints[key] = { first_lowercase }
-            goto continue
+        for _, try in ipairs(tries) do
+            if not filter_substr(existing_hints, try) then
+                hints[key] = try
+                table.insert(existing_hints, try)
+                goto continue
+            end
         end
 
-        local first_uppercase = string.lower(first_char)
-        if not vim.tbl_contains(existing_hints, first_uppercase) then
-            hints[key] = { first_uppercase }
-            goto continue
-        end
-
-        -- else 
-        hints[key] = {}
+        -- else
+        hints[key] = ""
 
         ::continue::
     end
@@ -135,18 +141,24 @@ M.load_custom_tailwind_colors = function()
 
     for key, value in pairs(colors_object) do
         if type(value) == "string" then
-            table.insert(custom_config_colors, { text = key, single = true, keymaps = hints[key] })
+            table.insert(
+                custom_config_colors,
+                1,
+                { text = key, single = true, keymaps = hints[key] }
+            )
             lua_patterns.add_to_postfixes(string.format("%%-%s", key))
         end
-        if type(value) == "table" then table.insert(custom_config_colors, { text = key }) end
+        if type(value) == "table" then table.insert(custom_config_colors, 1, { text = key }) end
     end
+
+    lua_patterns.initialize_patterns()
 end
 
 local get_base_and_custom_colors = function()
     local all_colors = vim.deepcopy(base_colors)
-    if #custom_config_colors > 0 then table.insert(all_colors, "") end
+    if #custom_config_colors > 0 then table.insert(all_colors, 1, "") end
     for _, item in ipairs(custom_config_colors) do
-        table.insert(all_colors, item)
+        table.insert(all_colors, 1, item)
     end
     return all_colors
 end
