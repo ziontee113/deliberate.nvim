@@ -3,10 +3,12 @@ local Input = require("deliberate.lib.ui.Input")
 local tcm = require("deliberate.api.tailwind_class_modifier")
 local transformer = require("deliberate.lib.arbitrary_transformer")
 local menu_repeater = require("deliberate.api.menu_repeater")
+local reader = require("deliberate.lib.custom_tailwind_color_reader")
+local lua_patterns = require("deliberate.lib.lua_patterns")
 
 local M = {}
 
-local colors = {
+local base_colors = {
     { text = "", keymaps = { "0" }, hidden = true },
     { text = "slate", keymaps = { "sl" } },
     { text = "gray", keymaps = { "G" } },
@@ -67,14 +69,51 @@ local show_arbitrary_input = function(metadata, prefix, fn, property)
     input:show(metadata, row, col)
 end
 
+-------------------------------------------- Load custom colors config in tailwind.config.js
+
+local custom_config_colors = {}
+local auto_loaded = false
+
+M.auto_load_tailwind = function()
+    if not auto_loaded then M.load_custom_tailwind_colors() end
+    auto_loaded = true
+end
+
+M.load_custom_tailwind_colors = function()
+    custom_config_colors = {}
+
+    local tailwind = reader.get_json_data_from_tailwind_config()
+    local colors_object = tailwind.theme.extend.colors
+
+    for key, value in pairs(colors_object) do
+        if type(value) == "string" then
+            table.insert(custom_config_colors, { text = key, single = true })
+            lua_patterns.add_to_postfixes(string.format("%%-%s", key))
+        end
+        if type(value) == "table" then table.insert(custom_config_colors, { text = key }) end
+    end
+end
+
+local get_base_and_custom_colors = function()
+    local all_colors = vim.deepcopy(base_colors)
+    for _, item in ipairs(custom_config_colors) do
+        table.insert(all_colors, item)
+    end
+    return all_colors
+end
+
+--------------------------------------------
+
 M._menu = function(filetype, prefix, fn, property)
     menu_repeater.register(M._menu, filetype, prefix, fn, property)
+
+    local all_colors = get_base_and_custom_colors()
 
     local popup = PopUp:new({
         filetype = filetype,
         steps = {
             {
-                items = colors,
+                items = all_colors,
                 format_fn = function(_, current_item)
                     return string.format("%s-%s", prefix, current_item.text)
                 end,

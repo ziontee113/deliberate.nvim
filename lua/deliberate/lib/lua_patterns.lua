@@ -266,6 +266,12 @@ local color_postfixes = {
     "%-%[#[%da-fA-F]+]",
 }
 
+M.add_to_postfixes = function(pattern)
+    if not vim.tbl_contains(color_postfixes, pattern) then
+        table.insert(color_postfixes, pattern)
+    end
+end
+
 local color_key_properties_map = {
     ["text-color"] = "text",
     ["background-color"] = "bg",
@@ -285,13 +291,17 @@ local color_key_properties_map = {
     ["outline-color"] = "outline",
 }
 
-for key, property in pairs(color_key_properties_map) do
-    local patterns_tbl = {}
-    for _, postfix in ipairs(color_postfixes) do
-        local pattern = "^" .. string.gsub(property, "%-", "%%%-") .. postfix
-        table.insert(patterns_tbl, pattern)
+M.initialize_patterns = function()
+    for key, property in pairs(color_key_properties_map) do
+        local patterns_tbl = {}
+        for _, postfix in ipairs(color_postfixes) do
+            local pattern = "^" .. string.gsub(property, "%-", "%%%-") .. postfix
+            table.insert(patterns_tbl, pattern)
+        end
+        M[key] = patterns_tbl
     end
-    M[key] = patterns_tbl
 end
+
+M.initialize_patterns()
 
 return M

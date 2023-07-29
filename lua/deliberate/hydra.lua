@@ -44,6 +44,15 @@ local manual_heads = {
     },
 
     {
+        "<leader>re",
+        function()
+            colors_menu.load_custom_tailwind_colors()
+            print("reloaded colors config from tailwind.config.js")
+        end,
+        { nowait = true },
+    },
+
+    {
         ";",
         function() require("deliberate.ui.attribute_changer_menu").show() end,
         { nowait = true },
@@ -607,6 +616,7 @@ Hydra({
         invoke_on_body = true,
         on_enter = function()
             require("deliberate.lib.selection.extmark_archive").clear_all()
+            colors_menu.auto_load_tailwind()
 
             catalyst.initiate({
                 win = vim.api.nvim_get_current_win(),

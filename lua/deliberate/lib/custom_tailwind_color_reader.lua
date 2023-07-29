@@ -5,7 +5,7 @@ local M = {}
 M.get_json_data_from_tailwind_config = function()
     local json_result = Job:new({
         command = "node",
-        args = { "read_tailwind_config.js" },
+        args = { "/home/ziontee113/.config/dev-nvim/deliberate.nvim/read_tailwind_config.js" },
     }):sync()
 
     local concat = table.concat(json_result, "\n")
