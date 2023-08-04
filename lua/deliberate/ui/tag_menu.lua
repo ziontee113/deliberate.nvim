@@ -21,6 +21,7 @@ local tag_map = {
     "",
     { keymaps = { "l" }, text = "li" },
     { keymaps = { "s" }, text = "span" },
+    { keymaps = { "S" }, text = "section" },
     "",
     { keymaps = { "b" }, text = "button" },
     { keymaps = { "i" }, text = "img", self_closing = true },

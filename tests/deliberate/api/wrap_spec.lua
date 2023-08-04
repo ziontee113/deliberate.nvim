@@ -47,3 +47,38 @@ describe("wrap.call()", function()
         </>]])
     end)
 end)
+
+describe("wrap.call()", function()
+    before_each(function()
+        vim.bo.ft = "typescriptreact"
+        h.set_buf_content([[
+export default function Home() {
+  return (
+    <div className="h-screen w-screen bg-zinc-900 text-white">
+      <li>Home</li>
+      <li>Contacts</li>
+      <li className="absolute bottom-56 bg-top text-9xl">FAQ</li>
+    </div>
+  )
+}]])
+    end)
+    after_each(function() h.clean_up() end)
+
+    it("works if the tag we wrap is the only html node in the document", function()
+        h.initiate(
+            "3gg^",
+            '<div className="h-screen w-screen bg-zinc-900 text-white">',
+            h.catalyst_first
+        )
+
+        wrap.call({ tag = "div" })
+
+        h.catalyst_has([[<div>
+      <div className="h-screen w-screen bg-zinc-900 text-white">
+        <li>Home</li>
+        <li>Contacts</li>
+        <li className="absolute bottom-56 bg-top text-9xl">FAQ</li>
+      </div>
+    </div>]])
+    end)
+end)

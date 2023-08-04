@@ -72,6 +72,7 @@ end
 M.highlight_selection = function()
     local selection = require("deliberate.lib.selection").items()
     if #selection == 0 then return end
+    if not require("deliberate.lib.catalyst").node() then return end
 
     local buf = selection[1].buf
     clear_selection_namespace(buf)
