@@ -509,6 +509,7 @@ local max_width_dict = {
     { keymaps = { "x" }, text = "max" },
     { keymaps = { "p" }, text = "prose" },
     "",
+    { keymaps = { "sx" }, text = "screen-xs" },
     { keymaps = { "ss" }, text = "screen-sm" },
     { keymaps = { "sm" }, text = "screen-md" },
     { keymaps = { "sl" }, text = "screen-lg" },
