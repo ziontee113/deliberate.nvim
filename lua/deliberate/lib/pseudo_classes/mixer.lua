@@ -40,6 +40,7 @@ local dictionary = {
     ["fi"] = "file",
     ["bd"] = "backdrop",
     ["ph"] = "placeholder",
+    ["X"] = "max",
     ["S"] = "xs",
     ["s"] = "sm",
     ["m"] = "md",

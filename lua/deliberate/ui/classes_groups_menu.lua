@@ -166,17 +166,6 @@ local place_self_group = {
 }
 M.change_place_self = function() M._classes_group_changer_menu(place_self_group) end
 
--- Custom (non-standard)
-
-local flex_align_group = {
-    { keymaps = { "i" }, classes = { "items-center" } },
-    { keymaps = { "j" }, classes = { "justify-center" } },
-    { keymaps = { "b" }, classes = { "justify-between" } },
-    { keymaps = { "C" }, classes = { "items-center", "justify-center" } },
-    { keymaps = { "cb" }, classes = { "content-between" } },
-}
-M.change_flex_align_properties = function() M._classes_group_changer_menu(flex_align_group) end
-
 -- Typography
 
 local font_smoothing_group = {
@@ -860,5 +849,43 @@ local group_group = {
     { keymaps = { "g" }, classes = { "group" } },
 }
 M.change_group = function() M._classes_group_changer_menu(group_group) end
+
+-- Custom (non-standard) -------------------------------
+
+local flex_align_group = {
+    { keymaps = { "i" }, classes = { "items-center" } },
+    { keymaps = { "j" }, classes = { "justify-center" } },
+    { keymaps = { "b" }, classes = { "justify-between" } },
+    { keymaps = { "c" }, classes = { "items-center", "justify-center" } },
+    { keymaps = { "a" }, classes = { "content-between" } },
+}
+M.change_flex_align_properties = function() M._classes_group_changer_menu(flex_align_group) end
+
+local quick_grid_group = {
+    { keymaps = { "1" }, classes = { "grid", "grid-cols-1" } },
+    { keymaps = { "2" }, classes = { "grid", "grid-cols-2" } },
+    { keymaps = { "3" }, classes = { "grid", "grid-cols-3" } },
+    { keymaps = { "4" }, classes = { "grid", "grid-cols-4" } },
+    { keymaps = { "5" }, classes = { "grid", "grid-cols-5" } },
+}
+M.change_quick_grid_group = function() M._classes_group_changer_menu(quick_grid_group) end
+
+local quick_flex_group = {
+    { keymaps = { "r" }, classes = { "flex", "flex-row", "gap-10" } },
+    { keymaps = { "c" }, classes = { "flex", "flex-col", "gap-10" } },
+    {
+        keymaps = { "j" },
+        classes = {
+            "h-screen",
+            "flex",
+            "flex-col",
+            "items-center",
+            "justify-center",
+            "gap-14",
+            "bg-stone-900",
+        },
+    },
+}
+M.change_quick_flex_group = function() M._classes_group_changer_menu(quick_flex_group) end
 
 return M

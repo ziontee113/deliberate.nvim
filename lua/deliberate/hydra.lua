@@ -517,6 +517,8 @@ local classes_groups_dict = {
     ["<space>sr"] = { cgm.change_screen_readers },
     ["<space>g"] = { cgm.change_group },
     ["os"] = { cgm.change_outline_style },
+
+    ["qf"] = { cgm.change_quick_flex_group },
 }
 
 for keymap, fn_and_args in pairs(classes_groups_dict) do
