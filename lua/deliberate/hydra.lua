@@ -519,6 +519,7 @@ local classes_groups_dict = {
     ["os"] = { cgm.change_outline_style },
 
     ["qf"] = { cgm.change_quick_flex_group },
+    ["qt"] = { cgm.change_quick_text_group },
 }
 
 for keymap, fn_and_args in pairs(classes_groups_dict) do

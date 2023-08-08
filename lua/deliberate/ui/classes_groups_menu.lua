@@ -883,9 +883,15 @@ local quick_flex_group = {
             "justify-center",
             "gap-14",
             "bg-stone-900",
+            "text-white",
         },
     },
 }
 M.change_quick_flex_group = function() M._classes_group_changer_menu(quick_flex_group) end
+
+local quick_text_group = {
+    { keymaps = { "j" }, classes = { "text-6xl" } },
+}
+M.change_quick_text_group = function() M._classes_group_changer_menu(quick_text_group) end
 
 return M

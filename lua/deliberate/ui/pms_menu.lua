@@ -611,9 +611,7 @@ local aspect_ratio_dict = {
     { keymaps = { "s" }, text = "square" },
     { keymaps = { "v" }, text = "video" },
 }
-M.change_aspect_ratio = function()
-    M._menu("aspect-ratio", false, tcm._change, { aspect_ratio_dict })
-end
+M.change_aspect_ratio = function() M._menu("aspect", false, tcm._change, { aspect_ratio_dict }) end
 
 -------------------------------------------- Columns
 
