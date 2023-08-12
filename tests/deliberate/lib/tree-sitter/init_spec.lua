@@ -97,16 +97,14 @@ describe("capture_nodes_with_queries()", function()
             buf = 0,
             parser_name = "tsx",
             queries = {
-                "(jsx_fragment) @jsx_fragment",
                 "(jsx_element) @jsx_element",
                 "(jsx_self_closing_element) @jsx_self_closing_element",
             },
-            capture_groups = { "jsx_element", "jsx_self_closing_element", "jsx_fragment" },
+            capture_groups = { "jsx_element", "jsx_self_closing_element" },
         })
 
         assert.equals(6, #all_captures)
-        assert.equals(1, #grouped_captures["jsx_fragment"])
-        assert.equals(5, #grouped_captures["jsx_element"])
+        assert.equals(6, #grouped_captures["jsx_element"])
         assert.equals(0, #grouped_captures["jsx_self_closing_element"])
     end)
 
@@ -117,22 +115,20 @@ describe("capture_nodes_with_queries()", function()
             buf = 0,
             parser_name = "tsx",
             queries = {
-                "(jsx_fragment) @jsx_fragment",
                 "(jsx_element) @jsx_element",
                 "(jsx_self_closing_element) @jsx_self_closing_element",
             },
-            capture_groups = { "jsx_element", "jsx_self_closing_element", "jsx_fragment" },
+            capture_groups = { "jsx_element", "jsx_self_closing_element" },
         })
 
         assert.equals(6, #all_captures)
-        assert.equals(1, #grouped_captures["jsx_fragment"])
-        assert.equals(5, #grouped_captures["jsx_element"])
+        assert.equals(6, #grouped_captures["jsx_element"])
         assert.equals(0, #grouped_captures["jsx_self_closing_element"])
 
         -- Make changes to buffer
 
         lib_ts.replace_node_text({
-            node = grouped_captures["jsx_element"][2], -- first <li> tag
+            node = grouped_captures["jsx_element"][3], -- first <li> tag
             buf = 0,
             replacement = { "<h1>Hello</h1>", "        <p>Venus</p>" },
         })
@@ -141,16 +137,14 @@ describe("capture_nodes_with_queries()", function()
             buf = 0,
             parser_name = "tsx",
             queries = {
-                "(jsx_fragment) @jsx_fragment",
                 "(jsx_element) @jsx_element",
                 "(jsx_self_closing_element) @jsx_self_closing_element",
             },
-            capture_groups = { "jsx_element", "jsx_self_closing_element", "jsx_fragment" },
+            capture_groups = { "jsx_element", "jsx_self_closing_element" },
         })
 
         assert.equals(7, #all_captures)
-        assert.equals(1, #grouped_captures["jsx_fragment"])
-        assert.equals(6, #grouped_captures["jsx_element"])
+        assert.equals(7, #grouped_captures["jsx_element"])
         assert.equals(0, #grouped_captures["jsx_self_closing_element"])
     end)
 end)

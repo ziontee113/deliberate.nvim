@@ -91,11 +91,10 @@ M.get_all_html_nodes_in_buffer = function(buf)
         buf = buf,
         parser_name = "tsx",
         queries = {
-            "(jsx_fragment) @jsx_fragment",
             "(jsx_element) @jsx_element",
             "(jsx_self_closing_element) @jsx_self_closing_element",
         },
-        capture_groups = { "jsx_element", "jsx_self_closing_element", "jsx_fragment" },
+        capture_groups = { "jsx_element", "jsx_self_closing_element" },
     })
     return all_html_nodes, grouped_captures
 end
@@ -174,7 +173,7 @@ end
 ---@param node TSNode
 ---@return TSNode | nil
 M.get_html_node = function(node)
-    return lib_ts.get_html_node(node, { "jsx_element", "jsx_self_closing_element", "jsx_fragment" })
+    return lib_ts.get_html_node(node, { "jsx_element", "jsx_self_closing_element" })
 end
 
 ---@param node TSNode

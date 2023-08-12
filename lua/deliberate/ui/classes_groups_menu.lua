@@ -517,11 +517,11 @@ M.change_overscroll_y = function() M._classes_group_changer_menu(overscroll_y_gr
 
 -- Position
 local position_group = {
-    { keymaps = { "s" }, classes = { "static" } },
+    { keymaps = { "s" }, classes = { "sticky" } },
     { keymaps = { "f", "F" }, classes = { "fixed" } },
     { keymaps = { "a", "A" }, classes = { "absolute" } },
     { keymaps = { "r", "R" }, classes = { "relative" } },
-    { keymaps = { "S" }, classes = { "sticky" } },
+    { keymaps = { "S" }, classes = { "static" } },
 }
 M.change_position = function() M._classes_group_changer_menu(position_group) end
 

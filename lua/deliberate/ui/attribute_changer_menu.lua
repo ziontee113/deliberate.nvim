@@ -12,6 +12,8 @@ local col_offset = -1
 
 local items = {
     { keymaps = { "s" }, text = "src", exit_hydra = true },
+    { keymaps = { "r" }, text = "ref", exit_hydra = true },
+    { keymaps = { "l" }, text = "style", content = "{{  }}", col_offset = -2, exit_hydra = true },
     { keymaps = { "A" }, text = "alt" },
     "",
     { keymaps = { "k" }, text = "key", exit_hydra = true },
