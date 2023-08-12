@@ -142,7 +142,7 @@ M.get_tag_identifier_node = function(node)
 
     local tag_node = lib_ts.get_children_with_types({
         node = attribute_master_node,
-        desired_types = { "identifier", "nested_identifier" },
+        desired_types = { "member_expression", "identifier" },
     })[1]
     return tag_node
 end
