@@ -25,6 +25,13 @@ local tag_map = {
     "",
     { keymaps = { "b" }, text = "button" },
     { keymaps = { "i" }, text = "img", self_closing = true },
+    "",
+    { keymaps = { ";r" }, text = "DropdownMenu.Root" },
+    { keymaps = { ";p" }, text = "DropdownMenu.Portal" },
+    { keymaps = { ";c" }, text = "DropdownMenu.Content" },
+    { keymaps = { ";g" }, text = "DropdownMenu.RadioGroup" },
+    { keymaps = { ";r" }, text = "DropdownMenu.RadioItem" },
+    { keymaps = { ";i" }, text = "DropdownMenu.Item" },
 
     { keymaps = ",", text = "", hidden = true, self_closing = true, arbitrary = true },
     { keymaps = ".", text = "", hidden = true, self_closing = false, arbitrary = true },
