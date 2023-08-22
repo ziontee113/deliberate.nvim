@@ -50,6 +50,8 @@ local dictionary = {
     ["D"] = "dark",
     ["P"] = "portrait",
     ["ns"] = "landscape",
+    ["dh"] = "data-[highlighted]",
+    ["dd"] = "data-[disabled]",
 }
 
 M.translate_alias_string = function(input)

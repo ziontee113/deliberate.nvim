@@ -152,7 +152,7 @@ M._change = function(o)
             lib_ts.replace_node_text({
                 node = className_string_node,
                 buf = catalyst.buf(),
-                replacement = replacement,
+                replacement = vim.split(replacement, "\n"),
             })
         end
 

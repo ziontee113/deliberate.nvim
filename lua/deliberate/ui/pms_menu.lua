@@ -295,6 +295,8 @@ local font_family_dict = {
     { keymaps = { "s" }, text = "sans" },
     { keymaps = { "S" }, text = "serif" },
     { keymaps = { "m" }, text = "mono" },
+    { keymaps = { "p", "1" }, text = "primary" },
+    { keymaps = { "2" }, text = "secondary" },
 }
 M.change_font_family = function() M._menu("font", false, tcm._change, { font_family_dict }) end
 
