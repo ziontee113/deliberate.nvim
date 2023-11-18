@@ -9,7 +9,8 @@ M.get_json_data_from_tailwind_config = function()
     }):sync()
 
     local concat = table.concat(json_result, "\n")
-    local parsed = vim.json.decode(concat)
+    local ok, parsed = pcall(vim.json.decode, concat)
+    if not ok then return end
 
     return parsed
 end
